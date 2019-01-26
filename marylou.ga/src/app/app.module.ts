@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './login/login.module';
 import { LobbyModule } from './lobby/lobby.module';
 import { GameModule } from './game/game.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { GameModule } from './game/game.module';
     AppRoutingModule,
     LoginModule,
     LobbyModule,
-    GameModule
+    GameModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
