@@ -56,6 +56,7 @@ Several commands transmit arrays of models, these are their descriptions.
 Server Command.
 
 Registers a new user.
+`username` should be a maximum of 16 characters.
 
 #### Syntax
 ```json
@@ -86,14 +87,22 @@ Client Command.
 Informs the client the result of a login.
 
 If the login/registration is successful, `authToken` will be present and populated.
-If the login/registration was not successful, `error` will be present and populated.
+If the login/registration was not successful, `error` and `errorCode` will be present and populated.
+
+These are the errors the client will expect (so it knows which input field to mark with the message)
+
+1. Username is taken
+2. Password is incorrect
+3. Username does not exist
+4. Username is too long (16 chars max)
 
 #### Syntax
 ```json
 {
     "command": "loginResult",
     "authToken": "token",
-    "error": "message"
+    "error": "message",
+    "errorCode": 1
 }
 ```
 ### `listGames` Command
