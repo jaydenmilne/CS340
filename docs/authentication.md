@@ -1,6 +1,6 @@
 ## Authentication Mechanisms
 
-Authentication of the clients will be handled with session tokens, a-la CS240. 
+Authentication of the clients will be handled with 256 bit random strings used as session tokens, a-la CS240.
 
 ### Registration / Login Process
 The user will provide a username and a password on the login screen. 
