@@ -1,11 +1,11 @@
 package command;
 
-public class JoinGameCommand implements IServerCommand{
-    private command.CommandType type = CommandType.JOIN_GAME;
-    private String userID;
+public class LoginResultCommand implements IClientCommand{
+    private command.CommandType type = CommandType.LOGIN_RESULT;
     private String authToken;
+    private String error;
 
-    public JoinGameCommand(){
+    public LoginResultCommand(){
     }
 
     @Override

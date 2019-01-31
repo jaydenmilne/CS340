@@ -1,11 +1,12 @@
 package command;
 
-public class JoinGameCommand implements IServerCommand{
-    private command.CommandType type = CommandType.JOIN_GAME;
+public class LeaveGameCommand implements IServerCommand{
+    private command.CommandType type = CommandType.LEAVE_GAME;
     private String userID;
+    private String gameID;
     private String authToken;
 
-    public JoinGameCommand(){
+    public LeaveGameCommand(){
     }
 
     @Override
