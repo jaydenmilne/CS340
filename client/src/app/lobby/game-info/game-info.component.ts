@@ -10,9 +10,9 @@ import { GamePreview } from 'src/app/core/model/GamePreview';
 })
 export class GameInfoComponent implements OnInit {
 
-  
-  constructor() { 
-    let players: Player []= [
+
+  constructor() {
+    const players: Player [] = [
       new Player(Color.YELLOW, 'user1', false, 'riffraff78'),
       new Player(Color.BLUE, 'user2', true, 'toughstuff56'),
       new Player(Color.GREEN, 'user3', true, 'hotshot33'),
@@ -22,19 +22,19 @@ export class GameInfoComponent implements OnInit {
 
   }
 
-  gamePreview : GamePreview;
+  gamePreview: GamePreview;
 
   ngOnInit() {
   }
 
-  public getPlayerColorStyle(player:Player){
-    let style = {
-      'background-color': "#" + player.getColor()
-    }
+  public getPlayerColorStyle(player: Player) {
+    const style = {
+      'background-color': '#' + player.getColor()
+    };
     return style;
   }
 
-  public onJoinGame(){
+  public onJoinGame() {
     // call join game on lobby service
   }
 }

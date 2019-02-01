@@ -1,47 +1,47 @@
-import { Color } from "./color.enum";
+import { Color } from './color.enum';
 
-export class Player{
+export class Player {
     private color: Color;
-    private userID:string;
-    private ready:boolean;
-    private handle:string;
+    private userID: string;
+    private ready: boolean;
+    private handle: string;
 
-    constructor(color:Color, userID:string, ready:boolean, handle:string){
+    constructor(color: Color, userID: string, ready: boolean, handle: string) {
         this.color = color;
         this.userID = userID;
         this.ready = ready;
         this.handle = handle;
     }
 
-    public getColor():Color{
+    public getColor(): Color {
         return this.color;
     }
 
-    public setColor(color:string){
+    public setColor(color: string) {
         this.color = Color[color.toUpperCase()];
     }
 
-    public getUserID():string{
+    public getUserID(): string {
         return this.userID;
     }
 
-    public setUserID(userID:string){
+    public setUserID(userID: string) {
         this.userID = userID;
     }
 
-    public isReady():boolean{
+    public isReady(): boolean {
         return this.ready;
     }
 
-    public setReady(ready:boolean){
+    public setReady(ready: boolean) {
         this.ready = ready;
     }
 
-    public getHandle():string{
+    public getHandle(): string {
         return this.handle;
     }
 
-    public setHandle(handle:string){
+    public setHandle(handle: string) {
         this.handle = handle;
     }
 }
