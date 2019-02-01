@@ -1,6 +1,6 @@
-import { User } from './User';
-import { GameList } from './GameLIst';
-import { GamePreview } from './GamePreview';
+import { User } from './user';
+import { GameList } from './game-list';
+import { GamePreview } from './game-preview';
 
 export class Model {
     private myUser: User;
