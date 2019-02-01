@@ -11,21 +11,20 @@ import { Subject } from 'rxjs';
 
 export class ServerProxyService {
 
-  private commandEndpoint = "/command";
+  private commandEndpoint = '/command';
 
   private incomingCmdSrc = new Subject<Command>();
   public incomingCmd$ = this.incomingCmdSrc.asObservable();
-  
-  private getServerUrl() : string {
-    if (isDevMode()) return 'http://127.0.0.1:4300';
-    else return 'api.marylou.ga';
+
+  private getServerUrl(): string {
+    if (isDevMode()) { return 'http://127.0.0.1:4300'; } else { return 'api.marylou.ga'; }
   }
 
-  private getUrl() : string {
+  private getUrl(): string {
     return this.getServerUrl() + this.commandEndpoint;
   }
 
-  private handleError(error : HttpErrorResponse) {
+  private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
       this.errorService.notifyServerCommError(error.error.message);
@@ -40,16 +39,21 @@ export class ServerProxyService {
     }
   }
 
-  private handleReponse(result : HttpResponse<CommandArray>) {
-    if (!result.ok) console.error("Got a response that isn't OK but didn't go to handleError(?)");
-    console.log("didn't blow up!");
+  private handleReponse(result: HttpResponse<CommandArray>) {
+    if (!result.ok) { console.error('Got a response that isn\'t OK but didn\'t go to handleError(?)'); }
+
+    const commands: CommandArray = result.body as CommandArray;
+
+    for (const command of commands.commands) {
+      this.incomingCmdSrc.next(command);
+    }
   }
 
-  public transmitCommand(command : Command) {
+  public transmitCommand(command: Command) {
     this.http.post<ICommandArray>(
-      this.getUrl(), 
+      this.getUrl(),
       new CommandArray([command]),
-      { observe: 'response'}).subscribe( 
+      { observe: 'response'}).subscribe(
         result => this.handleReponse(result),
         error => this.handleError(error));
 
@@ -59,6 +63,6 @@ export class ServerProxyService {
 
   }
 
-  constructor(private http : HttpClient,
+  constructor(private http: HttpClient,
               private errorService: ErrorNotifierService) { }
 }

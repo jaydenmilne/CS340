@@ -11,14 +11,14 @@ import { GameModule } from './game/game.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatDialogModule, MatButtonModule } from '@angular/material';
-import { FatalErrorDialog } from './app.component'
+import { FatalErrorDialogComponent } from './app.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FatalErrorDialog
+    FatalErrorDialogComponent
   ],
-  entryComponents: [ FatalErrorDialog ],
+  entryComponents: [ FatalErrorDialogComponent ],
   imports: [
     BrowserModule,
     HttpClientModule,

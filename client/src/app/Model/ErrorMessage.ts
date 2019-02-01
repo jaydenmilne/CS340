@@ -1,13 +1,13 @@
-export class ErrorMessage{
-    private message: string
+export class ErrorMessage {
+    private message: string;
 
-    constructor(){}
+    constructor() {}
 
-    public getMessage():string {
+    public getMessage(): string {
         return this.message;
     }
 
-    public setMessage(message:string){
+    public setMessage(message: string) {
         this.message = message;
     }
 }

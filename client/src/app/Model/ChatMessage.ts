@@ -1,31 +1,31 @@
-export class ChatMessage{
+export class ChatMessage {
     private message: string;
     private gameID: string;
     private userID: string;
 
-    constructor(){}
+    constructor() {}
 
-    public getMessage():string {
+    public getMessage(): string {
         return this.message;
     }
 
-    public setMessage(message:string){
+    public setMessage(message: string) {
         this.message = message;
     }
 
-    public getGameID():string{
+    public getGameID(): string {
         return this.gameID;
     }
 
-    public setGameID(gameID:string){
+    public setGameID(gameID: string) {
         this.gameID = gameID;
     }
 
-    public getUserID():string{
+    public getUserID(): string {
         return this.userID;
     }
 
-    public setUserID(userID:string){
+    public setUserID(userID: string) {
         this.userID = userID;
     }
 }
