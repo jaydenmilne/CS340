@@ -2,6 +2,23 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoginService } from '../login.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { isDevMode } from '@angular/core';
+
+@Component({
+  selector: 'app-login-error-dialog',
+  templateUrl: 'login-error-dialog.component.html',
+})
+export class LoginErrorDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<LoginErrorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public message: string) {}
+
+  onOkClick(): void {
+    this.dialogRef.close();
+  }
+
+}
 
 @Component({
   selector: 'app-login',
@@ -24,11 +41,16 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.loginError$.subscribe(loginError => this.loginError(loginError));
+
+    if (isDevMode()) {
+      this.loginForm.get('username').setValue('bob');
+      this.loginForm.get('password').setValue('hunter2');
+    }
   }
 
   loginError(loginError: string) {
-    const dialogRef = this.dialog.open(LoginErrorDialog, {
-      width: '250px',
+    const dialogRef = this.dialog.open(LoginErrorDialogComponent, {
+      width: '400px',
       data: loginError
     });
   }
@@ -46,28 +68,11 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    console.log('login pressed...');
     this.loginService.commenceLogin('a', 'b');
   }
 
   onRegister() {
-    console.log('register pressed...');
-  }
-
-}
-
-@Component({
-  selector: 'login-error-dialog',
-  templateUrl: 'login-error-dialog.component.html',
-})
-export class LoginErrorDialog {
-
-  constructor(
-    public dialogRef: MatDialogRef<LoginErrorDialog>,
-    @Inject(MAT_DIALOG_DATA) public message: string) {}
-
-  onOkClick(): void {
-    this.dialogRef.close();
+    
   }
 
 }
