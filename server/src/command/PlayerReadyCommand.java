@@ -1,9 +1,9 @@
 package command;
 
 public class PlayerReadyCommand implements IServerCommand{
-    private command.CommandType type = CommandType.PLAYER_READY;
-    private String userID;
-    private boolean ready;
+    private command.CommandType command = CommandType.playerReady;
+    private String gameId;
+    private boolean playerIsReady;
 
     public PlayerReadyCommand(){
     }
@@ -15,6 +15,6 @@ public class PlayerReadyCommand implements IServerCommand{
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

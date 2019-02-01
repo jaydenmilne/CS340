@@ -1,8 +1,7 @@
 package command;
 
-public class ListGamesCommand implements IServerCommand{ //unfinished waiting on GameList Model Object
-    private command.CommandType type = CommandType.LIST_GAMES;
-    //private GameList games;
+public class ListGamesCommand implements IServerCommand{
+    private command.CommandType command = CommandType.listGames;
 
     public ListGamesCommand(){
     }
@@ -14,6 +13,6 @@ public class ListGamesCommand implements IServerCommand{ //unfinished waiting on
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

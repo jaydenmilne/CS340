@@ -1,8 +1,8 @@
 package command;
 
 public class StartGameCommand implements IClientCommand{
-    private command.CommandType type = CommandType.START_GAME;
-    private String gameID;
+    private command.CommandType command = CommandType.startGame;
+    private String gameId;
 
     public StartGameCommand(){
     }
@@ -14,6 +14,6 @@ public class StartGameCommand implements IClientCommand{
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

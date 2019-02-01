@@ -1,7 +1,7 @@
 package command;
 
 public class RegisterCommand implements IServerCommand{
-    private command.CommandType type = CommandType.REGISTER;
+    private command.CommandType command = CommandType.register;
     private String username;
     private String password;
 
@@ -15,6 +15,6 @@ public class RegisterCommand implements IServerCommand{
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

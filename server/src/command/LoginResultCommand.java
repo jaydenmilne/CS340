@@ -1,9 +1,10 @@
 package command;
 
 public class LoginResultCommand implements IClientCommand{
-    private command.CommandType type = CommandType.LOGIN_RESULT;
+    private command.CommandType command = CommandType.loginResult;
     private String authToken;
     private String error;
+    private int errorCode;
 
     public LoginResultCommand(){
     }
@@ -15,6 +16,6 @@ public class LoginResultCommand implements IClientCommand{
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

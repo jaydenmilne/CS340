@@ -1,10 +1,10 @@
 package command;
 
-public class CreateGameCommand implements IServerCommand{
+public class GameCreatedCommand implements IServerCommand {
     private command.CommandType command = CommandType.createGame;
-    private String name;
+    private String gameId;
 
-    public CreateGameCommand(){
+    public GameCreatedCommand(){
     }
 
     @Override

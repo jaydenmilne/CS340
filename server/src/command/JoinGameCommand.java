@@ -1,9 +1,8 @@
 package command;
 
 public class JoinGameCommand implements IServerCommand{
-    private command.CommandType type = CommandType.JOIN_GAME;
-    private String userID;
-    private String authToken;
+    private command.CommandType command = CommandType.joinGame;
+    private String gameId;
 
     public JoinGameCommand(){
     }
@@ -15,6 +14,6 @@ public class JoinGameCommand implements IServerCommand{
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

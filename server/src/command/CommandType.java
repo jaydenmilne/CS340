@@ -1,7 +1,7 @@
 package command;
 
 public enum CommandType {
-    LOGIN, REGISTER, JOIN_GAME, LEAVE_GAME, CREATE_GAME,
-    PLAYER_READY, POST_CHAT, START_GAME, LIST_GAMES,
-    REFRESH_GAME_LIST, LOGIN_RESULT, REGISTER_RESULT;
+    login, register, joinGame, leaveGame, createGame,
+    playerReady, postChat, startGame, listGames,
+    refreshGameList, loginResult, registerResult, gameCreated;
 }

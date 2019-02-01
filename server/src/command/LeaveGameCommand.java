@@ -1,10 +1,8 @@
 package command;
 
 public class LeaveGameCommand implements IServerCommand{
-    private command.CommandType type = CommandType.LEAVE_GAME;
-    private String userID;
-    private String gameID;
-    private String authToken;
+    private command.CommandType command = CommandType.leaveGame;
+    private String gameId;
 
     public LeaveGameCommand(){
     }
@@ -16,6 +14,6 @@ public class LeaveGameCommand implements IServerCommand{
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

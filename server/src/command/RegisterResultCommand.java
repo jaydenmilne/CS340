@@ -1,9 +1,10 @@
 package command;
 
 public class RegisterResultCommand implements IClientCommand{
-    private command.CommandType type = CommandType.REGISTER_RESULT;
+    private command.CommandType command = CommandType.registerResult;
     private String authToken;
     private String error;
+    private int errorCode;
 
     public RegisterResultCommand(){
     }
@@ -15,6 +16,6 @@ public class RegisterResultCommand implements IClientCommand{
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

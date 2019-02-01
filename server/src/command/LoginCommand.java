@@ -1,7 +1,7 @@
 package command;
 
 public class LoginCommand implements IServerCommand{
-    private command.CommandType type = CommandType.LOGIN;
+    private command.CommandType command = CommandType.login;
     private String username;
     private String password;
 
@@ -15,6 +15,6 @@ public class LoginCommand implements IServerCommand{
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

@@ -1,8 +1,11 @@
 package command;
 
-public class PostChatCommand implements IClientCommand, IServerCommand{//unfinished waiting on Message Model Object
-    private command.CommandType type = CommandType.POST_CHAT;
-    //private Message message;
+public class PostChatCommand implements IClientCommand, IServerCommand{
+    private command.CommandType command = CommandType.postChat;
+    private String gameId;
+    private String playerId;
+    private String playerName;
+    private String message;
 
     public PostChatCommand(){
     }
@@ -14,6 +17,6 @@ public class PostChatCommand implements IClientCommand, IServerCommand{//unfinis
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }

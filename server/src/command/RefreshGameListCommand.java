@@ -1,7 +1,7 @@
 package command;
 
 public class RefreshGameListCommand implements IClientCommand{//unfinished needs GamesList Model Object
-    private command.CommandType type = CommandType.REFRESH_GAME_LIST;
+    private command.CommandType command = CommandType.refreshGameList;
     //private GamesList games;
 
     public RefreshGameListCommand(){
@@ -14,6 +14,6 @@ public class RefreshGameListCommand implements IClientCommand{//unfinished needs
 
     @Override
     public CommandType getType() {
-        return type;
+        return command;
     }
 }
