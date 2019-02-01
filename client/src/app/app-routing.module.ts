@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 <<<<<<< HEAD
-import { LoginComponent } from './login/login/login.component'
-import { LobbyComponent } from './lobby/lobby/lobby.component'
-import { GameComponent } from './game/game/game.component'
+import { LoginComponent } from './login/login/login.component';
+import { LobbyComponent } from './lobby/lobby/lobby.component';
+import { GameComponent } from './game/game/game.component';
 =======
 import { LoginComponent } from './login/login/login.component';
 import { LobbyComponent } from './lobby/lobby/lobby.component';
@@ -19,7 +19,7 @@ const routes: Routes = [
   },
   {
 <<<<<<< HEAD
-    path: 'login', 
+    path: 'login',
 =======
     path: 'login',
 >>>>>>> master
