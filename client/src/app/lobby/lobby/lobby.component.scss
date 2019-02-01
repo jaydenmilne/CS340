@@ -4,6 +4,7 @@
 
 .lobby-game-list {
     width: 30%;
+    min-height:100vh;
     display: block;
     float: left;
     padding: 5px;
@@ -11,6 +12,7 @@
 
 .lobby-game-info {
     width: 65%;
+    min-height:100vh;
     display: block;
     float: left;
     padding: 5px;

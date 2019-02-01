@@ -1,12 +1,22 @@
-<mat-card>
+<mat-card class="game-info-card">
     <mat-card-header>
       <mat-card-title>
-        Game Info
+        {{GameName}}
       </mat-card-title>
+      <button mat-raised-button class ="actionbutton, game-info-close-button" color="warn">X</button>
     </mat-card-header>
-    Stuff
+    
+    <mat-card-content class="game-info-main">
+      <div class="game-info-player-list">
+        <mat-card class="player-card,foreground">
+          Player Card
+        </mat-card>
+      </div>
+
+      <!-- <app-chat-component></app-chat-component> -->
+    </mat-card-content>
   
-    <mat-card-actions>
-        <button mat-raised-button class ="actionbutton" color="accent">Start Game</button>
+    <mat-card-actions class="game-info-actions">
+        <button mat-raised-button class ="actionbutton,game-info-ready-button" color="accent">Ready</button>
     </mat-card-actions>
   </mat-card>

@@ -1,0 +1,13 @@
+.game-list-card {
+    min-height: 80vh;
+    padding-bottom: 56px;
+}
+.game-list-actions{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+.game-list-game-card{
+    margin: 5px 0;
+}
+@import '~@angular/material/theming';

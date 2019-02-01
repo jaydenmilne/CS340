@@ -1,17 +1,17 @@
-<mat-card>
+<mat-card class="game-list-card">
   <mat-card-header>
     <mat-card-title>
       Game List
     </mat-card-title>
   </mat-card-header>
-  List of games
-  <mat-card>
-    <mat-card-title>
-      Nested Card
-    </mat-card-title>
-  </mat-card>
+ 
+  <mat-chip-list class="mat-chip-list-stacked">
+    <mat-chip *ngFor="let game of gameList" class="game-list-game-card,mat-primary" [class.mat-chip-selected]="this.selectedGame === game" (click)="onGameSelect(game)">
+      {{game}}
+    </mat-chip>
+  </mat-chip-list>
 
-  <mat-card-actions>
-      <button mat-raised-button class ="actionbutton" color="primary">Add Game</button>
+  <mat-card-actions class="game-list-actions">
+      <button mat-raised-button class ="actionbutton" color="primary" (click)="onNewGame()">Add Game</button>
   </mat-card-actions>
 </mat-card>

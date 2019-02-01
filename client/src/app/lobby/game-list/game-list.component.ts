@@ -12,4 +12,18 @@ export class GameListComponent implements OnInit {
   ngOnInit() {
   }
 
+  gameList = []
+  gameIndex = 0;
+  selectedGame = "";
+
+  onNewGame(){
+    // Call new game on lobby service
+    this.gameIndex++;
+    this.gameList.push('game ' + String(this.gameIndex));
+  }
+
+  onGameSelect(game: string){
+    this.selectedGame = game;
+  }
+
 }
