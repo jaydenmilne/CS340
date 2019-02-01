@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Color } from 'src/app/core/model/color.enum';
 import { Player } from 'src/app/core/model/Player';
 import { GamePreview } from 'src/app/core/model/GamePreview';
+import { LobbyService } from '../lobby.service';
 
 @Component({
   selector: 'app-game-info',
@@ -11,7 +12,7 @@ import { GamePreview } from 'src/app/core/model/GamePreview';
 export class GameInfoComponent implements OnInit {
 
 
-  constructor() {
+  constructor(private lobbyService: LobbyService) {
     const players: Player [] = [
       new Player(Color.YELLOW, 'user1', false, 'riffraff78'),
       new Player(Color.BLUE, 'user2', true, 'toughstuff56'),
@@ -36,5 +37,6 @@ export class GameInfoComponent implements OnInit {
 
   public onJoinGame() {
     // call join game on lobby service
+    this.lobbyService.joinGame(this.gamePreview);
   }
 }
