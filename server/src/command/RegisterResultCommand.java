@@ -4,7 +4,6 @@ public class RegisterResultCommand implements IClientCommand{
     private command.CommandType command = CommandType.registerResult;
     private String authToken;
     private String error;
-    private int errorCode;
 
     public RegisterResultCommand(){
     }
