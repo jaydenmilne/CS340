@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameList } from 'src/app/core/model/GameList';
+import { GamePreview } from 'src/app/core/model/GamePreview';
 
 @Component({
   selector: 'app-game-list',
@@ -10,8 +11,11 @@ export class GameListComponent implements OnInit {
 
   constructor() { }
 
-  gameList: GameList = new GameList(['game1', 'game2', 'game3']);
-  selectedGame = '';
+  gameList: GameList = new GameList([
+    new GamePreview('game1', 'asldk', false, []),
+    new GamePreview('game2', '531', false, []),
+    new GamePreview('game3', 'vcb', false, []),
+  ]);
 
   ngOnInit() {
   }
@@ -21,7 +25,7 @@ export class GameListComponent implements OnInit {
   }
 
   onGameSelect(game: string) {
-    this.gameList.setSelectedGame(game);
+    this.gameList.setSelectedGameByID(game);
   }
 
 }

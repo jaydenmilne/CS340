@@ -44,4 +44,8 @@ export class GamePreview {
     public setPlayers(players: Player []) {
         this.players = players;
     }
+
+    public getNumPlayers(): number {
+        return this.players.length;
+    }
 }
