@@ -2,34 +2,34 @@ import { User } from './User';
 import { GameList } from './GameList';
 import { GamePreview } from './GamePreview';
 
-export class Model{
-    private myUser:User;
-    private availableGames:GameList;
-    private allGames:GamePreview;
+export class Model {
+    private myUser: User;
+    private availableGames: GameList;
+    private allGames: GamePreview[];
 
-    constructor(){}
+    constructor() {}
 
-    public getMyUser():User{
+    public getMyUser(): User {
         return this.myUser;
     }
 
-    public setMyUser(myUser:User){
+    public setMyUser(myUser: User) {
         this.myUser = myUser;
     }
 
-    public getAvailableGames():GameList{
+    public getAvailableGames(): GameList {
         return this.availableGames;
     }
 
-    public setAvailableGames(availableGames:GameList){
+    public setAvailableGames(availableGames: GameList) {
         this.availableGames = availableGames;
     }
 
-    public getAllGames():GamePreview{
+    public getAllGames(): GamePreview[] {
         return this.allGames;
     }
 
-    public setAllGames(allGames:GamePreview){
+    public setAllGames(allGames: GamePreview[]) {
         this.allGames = allGames;
     }
 }

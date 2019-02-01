@@ -10,21 +10,21 @@ import { ErrorNotifierService, ErrorMessage } from '@core/error-notifier.service
 export class AppComponent {
   title = 'Mary Lou';
   constructor (public dialog: MatDialog,
-               public errorService: ErrorNotifierService) {};
+               public errorService: ErrorNotifierService) {}
 
   ngOnInit() {
-  this.errorService.errors$.subscribe(loginError => this.oops(loginError))
+  this.errorService.errors$.subscribe(loginError => this.oops(loginError));
   }
 
-  private oops(error : ErrorMessage) {
+  private oops(error: ErrorMessage) {
     const dialogRef = this.dialog.open(FatalErrorDialog, {
       width: '500px',
       data: error
-    })
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       // bye bye
-    })
+    });
   }
 }
 
