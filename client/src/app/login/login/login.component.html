@@ -5,18 +5,32 @@
     <img class="full-width rounded" src="/assets/img/thanos.jpg">
   <h1>Welcome to Mary Lou!</h1>
     <p>Please login to get started</p>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Username" [formControl]="username" required>
-      <mat-error *ngIf="username.invalid">{{getUsernameError()}}</mat-error>
-      <mat-hint align="end">{{username.value.length}} / 16</mat-hint>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <input type="password" matInput placeholder="Password" [formControl]="password" required>
-      <mat-error *ngIf="password.invalid">{{getPasswordError()}}</mat-error>
-    </mat-form-field>
+    <form [formGroup]="loginForm" id="login_form" (ngSubmit)="onLogin()">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Username" formControlName="username" required>
+        <mat-error *ngIf="usernameError != '' || loginForm.get('username').invalid">{{getHumanReadableErrors('username')}}</mat-error>
+        <mat-hint align="end">{{loginForm.get('username').value.length}} / 16</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input type="password" matInput placeholder="Password" formControlName="password" required>
+        <mat-error *ngIf="loginForm.get('password').invalid">{{getHumanReadableErrors('password')}}</mat-error>
+      </mat-form-field>
+    </form>
+  
     <div class="buttondiv">
-        <button mat-raised-button class ="actionbutton" color="accent">Register</button>
-        <button mat-raised-button class ="actionbutton" color="primary">Login</button>
+      <button mat-raised-button 
+          [disabled]="!loginForm.valid"
+          (click)="onRegister()"
+          class="actionbutton" 
+          color="accent">Register</button>
+
+      <!-- Bind the login button to the form-->
+      <button mat-raised-button 
+          [disabled]="!loginForm.valid"
+          type="submit" 
+          form="login_form"  
+          class="actionbutton" 
+          color="primary">Login</button>
     </div>
   </div>  
 </div>
