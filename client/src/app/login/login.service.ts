@@ -8,15 +8,15 @@ import { LoginCommand, RegisterCommand } from '@core/logincommands';
 })
 export class LoginService {
 
-  constructor(private serverProxy : ServerProxyService ) { 
-    console.log("LoginService is alive!");
+  constructor(private serverProxy: ServerProxyService ) {
+    console.log('LoginService is alive!');
   }
 
   private loginErrorSource = new Subject<string>();
   public loginError$ = this.loginErrorSource.asObservable();
 
-  public commenceLogin(username : string, password: string) {
-    console.log("starting login...");
+  public commenceLogin(username: string, password: string) {
+    console.log('starting login...');
     this.serverProxy.transmitCommand(new LoginCommand(username, password));
   }
 
