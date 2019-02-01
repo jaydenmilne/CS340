@@ -1,8 +1,10 @@
 export class GameList{
-    private selectedGame:string;
-    private gameIDs:string;
+    private selectedGame : string;
+    private gameIDs : string [];
 
-    constructor(){}
+    constructor(gameIDs : string[]){
+        this.gameIDs = gameIDs;
+    }
 
     public getSelectedGame():string{
         return this.selectedGame;
@@ -12,11 +14,11 @@ export class GameList{
         this.selectedGame = selectedGame;
     }
 
-    public getGameIDs():string{
+    public getGameIDs() : string []{
         return this.gameIDs;
     }
 
-    public setGameIDs(gameIDs:string){
+    public setGameIDs(gameIDs:string []){
         this.gameIDs = gameIDs;
     }
 

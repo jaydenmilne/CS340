@@ -6,7 +6,7 @@
   </mat-card-header>
  
   <mat-chip-list class="mat-chip-list-stacked">
-    <mat-chip *ngFor="let game of gameList" class="game-list-game-card,mat-primary" [class.mat-chip-selected]="this.selectedGame === game" (click)="onGameSelect(game)">
+    <mat-chip *ngFor="let game of gameList.getGameIDs()" class="game-list-game-card,mat-primary" [class.mat-chip-selected]="this.gameList.getSelectedGame() === game" (click)="onGameSelect(game)">
       {{game}}
     </mat-chip>
   </mat-chip-list>

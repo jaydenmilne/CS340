@@ -1,5 +1,5 @@
 import { User } from './User';
-import { GameList } from './GameLIst';
+import { GameList } from './GameList';
 import { GamePreview } from './GamePreview';
 
 export class Model{
@@ -17,19 +17,19 @@ export class Model{
         this.myUser = myUser;
     }
 
-    private getAvailableGames():GameList{
+    public getAvailableGames():GameList{
         return this.availableGames;
     }
 
-    private setAvailableGames(availableGames:GameList){
+    public setAvailableGames(availableGames:GameList){
         this.availableGames = availableGames;
     }
 
-    private getAllGames():GamePreview{
+    public getAllGames():GamePreview{
         return this.allGames;
     }
 
-    private setAllGames(allGames:GamePreview){
+    public setAllGames(allGames:GamePreview){
         this.allGames = allGames;
     }
 }

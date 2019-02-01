@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameList } from 'src/app/Model/GameList';
 
 @Component({
   selector: 'app-game-list',
@@ -12,18 +13,15 @@ export class GameListComponent implements OnInit {
   ngOnInit() {
   }
 
-  gameList = []
-  gameIndex = 0;
+  gameList : GameList = new GameList(['game1', 'game2', 'game3']);
   selectedGame = "";
 
   onNewGame(){
     // Call new game on lobby service
-    this.gameIndex++;
-    this.gameList.push('game ' + String(this.gameIndex));
   }
 
   onGameSelect(game: string){
-    this.selectedGame = game;
+    this.gameList.setSelectedGame(game);
   }
 
 }
