@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable, of } from 'rxjs';
+import { Subject } from 'rxjs';
+import { ServerProxyService } from '@core/server-proxy.service';
+import { LoginCommand, RegisterCommand } from '@core/logincommands';
 
 @Injectable({
   providedIn: 'root' // this makes the service a singleton
 })
 export class LoginService {
 
-  constructor() { 
+  constructor(private serverProxy : ServerProxyService ) { 
     console.log("LoginService is alive!");
   }
 
@@ -15,7 +17,7 @@ export class LoginService {
 
   public commenceLogin(username : string, password: string) {
     console.log("starting login...");
-    this.loginErrorSource.next("The username is incorrect");
+    this.serverProxy.transmitCommand(new LoginCommand(username, password));
   }
 
 }
