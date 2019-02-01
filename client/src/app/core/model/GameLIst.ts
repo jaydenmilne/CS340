@@ -1,16 +1,16 @@
-export class GameList {
-    private selectedGame: string;
-    private gameIDs: string [];
+export class GameList{
+    private selectedGame : string;
+    private gameIDs : string [];
 
     constructor(gameIDs: string[]) {
         this.gameIDs = gameIDs;
     }
 
-    public getSelectedGame(): string {
+    public getSelectedGame():string{
         return this.selectedGame;
     }
 
-    public setSelectedGame(selectedGame: string) {
+    public setSelectedGame(selectedGame:string){
         this.selectedGame = selectedGame;
     }
 
@@ -18,7 +18,7 @@ export class GameList {
         return this.gameIDs;
     }
 
-    public setGameIDs(gameIDs: string []) {
+    public setGameIDs(gameIDs:string []){
         this.gameIDs = gameIDs;
     }
 

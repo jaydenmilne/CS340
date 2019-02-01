@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GamePreview } from 'src/app/Model/GamePreview';
-import { Player } from 'src/app/Model/Player';
-import { Color } from 'src/app/Model/color.enum';
+import { Color } from 'src/app/core/model/color.enum';
+import { Player } from 'src/app/core/model/Player';
+import { GamePreview } from 'src/app/core/model/GamePreview';
 
 @Component({
   selector: 'app-game-info',
