@@ -7,11 +7,14 @@
     </mat-card-header>
     
     <mat-card-content class="game-info-main">
-      <div class="game-info-player-list">
-        <mat-card class="player-card,foreground">
-          Player Card
-        </mat-card>
-      </div>
+        <mat-chip-list class="mat-chip-list-stacked game-info-player-list">
+          <mat-chip *ngFor="let player of gamePreview.getPlayers()"  class="player-card" [ngStyle]="getPlayerColorStyle(player)" [selectable]="false">
+          {{player.getHandle()}} {{player.isReady() ? "Ready" : "Waiting"}}
+        </mat-chip>
+        <mat-chip (click)="onJoinGame()">
+          Join Game
+        </mat-chip>
+      </mat-chip-list>
 
       <!-- <app-chat-component></app-chat-component> -->
     </mat-card-content>

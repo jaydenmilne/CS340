@@ -1,17 +1,24 @@
+import { Color } from "./color.enum";
+
 export class Player{
-    private color:string;
+    private color: Color;
     private userID:string;
     private ready:boolean;
-    private handel:string;
+    private handle:string;
 
-    constructor(){}
+    constructor(color:Color, userID:string, ready:boolean, handle:string){
+        this.color = color;
+        this.userID = userID;
+        this.ready = ready;
+        this.handle = handle;
+    }
 
-    public getColor():string{
+    public getColor():Color{
         return this.color;
     }
 
     public setColor(color:string){
-        this.color = color;
+        this.color = Color[color.toUpperCase()];
     }
 
     public getUserID():string{
@@ -31,10 +38,10 @@ export class Player{
     }
 
     public getHandle():string{
-        return this.handel;
+        return this.handle;
     }
 
     public setHandle(handle:string){
-        this.handel = handle;
+        this.handle = handle;
     }
 }
