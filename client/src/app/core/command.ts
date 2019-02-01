@@ -1,11 +1,11 @@
 export interface Command {
-    command : string;
+    command: string;
 }
 
 export interface ICommandArray {
-    commands : Array<Command>;
+    commands: Array<Command>;
 }
 
 export class CommandArray implements ICommandArray {
-    public constructor (public commands : Array<Command>) {};
+    public constructor (public commands: Array<Command>) {}
 }

@@ -11,7 +11,7 @@ import { GameModule } from './game/game.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatDialogModule, MatButtonModule } from '@angular/material';
-import { FatalErrorDialog } from './app.component'
+import { FatalErrorDialog } from './app.component';
 
 @NgModule({
   declarations: [

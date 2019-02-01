@@ -1,31 +1,31 @@
-export class User{
-    private ID:string;
-    private username:string;
-    private authToken:string;
+export class User {
+    private ID: string;
+    private username: string;
+    private authToken: string;
 
-    constructor(){}
+    constructor() {}
 
-    public getID():string{
+    public getID(): string {
         return this.ID;
     }
 
-    public setColor(ID:string){
+    public setColor(ID: string) {
         this.ID = ID;
     }
 
-    public getUsername():string{
+    public getUsername(): string {
         return this.username;
     }
 
-    public setUsername(username:string){
+    public setUsername(username: string) {
         this.username = username;
     }
 
-    public getAuthToken():string{
+    public getAuthToken(): string {
         return this.authToken;
     }
 
-    public setAuthToken(authToken:string){
+    public setAuthToken(authToken: string) {
         this.authToken = authToken;
     }
 }

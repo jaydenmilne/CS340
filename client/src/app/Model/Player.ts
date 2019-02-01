@@ -1,40 +1,40 @@
-export class Player{
-    private color:string;
-    private userID:string;
-    private ready:boolean;
-    private handel:string;
+export class Player {
+    private color: string;
+    private userID: string;
+    private ready: boolean;
+    private handel: string;
 
-    constructor(){}
+    constructor() {}
 
-    public getColor():string{
+    public getColor(): string {
         return this.color;
     }
 
-    public setColor(color:string){
+    public setColor(color: string) {
         this.color = color;
     }
 
-    public getUserID():string{
+    public getUserID(): string {
         return this.userID;
     }
 
-    public setUserID(userID:string){
+    public setUserID(userID: string) {
         this.userID = userID;
     }
 
-    public isReady():boolean{
+    public isReady(): boolean {
         return this.ready;
     }
 
-    public setReady(ready:boolean){
+    public setReady(ready: boolean) {
         this.ready = ready;
     }
 
-    public getHandle():string{
+    public getHandle(): string {
         return this.handel;
     }
 
-    public setHandle(handle:string){
+    public setHandle(handle: string) {
         this.handel = handle;
     }
 }

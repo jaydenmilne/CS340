@@ -1,31 +1,31 @@
-export class GamePreview{
-    private name:string;
-    private ID:string;
-    private started:boolean;
+export class GamePreview {
+    private name: string;
+    private ID: string;
+    private started: boolean;
 
-    constructor(){}
+    constructor() {}
 
-    public getName():string{
+    public getName(): string {
         return this.name;
     }
 
-    public setColor(name:string){
+    public setColor(name: string) {
         this.name = name;
     }
 
-    public getID():string{
+    public getID(): string {
         return this.ID;
     }
 
-    public setUserID(ID:string){
+    public setUserID(ID: string) {
         this.ID = ID;
     }
 
-    public isStarted():boolean{
-        return this.started
+    public isStarted(): boolean {
+        return this.started;
     }
 
-    public setStarted(started:boolean){
+    public setStarted(started: boolean) {
         this.started = started;
     }
 

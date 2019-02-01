@@ -1,22 +1,22 @@
-export class GameList{
-    private selectedGame:string;
-    private gameIDs:string;
+export class GameList {
+    private selectedGame: string;
+    private gameIDs: string;
 
-    constructor(){}
+    constructor() {}
 
-    public getSelectedGame():string{
+    public getSelectedGame(): string {
         return this.selectedGame;
     }
 
-    public setSelectedGame(selectedGame:string){
+    public setSelectedGame(selectedGame: string) {
         this.selectedGame = selectedGame;
     }
 
-    public getGameIDs():string{
+    public getGameIDs(): string {
         return this.gameIDs;
     }
 
-    public setGameIDs(gameIDs:string){
+    public setGameIDs(gameIDs: string) {
         this.gameIDs = gameIDs;
     }
 
