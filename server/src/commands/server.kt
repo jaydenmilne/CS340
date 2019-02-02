@@ -1,42 +1,35 @@
 package commands
 
 class CreateGameCommand : IServerCommand {
-    override val type = "createGame"
+    override val type = CREATE_GAME
     private var name = ""
 
     override fun execute() {}
 }
 
-class GameCreatedCommand : IServerCommand {
-    override val type = "createGame"
-    private val gameId = ""
-
-    override fun execute() {}
-}
-
 class JoinGameCommand : IServerCommand {
-    override val type = "joinGame"
+    override val type = JOIN_GAME
     private val gameId = ""
 
     override fun execute() {}
 }
 
 class LeaveGameCommand : IServerCommand {
-    override val type = "leaveGame"
+    override val type = LEAVE_GAME
     private val gameId = ""
 
     override fun execute() {}
 }
 
 class ListGamesCommand : IServerCommand {
-    override val type = "listGames"
+    override val type = LIST_GAMES
 
     override fun execute() {}
 }
 
 
 class LoginCommand : IServerCommand {
-    override val type = "login"
+    override val type = LOGIN
     private val username = ""
     private val password = ""
 
@@ -44,7 +37,7 @@ class LoginCommand : IServerCommand {
 }
 
 class PlayerReadyCommand : IServerCommand {
-    override val type = "playerReady"
+    override val type = PLAYER_READY
     private val gameId = ""
     private val playerIsReady = false
 
@@ -52,7 +45,7 @@ class PlayerReadyCommand : IServerCommand {
 }
 
 class RegisterCommand : IServerCommand {
-    override val type = "register"
+    override val type = REGISTER
     private val username = ""
     private val password = ""
 

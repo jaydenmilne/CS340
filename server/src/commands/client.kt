@@ -1,7 +1,14 @@
 package commands
 
+class GameCreatedCommand : IClientCommand {
+    override val type = CREATE_GAME
+    private val gameId = ""
+
+    override fun execute() {}
+}
+
 class LoginResultCommand : IClientCommand {
-    override val type = "loginResult"
+    override val type = LOGIN_RESULT
     private val authToken = ""
     private val error = ""
 
@@ -10,13 +17,13 @@ class LoginResultCommand : IClientCommand {
 
 class RefreshGameListCommand : IClientCommand {
     //unfinished needs GamesList Model Object
-    override val type = "refreshGameList"
+    override val type = REFRESH_GAME_LIST
 
     override fun execute() {}
 }
 
 class RegisterResultCommand : IClientCommand {
-    override val type = "registerResult"
+    override val type = REGISTER_RESULT
     private val authToken = ""
     private val error = ""
 
@@ -24,7 +31,7 @@ class RegisterResultCommand : IClientCommand {
 }
 
 class StartGameCommand : IClientCommand {
-    override val type = "startGame"
+    override val type = START_GAME
     private val gameId = ""
 
     override fun execute() {}
