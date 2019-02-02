@@ -40,7 +40,7 @@ export class GameInfoComponent implements OnInit {
     this.lobbyService.leaveGame();
   }
 
-  public onSetColor(color: Color){
+  public onSetColor(color: Color) {
     this.lobbyService.changeColor(color);
   }
 }

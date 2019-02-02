@@ -53,7 +53,7 @@ export class LobbyService {
     this.server.transmitCommand(command);
   }
 
-  public changeColor(color: Color){
+  public changeColor(color: Color) {
     const command: ChangeColorCommand =  new ChangeColorCommand(this.gameList.getSelectedGame().getID(), color);
     this.server.transmitCommand(command);
   }

@@ -11,20 +11,20 @@ export class GameListComponent implements OnInit {
 
   constructor(private lobbyService: LobbyService) { }
 
-  ngOnInit() {
-  }
-
-  showNamePrompt: boolean = false;
+  showNamePrompt = false;
 
   createGameForm = new FormGroup({
     gameName: new FormControl('', [Validators.required, Validators.maxLength(20)])
   });
 
+  ngOnInit() {
+  }
+
   onNewGame() {
     this.showNamePrompt = true;
   }
 
-  onCreateGame(){
+  onCreateGame() {
     this.showNamePrompt = false;
     this.lobbyService.createGame(this.createGameForm.get('gameName').value);
   }
@@ -33,7 +33,7 @@ export class GameListComponent implements OnInit {
     this.lobbyService.gameList.setSelectedGameByID(game);
   }
 
-  onCancelNewGame(){
+  onCancelNewGame() {
     this.showNamePrompt = false;
   }
 }

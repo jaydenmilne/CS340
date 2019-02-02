@@ -50,7 +50,7 @@ export class GamePreview {
         return this.players.length;
     }
 
-    public getAvailableColors(): Color []{
+    public getAvailableColors(): Color [] {
         const colors: Color[] = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.ORANGE, Color.RED, Color.PURPLE];
         const takenColors: Color[] = [];
 
@@ -61,7 +61,7 @@ export class GamePreview {
         const avaiableColors = [];
 
         colors.forEach(color => {
-            if(!takenColors.includes(color)){
+            if (!takenColors.includes(color)) {
                 avaiableColors.push(color);
             }
         });
