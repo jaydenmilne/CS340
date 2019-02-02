@@ -32,12 +32,25 @@
 }
 .player-card{
     margin: 5px 0;
+    padding: 5px;
+}
+.player-list-card{
+    margin: 5px 0;
+}
+.player-card-info{
+    width: 100%;
 }
 .player-status{
-    position: absolute;
-    right: 15px;
-    bottom: 16px;
+    width: 30px;
 }
 .player-list-text{
+    font-weight: bold;
+}
+.ready-text{
+    font-weight: bold;
+    width: 55px;
+}
+.color-select{
+    margin-top: 50px;
     font-weight: bold;
 }

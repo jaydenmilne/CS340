@@ -4,17 +4,13 @@ export class Player {
     private color: Color;
     private userID: string;
     private ready: boolean;
-    private handle: string;
+    private name: string;
 
-    constructor(color: Color, userID: string, ready: boolean, handle: string) {
+    constructor(color: Color, userID: string, ready: boolean, name: string) {
         this.color = color;
         this.userID = userID;
         this.ready = ready;
-        this.handle = handle;
-    }
-
-    public getColor(): Color {
-        return this.color;
+        this.name = name;
     }
 
     public setColor(color: string) {
@@ -41,11 +37,11 @@ export class Player {
         this.ready = ready;
     }
 
-    public getHandle(): string {
-        return this.handle;
+    public getName(): string {
+        return this.name;
     }
 
     public setHandle(handle: string) {
-        this.handle = handle;
+        this.name = handle;
     }
 }
