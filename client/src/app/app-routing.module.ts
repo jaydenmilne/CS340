@@ -1,14 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-<<<<<<< HEAD
 import { LoginComponent } from './login/login/login.component';
 import { LobbyComponent } from './lobby/lobby/lobby.component';
 import { GameComponent } from './game/game/game.component';
-=======
-import { LoginComponent } from './login/login/login.component';
-import { LobbyComponent } from './lobby/lobby/lobby.component';
-import { GameComponent } from './game/game/game.component';
->>>>>>> master
 
 const routes: Routes = [
   // Login should be the first thing that happens
@@ -18,11 +12,7 @@ const routes: Routes = [
     redirectTo: 'login'
   },
   {
-<<<<<<< HEAD
     path: 'login',
-=======
-    path: 'login',
->>>>>>> master
     component: LoginComponent
   },
   {
