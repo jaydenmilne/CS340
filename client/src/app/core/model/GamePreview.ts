@@ -1,4 +1,5 @@
 import { Player } from './Player';
+import { Color } from './color.enum';
 
 export class GamePreview {
     private name: string;
@@ -47,5 +48,24 @@ export class GamePreview {
 
     public getNumPlayers(): number {
         return this.players.length;
+    }
+
+    public getAvailableColors(): Color []{
+        const colors: Color[] = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.ORANGE, Color.RED, Color.PURPLE];
+        const takenColors: Color[] = [];
+
+        this.players.forEach(player => {
+            takenColors.push(player.getColor());
+        });
+
+        const avaiableColors = [];
+
+        colors.forEach(color => {
+            if(!takenColors.includes(color)){
+                avaiableColors.push(color);
+            }
+        });
+
+        return avaiableColors;
     }
 }

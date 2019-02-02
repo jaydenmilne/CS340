@@ -13,6 +13,18 @@
   </mat-chip-list>
 
   <mat-card-actions class="game-list-actions">
-      <button mat-fab class ="actionbutton" color="primary" (click)="onNewGame()">+</button>
+      <form [formGroup]="createGameForm" id="game_create_form" *ngIf="showNamePrompt" class="full-width">
+          <button mat-icon-button class ="actionbutton"  (click)="onCancelNewGame()" *ngIf="showNamePrompt">
+              <i class="material-icons">cancel</i>
+            </button>  
+          <mat-form-field class="full-width name-input">
+            <input matInput placeholder="Enter a Game Name" formControlName="gameName" value="">
+          </mat-form-field>
+          <button mat-fab class ="actionbutton" color="primary" (click)=onCreateGame() [disabled]="!createGameForm.valid">></button>
+        </form>
+
+      <button mat-fab class ="actionbutton" color="primary" (click)="onNewGame()" *ngIf="!showNamePrompt">
+          <i class="material-icons">add</i>
+      </button>
   </mat-card-actions>
 </mat-card>

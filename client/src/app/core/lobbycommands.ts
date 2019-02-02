@@ -1,5 +1,6 @@
 import { Command } from './command';
 import { GameList } from './model/GameList';
+import { Color } from '../Model/color.enum';
 
 
 // Server commands
@@ -13,6 +14,12 @@ export class JoinGameCommand implements Command {
     public command = 'joinGame';
 
     constructor( public gameID: string) {}
+}
+
+export class ChangeColorCommand implements Command {
+    public command = 'changeColor';
+
+    constructor( public gameID: string, public newColor: Color) {}
 }
 
 export class LeaveGameCommand implements Command {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GameList } from 'src/app/core/model/GameList';
-import { GamePreview } from 'src/app/core/model/GamePreview';
 import { LobbyService } from '../lobby.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-game-list',
@@ -15,15 +14,26 @@ export class GameListComponent implements OnInit {
   ngOnInit() {
   }
 
-  onNewGame() {
-    // Get game name
+  showNamePrompt: boolean = false;
 
-    // Call new game on lobby service
-    this.lobbyService.createGame('');
+  createGameForm = new FormGroup({
+    gameName: new FormControl('', [Validators.required, Validators.maxLength(20)])
+  });
+
+  onNewGame() {
+    this.showNamePrompt = true;
+  }
+
+  onCreateGame(){
+    this.showNamePrompt = false;
+    this.lobbyService.createGame(this.createGameForm.get('gameName').value);
   }
 
   onGameSelect(game: string) {
     this.lobbyService.gameList.setSelectedGameByID(game);
   }
 
+  onCancelNewGame(){
+    this.showNamePrompt = false;
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/core/model/Player';
 import { LobbyService } from '../lobby.service';
+import { Color } from '@core/model/color.enum';
 
 @Component({
   selector: 'app-game-info',
@@ -23,6 +24,13 @@ export class GameInfoComponent implements OnInit {
     return style;
   }
 
+  public getColorStyle(color: Color) {
+    const style = {
+      'background-color': '#' + color
+    };
+    return style;
+  }
+
   public onReady() {
     this.playerReady = !this.playerReady;
     this.lobbyService.setReady(this.playerReady);
@@ -30,5 +38,9 @@ export class GameInfoComponent implements OnInit {
 
   public onLeave() {
     this.lobbyService.leaveGame();
+  }
+
+  public onSetColor(color: Color){
+    this.lobbyService.changeColor(color);
   }
 }

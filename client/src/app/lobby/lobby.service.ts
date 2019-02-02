@@ -3,7 +3,7 @@ import { GameList } from '../core/model/GameLIst';
 import { GamePreview } from '../core/model/GamePreview';
 import { Player } from '../core/model/Player';
 import { ServerProxyService } from '@core/server-proxy.service';
-import { JoinGameCommand, CreateGameCommand, LeaveGameCommand, PlayerReadyCommand, GameCreatedCommand, StartGameCommand, RefreshGameListCommand, ListGamesCommand } from '@core/lobbycommands';
+import { JoinGameCommand, CreateGameCommand, LeaveGameCommand, PlayerReadyCommand, GameCreatedCommand, StartGameCommand, RefreshGameListCommand, ListGamesCommand, ChangeColorCommand } from '@core/lobbycommands';
 import { Color } from '@core/model/color.enum';
 
 @Injectable({
@@ -50,6 +50,11 @@ export class LobbyService {
 
   public setReady(ready: boolean) {
     const command: PlayerReadyCommand = new PlayerReadyCommand(this.gameList.getSelectedGame().getID(), ready);
+    this.server.transmitCommand(command);
+  }
+
+  public changeColor(color: Color){
+    const command: ChangeColorCommand =  new ChangeColorCommand(this.gameList.getSelectedGame().getID(), color);
     this.server.transmitCommand(command);
   }
 
