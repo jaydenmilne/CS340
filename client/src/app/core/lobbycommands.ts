@@ -30,7 +30,7 @@ export class CreateGameCommand implements Command {
 export class PlayerReadyCommand implements Command {
     public command = 'playerReady';
 
-    constructor( public gameID: string, 
+    constructor( public gameID: string,
         public playerIsReady: boolean) {}
 }
 

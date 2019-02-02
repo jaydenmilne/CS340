@@ -12,12 +12,6 @@ export class GameListComponent implements OnInit {
 
   constructor(private lobbyService: LobbyService) { }
 
-  gameList: GameList = new GameList([
-    new GamePreview('game1', 'asldk', false, []),
-    new GamePreview('game2', '531', false, []),
-    new GamePreview('game3', 'vcb', false, []),
-  ]);
-
   ngOnInit() {
   }
 
@@ -25,11 +19,11 @@ export class GameListComponent implements OnInit {
     // Get game name
 
     // Call new game on lobby service
-    this.lobbyService.createGame("");
+    this.lobbyService.createGame('');
   }
 
   onGameSelect(game: string) {
-    this.gameList.setSelectedGameByID(game);
+    this.lobbyService.gameList.setSelectedGameByID(game);
   }
 
 }

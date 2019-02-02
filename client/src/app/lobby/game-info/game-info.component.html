@@ -1,26 +1,28 @@
-<mat-card class="game-info-card">
+<mat-card class="game-info-card" *ngIf="lobbyService.gameList.getSelectedGame()!=undefined">
     <mat-card-header>
       <mat-card-title>
-        {{GameName}}
+        {{this.lobbyService.gameList.getSelectedGame().getName()}}
       </mat-card-title>
-      <button mat-raised-button class ="actionbutton, game-info-close-button" color="warn">X</button>
+      <button mat-fab class ="actionbutton, game-info-close-button" color="warn" (click)="onLeave()">X</button>
     </mat-card-header>
     
     <mat-card-content class="game-info-main">
-        <!-- <mat-chip-list class="mat-chip-list-stacked game-info-player-list"> -->
-          <mat-card *ngFor="let player of gamePreview.getPlayers()"  class="player-card" [ngStyle]="getPlayerColorStyle(player)">
+          <mat-card *ngFor="let player of lobbyService.gameList.getSelectedGame().getPlayers()"  class="player-card" [ngStyle]="getPlayerColorStyle(player)">
           <div class="player-handle player-list-text"> {{player.getHandle()}} </div> 
           <div class="player-status player-list-text">{{player.isReady() ? "Ready" : "Waiting"}}</div>
         </mat-card>
-        <mat-chip (click)="onJoinGame()">
-          Join Game
-        </mat-chip>
-      <!-- </mat-chip-list> -->
 
-      <!-- <app-chat-component></app-chat-component> -->
+      <!-- <app-chat-component></app-chat-component>-->
     </mat-card-content>
   
     <mat-card-actions class="game-info-actions">
-        <button mat-raised-button class ="actionbutton,game-info-ready-button" color="accent">Ready</button>
+        <button mat-raised-button class ="actionbutton,game-info-ready-button" (click)="onReady()" color="primary">Ready</button>
     </mat-card-actions>
   </mat-card>
+
+  <div class="container">
+  <mat-card class="sel-game-msg" *ngIf="lobbyService.gameList.getSelectedGame()===undefined">
+    <mat-card-title class="title">Select a Game</mat-card-title>
+  </mat-card>
+
+  </div>

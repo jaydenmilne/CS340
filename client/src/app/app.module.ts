@@ -13,7 +13,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatButtonModule } from '@angular/material';
 import { FatalErrorDialog } from './app.component';
 import { ServerProxyService } from '@core/server-proxy.service';
-import { LobbyService } from './lobby/lobby.service';
 
 @NgModule({
   declarations: [

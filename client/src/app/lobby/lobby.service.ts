@@ -4,20 +4,34 @@ import { GamePreview } from '../core/model/GamePreview';
 import { Player } from '../core/model/Player';
 import { ServerProxyService } from '@core/server-proxy.service';
 import { JoinGameCommand, CreateGameCommand, LeaveGameCommand, PlayerReadyCommand, GameCreatedCommand, StartGameCommand, RefreshGameListCommand, ListGamesCommand } from '@core/lobbycommands';
+import { Color } from '@core/model/color.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyService {
 
-  constructor(private server: ServerProxyService) { }
+  constructor(private server: ServerProxyService) {
+      // this.gameList.setSelectedGameByID('asldk');
+   }
 
-  public getGamesList(){
+  public gameList: GameList = new GameList([
+    new GamePreview('game1', 'asldk', false, [
+      new Player(Color.YELLOW, 'user1', false, 'riffraff78'),
+      new Player(Color.BLUE, 'user2', true, 'toughstuff56'),
+      new Player(Color.GREEN, 'user3', true, 'hotshot33'),
+      new Player(Color.PURPLE, 'user4', false, 'tooslow64'),
+    ]),
+    new GamePreview('game2', '531', false, []),
+    new GamePreview('game3', 'vcb', false, []),
+  ]);
+
+  public getGamesList() {
     const command: ListGamesCommand = new ListGamesCommand();
     this.server.transmitCommand(command);
   }
 
-  public joinGame(game: GamePreview){
+  public joinGame(game: GamePreview) {
     // Create Join Game command
     const command: JoinGameCommand = new JoinGameCommand(game.getID());
     this.server.transmitCommand(command);
@@ -28,25 +42,26 @@ export class LobbyService {
     this.server.transmitCommand(command);
   }
 
-  public leaveGame(game: GamePreview){
-    const command: LeaveGameCommand = new LeaveGameCommand(game.getID());
+  public leaveGame() {
+    const command: LeaveGameCommand = new LeaveGameCommand(this.gameList.getSelectedGame().getID());
+    this.gameList.setSelectedGame(undefined);
     this.server.transmitCommand(command);
   }
 
-  public setReady(player: Player, ready: boolean, game: GamePreview){
-    const command: PlayerReadyCommand = new PlayerReadyCommand(game.getID(), ready);
+  public setReady(ready: boolean) {
+    const command: PlayerReadyCommand = new PlayerReadyCommand(this.gameList.getSelectedGame().getID(), ready);
     this.server.transmitCommand(command);
   }
 
-  public onStartGameCommand(command: StartGameCommand){
+  public onStartGameCommand(command: StartGameCommand) {
 
   }
 
-  public onGameCreatedCommand(command: GameCreatedCommand){
+  public onGameCreatedCommand(command: GameCreatedCommand) {
 
   }
 
-  public onRefreshGameListCommand(command: RefreshGameListCommand){
+  public onRefreshGameListCommand(command: RefreshGameListCommand) {
 
   }
 }
