@@ -1,11 +1,11 @@
-import { User } from './User';
-import { GameList } from './GameLIst';
-import { GamePreview } from './GamePreview';
+import { User } from './user';
+import { GameList } from './game-list';
+import { GamePreview } from './game-preview';
 
 export class Model {
     private myUser: User;
     private availableGames: GameList;
-    private allGames: GamePreview;
+    private allGames: GamePreview[];
 
     constructor() {}
 
@@ -25,11 +25,11 @@ export class Model {
         this.availableGames = availableGames;
     }
 
-    private getAllGames(): GamePreview {
+    private getAllGames(): GamePreview[] {
         return this.allGames;
     }
 
-    private setAllGames(allGames: GamePreview) {
+    private setAllGames(allGames: GamePreview[]) {
         this.allGames = allGames;
     }
 }
