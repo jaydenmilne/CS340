@@ -4,6 +4,8 @@ import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from './error-notifier.service';
 import { Subject } from 'rxjs';
+import { UserService } from './user.service';
+import { LoginResult } from './login-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +14,28 @@ import { Subject } from 'rxjs';
 export class ServerProxyService {
 
   private commandEndpoint = '/command';
+  private authToken = '';
 
-  private incomingCmdSrc = new Subject<Command>();
-  public incomingCmd$ = this.incomingCmdSrc.asObservable();
+  public incomingCmd$ = new Subject<Command>();
 
+  /**
+   * Gets the correct url depending on development mode or not
+   */
   private getServerUrl(): string {
     if (isDevMode()) { return 'http://127.0.0.1:4300'; } else { return 'api.marylou.ga'; }
   }
 
+  /**
+   * Returns the entire URL that we should be using (debug / production)
+   */
   private getUrl(): string {
     return this.getServerUrl() + this.commandEndpoint;
   }
 
+  /**
+   * When an HTTP error occurs, handle it and notify the user
+   * @param error the error to parse
+   */
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -39,16 +51,23 @@ export class ServerProxyService {
     }
   }
 
+  /**
+   * Parses the commands out of a response from the server
+   * @param result response to parse
+   */
   private handleReponse(result: HttpResponse<CommandArray>) {
-    if (!result.ok) { console.error('Got a response that isn\'t OK but didn\'t go to handleError(?)'); }
-
     const commands: CommandArray = result.body as CommandArray;
 
+    // Dispatch every command in the received array
     for (const command of commands.commands) {
-      this.incomingCmdSrc.next(command);
+      this.incomingCmd$.next(command);
     }
   }
 
+  /**
+   * Sends a command to the server and parses commands it receives in response.
+   * @param command Command-like object to transmit to the server
+   */
   public transmitCommand(command: Command) {
     this.http.post<ICommandArray>(
       this.getUrl(),
@@ -59,10 +78,26 @@ export class ServerProxyService {
 
   }
 
+  /**
+   * Polls the backend without transmitting and paramaters
+   */
   public poll() {
-
+    this.http.get<ICommandArray>(
+      this.getUrl(),
+      { observe: 'response'}).subscribe(
+        result => this.handleReponse(result),
+        error => this.handleError(error));
   }
 
   constructor(private http: HttpClient,
-              private errorService: ErrorNotifierService) { }
+              private errorService: ErrorNotifierService) {
+    this.incomingCmd$.subscribe(cmd => {
+      // Listen for authTokens
+      const loginResult: any = cmd as any;
+
+      if (loginResult.command !== 'loginResult' && loginResult.error === '') { return; }
+
+      this.authToken = loginResult.user.authToken;
+    });
+  }
 }
