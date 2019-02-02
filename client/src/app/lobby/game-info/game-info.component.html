@@ -17,7 +17,9 @@
         <mat-card class="player-select">
           <mat-card-title>Select Color</mat-card-title>
           <mat-chip-list>
-              <mat-chip *ngFor="let color of lobbyService.gameList.getSelectedGame().getAvailableColors()"  class="player-card" [ngStyle]="getColorStyle(color)" (click)="onSetColor(color)"></mat-chip>
+              <mat-chip *ngFor="let color of lobbyService.gameList.getSelectedGame().getAvailableColors()"  class="player-card" [ngStyle]="getColorStyle(color)" (click)="onSetColor(color)">
+                  <i class="material-icons">color_lens</i>
+              </mat-chip>
           </mat-chip-list>
         </mat-card>
 

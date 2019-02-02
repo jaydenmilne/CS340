@@ -20,7 +20,9 @@
           <mat-form-field class="full-width name-input">
             <input matInput placeholder="Enter a Game Name" formControlName="gameName" value="">
           </mat-form-field>
-          <button mat-fab class ="actionbutton" color="primary" (click)=onCreateGame() [disabled]="!createGameForm.valid">></button>
+          <button mat-fab class ="actionbutton" color="primary" (click)=onCreateGame() [disabled]="!createGameForm.valid">
+              <i class="material-icons">check</i>
+          </button>
         </form>
 
       <button mat-fab class ="actionbutton" color="primary" (click)="onNewGame()" *ngIf="!showNamePrompt">
