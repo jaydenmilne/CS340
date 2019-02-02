@@ -34,6 +34,13 @@ Several commands transmit arrays of models, these are their descriptions.
     "ready": true
 }
 ```
+Valid colors are
+- `blue`
+- `red`
+- `green`
+- `yellow`
+- `black`
+
 ### `user` object
 This should only be sent as part of the loginResult command.
 ```json
