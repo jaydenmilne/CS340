@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { GameInfoComponent } from '../game-info/game-info.component';
-
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',

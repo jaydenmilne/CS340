@@ -41,7 +41,12 @@ export class ServerProxyService {
 
   private handleReponse(result: HttpResponse<CommandArray>) {
     if (!result.ok) { console.error('Got a response that isn\'t OK but didn\'t go to handleError(?)'); }
-    console.log('didn\'t blow up!');
+
+    const commands: CommandArray = result.body as CommandArray;
+
+    for (const command of commands.commands) {
+      this.incomingCmdSrc.next(command);
+    }
   }
 
   public transmitCommand(command: Command) {

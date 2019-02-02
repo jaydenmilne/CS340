@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { GameList } from '../core/model/GameLIst';
-import { GamePreview } from '../core/model/GamePreview';
-import { Player } from '../core/model/Player';
+import { GameList } from '../core/model/game-list';
+import { GamePreview } from '../core/model/game-preview';
+import { Player } from '../core/model/player';
 import { ServerProxyService } from '@core/server-proxy.service';
 import { JoinGameCommand, CreateGameCommand, LeaveGameCommand, PlayerReadyCommand, GameCreatedCommand, StartGameCommand, RefreshGameListCommand, ListGamesCommand, ChangeColorCommand } from '@core/lobbycommands';
 import { Color } from '@core/model/color.enum';

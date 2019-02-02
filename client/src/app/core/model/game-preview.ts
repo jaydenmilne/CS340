@@ -1,5 +1,5 @@
-import { Player } from './Player';
 import { Color } from './color.enum';
+import { Player } from './player';
 
 export class GamePreview {
     private name: string;
@@ -69,3 +69,4 @@ export class GamePreview {
         return avaiableColors;
     }
 }
+

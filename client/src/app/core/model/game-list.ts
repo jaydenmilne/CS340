@@ -1,4 +1,4 @@
-import { GamePreview } from './GamePreview';
+import { GamePreview } from './game-preview';
 
 export class GameList {
     private selectedGame: GamePreview;

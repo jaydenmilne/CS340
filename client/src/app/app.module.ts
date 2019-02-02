@@ -13,13 +13,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatButtonModule } from '@angular/material';
 import { FatalErrorDialog } from './app.component';
 import { ServerProxyService } from '@core/server-proxy.service';
+import { FatalErrorDialogComponent } from './app.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FatalErrorDialog
+    FatalErrorDialogComponent
   ],
-  entryComponents: [ FatalErrorDialog ],
+  entryComponents: [ FatalErrorDialogComponent ],
   imports: [
     BrowserModule,
     HttpClientModule,

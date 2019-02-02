@@ -34,6 +34,15 @@ Several commands transmit arrays of models, these are their descriptions.
     "ready": true
 }
 ```
+### `user` object
+This should only be sent as part of the loginResult command.
+```json
+{
+    "userId": "{id of user}",
+    "username": "{username of player}",
+    "authToken": "{auth token}"
+}
+```
 
 ## Commands
 
@@ -84,25 +93,16 @@ Logs in an existing user.
 ### `loginResult` Command
 Client Command.
 
-Informs the client the result of a login.
-
-If the login/registration is successful, `authToken` will be present and populated.
-If the login/registration was not successful, `error` and `errorCode` will be present and populated.
-
-These are the errors the client will expect (so it knows which input field to mark with the message)
-
-1. Username is taken
-2. Password is incorrect
-3. Username does not exist
-4. Username is too long (16 chars max)
+Informs the client the result of a login. If there was no error, `error` should be an empty string.
 
 #### Syntax
 ```json
 {
     "command": "loginResult",
-    "authToken": "token",
     "error": "message",
-    "errorCode": 1
+    "user": {
+        // user object
+    }
 }
 ```
 ### `listGames` Command

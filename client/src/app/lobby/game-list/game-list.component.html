@@ -8,7 +8,7 @@
   <mat-chip-list class="mat-chip-list-stacked">
     <mat-chip *ngFor="let game of lobbyService.gameList.getGames()" class="game-list-game-card,mat-primary" [class.mat-chip-selected]="lobbyService.gameList.isSelectedGame(game.getID())" (click)="onGameSelect(game.getID())">
       <div class="game-name">{{game.getName()}}</div>
-      <div class="game-player-num">{{game. getNumPlayers()}}</div>
+      <div class="game-player-num">{{game.getNumPlayers()}}</div>
     </mat-chip>
   </mat-chip-list>
 
