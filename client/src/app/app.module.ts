@@ -22,13 +22,13 @@ import { FatalErrorDialogComponent } from './app.component';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule,
     LoginModule,
     LobbyModule,
     GameModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
