@@ -1,0 +1,15 @@
+.chat-message-card{
+    max-width: 100%;
+    word-wrap: break-word;
+    margin-top: 16px;
+}
+.chat-box{
+    max-height: 100%;
+    overflow-y: scroll;
+}
+.my-message{
+    margin-left: 20%;
+}
+.other-message{
+    margin-right: 20%;
+}

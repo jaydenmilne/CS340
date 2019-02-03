@@ -13,4 +13,8 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
   }
 
+  public onSend(){
+    
+  }
+
 }
