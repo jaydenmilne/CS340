@@ -216,8 +216,8 @@ the chat window.
 {
     "command": "postChat",
     "gameId": "{id of relevant game}",
-    "playerId": "{id of relevant player}",
-    "playerName": "{name of relevant player}",
+    "userId": "{id of relevant player}",
+    "userName": "{name of relevant player}",
     "message": "I like pie!"
 }
 ```
