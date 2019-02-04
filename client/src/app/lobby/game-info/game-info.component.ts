@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Player } from 'src/app/core/model/Player';
+import { Player } from 'src/app/core/model/player';
 import { LobbyService } from '../lobby.service';
 import { Color } from '@core/model/color.enum';
 
