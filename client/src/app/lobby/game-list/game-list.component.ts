@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LobbyService } from '../lobby.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-game-list',
@@ -7,9 +9,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameListComponent implements OnInit {
 
-  constructor() { }
+  constructor(private lobbyService: LobbyService) { }
+
+  showNamePrompt = false;
+
+  createGameForm = new FormGroup({
+    gameName: new FormControl('', [Validators.required, Validators.maxLength(20)])
+  });
 
   ngOnInit() {
   }
 
+  onNewGame() {
+    this.showNamePrompt = true;
+  }
+
+  onCreateGame() {
+    this.showNamePrompt = false;
+    this.lobbyService.createGame(this.createGameForm.get('gameName').value);
+  }
+
+  onGameSelect(game: string) {
+    this.lobbyService.gameList.setSelectedGameByID(game);
+  }
+
+  onCancelNewGame() {
+    this.showNamePrompt = false;
+  }
 }

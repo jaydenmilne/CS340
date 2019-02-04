@@ -12,6 +12,7 @@ import { ChatModule } from './chat/chat.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatButtonModule } from '@angular/material';
+import { ServerProxyService } from '@core/server-proxy.service';
 import { FatalErrorDialogComponent } from './app.component';
 
 @NgModule({
@@ -32,7 +33,7 @@ import { FatalErrorDialogComponent } from './app.component';
     MatDialogModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [ServerProxyService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

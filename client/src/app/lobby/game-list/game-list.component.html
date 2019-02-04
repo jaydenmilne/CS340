@@ -1,3 +1,32 @@
-<p>
-  game-list works!
-</p>
+<mat-card class="game-list-card" color="P-light">
+  <mat-card-header>
+    <mat-card-title>
+      Available Games
+    </mat-card-title>
+  </mat-card-header>
+ 
+  <mat-chip-list class="mat-chip-list-stacked">
+    <mat-chip *ngFor="let game of lobbyService.gameList.getGames()" class="game-list-game-card,mat-primary" [class.mat-chip-selected]="lobbyService.gameList.isSelectedGame(game.getID())" (click)="onGameSelect(game.getID())">
+      <div class="game-name">{{game.getName()}}</div>
+      <div class="game-player-num">{{game.getNumPlayers()}}</div>
+    </mat-chip>
+  </mat-chip-list>
+
+  <mat-card-actions class="game-list-actions">
+      <form [formGroup]="createGameForm" id="game_create_form" *ngIf="showNamePrompt" class="full-width">
+          <button mat-icon-button class ="actionbutton"  (click)="onCancelNewGame()" *ngIf="showNamePrompt">
+              <i class="material-icons">cancel</i>
+            </button>  
+          <mat-form-field class="full-width name-input">
+            <input matInput placeholder="Enter a Game Name" formControlName="gameName" value="">
+          </mat-form-field>
+          <button mat-fab class ="actionbutton" color="primary" (click)=onCreateGame() [disabled]="!createGameForm.valid">
+              <i class="material-icons">check</i>
+          </button>
+        </form>
+
+      <button mat-fab class ="actionbutton" color="primary" (click)="onNewGame()" *ngIf="!showNamePrompt">
+          <i class="material-icons">add</i>
+      </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Player } from 'src/app/core/model/player';
+import { LobbyService } from '../lobby.service';
+import { Color } from '@core/model/color.enum';
 
 @Component({
   selector: 'app-game-info',
@@ -7,9 +10,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameInfoComponent implements OnInit {
 
-  constructor() { }
+  constructor(private lobbyService: LobbyService) { }
+
+  playerReady = false;
 
   ngOnInit() {
   }
 
+  public getPlayerColorStyle(player: Player) {
+    const style = {
+      'background-color': '#' + player.getColor()
+    };
+    return style;
+  }
+
+  public getColorStyle(color: Color) {
+    const style = {
+      'background-color': '#' + color
+    };
+    return style;
+  }
+
+  public onReady() {
+    this.playerReady = !this.playerReady;
+    this.lobbyService.setReady(this.playerReady);
+  }
+
+  public onLeave() {
+    this.lobbyService.leaveGame();
+  }
+
+  public onSetColor(color: Color) {
+    this.lobbyService.changeColor(color);
+  }
 }
