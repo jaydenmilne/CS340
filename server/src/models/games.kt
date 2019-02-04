@@ -1,12 +1,19 @@
 package models
 
+private var nextGameId = -1
+
+fun getNextGameID(): Int {
+    nextGameId++
+    return nextGameId
+}
+
 object Games {
     var games = mutableMapOf<Int, Game>()
 }
 
-class Game(var gameid: Int, var players: Set<Player>, var name: String, var started: Boolean) {
+class Game(var name: String) {
 
-    fun hasPlayer(player: Player): Boolean {
-        return players.contains(player)
-    }
+    val gameID = getNextGameID()
+    var players = mutableSetOf<User>()
+    var started = false
 }

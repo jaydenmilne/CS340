@@ -1,5 +1,7 @@
 package commands
 
+import models.User
+
 const val CREATE_GAME = "createGame"
 const val JOIN_GAME = "joinGame"
 const val LEAVE_GAME = "leaveGame"
@@ -18,7 +20,7 @@ interface ICommand {
 
 interface IServerCommand : ICommand {
     override val type: String
-    fun execute()
+    fun execute(user: User)
 }
 
 interface IClientCommand : ICommand {

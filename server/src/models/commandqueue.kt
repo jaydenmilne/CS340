@@ -1,12 +1,20 @@
 package models
 
-import command.ICommand
-import java.util.*
+import com.google.gson.Gson
+import commands.IClientCommand
 
-class CommandQueue(var commands: Queue<ICommand>) {
+class CommandQueue {
 
-    fun executeNextCommand() {
-        commands.peek().execute()
-        commands.remove()
+    var commands = mutableListOf<IClientCommand>()
+
+    fun push(command: IClientCommand) {
+        commands.add(command)
+    }
+
+    fun pollCommands(): String {
+        var rendered = Gson().toJson(commands)
+        commands.clear()
+
+        return rendered
     }
 }

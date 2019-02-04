@@ -29,8 +29,9 @@ fun handlePost(httpExchange: HttpExchange) {
 
     var initialCommand = Gson().fromJson(requestBody, IServerCommand::class.java)
 
-    var command = when(initialCommand.type) {
+    var authToken = httpExchange.requestHeaders.getFirst("Authorization")
 
+    var command = when(initialCommand.type) {
         CREATE_GAME -> Gson().fromJson(requestBody, CreateGameCommand::class.java)
         JOIN_GAME -> Gson().fromJson(requestBody, JoinGameCommand::class.java)
         LEAVE_GAME -> Gson().fromJson(requestBody, LeaveGameCommand::class.java)
@@ -48,6 +49,9 @@ fun handlePost(httpExchange: HttpExchange) {
     } else {
         httpExchange.sendResponseHeaders(HTTP_OK, 0)
         command.execute()
+
+        // render the command queue
+
         httpExchange.close()
     }
 }
