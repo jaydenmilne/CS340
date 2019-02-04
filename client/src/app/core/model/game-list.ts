@@ -1,23 +1,38 @@
+import { GamePreview } from './game-preview';
+
 export class GameList {
-    private selectedGame: string;
-    private gameIDs: string;
+    private selectedGame: GamePreview;
+    private games: GamePreview [];
 
-    constructor() {}
-
-    public getSelectedGame(): string {
-        return this.selectedGame;
+    constructor(games: GamePreview []) {
+        this.games = games;
     }
 
-    public setSelectedGame(selectedGame: string) {
+    public getSelectedGame(): GamePreview {
+        return this.selectedGame;
+    }
+    
+    public setSelectedGameByID(selectedGameID: string) {
+        const gamePreview: GamePreview = this.games.find(g => g.getID() === selectedGameID);
+        this.selectedGame = gamePreview;
+    }
+
+    public setSelectedGame(selectedGame: GamePreview) {
         this.selectedGame = selectedGame;
     }
 
-    public getGameIDs(): string {
-        return this.gameIDs;
+    public getGames(): GamePreview [] {
+        return this.games;
     }
 
-    public setGameIDs(gameIDs: string) {
-        this.gameIDs = gameIDs;
+    public setGames(games: GamePreview []) {
+        this.games = games;
     }
 
+    public isSelectedGame(gameID: string): boolean {
+        if (this.selectedGame === undefined) {
+            return false;
+        }
+        return this.selectedGame.getID() === gameID;
+    }
 }
