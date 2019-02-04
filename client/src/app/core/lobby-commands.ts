@@ -1,5 +1,5 @@
 import { Command } from './command';
-import { Color } from '../Model/color.enum';
+import { Color } from '@core/model/color.enum';
 import { GamePreview } from './model/game-preview';
 
 
