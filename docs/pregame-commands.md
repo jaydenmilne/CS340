@@ -55,7 +55,8 @@ This should only be sent as part of the loginResult command.
 | [refreshGameList](#refreshgamelist-command) | Client                      | `listGames`      |
 | [joinGame](#joingame-command)          | Server                           | `leaveGame`      |
 | [leaveGame](#leavegame-command)        | Server                           | `joinGame`       |
-| [createGame](#creategame-command)      | Server                           | `gameCreated`    |
+| [createGame](#creategame-command)      | Server                           | `refreshGameList`    |
+| [changeColor](#changecolor-command)    | Server                           | `gameCreated`    |
 | [gameCreated](#gamecreated-command)    | Client                           | `createGame`     |
 | [playerReady](#playerready-command)    | Server                           |                  |
 | [postChat](#postchat-command)          | Server / Client                  |                  |
@@ -156,6 +157,20 @@ Informs the server the user has left a game.
 {
     "command": "leaveGame",
     "gameId": "{game id}"
+}
+```
+
+### `changeColor` Command
+Client Command.
+
+Informs the server that the player has selected a new color.
+
+#### Syntax
+```json
+{
+    "command": "changecolor",
+    "gameId": "{game id}",
+    "color":  "{new colorolor}"
 }
 ```
 
