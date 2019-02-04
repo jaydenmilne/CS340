@@ -4,28 +4,28 @@ export class Player {
     private color: Color;
     private userId: string;
     private ready: boolean;
-    private handle: string;
+    private name: string;
 
-    constructor(color: Color, userId: string, ready: boolean, handle: string) {
+    constructor(color: Color, userId: string, ready: boolean, name: string) {
         this.color = color;
         this.userId = userId;
         this.ready = ready;
-        this.handle = handle;
-    }
-
-    public getColor(): Color {
-        return this.color;
+        this.name = name;
     }
 
     public setColor(color: string) {
         this.color = Color[color.toUpperCase()];
     }
 
-    public getUserID(): string {
+    public getColor(): Color {
+        return this.color;
+    }
+
+    public getuserId(): string {
         return this.userId;
     }
 
-    public setUserID(userId: string) {
+    public setuserId(userId: string) {
         this.userId = userId;
     }
 
@@ -37,11 +37,11 @@ export class Player {
         this.ready = ready;
     }
 
-    public getHandle(): string {
-        return this.handle;
+    public getName(): string {
+        return this.name;
     }
 
     public setHandle(handle: string) {
-        this.handle = handle;
+        this.name = handle;
     }
 }

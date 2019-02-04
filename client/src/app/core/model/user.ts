@@ -1,16 +1,23 @@
 export class User {
-    private ID: string;
+    private userId: string;
     private username: string;
     private authToken: string;
 
-    constructor() {}
+    constructor(user: any) {
+        // Construct a User from a user-like object
+        if (!('authToken' in user) ||
+            !('username' in user)  ||
+            !('userId' in user)) {
+                throw new TypeError('Unable to deserialize user object, ' + JSON.stringify(user));
+            }
 
-    public getID(): string {
-        return this.ID;
+        this.authToken = user.authToken;
+        this.username = user.username;
+        this.userId = user.userId;
     }
 
-    public setColor(ID: string) {
-        this.ID = ID;
+    public getUserId(): string {
+        return this.userId;
     }
 
     public getUsername(): string {
