@@ -11,20 +11,20 @@ export class ChatService {
   constructor(private server: ServerProxyService) { }
 
   public chatHistory: ChatMessage[] = [
-    new ChatMessage('game1', '8652315', 'user1', 'This is a message'),
-    new ChatMessage('game1', '865sdf15', 'user1', 'This is a message'),
-    new ChatMessage('game1', '8652gf5', 'user1', 'This is a message'),
-    new ChatMessage('game1', '8652cv5', 'user1', 'This is a message'),
-    new ChatMessage('game1', '8652re5', 'user1', 'This is a message'),
-    new ChatMessage('game1', '8652df5', 'user1', 'This is a message'),
-    new ChatMessage('game1', '8652vcxb5', 'user1', 'This is a message'),
-    new ChatMessage('game1', '86523xcvb5', 'user1', 'This is a message'),
-    new ChatMessage('game1', '865231xcv5', 'user1', 'This is a message'),
-    new ChatMessage('game1', '865231xzv5', 'user1', 'This is a message'),
-    new ChatMessage('game1', '86523fdg15', 'user1', 'This is a message'),
-    new ChatMessage('game1', '86523gfh15', 'user1', 'This is a message'),
-    new ChatMessage('game1', '86523jgh15', 'user2', 'This is another message'),
-    new ChatMessage('game1', '865231tyu5', 'user3', 'This is a really loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong message')
+    new ChatMessage('game1', '8652315', 'riffraff78', 'This is a message'),
+    new ChatMessage('game1', '865sdf15', 'toughstuff56', 'This is a message'),
+    new ChatMessage('game1', '8652gf5', 'riffraff78', 'This is a message'),
+    new ChatMessage('game1', '8652cv5', 'toughstuff56', 'This is a message'),
+    new ChatMessage('game1', '8652re5', 'hotshot33', 'This is a message'),
+    new ChatMessage('game1', '8652df5', 'riffraff78', 'This is a message'),
+    new ChatMessage('game1', '8652vcxb5', 'toughstuff56', 'This is a message'),
+    new ChatMessage('game1', '1234', 'user1', 'This is a message'),
+    new ChatMessage('game1', '865231xcv5', 'hotshot33', 'This is a message'),
+    new ChatMessage('game1', '865231xzv5', 'hotshot33', 'This is a message'),
+    new ChatMessage('game1', '1234', 'user1', 'This is a message'),
+    new ChatMessage('game1', '86523gfh15', 'hotshot33', 'This is a message'),
+    new ChatMessage('game1', '1234', 'user1', 'This is another message'),
+    new ChatMessage('game1', '865231tyu5', 'hotshot33', 'This is a really loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong message')
   ];
 
   public sendChat(message: ChatMessage){
