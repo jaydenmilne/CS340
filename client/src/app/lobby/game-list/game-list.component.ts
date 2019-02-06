@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LobbyService } from '../lobby.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { GamePreview } from '@core/model/game-preview';
 
 @Component({
   selector: 'app-game-list',
@@ -29,8 +30,8 @@ export class GameListComponent implements OnInit {
     this.lobbyService.createGame(this.createGameForm.get('gameName').value);
   }
 
-  onGameSelect(game: string) {
-    this.lobbyService.gameList.setSelectedGameByID(game);
+  onGameSelect(game: GamePreview) {
+    this.lobbyService.joinGame(game);
   }
 
   onCancelNewGame() {
