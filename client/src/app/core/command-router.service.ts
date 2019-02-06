@@ -4,6 +4,7 @@ import { Command } from '@core/command';
 import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
+import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,9 @@ export class CommandRouterService {
   // OBSERVABLES (one for every client command type)
 
   public loginResult$ = new Subject<LoginResult>();
+  public gameCreated$ = new Subject<GameCreatedCommand>();
+  public startGame$ = new Subject<StartGameCommand>();
+  public refreshGameList$ = new Subject<RefreshGameListCommand>();
 
   /**
    * Identifies each command, deserializes it, and signals the observables.
@@ -31,6 +35,10 @@ export class CommandRouterService {
         case 'loginResult':
           this.loginResult$.next(new LoginResult(cmd));
           break;
+        case 'gameCreated': this.gameCreated$.next(new GameCreatedCommand(cmd)); break;
+        case 'startGame': this.startGame$.next(new StartGameCommand(cmd)); break;
+        case 'refreshGameList': this.refreshGameList$.next(new RefreshGameListCommand(cmd)); break;
+
         default:
           const msg = new ErrorMessage(
             'Got an unknown command type from the server',
