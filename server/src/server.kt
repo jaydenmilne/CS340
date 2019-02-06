@@ -2,13 +2,15 @@ import com.google.gson.Gson
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import commands.*
+import models.AuthTokens
 import org.apache.commons.io.IOUtils
 import java.io.InputStreamReader
-import java.net.HttpURLConnection.HTTP_BAD_REQUEST
-import java.net.HttpURLConnection.HTTP_OK
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection.*
 import java.net.InetSocketAddress
 
 const val MAX_CONNECTIONS = 10
+const val REGISTRATION_ENDPOINT = "/register"
 const val COMMAND_ENDPOINT = "/command"
 
 fun main(args: Array<String>) {
@@ -22,7 +24,23 @@ fun main(args: Array<String>) {
     }
 }
 
-fun handleGet(httpExchange: HttpExchange) {}
+fun handleGet(httpExchange: HttpExchange) {
+    var authToken = httpExchange.requestHeaders.getFirst("Authorization")
+    var user = AuthTokens.getUser(authToken)
+
+    httpExchange.sendResponseHeaders(HTTP_OK, 0)
+
+    if (user == null) {
+        httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
+        httpExchange.close()
+        return
+    }
+
+    var writer = OutputStreamWriter(httpExchange.responseBody)
+
+    writer.write(user.queue.pollCommands())
+    httpExchange.close()
+}
 
 fun handlePost(httpExchange: HttpExchange) {
     var requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
@@ -30,6 +48,13 @@ fun handlePost(httpExchange: HttpExchange) {
     var initialCommand = Gson().fromJson(requestBody, IServerCommand::class.java)
 
     var authToken = httpExchange.requestHeaders.getFirst("Authorization")
+    var user = AuthTokens.getUser(authToken)
+
+    if (user == null) {
+        httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
+        httpExchange.close()
+        return
+    }
 
     var command = when(initialCommand.type) {
         CREATE_GAME -> Gson().fromJson(requestBody, CreateGameCommand::class.java)
@@ -48,10 +73,11 @@ fun handlePost(httpExchange: HttpExchange) {
         httpExchange.close()
     } else {
         httpExchange.sendResponseHeaders(HTTP_OK, 0)
-        command.execute()
+        var writer = OutputStreamWriter(httpExchange.responseBody)
 
-        // render the command queue
+        command.execute(user)
 
+        writer.write(user.queue.pollCommands())
         httpExchange.close()
     }
 }
