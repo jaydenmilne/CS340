@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Command, CommandArray, ICommandArray} from './command';
+import { Command, CommandArray, ICommandArray } from './command';
 import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from './error-notifier.service';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 import { LoginResult } from './login-commands';
 
@@ -16,6 +16,7 @@ export class ServerProxyService {
   private commandEndpoint = '/command';
   private authToken = '';
 
+  public failedRequests$ = new BehaviorSubject <number>(0);
   public incomingCmd$ = new Subject<Command>();
 
   /**
@@ -51,12 +52,35 @@ export class ServerProxyService {
     }
   }
 
+    /**
+   * When an HTTP error occurs, handle it and notify the user
+   * @param error the error to parse
+   */
+  private handleFailedPoll(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      this.failedRequests$.next(this.failedRequests$.value + 1);
+      if (this.failedRequests$.value == 5){  // Notify user after 5 failed polls
+        this.errorService.notifyServerCommError(error.error.message);
+      }
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+
+      this.errorService.notifyHttpError(error.status, error.error.message);
+    }
+  }
+
   /**
    * Parses the commands out of a response from the server
    * @param result response to parse
    */
   private handleReponse(result: HttpResponse<CommandArray>) {
     const commands: CommandArray = result.body as CommandArray;
+    this.failedRequests$.next(0);
 
     // Dispatch every command in the received array
     for (const command of commands.commands) {
@@ -72,7 +96,7 @@ export class ServerProxyService {
     this.http.post<ICommandArray>(
       this.getUrl(),
       new CommandArray([command]),
-      { observe: 'response'}).subscribe(
+      { observe: 'response' }).subscribe(
         result => this.handleReponse(result),
         error => this.handleError(error));
 
@@ -84,13 +108,13 @@ export class ServerProxyService {
   public poll() {
     this.http.get<ICommandArray>(
       this.getUrl(),
-      { observe: 'response'}).subscribe(
+      { observe: 'response' }).subscribe(
         result => this.handleReponse(result),
-        error => this.handleError(error));
+        error => this.handleFailedPoll(error));    
   }
 
   constructor(private http: HttpClient,
-              private errorService: ErrorNotifierService) {
+    private errorService: ErrorNotifierService) {
     this.incomingCmd$.subscribe(cmd => {
       // Listen for authTokens
       const loginResult: any = cmd as any;
