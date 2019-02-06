@@ -44,18 +44,42 @@ export class PlayerReadyCommand implements Command {
 // Client commands
 export class GameCreatedCommand implements Command {
     public command = 'gameCreated';
+    public gameId: string;
 
-    constructor( public gameId: string) {}
+    constructor(gameCreatedCommand: any) {
+        if (!('gameId' in gameCreatedCommand)) {
+                throw new TypeError('Unable to deserialize GameCreatedCommand object, ' + JSON.stringify(gameCreatedCommand));
+        }
+    this.gameId = gameCreatedCommand.gameId;
+
+    }
 }
 
 export class StartGameCommand implements Command {
     public command = 'startGame';
+    public gameId: string;
 
-    constructor( public gameId: string ) {}
+    constructor(startGameCommand: any) {
+        if (!('gameId' in startGameCommand)) {
+                throw new TypeError('Unable to deserialize StartGameCommand object, ' + JSON.stringify(startGameCommand));
+        }
+    this.gameId = startGameCommand.gameId;
+
+    }
 }
 
 export class RefreshGameListCommand implements Command {
-    public command = 'startGame';
+    public command = 'refreshGameList';
+    public games: GamePreview [];
 
-    constructor( public games: GamePreview ) {}
+    constructor(refreshGameListCommand: any) {
+        if (!('games' in refreshGameListCommand)) {
+                throw new TypeError('Unable to deserialize RefreshGameListCommand object, ' + JSON.stringify(refreshGameListCommand));
+        }
+        // TODO: Figure out how to deserialize Game Previews.
+        this.games = [];
+        refreshGameListCommand.games.forEach(game => {
+            this.games.push(new GamePreview(game));
+        });
+    }
 }
