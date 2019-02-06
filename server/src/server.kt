@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpServer
 import commands.*
 import models.AuthTokens
 import org.apache.commons.io.IOUtils
+import sun.misc.IOUtils
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
@@ -21,6 +22,37 @@ fun main(args: Array<String>) {
             "GET" -> handleGet(httpExchange)
             "POST" -> handlePost(httpExchange)
         }
+    }
+
+    server.createContext(REGISTRATION_ENDPOINT) { httpExchange ->
+        when (httpExchange.requestMethod) {
+            "POST" -> handleRegistrationPost(httpExchange)
+        }
+    }
+}
+
+fun handleRegistrationPost(httpExchange: HttpExchange) {
+    var requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
+
+    var initialCommand = Gson().fromJson(requestBody, IServerCommand::class.java)
+
+    var command = when(initialCommand.type) {
+        LOGIN -> Gson().fromJson(requestBody, LoginCommand::class.java)
+        REGISTER -> Gson().fromJson(requestBody, RegisterCommand::class.java)
+        else -> null
+    }
+
+    if (command == null) {
+        httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
+        httpExchange.close()
+    } else {
+        httpExchange.sendResponseHeaders(HTTP_OK, 0)
+        var writer = OutputStreamWriter(httpExchange.responseBody)
+
+        command.execute()
+
+        writer.write()
+        httpExchange.close()
     }
 }
 
