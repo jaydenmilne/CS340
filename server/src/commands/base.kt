@@ -18,11 +18,28 @@ interface ICommand {
     val type: String
 }
 
-interface IServerCommand : ICommand {
+interface INormalCommand : ICommand {
+    override val type: String
+}
+
+interface IRegisterCommand : ICommand {
+    override val type: String
+}
+
+interface IRegisterServerCommand : IRegisterCommand {
+    override val type: String
+    fun execute() : IRegisterClientCommand
+}
+
+interface IRegisterClientCommand : IRegisterCommand {
+    override val type: String
+}
+
+interface INormalServerCommand : INormalCommand {
     override val type: String
     fun execute(user: User)
 }
 
-interface IClientCommand : ICommand {
+interface INormalClientCommand : INormalCommand {
     override val type: String
 }

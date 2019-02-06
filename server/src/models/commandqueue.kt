@@ -1,13 +1,13 @@
 package models
 
 import com.google.gson.Gson
-import commands.IClientCommand
+import commands.INormalClientCommand
 
 class CommandQueue {
 
-    var commands = mutableListOf<IClientCommand>()
+    var commands = mutableListOf<INormalClientCommand>()
 
-    fun push(command: IClientCommand) {
+    fun push(command: INormalClientCommand) {
         commands.add(command)
     }
 

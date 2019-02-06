@@ -2,43 +2,43 @@ package commands
 
 import models.User
 
-class CreateGameCommand : IServerCommand {
+class CreateGameCommand : INormalServerCommand {
     override val type = CREATE_GAME
     private var name = ""
 
     override fun execute(user: User) {}
 }
 
-class JoinGameCommand : IServerCommand {
+class JoinGameCommand : INormalServerCommand {
     override val type = JOIN_GAME
     private val gameId = ""
 
     override fun execute(user: User) {}
 }
 
-class LeaveGameCommand : IServerCommand {
+class LeaveGameCommand : INormalServerCommand {
     override val type = LEAVE_GAME
     private val gameId = ""
 
     override fun execute(user: User) {}
 }
 
-class ListGamesCommand : IServerCommand {
+class ListGamesCommand : INormalServerCommand {
     override val type = LIST_GAMES
 
     override fun execute(user: User) {}
 }
 
 
-class LoginCommand : IServerCommand {
+class LoginCommand : IRegisterServerCommand {
     override val type = LOGIN
     private val username = ""
     private val password = ""
 
-    override fun execute(user: User) {}
+    override fun execute(): IRegisterClientCommand {}
 }
 
-class PlayerReadyCommand : IServerCommand {
+class PlayerReadyCommand : INormalServerCommand {
     override val type = PLAYER_READY
     private val gameId = ""
     private val playerIsReady = false
@@ -46,10 +46,10 @@ class PlayerReadyCommand : IServerCommand {
     override fun execute(user: User) {}
 }
 
-class RegisterCommand : IServerCommand {
+class RegisterCommand : IRegisterServerCommand {
     override val type = REGISTER
     private val username = ""
     private val password = ""
 
-    override fun execute(user: User) {}
+    override fun execute(): IRegisterClientCommand {}
 }

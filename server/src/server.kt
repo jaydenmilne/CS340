@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
 fun handleRegistrationPost(httpExchange: HttpExchange) {
     var requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
-    var initialCommand = Gson().fromJson(requestBody, IServerCommand::class.java)
+    var initialCommand = Gson().fromJson(requestBody, IRegisterServerCommand::class.java)
 
     var command = when(initialCommand.type) {
         LOGIN -> Gson().fromJson(requestBody, LoginCommand::class.java)
@@ -49,9 +49,9 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
         httpExchange.sendResponseHeaders(HTTP_OK, 0)
         var writer = OutputStreamWriter(httpExchange.responseBody)
 
-        command.execute()
+        var resultCommand = command.execute()
 
-        writer.write()
+        writer.write(Gson().toJson(resultCommand, IRegisterClientCommand::class.java))
         httpExchange.close()
     }
 }
@@ -77,7 +77,7 @@ fun handleGet(httpExchange: HttpExchange) {
 fun handlePost(httpExchange: HttpExchange) {
     var requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
-    var initialCommand = Gson().fromJson(requestBody, IServerCommand::class.java)
+    var initialCommand = Gson().fromJson(requestBody, INormalServerCommand::class.java)
 
     var authToken = httpExchange.requestHeaders.getFirst("Authorization")
     var user = AuthTokens.getUser(authToken)
