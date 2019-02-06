@@ -6,6 +6,7 @@ import { ErrorNotifierService } from './error-notifier.service';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 import { LoginResult } from './login-commands';
+import { ListGamesCommand } from './lobby-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -93,13 +94,21 @@ export class ServerProxyService {
    * @param command Command-like object to transmit to the server
    */
   public transmitCommand(command: Command) {
-    this.http.post<ICommandArray>(
-      this.getUrl(),
-      new CommandArray([command]),
-      { observe: 'response' }).subscribe(
-        result => this.handleReponse(result),
-        error => this.handleError(error));
-
+    if (command instanceof ListGamesCommand) {    // Use poll error handling for ListGamesCommand
+      this.http.post<ICommandArray>(
+        this.getUrl(),
+        new CommandArray([command]),
+        { observe: 'response' }).subscribe(
+          result => this.handleReponse(result),
+          error => this.handleFailedPoll(error));
+    } else {
+      this.http.post<ICommandArray>(
+        this.getUrl(),
+        new CommandArray([command]),
+        { observe: 'response' }).subscribe(
+          result => this.handleReponse(result),
+          error => this.handleError(error));
+    }
   }
 
   /**
