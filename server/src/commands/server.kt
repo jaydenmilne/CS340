@@ -17,7 +17,7 @@ class JoinGameCommand : INormalServerCommand {
     private val gameId = ""
 
     override fun execute(user: User) {
-        if(Games.games[gameId.toInt()]!!.players.size < 4) {
+        if(Games.games[gameId.toInt()]!!.players.size < 5) {
             Games.games[gameId.toInt()]!!.players.add(user)
             user.ready = false
         }
