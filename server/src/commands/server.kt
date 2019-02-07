@@ -1,34 +1,46 @@
 package commands
 
-import models.AuthTokens
-import models.User
-import models.Users
+import models.*
 
 class CreateGameCommand : INormalServerCommand {
     override val type = CREATE_GAME
     private var name = ""
 
-    override fun execute(user: User) {}
+    override fun execute(user: User) {
+        var newGame = Game(name)
+        Games.games.put(newGame.gameID, newGame)
+    }
 }
 
 class JoinGameCommand : INormalServerCommand {
     override val type = JOIN_GAME
     private val gameId = ""
 
-    override fun execute(user: User) {}
+    override fun execute(user: User) {
+        if(Games.games[gameId.toInt()]!!.players.size < 4) {
+            Games.games[gameId.toInt()]!!.players.add(user)
+            user.ready = false
+        }
+    }
 }
 
 class LeaveGameCommand : INormalServerCommand {
     override val type = LEAVE_GAME
     private val gameId = ""
 
-    override fun execute(user: User) {}
+    override fun execute(user: User) {
+        Games.games[gameId.toInt()]!!.players.remove(user)
+        user.ready = false
+    }
 }
 
 class ListGamesCommand : INormalServerCommand {
     override val type = LIST_GAMES
 
-    override fun execute(user: User) {}
+    override fun execute(user: User) {
+        var newCommand = RefreshGameListCommand()
+        user.queue.push(newCommand)
+    }
 }
 
 
@@ -62,7 +74,9 @@ class PlayerReadyCommand : INormalServerCommand {
     private val gameId = ""
     private val playerIsReady = false
 
-    override fun execute(user: User) {}
+    override fun execute(user: User) {
+        user.ready = playerIsReady
+    }
 }
 
 class RegisterCommand : IRegisterServerCommand {
