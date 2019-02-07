@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
 }
 
 fun handleRegistrationPost(httpExchange: HttpExchange) {
-    var requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
+    var requestBody = org.apache.commons.io.IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
     var initialCommand = Gson().fromJson(requestBody, IRegisterServerCommand::class.java)
 
@@ -75,7 +75,7 @@ fun handleGet(httpExchange: HttpExchange) {
 }
 
 fun handlePost(httpExchange: HttpExchange) {
-    var requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
+    var requestBody = org.apache.commons.io.IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
     var initialCommand = Gson().fromJson(requestBody, INormalServerCommand::class.java)
 
@@ -93,10 +93,8 @@ fun handlePost(httpExchange: HttpExchange) {
         JOIN_GAME -> Gson().fromJson(requestBody, JoinGameCommand::class.java)
         LEAVE_GAME -> Gson().fromJson(requestBody, LeaveGameCommand::class.java)
         LIST_GAMES -> Gson().fromJson(requestBody, ListGamesCommand::class.java)
-        LOGIN -> Gson().fromJson(requestBody, LoginCommand::class.java)
         PLAYER_READY -> Gson().fromJson(requestBody, PlayerReadyCommand::class.java)
-        REGISTER -> Gson().fromJson(requestBody, RegisterCommand::class.java)
-        START_GAME -> Gson().fromJson(requestBody, RegisterCommand::class.java)
+        START_GAME -> Gson().fromJson(requestBody, StartGameCommand::class.java)
         else -> null
     }
 

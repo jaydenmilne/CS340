@@ -1,6 +1,8 @@
 package commands
 
+import models.AuthTokens
 import models.User
+import models.Users
 
 class CreateGameCommand : INormalServerCommand {
     override val type = CREATE_GAME
@@ -35,7 +37,24 @@ class LoginCommand : IRegisterServerCommand {
     private val username = ""
     private val password = ""
 
-    override fun execute(): IRegisterClientCommand {}
+    override fun execute(): IRegisterClientCommand {
+        var response = RegisterResultCommand()
+
+        var user = Users.getUserByUsername(username)
+
+        if (user == null) {
+            response.error = "Authentication error."
+            return response
+        }
+
+        if (user.verifyPassword(password)) {
+            response.authToken = AuthTokens.makeAuthTokenForUser(user)
+            return response
+        } else {
+            response.error = "Authentication error."
+            return response
+        }
+    }
 }
 
 class PlayerReadyCommand : INormalServerCommand {
@@ -51,5 +70,22 @@ class RegisterCommand : IRegisterServerCommand {
     private val username = ""
     private val password = ""
 
-    override fun execute(): IRegisterClientCommand {}
+    override fun execute(): IRegisterClientCommand {
+        var response = LoginResultCommand()
+
+        if (Users.isUsernameTaken(username)) {
+            response.error = "Username already taken."
+            return response
+        }
+
+        var newUser = User(username, password)
+
+        Users.addUser(newUser)
+        var token = AuthTokens.makeAuthTokenForUser(newUser)
+
+
+        response.authToken = token
+
+        return response
+    }
 }

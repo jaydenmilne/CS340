@@ -2,13 +2,13 @@ package commands
 
 class GameCreatedCommand : INormalClientCommand {
     override val type = CREATE_GAME
-    private val gameId = ""
+    var gameId = ""
 }
 
 class LoginResultCommand : IRegisterClientCommand {
     override val type = LOGIN_RESULT
-    private val authToken = ""
-    private val error = ""
+    var authToken = ""
+    var error = ""
 }
 
 class RefreshGameListCommand : INormalClientCommand {
@@ -18,11 +18,11 @@ class RefreshGameListCommand : INormalClientCommand {
 
 class RegisterResultCommand : IRegisterClientCommand {
     override val type = REGISTER_RESULT
-    private val authToken = ""
-    private val error = ""
+    var authToken = ""
+    var error = ""
 }
 
 class StartGameCommand : INormalClientCommand {
     override val type = START_GAME
-    private val gameId = ""
+    var gameId = ""
 }

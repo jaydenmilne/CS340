@@ -8,17 +8,28 @@ fun getNextUserID(): Int {
 }
 
 object Users {
-    private var users = mutableMapOf<Int, User>()
+    private var usersByUserID = mutableMapOf<Int, User>()
+    private var usersByUsername = mutableMapOf<String, User>()
 
     // Autoincrement
     private var i = 0
 
     fun addUser(user: User) {
-        users.put(user.userID, user)
+        usersByUserID.put(user.userID, user)
+        usersByUsername.put(user.username, user)
     }
 
     fun removeUser(user: User) {
-        users.remove(user.userID)
+        usersByUserID.remove(user.userID)
+        usersByUsername.remove(user.username)
+    }
+
+    fun isUsernameTaken(username: String): Boolean {
+        return usersByUsername.containsKey(username)
+    }
+
+    fun getUserByUsername(username: String): User? {
+        return usersByUsername[username]
     }
 }
 
@@ -27,6 +38,10 @@ class User(var username: String) {
     var userID = getNextUserID()
     private var passwordHash = ""
     var queue = CommandQueue()
+
+    constructor(username: String, password: String) : this(username) {
+        updatePassword(password)
+    }
 
     fun updatePassword(password: String) {
         this.passwordHash = PasswordStorage.createHash(password)
