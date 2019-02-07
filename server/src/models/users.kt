@@ -38,6 +38,7 @@ class User(var username: String) {
     var userID = getNextUserID()
     private var passwordHash = ""
     var queue = CommandQueue()
+    var ready = false
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)
