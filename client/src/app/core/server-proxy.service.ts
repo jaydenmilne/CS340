@@ -112,12 +112,21 @@ export class ServerProxyService {
    * @param url where to send it
    */
   private sendCommandToEndpoint(command: Command, url: string) {
-    this.http.post<ICommandArray>(
-      url,
-      new CommandArray([command]),
-      { observe: 'response'}).subscribe(
-        result => this.handleReponse(result),
-        error => this.handleError(error));
+    if(command instanceof ListGamesCommand){    // For polling commands, use poll handler.
+      this.http.post<ICommandArray>(
+        url,
+        new CommandArray([command]),
+        { observe: 'response'}).subscribe(
+          result => this.handleReponse(result),
+          error => this.handleFailedPoll(error));
+    } else {
+      this.http.post<ICommandArray>(
+        url,
+        new CommandArray([command]),
+        { observe: 'response'}).subscribe(
+          result => this.handleReponse(result),
+          error => this.handleError(error));
+    }
   }
 
   /**
