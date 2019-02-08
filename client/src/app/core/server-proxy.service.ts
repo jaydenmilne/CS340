@@ -15,6 +15,7 @@ import { ListGamesCommand } from './lobby-commands';
 export class ServerProxyService {
 
   private commandEndpoint = '/command';
+  private registerEndpoint = '/register';
   private authToken = '';
 
   public failedRequests$ = new BehaviorSubject <number>(0);
@@ -94,21 +95,29 @@ export class ServerProxyService {
    * @param command Command-like object to transmit to the server
    */
   public transmitCommand(command: Command) {
-    if (command instanceof ListGamesCommand) {    // Use poll error handling for ListGamesCommand
-      this.http.post<ICommandArray>(
-        this.getUrl(),
-        new CommandArray([command]),
-        { observe: 'response' }).subscribe(
-          result => this.handleReponse(result),
-          error => this.handleFailedPoll(error));
-    } else {
-      this.http.post<ICommandArray>(
-        this.getUrl(),
-        new CommandArray([command]),
-        { observe: 'response' }).subscribe(
-          result => this.handleReponse(result),
-          error => this.handleError(error));
-    }
+    this.sendCommandToEndpoint(command, this.getServerUrl() + this.commandEndpoint);
+  }
+
+  /**
+   * Sends a command to the server and parses commands it receives in response.
+   * @param command Command-like object to transmit to the server
+   */
+  public transmitRegisterCommand(command: Command) {
+    this.sendCommandToEndpoint(command, this.getServerUrl() + this.registerEndpoint);
+  }
+
+  /**
+   * Sends a command to given endpoint
+   * @param command command like object
+   * @param url where to send it
+   */
+  private sendCommandToEndpoint(command: Command, url: string) {
+    this.http.post<ICommandArray>(
+      url,
+      new CommandArray([command]),
+      { observe: 'response'}).subscribe(
+        result => this.handleReponse(result),
+        error => this.handleError(error));
   }
 
   /**
@@ -119,7 +128,7 @@ export class ServerProxyService {
       this.getUrl(),
       { observe: 'response' }).subscribe(
         result => this.handleReponse(result),
-        error => this.handleFailedPoll(error));    
+        error => this.handleFailedPoll(error));
   }
 
   constructor(private http: HttpClient,

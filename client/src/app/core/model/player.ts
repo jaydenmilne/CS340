@@ -6,11 +6,18 @@ export class Player {
     private ready: boolean;
     private name: string;
 
-    constructor(color: Color, userId: string, ready: boolean, name: string) {
-        this.color = color;
-        this.userId = userId;
-        this.ready = ready;
-        this.name = name;
+    constructor(player: any) {
+        if (!('userId' in player ||
+            'ready' in player ||
+            'name' in player ||
+            'color' in player)) {
+            throw new TypeError('Unable to deserialize Player object, ' + JSON.stringify(player));
+        }
+
+        this.color = <Color> player.color;
+        this.userId = player.userId;
+        this.ready = player.ready;
+        this.name = player.name;
     }
 
     public setColor(color: string) {
