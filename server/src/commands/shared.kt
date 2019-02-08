@@ -1,5 +1,6 @@
 package commands
 
+import models.Games
 import models.User
 
 class PostChatCommand : INormalClientCommand, INormalServerCommand {
@@ -9,5 +10,7 @@ class PostChatCommand : INormalClientCommand, INormalServerCommand {
     private val playerName = ""
     private val message = ""
 
-    override fun execute(user: User) {}
+    override fun execute(user: User) {
+        Games.games[gameId.toInt()]!!.players.forEach { user:User -> user.queue.push(this) }
+    }
 }

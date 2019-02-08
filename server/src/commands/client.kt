@@ -12,7 +12,7 @@ class LoginResultCommand : IRegisterClientCommand {
 }
 
 class RefreshGameListCommand : INormalClientCommand {
-    //unfinished needs GamesList Model Object
+    var games = Games.games
     override val type = REFRESH_GAME_LIST
 }
 
