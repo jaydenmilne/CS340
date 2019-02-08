@@ -14,6 +14,7 @@ import { LoginResult } from './login-commands';
 export class ServerProxyService {
 
   private commandEndpoint = '/command';
+  private registerEndpoint = '/register';
   private authToken = '';
 
   public incomingCmd$ = new Subject<Command>();
@@ -69,13 +70,29 @@ export class ServerProxyService {
    * @param command Command-like object to transmit to the server
    */
   public transmitCommand(command: Command) {
+    this.sendCommandToEndpoint(command, this.getServerUrl() + this.commandEndpoint);
+  }
+
+  /**
+   * Sends a command to the server and parses commands it receives in response.
+   * @param command Command-like object to transmit to the server
+   */
+  public transmitRegisterCommand(command: Command) {
+    this.sendCommandToEndpoint(command, this.getServerUrl() + this.registerEndpoint);
+  }
+
+  /**
+   * Sends a command to given endpoint
+   * @param command command like object
+   * @param url where to send it
+   */
+  private sendCommandToEndpoint(command: Command, url: string) {
     this.http.post<ICommandArray>(
-      this.getUrl(),
+      url,
       new CommandArray([command]),
       { observe: 'response'}).subscribe(
         result => this.handleReponse(result),
         error => this.handleError(error));
-
   }
 
   /**
