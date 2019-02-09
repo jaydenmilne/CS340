@@ -7,8 +7,8 @@ class CreateGameCommand : INormalServerCommand {
     private var name = ""
 
     override fun execute(user: User) {
-        var newGame = Game(name)
-        Games.games.put(newGame.gameID, newGame)
+        val newGame = Game(name)
+        Games.games[newGame.gameID] = newGame
     }
 }
 

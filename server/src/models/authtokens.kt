@@ -10,22 +10,22 @@ object AuthTokens {
     fun verifyToken(authToken: String, user: User): Boolean {
         if (!authTokens.containsKey(authToken))
             return false
-        return authTokens.get(authToken) == user
+        return authTokens[authToken] == user
     }
 
     fun getUser(authToken: String): User? {
-        return authTokens.get(authToken)
+        return authTokens[authToken]
     }
 
     fun makeAuthTokenForUser(user: User): String {
-        var random = SecureRandom()
-        var bytes = ByteArray(256 / 8)
+        val random = SecureRandom()
+        val bytes = ByteArray(256 / 8)
 
         random.nextBytes(bytes)
 
-        var token = BigInteger(bytes).toString(16)
+        val token = BigInteger(bytes).toString(16)
 
-        authTokens.put(token, user)
+        authTokens[token] = user
 
         return token
     }
