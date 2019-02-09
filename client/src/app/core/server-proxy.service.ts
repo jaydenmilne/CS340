@@ -4,8 +4,6 @@ import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from './error-notifier.service';
 import { Subject } from 'rxjs';
-import { UserService } from './user.service';
-import { LoginResult } from './login-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -89,7 +87,7 @@ export class ServerProxyService {
   private sendCommandToEndpoint(command: Command, url: string) {
     this.http.post<ICommandArray>(
       url,
-      new CommandArray([command]),
+      command,
       { observe: 'response'}).subscribe(
         result => this.handleReponse(result),
         error => this.handleError(error));

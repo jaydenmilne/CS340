@@ -17,9 +17,9 @@ the `Register` and `Login` commands when sent to the `/register` endpoint.
 
 |  Endpoint  | HTTP Method | Request Body                | Response Body               | Description                    |
 |------------|-------------|-----------------------------|-----------------------------|--------------------------------|
-| `/command` | `POST`      | An array of server commands | An array of client commands | Endpoint used to send commands. Must have `Authorization` header |
+| `/command` | `POST`      | A server command            | An array of client commands | Endpoint used to send commands. Must have `Authorization` header |
 | `/command` | `GET`       | N/A                         | An array of client commands | Generic endpoint for polling   |
-| `/register`| `POST`      | An array with a login/register command (same format as `/command` endpoint response) | An array of client commands (same format as `/command` endpoint response) | Endpoint used for authentication. No `Authorization` header present. |
+| `/register`| `POST`      | A login/register command    | An array of client commands (same format as `/command` endpoint response) | Endpoint used for authentication. No `Authorization` header present. |
 
 | Response Code     | Reason                                                                                                     |
 |-------------------|------------------------------------------------------------------------------------------------------------|
@@ -33,21 +33,9 @@ the `Register` and `Login` commands when sent to the `/register` endpoint.
 `Authorization: {token}` (if `/command`)
 ```json
 {
-    "commands": [
-        {
-            "command": "login",
-            "username": "uname",
-            "password": "password"
-        },
-        {
-            "command": "chat",
-            "game": "KDD39-KDF42",
-            "message": "I like pie"
-        },
-        {
-            "command": "getGameList"
-        }
-    ]
+    "command": "login",
+    "username": "uname",
+    "password": "password"
 }
 
 ```
