@@ -7,6 +7,9 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
 import java.net.InetSocketAddress
+import models.*
+import java.lang.IllegalStateException
+import java.lang.NullPointerException
 
 const val MAX_CONNECTIONS = 10
 const val REGISTRATION_ENDPOINT = "/register"
@@ -72,11 +75,18 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
 fun handleGet(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*");
     try {
-        var authToken = httpExchange.requestHeaders.getFirst("Authorization")
-        var user = AuthTokens.getUser(authToken)
 
-        println("GET /command - " + authToken)
+        var authToken: String
+        var user: User? = null
 
+        try {
+            authToken = httpExchange.requestHeaders.getFirst("Authorization")
+            user = AuthTokens.getUser(authToken)
+            println("GET /command - " + authToken)
+        }
+        catch (e: IllegalStateException) {
+            httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
+        }
 
         if (user == null) {
             httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
@@ -103,8 +113,16 @@ fun handlePost(httpExchange: HttpExchange) {
     try {
         var initialCommand = Gson().fromJson(requestBody, INormalServerCommand::class.java)
 
-        var authToken = httpExchange.requestHeaders.getFirst("Authorization")
-        var user = AuthTokens.getUser(authToken)
+        var authToken: String
+        var user: User? = null
+
+        try {
+            authToken = httpExchange.requestHeaders.getFirst("Authorization")
+            user = AuthTokens.getUser(authToken)
+        }
+        catch (e: IllegalStateException) {
+            httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
+        }
 
 
         if (user == null) {
