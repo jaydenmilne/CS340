@@ -21,17 +21,26 @@ fun main(args: Array<String>) {
         when (httpExchange.requestMethod) {
             "GET" -> handleGet(httpExchange)
             "POST" -> handlePost(httpExchange)
+            "OPTIONS" -> handleOptions(httpExchange)
         }
     }
 
     server.createContext(REGISTRATION_ENDPOINT) { httpExchange ->
         when (httpExchange.requestMethod) {
             "POST" -> handleRegistrationPost(httpExchange)
+            "OPTIONS" -> handleOptions(httpExchange)
         }
     }
     println("Hold on to your butts...")
     server.start()
     println("Server started on port " + port)
+}
+
+fun handleOptions(httpExchange: HttpExchange) {
+    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+    httpExchange.responseHeaders.add("Access-Control-Allow-Headers", "*")
+    httpExchange.sendResponseHeaders(HTTP_OK, 0)
+    httpExchange.close()
 }
 
 fun handleRegistrationPost(httpExchange: HttpExchange) {
