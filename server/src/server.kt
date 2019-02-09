@@ -8,7 +8,6 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
 import java.net.InetSocketAddress
-import models.*
 
 const val MAX_CONNECTIONS = 10
 const val REGISTRATION_ENDPOINT = "/register"
