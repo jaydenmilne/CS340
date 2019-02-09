@@ -16,7 +16,7 @@ export class GamePreview {
     }
 
         this.name = gamePreview.name;
-        this.Id = gamePreview.id;
+        this.Id = gamePreview.Id;
         this.started = gamePreview.started;
         this.players = [];
         gamePreview.players.forEach(player => {
