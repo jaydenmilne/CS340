@@ -44,6 +44,7 @@ class User(var username: String) {
     private var passwordHash = ""
     var queue = CommandQueue()
     var ready = false
+    var authToken = ""
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)
@@ -56,4 +57,9 @@ class User(var username: String) {
     fun verifyPassword(password: String): Boolean {
         return PasswordStorage.verifyPassword(password, passwordHash)
     }
+}
+
+// Simplification of user class to sendt to client
+class ClientUser(val userId: Int, var username: String, val authToken: String) {
+
 }

@@ -12,7 +12,6 @@ const val LOGIN_RESULT = "loginResult"
 const val PLAYER_READY = "playerReady"
 const val REFRESH_GAME_LIST = "refreshGameList"
 const val REGISTER = "register"
-const val REGISTER_RESULT = "registerResult"
 const val START_GAME = "startGame"
 
 interface ICommand {

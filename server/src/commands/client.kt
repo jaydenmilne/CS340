@@ -1,5 +1,6 @@
 package commands
 
+import models.ClientUser
 import models.Games
 
 class GameCreatedCommand(gameId: Int) : INormalClientCommand {
@@ -8,19 +9,13 @@ class GameCreatedCommand(gameId: Int) : INormalClientCommand {
 
 class LoginResultCommand : IRegisterClientCommand {
     override val command = LOGIN_RESULT
-    var authToken = ""
+    var user = ClientUser(0, "", "")
     var error = ""
 }
 
 class RefreshGameListCommand : INormalClientCommand {
     var games = Games.games
     override val command = REFRESH_GAME_LIST
-}
-
-class RegisterResultCommand : IRegisterClientCommand {
-    override val command = REGISTER_RESULT
-    var authToken = ""
-    var error = ""
 }
 
 class StartGameCommand : INormalClientCommand {
