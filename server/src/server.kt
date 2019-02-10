@@ -76,17 +76,12 @@ fun handleGet(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*");
     try {
 
-        var authToken: String
-        var user: User? = null
-
-        try {
-            authToken = httpExchange.requestHeaders.getFirst("Authorization")
-            user = AuthTokens.getUser(authToken)
-            println("GET /command - " + authToken)
-        }
-        catch (e: IllegalStateException) {
+        if (!httpExchange.requestHeaders.containsKey("Authorization"))
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
-        }
+
+        val authToken = httpExchange.requestHeaders.getFirst("Authorization")
+        val user = AuthTokens.getUser(authToken)
+        println("GET /command - " + authToken)
 
         if (user == null) {
             httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
@@ -113,17 +108,11 @@ fun handlePost(httpExchange: HttpExchange) {
     try {
         var initialCommand = Gson().fromJson(requestBody, INormalServerCommand::class.java)
 
-        var authToken: String
-        var user: User? = null
-
-        try {
-            authToken = httpExchange.requestHeaders.getFirst("Authorization")
-            user = AuthTokens.getUser(authToken)
-        }
-        catch (e: IllegalStateException) {
+        if (!httpExchange.requestHeaders.containsKey("Authorization"))
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
-        }
 
+        val authToken = httpExchange.requestHeaders.getFirst("Authorization")
+        val user = AuthTokens.getUser(authToken)
 
         if (user == null) {
             httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
