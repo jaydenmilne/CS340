@@ -59,20 +59,21 @@ export class ServerProxyService {
    * @param error the error to parse
    */
   private handleFailedPoll(error: HttpErrorResponse) {
+    this.failedRequests$.next(this.failedRequests$.value + 1);
     if (error.status === 0) {
-      // A client-side or network error occurred. Handle it accordingly.
-      this.failedRequests$.next(this.failedRequests$.value + 1);
       if (this.failedRequests$.value == 5){  // Notify user after 5 failed polls
-        this.errorService.notifyServerCommError(error.error.message);
+        this.errorService.notifyServerCommError(error.message);
       }
+      // A client-side or network error occurred. Handle it accordingly.
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
-
-      this.errorService.notifyHttpError(error.status, error.error.message);
+      if (this.failedRequests$.value == 5){  // Notify user after 5 failed polls
+        this.errorService.notifyHttpError(error.status, error.message);
+      }
     }
   }
 
@@ -115,14 +116,14 @@ export class ServerProxyService {
     if(command instanceof ListGamesCommand){    // For polling commands, use poll handler.
       this.http.post<ICommandArray>(
         url,
-        new CommandArray([command]),
+        command,
         { observe: 'response'}).subscribe(
           result => this.handleReponse(result),
           error => this.handleFailedPoll(error));
     } else {
       this.http.post<ICommandArray>(
         url,
-        new CommandArray([command]),
+        command,
         { observe: 'response'}).subscribe(
           result => this.handleReponse(result),
           error => this.handleError(error));
