@@ -85,7 +85,7 @@ class LoginCommand : IRegisterServerCommand {
 
         if (user.verifyPassword(password)) {
             val authToken = AuthTokens.makeAuthTokenForUser(user)
-            response.user = ClientUser(user.userID, user.username, authToken)
+            response.user = ClientUser(user.userId, user.username, authToken)
             return response
         } else {
             response.error = "Authentication error."
@@ -124,7 +124,7 @@ class RegisterCommand : IRegisterServerCommand {
         newUser.authToken = token
 
 
-        response.user = ClientUser(newUser.userID, newUser.username, newUser.authToken)
+        response.user = ClientUser(newUser.userId, newUser.username, newUser.authToken)
 
         return response
     }
@@ -144,7 +144,7 @@ class ChangeColorCommand : INormalServerCommand {
             // user is not in game
             throw CommandException("ChangeColorCommand: User is not in this game")
         }
-        Users.getUserById(user.userID)!!.color = Color.valueOf(newColor)
+        Users.getUserById(user.userId)!!.color = Color.valueOf(newColor)
     }
 }
 

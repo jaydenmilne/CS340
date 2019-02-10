@@ -4,20 +4,20 @@ export class Player {
     private color: Color;
     private userId: string;
     private ready: boolean;
-    private name: string;
+    private username: string;
 
     constructor(player: any) {
         if (!('userId' in player ||
             'ready' in player ||
-            'name' in player ||
+            'username' in player ||
             'color' in player)) {
             throw new TypeError('Unable to deserialize Player object, ' + JSON.stringify(player));
         }
 
-        this.color = <Color> player.color;
+        this.color = <Color> Color[player.color];
         this.userId = player.userId;
         this.ready = player.ready;
-        this.name = player.name;
+        this.username = player.username;
     }
 
     public setColor(color: string) {
@@ -45,10 +45,10 @@ export class Player {
     }
 
     public getName(): string {
-        return this.name;
+        return this.username;
     }
 
     public setHandle(handle: string) {
-        this.name = handle;
+        this.username = handle;
     }
 }
