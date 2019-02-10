@@ -12,7 +12,7 @@ export class GameList {
         return this.selectedGame;
     }
     
-    public setSelectedGameByID(selectedGameID: string) {
+    public setSelectedGameByID(selectedGameID: number) {
         const gamePreview: GamePreview = this.games.find(g => g.getID() === selectedGameID);
         this.selectedGame = gamePreview;
     }
@@ -29,7 +29,7 @@ export class GameList {
         this.games = games;
     }
 
-    public isSelectedGame(gameID: string): boolean {
+    public isSelectedGame(gameID: number): boolean {
         if (this.selectedGame === undefined) {
             return false;
         }
