@@ -8,6 +8,7 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
 import java.net.InetSocketAddress
+import models.*
 
 const val MAX_CONNECTIONS = 10
 const val REGISTRATION_ENDPOINT = "/register"
@@ -35,13 +36,6 @@ fun main(args: Array<String>) {
     server.start()
     println("Server started on port $PORT")
     println("Go!")
-}
-
-fun handleOptions(httpExchange: HttpExchange) {
-    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
-    httpExchange.responseHeaders.add("Access-Control-Allow-Headers", "*")
-    httpExchange.sendResponseHeaders(HTTP_OK, 0)
-    httpExchange.close()
 }
 
 fun handleOptions(httpExchange: HttpExchange) {
@@ -89,10 +83,12 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
 fun handleGet(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
     try {
+        if (!httpExchange.requestHeaders.containsKey("Authorization"))
+            httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
+
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
-
-        println("GET /command - $authToken")
+        println("GET /command - " + authToken)
 
         if (user == null) {
             httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
@@ -119,9 +115,11 @@ fun handlePost(httpExchange: HttpExchange) {
     try {
         val initialCommand = Gson().fromJson(requestBody, INormalServerCommand::class.java)
 
+        if (!httpExchange.requestHeaders.containsKey("Authorization"))
+            httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
+
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
-
 
         if (user == null) {
             httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
