@@ -2,6 +2,7 @@ import com.google.gson.Gson
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import commands.*
+import javafx.scene.control.TextFormatter
 import models.AuthTokens
 import models.RegisterCommandQueue
 import org.apache.commons.io.IOUtils
@@ -146,6 +147,7 @@ fun handlePost(httpExchange: HttpExchange) {
             LEAVE_GAME -> Gson().fromJson(requestBody, LeaveGameCommand::class.java)
             LIST_GAMES -> Gson().fromJson(requestBody, ListGamesCommand::class.java)
             PLAYER_READY -> Gson().fromJson(requestBody, PlayerReadyCommand::class.java)
+            CHANGE_COLOR -> Gson().fromJson(requestBody, ChangeColorCommand::class.java)
             else -> null
         }
 

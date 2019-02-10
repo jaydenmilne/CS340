@@ -85,7 +85,7 @@ class LoginCommand : IRegisterServerCommand {
 
         if (user.verifyPassword(password)) {
             val authToken = AuthTokens.makeAuthTokenForUser(user)
-            response.user = ClientUser(user.userID, user.username, authToken)
+            response.user = ClientUser(user.userId, user.username, authToken)
             return response
         } else {
             response.error = "Authentication error."
@@ -124,9 +124,27 @@ class RegisterCommand : IRegisterServerCommand {
         newUser.authToken = token
 
 
-        response.user = ClientUser(newUser.userID, newUser.username, newUser.authToken)
+        response.user = ClientUser(newUser.userId, newUser.username, newUser.authToken)
 
         return response
+    }
+}
+
+class ChangeColorCommand : INormalServerCommand {
+    override val command = CHANGE_COLOR
+    private val gameId = ""
+    private var newColor = ""
+
+    override fun execute(user: User) {
+        if (!Games.games.containsKey(gameId.toInt())) {
+            // game does not exist
+            throw CommandException("ChangeColorCommand: Game does not exist")
+        }
+        if (!Games.games[gameId.toInt()]!!.players.contains(user)) {
+            // user is not in game
+            throw CommandException("ChangeColorCommand: User is not in this game")
+        }
+        enumValues<Color>().forEach { if(it.rgb.equals(newColor)) Users.getUserById(user.userId)!!.color = it }
     }
 }
 

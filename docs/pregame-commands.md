@@ -25,15 +25,6 @@ Several commands transmit arrays of models, these are their descriptions.
 }
 ```
 
-### `player` object
-```json
-{
-    "playerId": "{id of player}",
-    "name": "Bob",
-    "color": "blue",
-    "ready": true
-}
-```
 Valid colors are
 - `blue`
 - `red`
@@ -45,8 +36,10 @@ Valid colors are
 This should only be sent as part of the loginResult command.
 ```json
 {
-    "user": "{user object}",
-    "error": "{error message}"
+    "username": "username",
+    "userId": "user ID number",
+    "color": "blue",
+    "ready": true
 }
 ```
 

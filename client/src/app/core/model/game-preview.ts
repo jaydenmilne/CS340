@@ -3,24 +3,24 @@ import { Player } from './player';
 
 export class GamePreview {
     private name: string;
-    private Id: number;
+    private gameId: number;
     private started: boolean;
     private players: Player [];
 
     constructor(gamePreview: any) {
         if (!('name' in gamePreview ||
-        'Id' in gamePreview ||
+        'gameId' in gamePreview ||
         'started' in gamePreview ||
         'players' in gamePreview)) {
             throw new TypeError('Unable to deserialize GamePreview object, ' + JSON.stringify(gamePreview));
     }
 
         this.name = gamePreview.name;
-        this.Id = gamePreview.Id;
+        this.gameId = gamePreview.gameId;
         this.started = gamePreview.started;
         this.players = [];
         gamePreview.players.forEach(player => {
-            this.players.push(new Player(player))
+            this.players.push(new Player(player));
         });
     }
 
@@ -33,11 +33,11 @@ export class GamePreview {
     }
 
     public getID(): number {
-        return this.Id;
+        return this.gameId;
     }
 
     public setUserID(ID: number) {
-        this.Id = ID;
+        this.gameId = ID;
     }
 
     public isStarted(): boolean {
