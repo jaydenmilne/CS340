@@ -69,6 +69,7 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             val resultCommand = command.execute()
 
             writer.write(Gson().toJson(resultCommand))
+            writer.close()
         }
     } catch (e : Exception) {
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
@@ -100,6 +101,7 @@ fun handleGet(httpExchange: HttpExchange) {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
             writer.write(user.queue.pollCommands())
+            writer.close()
         }
     } catch (e : Exception) {
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
@@ -154,6 +156,7 @@ fun handlePost(httpExchange: HttpExchange) {
             command.execute(user)
 
             writer.write(user.queue.pollCommands())
+            writer.close()
         }
 
     } catch (e : Exception) {
