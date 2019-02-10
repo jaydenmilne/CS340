@@ -12,7 +12,15 @@ import { LobbyService } from './lobby.service';
   declarations: [LobbyComponent, GameListComponent, GameInfoComponent],
   providers: [LobbyService],
   imports: [
-    CommonModule, MatCardModule, MatButtonModule, MatChipsModule, MatInputModule, MatFormFieldModule, FormsModule, ReactiveFormsModule, MatIconModule
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule
   ]
 })
 export class LobbyModule { }

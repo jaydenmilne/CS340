@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Command, CommandArray, ICommandArray } from './command';
 import { isDevMode } from '@angular/core';
-import { HttpClient, HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from './error-notifier.service';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
-import { UserService } from './user.service';
-import { LoginResult } from './login-commands';
 import { ListGamesCommand } from './lobby-commands';
 
 @Injectable({
@@ -61,7 +59,7 @@ export class ServerProxyService {
   private handleFailedPoll(error: HttpErrorResponse) {
     this.failedRequests$.next(this.failedRequests$.value + 1);
     if (error.status === 0) {
-      if (this.failedRequests$.value == 5){  // Notify user after 5 failed polls
+      if (this.failedRequests$.value === 5) {  // Notify user after 5 failed polls
         this.errorService.notifyServerCommError(error.message);
       }
       // A client-side or network error occurred. Handle it accordingly.
@@ -71,7 +69,7 @@ export class ServerProxyService {
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
-      if (this.failedRequests$.value == 5){  // Notify user after 5 failed polls
+      if (this.failedRequests$.value === 5) {  // Notify user after 5 failed polls
         this.errorService.notifyHttpError(error.status, error.message);
       }
     }
@@ -81,7 +79,7 @@ export class ServerProxyService {
    * Parses the commands out of a response from the server
    * @param result response to parse
    */
-  private handleReponse(result: HttpResponse<CommandArray>) {
+  private handleResponse(result: HttpResponse<CommandArray>) {
     const commands: CommandArray = result.body as CommandArray;
     this.failedRequests$.next(0);
 
@@ -113,7 +111,7 @@ export class ServerProxyService {
    * @param url where to send it
    */
   private sendCommandToEndpoint(command: Command, url: string) {
-    if (command instanceof ListGamesCommand){
+    if (command instanceof ListGamesCommand) {
       this.http.post<ICommandArray>(
         url,
         command,
@@ -124,7 +122,7 @@ export class ServerProxyService {
           }),
           observe: 'response'
         }).subscribe(
-          result => this.handleReponse(result),
+          result => this.handleResponse(result),
           error => this.handleFailedPoll(error));
     } else {
       this.http.post<ICommandArray>(
@@ -137,7 +135,7 @@ export class ServerProxyService {
           }),
           observe: 'response'
         }).subscribe(
-          result => this.handleReponse(result),
+          result => this.handleResponse(result),
           error => this.handleError(error));
     }
   }
@@ -155,7 +153,7 @@ export class ServerProxyService {
         }),
         observe: 'response'
       }).subscribe(
-        result => this.handleReponse(result),
+        result => this.handleResponse(result),
         error => this.handleFailedPoll(error));
   }
 

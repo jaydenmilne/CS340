@@ -20,7 +20,7 @@ export class GamePreview {
         this.started = gamePreview.started;
         this.players = [];
         gamePreview.players.forEach(player => {
-            this.players.push(new Player(player))
+            this.players.push(new Player(player));
         });
     }
 
