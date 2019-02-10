@@ -13,6 +13,7 @@ const val PLAYER_READY = "playerReady"
 const val REFRESH_GAME_LIST = "refreshGameList"
 const val REGISTER = "register"
 const val START_GAME = "startGame"
+const val CHANGE_COLOR = "changeColor"
 
 interface ICommand {
     val command: String
