@@ -7,14 +7,20 @@ import { JoinGameCommand, CreateGameCommand, LeaveGameCommand, PlayerReadyComman
 import { Color } from '@core/model/color.enum';
 import { CommandRouterService } from '@core/command-router.service';
 import { Router } from '@angular/router';
+import { User } from '@core/model/user';
+import { UserService } from '@core/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyService {
 
-  constructor(private server: ServerProxyService, private commandRouter: CommandRouterService, private router: Router) {
+  constructor(private server: ServerProxyService, private userService: UserService,
+    private commandRouter: CommandRouterService, private router: Router) {
       // this.gameList.setSelectedGameByID('asldk');
+      this.userService.user$.subscribe(
+        user => this.onUser(user)
+      );
       this.commandRouter.gameCreated$.subscribe(
         result => this.onGameCreatedCommand(result)
       );
@@ -76,6 +82,12 @@ export class LobbyService {
   public onRefreshGameListCommand(command: RefreshGameListCommand) {
     this.gameList = new GameList(command.games);
     this.setSelectedById(this.lastSelectedId);
+  }
+
+  public onUser(user: User){
+    if(user == null){
+      this.router.navigate(['/login']);
+    }
   }
 
   private setSelectedById(gameId: string){
