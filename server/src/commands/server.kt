@@ -72,7 +72,7 @@ class LoginCommand : IRegisterServerCommand {
     private val password = ""
 
     override fun execute(): IRegisterClientCommand {
-        var response = RegisterResultCommand()
+        var response = LoginResultCommand()
 
         var user = Users.getUserByUsername(username)
 
@@ -82,7 +82,8 @@ class LoginCommand : IRegisterServerCommand {
         }
 
         if (user.verifyPassword(password)) {
-            response.authToken = AuthTokens.makeAuthTokenForUser(user)
+            val authToken = AuthTokens.makeAuthTokenForUser(user)
+            response.user = ClientUser(user.userID, user.username, authToken)
             return response
         } else {
             response.error = "Authentication error."
@@ -118,9 +119,10 @@ class RegisterCommand : IRegisterServerCommand {
 
         Users.addUser(newUser)
         var token = AuthTokens.makeAuthTokenForUser(newUser)
+        newUser.authToken = token
 
 
-        response.authToken = token
+        response.user = ClientUser(newUser.userID, newUser.username, newUser.authToken)
 
         return response
     }

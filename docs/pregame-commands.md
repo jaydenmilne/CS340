@@ -45,9 +45,8 @@ Valid colors are
 This should only be sent as part of the loginResult command.
 ```json
 {
-    "userId": "{id of user}",
-    "username": "{username of player}",
-    "authToken": "{auth token}"
+    "user": "{user object}",
+    "error": "{error message}"
 }
 ```
 
