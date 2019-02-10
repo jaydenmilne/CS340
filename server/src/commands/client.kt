@@ -2,9 +2,8 @@ package commands
 
 import models.Games
 
-class GameCreatedCommand : INormalClientCommand {
-    override val command = CREATE_GAME
-    var gameId = ""
+class GameCreatedCommand(gameId: Int) : INormalClientCommand {
+    override val type = CREATE_GAME
 }
 
 class LoginResultCommand : IRegisterClientCommand {

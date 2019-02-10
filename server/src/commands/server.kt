@@ -7,8 +7,17 @@ class CreateGameCommand : INormalServerCommand {
     private var name = ""
 
     override fun execute(user: User) {
-        val newGame = Game(name)
+        var newGame = Game(name)
         Games.games[newGame.gameID] = newGame
+
+        // If the user is in another game, take them out.
+        Games.removeUserFromGames(user)
+        // Add player to this new game's list of players
+        newGame.players.add(user)
+        user.ready = false
+
+        // Notify the client that we created the game
+        user.queue.push(GameCreatedCommand(newGame.gameID))
     }
 }
 
@@ -17,6 +26,14 @@ class JoinGameCommand : INormalServerCommand {
     private val gameId = ""
 
     override fun execute(user: User) {
+        // Ensure that the user is only in one game
+        Games.removeUserFromGames(user)
+        // Add the user to the new game
+        if (!Games.games.containsKey(gameId.toInt())) {
+            // game does not exist
+            throw CommandException("JoinGameCommand: Game does not exist")
+        }
+
         if(Games.games[gameId.toInt()]!!.players.size < 5) {
             Games.games[gameId.toInt()]!!.players.add(user)
             user.ready = false
@@ -29,6 +46,11 @@ class LeaveGameCommand : INormalServerCommand {
     private val gameId = ""
 
     override fun execute(user: User) {
+        // Add the user to the new game
+        if (!Games.games.containsKey(gameId.toInt())) {
+            // game does not exist
+            throw CommandException("JoinGameCommand: Game does not exist")
+        }
         Games.games[gameId.toInt()]!!.players.remove(user)
         user.ready = false
     }
