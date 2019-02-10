@@ -154,12 +154,13 @@ fun handlePost(httpExchange: HttpExchange) {
         if (command == null) {
             httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
         } else {
-            httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
 
             try {
+
                 command.execute(user)
                 writer.write(user.queue.pollCommands())
+                httpExchange.sendResponseHeaders(HTTP_OK, 0)
             } catch (e : CommandException) {
                 println(e.message)
                 writer.write(e.message)
