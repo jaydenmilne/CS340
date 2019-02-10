@@ -13,7 +13,7 @@ class CommandQueue {
     }
 
     fun pollCommands(): String {
-        val rendered = Gson().toJson(commands)
+        val rendered = Gson().toJson(this)
         commands.clear()
 
         return rendered

@@ -3,7 +3,7 @@ package commands
 import models.ClientUser
 import models.Games
 
-class GameCreatedCommand(gameId: Int) : INormalClientCommand {
+class GameCreatedCommand(val gameId: Int) : INormalClientCommand {
     override val command = GAME_CREATED
 }
 

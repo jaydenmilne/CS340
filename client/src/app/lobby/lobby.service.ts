@@ -33,7 +33,7 @@ export class LobbyService {
    }
 
   public gameList: GameList = new GameList([]);
-  private lastSelectedId: string = "";
+  private lastSelectedId: number = 0;
 
   public getGamesList() {
     const command: ListGamesCommand = new ListGamesCommand();
@@ -90,7 +90,7 @@ export class LobbyService {
     }
   }
 
-  private setSelectedById(gameId: string){
+  private setSelectedById(gameId: number){
     if(this.gameList !== undefined){
       this.gameList.setSelectedGameByID(this.lastSelectedId);
     }
