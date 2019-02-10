@@ -4,8 +4,6 @@ import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from './error-notifier.service';
 import { Subject } from 'rxjs';
-import { UserService } from './user.service';
-import { LoginResult } from './login-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +38,7 @@ export class ServerProxyService {
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      this.errorService.notifyServerCommError(error.error.message);
+      this.errorService.notifyServerCommError(error.message);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
@@ -48,7 +46,7 @@ export class ServerProxyService {
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
 
-      this.errorService.notifyHttpError(error.status, error.error.message);
+      this.errorService.notifyHttpError(error.status, error.message);
     }
   }
 
@@ -89,7 +87,7 @@ export class ServerProxyService {
   private sendCommandToEndpoint(command: Command, url: string) {
     this.http.post<ICommandArray>(
       url,
-      new CommandArray([command]),
+      command,
       { observe: 'response'}).subscribe(
         result => this.handleReponse(result),
         error => this.handleError(error));

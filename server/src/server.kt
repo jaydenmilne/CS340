@@ -3,51 +3,66 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import commands.*
 import models.AuthTokens
+import org.apache.commons.io.IOUtils
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
 import java.net.InetSocketAddress
 import models.*
-import java.lang.IllegalStateException
-import java.lang.NullPointerException
 
 const val MAX_CONNECTIONS = 10
 const val REGISTRATION_ENDPOINT = "/register"
 const val COMMAND_ENDPOINT = "/command"
+const val PORT = 4300
 
 fun main(args: Array<String>) {
-    val port = 4300
-    var server = HttpServer.create(InetSocketAddress(port), MAX_CONNECTIONS)
+    val server = HttpServer.create(InetSocketAddress(PORT), MAX_CONNECTIONS)
 
-    println("Registering endpoints...")
     server.createContext(COMMAND_ENDPOINT) { httpExchange ->
         when (httpExchange.requestMethod) {
             "GET" -> handleGet(httpExchange)
             "POST" -> handlePost(httpExchange)
+            "OPTIONS" -> handleOptions(httpExchange)
         }
     }
 
     server.createContext(REGISTRATION_ENDPOINT) { httpExchange ->
         when (httpExchange.requestMethod) {
             "POST" -> handleRegistrationPost(httpExchange)
+            "OPTIONS" -> handleOptions(httpExchange)
         }
     }
-    println("Hold on to your butts...")
+    println("On your marks... get set...")
     server.start()
-    println("Server started on port " + port)
+    println("Server started on port $PORT")
+    println("Go!")
+}
+
+fun handleOptions(httpExchange: HttpExchange) {
+    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+    httpExchange.responseHeaders.add("Access-Control-Allow-Headers", "*")
+    httpExchange.sendResponseHeaders(HTTP_OK, 0)
+    httpExchange.close()
+}
+
+fun handleOptions(httpExchange: HttpExchange) {
+    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+    httpExchange.responseHeaders.add("Access-Control-Allow-Headers", "*")
+    httpExchange.sendResponseHeaders(HTTP_OK, 0)
+    httpExchange.close()
 }
 
 fun handleRegistrationPost(httpExchange: HttpExchange) {
-    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*");
-    var requestBody = org.apache.commons.io.IOUtils.toString(InputStreamReader(httpExchange.requestBody))
+    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+    val requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
     println("POST /register")
     println(requestBody)
 
     try {
-        var initialCommand = Gson().fromJson(requestBody, IRegisterServerCommand::class.java)
+        val initialCommand = Gson().fromJson(requestBody, IRegisterServerCommand::class.java)
 
-        var command = when(initialCommand.type) {
+        val command = when(initialCommand.type) {
             LOGIN -> Gson().fromJson(requestBody, LoginCommand::class.java)
             REGISTER -> Gson().fromJson(requestBody, RegisterCommand::class.java)
             else -> null
@@ -57,9 +72,9 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
         } else {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
-            var writer = OutputStreamWriter(httpExchange.responseBody)
+            val writer = OutputStreamWriter(httpExchange.responseBody)
 
-            var resultCommand = command.execute()
+            val resultCommand = command.execute()
 
             writer.write(Gson().toJson(resultCommand, IRegisterClientCommand::class.java))
         }
@@ -73,9 +88,8 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
 }
 
 fun handleGet(httpExchange: HttpExchange) {
-    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*");
+    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
     try {
-
         if (!httpExchange.requestHeaders.containsKey("Authorization"))
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
 
@@ -88,7 +102,7 @@ fun handleGet(httpExchange: HttpExchange) {
             return
         } else {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
-            var writer = OutputStreamWriter(httpExchange.responseBody)
+            val writer = OutputStreamWriter(httpExchange.responseBody)
             writer.write(user.queue.pollCommands())
         }
     } catch (e : Exception) {
@@ -102,11 +116,11 @@ fun handleGet(httpExchange: HttpExchange) {
 
 fun handlePost(httpExchange: HttpExchange) {
     // Handle CORS
-    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*");
-    var requestBody = org.apache.commons.io.IOUtils.toString(InputStreamReader(httpExchange.requestBody))
+    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+    val requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
     try {
-        var initialCommand = Gson().fromJson(requestBody, INormalServerCommand::class.java)
+        val initialCommand = Gson().fromJson(requestBody, INormalServerCommand::class.java)
 
         if (!httpExchange.requestHeaders.containsKey("Authorization"))
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
@@ -122,7 +136,7 @@ fun handlePost(httpExchange: HttpExchange) {
         println("POST /command - " + user.username)
         println(requestBody)
 
-        var command = when (initialCommand.type) {
+        val command = when (initialCommand.type) {
             CREATE_GAME -> Gson().fromJson(requestBody, CreateGameCommand::class.java)
             JOIN_GAME -> Gson().fromJson(requestBody, JoinGameCommand::class.java)
             LEAVE_GAME -> Gson().fromJson(requestBody, LeaveGameCommand::class.java)
@@ -135,7 +149,7 @@ fun handlePost(httpExchange: HttpExchange) {
             httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
         } else {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
-            var writer = OutputStreamWriter(httpExchange.responseBody)
+            val writer = OutputStreamWriter(httpExchange.responseBody)
 
             command.execute(user)
 

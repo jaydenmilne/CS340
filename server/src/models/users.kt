@@ -15,8 +15,8 @@ object Users {
     private var i = 0
 
     fun addUser(user: User) {
-        usersByUserID.put(user.userID, user)
-        usersByUsername.put(user.username, user)
+        usersByUserID[user.userID] = user
+        usersByUsername[user.username] = user
     }
 
     fun removeUser(user: User) {
