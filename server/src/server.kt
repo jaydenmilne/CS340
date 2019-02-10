@@ -164,6 +164,7 @@ fun handlePost(httpExchange: HttpExchange) {
 
                 httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
             }
+            writer.close()
         }
 
     } catch (e : Exception) {
@@ -171,7 +172,6 @@ fun handlePost(httpExchange: HttpExchange) {
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
 
-    writer.close()
     println(httpExchange.responseCode.toString())
     httpExchange.close()
 }
