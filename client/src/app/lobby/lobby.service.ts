@@ -8,6 +8,7 @@ import { Color } from '@core/model/color.enum';
 import { CommandRouterService } from '@core/command-router.service';
 import { Router } from '@angular/router';
 import { User } from '@core/model/user';
+import { UserService } from '@core/user.service';
 
 @Injectable({
   providedIn: 'root'
