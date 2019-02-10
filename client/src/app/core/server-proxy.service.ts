@@ -113,31 +113,30 @@ export class ServerProxyService {
    * @param url where to send it
    */
   private sendCommandToEndpoint(command: Command, url: string) {
-    this.http.post<ICommandArray>(
-      url,
-      command,
-      {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/json',
-          'Authorization': this.authToken
-        }),
-        observe: 'response'
-      }).subscribe(
-        result => this.handleReponse(result),
-        error => this.handleError(error));
-  private sendCommandToEndpoint(command: Command, url: string) {
-    if(command instanceof ListGamesCommand){    // For polling commands, use poll handler.
+    if (command instanceof ListGamesCommand){
       this.http.post<ICommandArray>(
         url,
         command,
-        { observe: 'response'}).subscribe(
+        {
+          headers: new HttpHeaders({
+            'Content-Type':  'application/json',
+            'Authorization': this.authToken
+          }),
+          observe: 'response'
+        }).subscribe(
           result => this.handleReponse(result),
           error => this.handleFailedPoll(error));
     } else {
       this.http.post<ICommandArray>(
         url,
         command,
-        { observe: 'response'}).subscribe(
+        {
+          headers: new HttpHeaders({
+            'Content-Type':  'application/json',
+            'Authorization': this.authToken
+          }),
+          observe: 'response'
+        }).subscribe(
           result => this.handleReponse(result),
           error => this.handleError(error));
     }
