@@ -41,11 +41,12 @@ object Users {
 class User(var username: String) {
 
     var userID = getNextUserID()
-    private var passwordHash = ""
     var ready = false
     var authToken = ""
     var color = Color.YELLOW
 
+    @Transient
+    private var passwordHash = ""
     @Transient
     var queue = CommandQueue()
 
@@ -62,7 +63,7 @@ class User(var username: String) {
     }
 }
 
-// Simplification of user class to sendt to client
+// Simplification of user class to send to client
 class ClientUser(val userId: Int, var username: String, val authToken: String) {
     constructor() : this(0, "", "")
 }
