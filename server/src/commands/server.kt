@@ -37,6 +37,8 @@ class JoinGameCommand : INormalServerCommand {
         if(Games.games[gameId.toInt()]!!.players.size < 5) {
             Games.games[gameId.toInt()]!!.players.add(user)
             user.ready = false
+        }else{
+            throw CommandException("Game Full")
         }
     }
 }
