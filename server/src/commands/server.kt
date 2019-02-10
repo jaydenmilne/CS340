@@ -130,6 +130,24 @@ class RegisterCommand : IRegisterServerCommand {
     }
 }
 
+class ChangeColorCommand : INormalServerCommand {
+    override val command = CHANGE_COLOR
+    private val gameId = ""
+    private val newColor = ""
+
+    override fun execute(user: User) {
+        if (!Games.games.containsKey(gameId.toInt())) {
+            // game does not exist
+            throw CommandException("ChangeColorCommand: Game does not exist")
+        }
+        if (!Games.games[gameId.toInt()]!!.players.contains(user)) {
+            // user is not in game
+            throw CommandException("ChangeColorCommand: User is not in this game")
+        }
+        Users.getUserById(user.userID)!!.color = Color.valueOf(newColor)
+    }
+}
+
 class ServerCommandData : IRegisterCommand, INormalCommand {
     override val command: String = ""
 }
