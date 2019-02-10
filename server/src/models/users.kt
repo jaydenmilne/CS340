@@ -15,12 +15,12 @@ object Users {
     private var i = 0
 
     fun addUser(user: User) {
-        usersByUserID[user.userID] = user
+        usersByUserID[user.userId] = user
         usersByUsername[user.username] = user
     }
 
     fun removeUser(user: User) {
-        usersByUserID.remove(user.userID)
+        usersByUserID.remove(user.userId)
         usersByUsername.remove(user.username)
     }
 
@@ -40,7 +40,7 @@ object Users {
 
 class User(var username: String) {
 
-    var userID = getNextUserID()
+    var userId = getNextUserID()
     private var passwordHash = ""
     var ready = false
     var authToken = ""
