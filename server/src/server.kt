@@ -69,13 +69,13 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             try {
                 val resultCommand = command.execute()
                 writer.write(Gson().toJson(resultCommand, IRegisterClientCommand::class.java))
+
             } catch (e : CommandException) {
                 println(e.message)
                 writer.write(e.message)
                 httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
             }
-
-            writer.write(Gson().toJson(resultCommand))
+            
             writer.close()
         }
     } catch (e : Exception) {
@@ -169,14 +169,14 @@ fun handlePost(httpExchange: HttpExchange) {
                 
                 httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
             }
+            writer.close()
         }
 
     } catch (e : Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
-    
-    writer.close()
+
     println(httpExchange.responseCode.toString())
     httpExchange.close()
 }
