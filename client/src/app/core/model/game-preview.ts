@@ -3,7 +3,7 @@ import { Player } from './player';
 
 export class GamePreview {
     private name: string;
-    private Id: string;
+    private Id: number;
     private started: boolean;
     private players: Player [];
 
@@ -32,11 +32,11 @@ export class GamePreview {
         this.name = name;
     }
 
-    public getID(): string {
+    public getID(): number {
         return this.Id;
     }
 
-    public setUserID(ID: string) {
+    public setUserID(ID: number) {
         this.Id = ID;
     }
 

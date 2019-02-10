@@ -13,19 +13,19 @@ export class ListGamesCommand implements Command {
 export class JoinGameCommand implements Command {
     public command = 'joinGame';
 
-    constructor( public gameId: string) {}
+    constructor( public gameId: number) {}
 }
 
 export class ChangeColorCommand implements Command {
     public command = 'changeColor';
 
-    constructor( public gameId: string, public newColor: Color) {}
+    constructor( public gameId: number, public newColor: Color) {}
 }
 
 export class LeaveGameCommand implements Command {
     public command = 'leaveGame';
 
-    constructor( public gameId: string) {}
+    constructor( public gameId: number) {}
 }
 
 export class CreateGameCommand implements Command {
@@ -37,14 +37,14 @@ export class CreateGameCommand implements Command {
 export class PlayerReadyCommand implements Command {
     public command = 'playerReady';
 
-    constructor( public gameId: string,
+    constructor( public gameId: number,
         public playerIsReady: boolean) {}
 }
 
 // Client commands
 export class GameCreatedCommand implements Command {
     public command = 'gameCreated';
-    public gameId: string;
+public gameId: number;
 
     constructor(gameCreatedCommand: any) {
         if (!('gameId' in gameCreatedCommand)) {
