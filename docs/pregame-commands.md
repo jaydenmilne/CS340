@@ -34,23 +34,28 @@ Several commands transmit arrays of models, these are their descriptions.
     "ready": true
 }
 ```
+Valid colors are
+- `blue`
+- `red`
+- `green`
+- `yellow`
+- `black`
+
 ### `user` object
 This should only be sent as part of the loginResult command.
 ```json
 {
-    "userId": "{id of user}",
-    "username": "{username of player}",
-    "authToken": "{auth token}"
+    "user": "{user object}",
+    "error": "{error message}"
 }
 ```
 
 ## Commands
-
 | Command                                | [Type](protocol.md#terminology)  | Related Commands |    
 |----------------------------------------|----------------------------------|------------------|
-| [register](#register-command)          | Server                           | `loginResult`    |
-| [login](#login-command)                | Server                           | `loginResult`    |
-| [loginResult](#loginresult-command)    | Client                           | `register`, `login` |
+| [register](#register-command)*         | Server                           | `loginResult`    |
+| [login](#login-command)*               | Server                           | `loginResult`    |
+| [loginResult](#loginresult-command)*   | Client                           | `register`, `login` |
 | [listGames](#listgames-command)        | Server                           | `refreshGameList`|
 | [refreshGameList](#refreshgamelist-command) | Client                      | `listGames`      |
 | [joinGame](#joingame-command)          | Server                           | `leaveGame`      |
@@ -61,9 +66,10 @@ This should only be sent as part of the loginResult command.
 | [playerReady](#playerready-command)    | Server                           |                  |
 | [postChat](#postchat-command)          | Server / Client                  |                  |
 | [startGame](#startgame-command)        | Client                           |                  |
+* denotes a command that must be sent to the server and to the client via a request to the `/register` endpoint.
 
 ### `register` Command
-Server Command.
+Server Command (must be sent to the server via a request to the `/register` endpoint.).
 
 Registers a new user.
 `username` should be a maximum of 16 characters.
@@ -78,7 +84,7 @@ Registers a new user.
 ```
 
 ### `login` Command
-Server Command.
+Server Command (must be sent to the server via a request to the `/register` endpoint.).
 
 Logs in an existing user.
 
@@ -92,9 +98,9 @@ Logs in an existing user.
 ```
 
 ### `loginResult` Command
-Client Command.
+Client Command (must be sent to client via a request to the `/register` endpoint.).
 
-Informs the client the result of a login. If there was no error, `error` should be an empty string.
+Informs the client the result of a login. If there was no error, `error` should be an empty string. If there was an error, "user" should be empty
 
 #### Syntax
 ```json

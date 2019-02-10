@@ -11,7 +11,7 @@ import { PollerService } from '@core/poller.service';
 })
 export class GameInfoComponent implements OnInit {
 
-  constructor(private lobbyService: LobbyService, private poller: PollerService) { 
+  constructor(private lobbyService: LobbyService, private poller: PollerService) {
     this.poller.setLobbyMode(true);
     this.poller.startPolling();
   }
