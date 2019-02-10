@@ -144,7 +144,7 @@ class ChangeColorCommand : INormalServerCommand {
             // user is not in game
             throw CommandException("ChangeColorCommand: User is not in this game")
         }
-        Users.getUserById(user.userID)!!.color = Color.valueOf(newColor)
+        Users.getUserById(user.userId)!!.color = Color.valueOf(newColor)
     }
 }
 

@@ -41,7 +41,6 @@ object Users {
 class User(var username: String) {
 
     var userId = getNextUserID()
-    private var passwordHash = ""
     var ready = false
     var authToken = ""
     var color = Color.YELLOW
