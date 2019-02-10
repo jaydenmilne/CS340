@@ -11,6 +11,9 @@
     margin: 5px 0;
     width: 100%;
 }
+.game-list-game-card::after{
+    background: initial;
+}
 .game-player-num{
     position: absolute;
     right: 15px;
