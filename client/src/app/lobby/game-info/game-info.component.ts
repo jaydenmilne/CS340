@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/core/model/player';
 import { LobbyService } from '../lobby.service';
 import { Color } from '@core/model/color.enum';
+import { PollerService } from '@core/poller.service';
 
 @Component({
   selector: 'app-game-info',
@@ -10,7 +11,10 @@ import { Color } from '@core/model/color.enum';
 })
 export class GameInfoComponent implements OnInit {
 
-  constructor(private lobbyService: LobbyService) { }
+  constructor(private lobbyService: LobbyService, private poller: PollerService) {
+    this.poller.setLobbyMode(true);
+    this.poller.startPolling();
+  }
 
   playerReady = false;
 

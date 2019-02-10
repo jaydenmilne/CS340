@@ -8,9 +8,9 @@ export class GamePreview {
     private players: Player [];
 
     constructor(gamePreview: any) {
-        if (!('name' in gamePreview || 
-        'Id' in gamePreview || 
-        'started' in gamePreview || 
+        if (!('name' in gamePreview ||
+        'Id' in gamePreview ||
+        'started' in gamePreview ||
         'players' in gamePreview)) {
             throw new TypeError('Unable to deserialize GamePreview object, ' + JSON.stringify(gamePreview));
     }

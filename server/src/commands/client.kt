@@ -9,12 +9,12 @@ class GameCreatedCommand(gameId: Int) : INormalClientCommand {
 
 class LoginResultCommand : IRegisterClientCommand {
     override val command = LOGIN_RESULT
-    var user = ClientUser(0, "", "")
+    var user = ClientUser()
     var error = ""
 }
 
 class RefreshGameListCommand : INormalClientCommand {
-    var games = Games.games
+    var games = Games.games.values
     override val command = REFRESH_GAME_LIST
 }
 

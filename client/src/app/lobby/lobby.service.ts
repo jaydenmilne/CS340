@@ -7,14 +7,20 @@ import { JoinGameCommand, CreateGameCommand, LeaveGameCommand, PlayerReadyComman
 import { Color } from '@core/model/color.enum';
 import { CommandRouterService } from '@core/command-router.service';
 import { Router } from '@angular/router';
+import { User } from '@core/model/user';
+import { UserService } from '@core/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyService {
 
-  constructor(private server: ServerProxyService, private commandRouter: CommandRouterService, private router: Router) {
+  constructor(private server: ServerProxyService, private userService: UserService,
+    private commandRouter: CommandRouterService, private router: Router) {
       // this.gameList.setSelectedGameByID('asldk');
+      this.userService.user$.subscribe(
+        user => this.onUser(user)
+      );
       this.commandRouter.gameCreated$.subscribe(
         result => this.onGameCreatedCommand(result)
       );
@@ -26,16 +32,7 @@ export class LobbyService {
       );
    }
 
-  public gameList: GameList = new GameList([
-    new GamePreview({'name':'game1', 'Id':'asldk', 'started':false, 'players':[
-      new Player({'color':Color.YELLOW, 'userId':'user1', 'ready':false, 'name':'riffraff78'}),
-      new Player({'color':Color.BLUE, 'userId':'user2', 'ready':true, 'name':'toughstuff56'}),
-      new Player({'color':Color.GREEN, 'userId':'user3', 'ready':true, 'name':'hotshot33'}),
-      new Player({'color':Color.PURPLE, 'userId':'user4', 'ready':false, 'name':'tooslow64'}),
-    ]}),
-    new GamePreview({'name':'game2', 'Id':'531', 'started':false, 'players':[]}),
-    new GamePreview({'name':'game3', 'Id':'vcb', 'started':false, 'players':[]}),
-  ]);
+  public gameList: GameList = new GameList([]);
   private lastSelectedId: string = "";
 
   public getGamesList() {
@@ -44,7 +41,6 @@ export class LobbyService {
   }
 
   public joinGame(game: GamePreview) {
-    // Create Join Game command
     const command: JoinGameCommand = new JoinGameCommand(game.getID());
     this.lastSelectedId = game.getID();
     this.setSelectedById(this.lastSelectedId);
@@ -86,6 +82,12 @@ export class LobbyService {
   public onRefreshGameListCommand(command: RefreshGameListCommand) {
     this.gameList = new GameList(command.games);
     this.setSelectedById(this.lastSelectedId);
+  }
+
+  public onUser(user: User){
+    if(user == null){
+      this.router.navigate(['/login']);
+    }
   }
 
   private setSelectedById(gameId: string){
