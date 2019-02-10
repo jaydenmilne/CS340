@@ -9,6 +9,8 @@
 
 .vscode
 server/.idea
+server/.idea/workspace.xml
+server/.idea/misc.xml
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
