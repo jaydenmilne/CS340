@@ -15,33 +15,33 @@ const val REGISTER_RESULT = "registerResult"
 const val START_GAME = "startGame"
 
 interface ICommand {
-    val type: String
+    val command: String
 }
 
 interface INormalCommand : ICommand {
-    override val type: String
+    override val command: String
 }
 
 interface IRegisterCommand : ICommand {
-    override val type: String
+    override val command: String
 }
 
 interface IRegisterServerCommand : IRegisterCommand {
-    override val type: String
+    override val command: String
     fun execute() : IRegisterClientCommand
 }
 
 interface IRegisterClientCommand : IRegisterCommand {
-    override val type: String
+    override val command: String
 }
 
 interface INormalServerCommand : INormalCommand {
-    override val type: String
+    override val command: String
     fun execute(user: User)
 }
 
 interface INormalClientCommand : INormalCommand {
-    override val type: String
+    override val command: String
 }
 
 class CommandException: Exception()

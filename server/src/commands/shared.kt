@@ -4,7 +4,7 @@ import models.Games
 import models.User
 
 class PostChatCommand : INormalClientCommand, INormalServerCommand {
-    override val type = "postChat"
+    override val command = "postChat"
     private val gameId = ""
     private val playerId = ""
     private val playerName = ""
