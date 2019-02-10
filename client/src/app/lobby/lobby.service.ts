@@ -3,7 +3,9 @@ import { GameList } from '../core/model/game-list';
 import { GamePreview } from '../core/model/game-preview';
 import { Player } from '../core/model/player';
 import { ServerProxyService } from '@core/server-proxy.service';
-import { JoinGameCommand, CreateGameCommand, LeaveGameCommand, PlayerReadyCommand, GameCreatedCommand, StartGameCommand, RefreshGameListCommand, ListGamesCommand, ChangeColorCommand } from '@core/lobby-commands';
+import { JoinGameCommand, CreateGameCommand, LeaveGameCommand,
+         PlayerReadyCommand, GameCreatedCommand, StartGameCommand,
+         RefreshGameListCommand, ListGamesCommand, ChangeColorCommand } from '@core/lobby-commands';
 import { Color } from '@core/model/color.enum';
 import { CommandRouterService } from '@core/command-router.service';
 import { Router } from '@angular/router';
@@ -33,7 +35,7 @@ export class LobbyService {
    }
 
   public gameList: GameList = new GameList([]);
-  private lastSelectedId: string = "";
+  private lastSelectedId = '';
 
   public getGamesList() {
     const command: ListGamesCommand = new ListGamesCommand();
@@ -84,14 +86,14 @@ export class LobbyService {
     this.setSelectedById(this.lastSelectedId);
   }
 
-  public onUser(user: User){
-    if(user == null){
+  public onUser(user: User) {
+    if (user == null) {
       this.router.navigate(['/login']);
     }
   }
 
-  private setSelectedById(gameId: string){
-    if(this.gameList !== undefined){
+  private setSelectedById(gameId: string) {
+    if (this.gameList !== undefined) {
       this.gameList.setSelectedGameByID(this.lastSelectedId);
     }
   }

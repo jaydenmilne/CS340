@@ -11,7 +11,7 @@ export class GameList {
     public getSelectedGame(): GamePreview {
         return this.selectedGame;
     }
-    
+
     public setSelectedGameByID(selectedGameID: string) {
         const gamePreview: GamePreview = this.games.find(g => g.getID() === selectedGameID);
         this.selectedGame = gamePreview;
