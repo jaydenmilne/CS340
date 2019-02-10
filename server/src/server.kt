@@ -44,6 +44,13 @@ fun handleOptions(httpExchange: HttpExchange) {
     httpExchange.close()
 }
 
+fun handleOptions(httpExchange: HttpExchange) {
+    httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+    httpExchange.responseHeaders.add("Access-Control-Allow-Headers", "*")
+    httpExchange.sendResponseHeaders(HTTP_OK, 0)
+    httpExchange.close()
+}
+
 fun handleRegistrationPost(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
     val requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
