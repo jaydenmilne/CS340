@@ -4,6 +4,7 @@ import { ServerProxyService } from '@core/server-proxy.service';
 import { LoginCommand, RegisterCommand, LoginResult } from '@core/login-commands';
 import { CommandRouterService } from '@core/command-router.service';
 import { Router } from '@angular/router';
+import { UserService } from '@core/user.service';
 
 @Injectable({
   providedIn: 'root' // this makes the service a singleton
@@ -12,7 +13,8 @@ export class LoginService {
 
   constructor(private serverProxy: ServerProxyService,
               private commandRouter: CommandRouterService,
-              private router: Router ) {
+              private router: Router,
+              private userService: UserService ) {
     this.commandRouter.loginResult$.subscribe(
       result => this.handleResult(result)
     );
@@ -28,7 +30,7 @@ export class LoginService {
   handleResult(loginResult: LoginResult) {
     if (loginResult.user !== null) {
       // Login/Register worked
-      this.router.navigate(['/lobby']);
+      // User service will route to the lobby
       return;
     }
 

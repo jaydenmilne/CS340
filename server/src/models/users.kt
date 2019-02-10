@@ -47,6 +47,8 @@ class User(var username: String) {
     var color = Color.YELLOW
 
     @Transient
+    private var passwordHash = ""
+    @Transient
     var queue = CommandQueue()
 
     constructor(username: String, password: String) : this(username) {
@@ -62,7 +64,7 @@ class User(var username: String) {
     }
 }
 
-// Simplification of user class to sendt to client
+// Simplification of user class to send to client
 class ClientUser(val userId: Int, var username: String, val authToken: String) {
     constructor() : this(0, "", "")
 }
