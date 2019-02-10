@@ -31,6 +31,11 @@ object Users {
     fun getUserByUsername(username: String): User? {
         return usersByUsername[username]
     }
+
+    fun getUserById(id: Int): User? {
+        return usersByUserID[id]
+    }
+
 }
 
 class User(var username: String) {
