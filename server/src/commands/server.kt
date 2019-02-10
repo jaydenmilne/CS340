@@ -49,7 +49,7 @@ class LeaveGameCommand : INormalServerCommand {
         // Add the user to the new game
         if (!Games.games.containsKey(gameId.toInt())) {
             // game does not exist
-            throw CommandException("JoinGameCommand: Game does not exist")
+            throw CommandException("LeaveGameCommand: Game does not exist")
         }
         Games.games[gameId.toInt()]!!.players.remove(user)
         user.ready = false
