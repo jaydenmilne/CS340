@@ -3,7 +3,7 @@ package commands
 import models.Games
 
 class GameCreatedCommand(gameId: Int) : INormalClientCommand {
-    override val type = CREATE_GAME
+    override val command = GAME_CREATED
 }
 
 class LoginResultCommand : IRegisterClientCommand {

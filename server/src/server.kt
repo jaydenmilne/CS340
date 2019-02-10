@@ -8,7 +8,6 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
 import java.net.InetSocketAddress
-import models.*
 
 const val MAX_CONNECTIONS = 10
 const val REGISTRATION_ENDPOINT = "/register"
@@ -76,11 +75,12 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
                 httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
             }
 
+            writer.write(Gson().toJson(resultCommand))
+            writer.close()
         }
     } catch (e : Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
-        println(e)
     }
 
     println(httpExchange.responseCode.toString())
@@ -91,8 +91,11 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
 fun handleGet(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
     try {
-        if (!httpExchange.requestHeaders.containsKey("Authorization"))
+        if (!httpExchange.requestHeaders.containsKey("Authorization")) {
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
+            httpExchange.close()
+            return
+        }
 
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
@@ -105,11 +108,11 @@ fun handleGet(httpExchange: HttpExchange) {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
             writer.write(user.queue.pollCommands())
+            writer.close()
         }
     } catch (e : Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
-        println(e)
     }
 
 
@@ -125,8 +128,11 @@ fun handlePost(httpExchange: HttpExchange) {
     try {
         val initialCommand = Gson().fromJson(requestBody, ServerCommandData::class.java)
 
-        if (!httpExchange.requestHeaders.containsKey("Authorization"))
+        if (!httpExchange.requestHeaders.containsKey("Authorization")) {
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
+            httpExchange.close()
+            return
+        }
 
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
@@ -160,6 +166,7 @@ fun handlePost(httpExchange: HttpExchange) {
             } catch (e : CommandException) {
                 println(e.message)
                 writer.write(e.message)
+                
                 httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
             }
         }
@@ -167,9 +174,9 @@ fun handlePost(httpExchange: HttpExchange) {
     } catch (e : Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
-        println(e)
     }
-
+    
+    writer.close()
     println(httpExchange.responseCode.toString())
     httpExchange.close()
 }
