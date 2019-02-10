@@ -9,7 +9,7 @@ class GameCreatedCommand(gameId: Int) : INormalClientCommand {
 
 class LoginResultCommand : IRegisterClientCommand {
     override val command = LOGIN_RESULT
-    var user = ClientUser(0, "", "")
+    var user = ClientUser()
     var error = ""
 }
 
