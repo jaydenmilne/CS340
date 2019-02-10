@@ -3,6 +3,7 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import commands.*
 import models.AuthTokens
+import models.RegisterCommandQueue
 import org.apache.commons.io.IOUtils
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -66,16 +67,10 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
 
-            try {
-                val resultCommand = command.execute()
-                writer.write(Gson().toJson(resultCommand, IRegisterClientCommand::class.java))
-            } catch (e : CommandException) {
-                println(e.message)
-                writer.write(e.message)
-                httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
-            }
+            val resultCommands = RegisterCommandQueue()
+            resultCommands.push(command.execute())
 
-            writer.write(Gson().toJson(resultCommand))
+            writer.write(Gson().toJson(resultCommands))
             writer.close()
         }
     } catch (e : Exception) {
@@ -166,17 +161,17 @@ fun handlePost(httpExchange: HttpExchange) {
             } catch (e : CommandException) {
                 println(e.message)
                 writer.write(e.message)
-                
+
                 httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
             }
+            writer.close()
         }
 
     } catch (e : Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
-    
-    writer.close()
+
     println(httpExchange.responseCode.toString())
     httpExchange.close()
 }
