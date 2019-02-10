@@ -4,6 +4,7 @@ import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from './error-notifier.service';
 import { Subject, BehaviorSubject } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 import { UserService } from './user.service';
 import { LoginResult } from './login-commands';
 import { ListGamesCommand } from './lobby-commands';
@@ -11,7 +12,6 @@ import { ListGamesCommand } from './lobby-commands';
 @Injectable({
   providedIn: 'root'
 })
-
 export class ServerProxyService {
 
   private commandEndpoint = '/command';
@@ -113,6 +113,19 @@ export class ServerProxyService {
    * @param url where to send it
    */
   private sendCommandToEndpoint(command: Command, url: string) {
+    this.http.post<ICommandArray>(
+      url,
+      command,
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': this.authToken
+        }),
+        observe: 'response'
+      }).subscribe(
+        result => this.handleReponse(result),
+        error => this.handleError(error));
+  private sendCommandToEndpoint(command: Command, url: string) {
     if(command instanceof ListGamesCommand){    // For polling commands, use poll handler.
       this.http.post<ICommandArray>(
         url,
@@ -136,7 +149,13 @@ export class ServerProxyService {
   public poll() {
     this.http.get<ICommandArray>(
       this.getUrl(),
-      { observe: 'response' }).subscribe(
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': this.authToken
+        }),
+        observe: 'response'
+      }).subscribe(
         result => this.handleReponse(result),
         error => this.handleFailedPoll(error));
   }
