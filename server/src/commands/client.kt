@@ -14,7 +14,7 @@ class LoginResultCommand : IRegisterClientCommand {
 }
 
 class RefreshGameListCommand : INormalClientCommand {
-    var games = Games.games
+    var games = Games.games.values
     override val command = REFRESH_GAME_LIST
 }
 
