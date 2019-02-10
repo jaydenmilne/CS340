@@ -157,7 +157,7 @@ fun handlePost(httpExchange: HttpExchange) {
 
             try {
                 command.execute(user)
-                writer.write(user.queue.pollCommands())
+                writer.write(Gson().toJson(user.queue))
             } catch (e : CommandException) {
                 println(e.message)
                 writer.write(e.message)
