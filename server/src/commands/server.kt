@@ -3,7 +3,7 @@ package commands
 import models.*
 
 class CreateGameCommand : INormalServerCommand {
-    override val type = CREATE_GAME
+    override val command = CREATE_GAME
     private var name = ""
 
     override fun execute(user: User) {
@@ -13,7 +13,7 @@ class CreateGameCommand : INormalServerCommand {
 }
 
 class JoinGameCommand : INormalServerCommand {
-    override val type = JOIN_GAME
+    override val command = JOIN_GAME
     private val gameId = ""
 
     override fun execute(user: User) {
@@ -25,7 +25,7 @@ class JoinGameCommand : INormalServerCommand {
 }
 
 class LeaveGameCommand : INormalServerCommand {
-    override val type = LEAVE_GAME
+    override val command = LEAVE_GAME
     private val gameId = ""
 
     override fun execute(user: User) {
@@ -35,7 +35,7 @@ class LeaveGameCommand : INormalServerCommand {
 }
 
 class ListGamesCommand : INormalServerCommand {
-    override val type = LIST_GAMES
+    override val command = LIST_GAMES
 
     override fun execute(user: User) {
         var newCommand = RefreshGameListCommand()
@@ -45,7 +45,7 @@ class ListGamesCommand : INormalServerCommand {
 
 
 class LoginCommand : IRegisterServerCommand {
-    override val type = LOGIN
+    override val command = LOGIN
     private val username = ""
     private val password = ""
 
@@ -70,7 +70,7 @@ class LoginCommand : IRegisterServerCommand {
 }
 
 class PlayerReadyCommand : INormalServerCommand {
-    override val type = PLAYER_READY
+    override val command = PLAYER_READY
     private val gameId = ""
     private val playerIsReady = false
 
@@ -80,7 +80,7 @@ class PlayerReadyCommand : INormalServerCommand {
 }
 
 class RegisterCommand : IRegisterServerCommand {
-    override val type = REGISTER
+    override val command = REGISTER
     private val username = ""
     private val password = ""
 
@@ -102,4 +102,8 @@ class RegisterCommand : IRegisterServerCommand {
 
         return response
     }
+}
+
+class ServerCommandData : IRegisterCommand, INormalCommand {
+    override val command: String = ""
 }

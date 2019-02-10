@@ -51,9 +51,9 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
     println(requestBody)
 
     try {
-        var initialCommand = Gson().fromJson(requestBody, IRegisterServerCommand::class.java)
+        var initialCommand = Gson().fromJson(requestBody, ServerCommandData::class.java)
 
-        var command = when(initialCommand.type) {
+        var command = when(initialCommand.command) {
             LOGIN -> Gson().fromJson(requestBody, LoginCommand::class.java)
             REGISTER -> Gson().fromJson(requestBody, RegisterCommand::class.java)
             else -> null
@@ -67,10 +67,11 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
 
             var resultCommand = command.execute()
 
-            writer.write(Gson().toJson(resultCommand, IRegisterClientCommand::class.java))
+            writer.write(Gson().toJson(resultCommand))
         }
     } catch (e : Exception) {
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
+        println(e)
     }
 
     println(httpExchange.responseCode.toString())
@@ -97,6 +98,7 @@ fun handleGet(httpExchange: HttpExchange) {
         }
     } catch (e : Exception) {
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
+        println(e)
     }
 
 
@@ -110,7 +112,7 @@ fun handlePost(httpExchange: HttpExchange) {
     var requestBody = org.apache.commons.io.IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
     try {
-        var initialCommand = Gson().fromJson(requestBody, INormalServerCommand::class.java)
+        var initialCommand = Gson().fromJson(requestBody, ServerCommandData::class.java)
 
         var authToken = httpExchange.requestHeaders.getFirst("Authorization")
         var user = AuthTokens.getUser(authToken)
@@ -124,7 +126,7 @@ fun handlePost(httpExchange: HttpExchange) {
         println("POST /command - " + user.username)
         println(requestBody)
 
-        var command = when (initialCommand.type) {
+        var command = when (initialCommand.command) {
             CREATE_GAME -> Gson().fromJson(requestBody, CreateGameCommand::class.java)
             JOIN_GAME -> Gson().fromJson(requestBody, JoinGameCommand::class.java)
             LEAVE_GAME -> Gson().fromJson(requestBody, LeaveGameCommand::class.java)
@@ -146,6 +148,7 @@ fun handlePost(httpExchange: HttpExchange) {
 
     } catch (e : Exception) {
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
+        println(e)
     }
 
     println(httpExchange.responseCode.toString())
