@@ -61,5 +61,5 @@ class User(var username: String) {
 
 // Simplification of user class to sendt to client
 class ClientUser(val userId: Int, var username: String, val authToken: String) {
-
+    constructor() : this(0, "", "")
 }
