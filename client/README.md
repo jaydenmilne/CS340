@@ -1,5 +1,5 @@
 # Getting Started
-1. Install [NPM v 10.x.x](https://angular.io/guide/quickstart)
+1. Install [Node v 10.x.x] with `npm`. (https://angular.io/guide/quickstart)
 2. Install Angular CLI (`npm install -g @angular/cli`)
 
 ## Development server

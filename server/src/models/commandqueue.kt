@@ -2,6 +2,7 @@ package models
 
 import com.google.gson.Gson
 import commands.INormalClientCommand
+import commands.IRegisterClientCommand
 
 class CommandQueue {
 
@@ -17,4 +18,14 @@ class CommandQueue {
 
         return rendered
     }
+}
+
+class RegisterCommandQueue {
+
+    var commands = mutableListOf<IRegisterClientCommand>()
+
+    fun push(command: IRegisterClientCommand) {
+        commands.add(command)
+    }
+
 }
