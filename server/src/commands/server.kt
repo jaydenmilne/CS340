@@ -133,7 +133,7 @@ class RegisterCommand : IRegisterServerCommand {
 class ChangeColorCommand : INormalServerCommand {
     override val command = CHANGE_COLOR
     private val gameId = ""
-    private val newColor = ""
+    private var newColor = ""
 
     override fun execute(user: User) {
         if (!Games.games.containsKey(gameId.toInt())) {
@@ -144,7 +144,7 @@ class ChangeColorCommand : INormalServerCommand {
             // user is not in game
             throw CommandException("ChangeColorCommand: User is not in this game")
         }
-        Users.getUserById(user.userId)!!.color = Color.valueOf(newColor)
+        enumValues<Color>().forEach { if(it.rgb.equals(newColor)) Users.getUserById(user.userId)!!.color = it }
     }
 }
 
