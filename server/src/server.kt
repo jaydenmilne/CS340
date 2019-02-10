@@ -66,14 +66,21 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
 
-            val resultCommand = command.execute()
+            try {
+                val resultCommand = command.execute()
+                writer.write(Gson().toJson(resultCommand, IRegisterClientCommand::class.java))
+            } catch (e : CommandException) {
+                println(e.message)
+                writer.write(e.message)
+                httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
+            }
 
             writer.write(Gson().toJson(resultCommand))
             writer.close()
         }
     } catch (e : Exception) {
-        httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
         println(e)
+        httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
 
     println(httpExchange.responseCode.toString())
@@ -104,8 +111,8 @@ fun handleGet(httpExchange: HttpExchange) {
             writer.close()
         }
     } catch (e : Exception) {
-        httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
         println(e)
+        httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
 
 
@@ -153,18 +160,23 @@ fun handlePost(httpExchange: HttpExchange) {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
 
-            command.execute(user)
-
-            writer.write(user.queue.pollCommands())
-            writer.close()
+            try {
+                command.execute(user)
+                writer.write(user.queue.pollCommands())
+            } catch (e : CommandException) {
+                println(e.message)
+                writer.write(e.message)
+                
+                httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
+            }
         }
 
     } catch (e : Exception) {
-        httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
         println(e)
+        httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
-
+    
+    writer.close()
     println(httpExchange.responseCode.toString())
     httpExchange.close()
-
 }
