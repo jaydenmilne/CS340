@@ -2,7 +2,7 @@ import { Color } from './color.enum';
 
 export class Player {
     private color: Color;
-    private userId: string;
+    private userId: number;
     private ready: boolean;
     private username: string;
 
@@ -28,11 +28,11 @@ export class Player {
         return this.color;
     }
 
-    public getuserId(): string {
+    public getuserId(): number {
         return this.userId;
     }
 
-    public setuserId(userId: string) {
+    public setuserId(userId: number) {
         this.userId = userId;
     }
 

@@ -46,7 +46,7 @@
   </mat-card-content>
 
   <mat-card-actions class="game-info-actions">
-    <button mat-raised-button class="actionbutton,game-info-ready-button" (click)="onReady()" color="primary" >{{playerReady ? "Not Ready" : "Ready" }}</button>
+    <button mat-raised-button class="actionbutton game-info-ready-button" (click)="onReady()" color="primary" >{{isUserReady() ? "Not Ready" : "Ready" }}</button>
   </mat-card-actions>
 </mat-card>
 

@@ -78,5 +78,10 @@ export class GamePreview {
 
         return avaiableColors;
     }
+
+    public isPlayerReady(userId: number): boolean{ 
+        const player: Player = this.players.find(p => p.getuserId() === userId);
+        return (player !== undefined && player.isReady());
+    }
 }
 
