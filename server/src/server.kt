@@ -83,8 +83,11 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
 fun handleGet(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
     try {
-        if (!httpExchange.requestHeaders.containsKey("Authorization"))
+        if (!httpExchange.requestHeaders.containsKey("Authorization")) {
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
+            httpExchange.close()
+            return
+        }
 
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
@@ -116,8 +119,11 @@ fun handlePost(httpExchange: HttpExchange) {
     try {
         val initialCommand = Gson().fromJson(requestBody, ServerCommandData::class.java)
 
-        if (!httpExchange.requestHeaders.containsKey("Authorization"))
+        if (!httpExchange.requestHeaders.containsKey("Authorization")) {
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
+            httpExchange.close()
+            return
+        }
 
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
