@@ -3,6 +3,7 @@ package commands
 import models.User
 
 const val CREATE_GAME = "createGame"
+const val GAME_CREATED = "gameCreated"
 const val JOIN_GAME = "joinGame"
 const val LEAVE_GAME = "leaveGame"
 const val LIST_GAMES = "listGames"
@@ -44,4 +45,4 @@ interface INormalClientCommand : INormalCommand {
     override val command: String
 }
 
-class CommandException: Exception()
+class CommandException(message:String): Exception(message)
