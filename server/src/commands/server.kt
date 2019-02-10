@@ -8,7 +8,7 @@ class CreateGameCommand : INormalServerCommand {
 
     override fun execute(user: User) {
         var newGame = Game(name)
-        Games.games[newGame.gameID] = newGame
+        Games.games[newGame.gameId] = newGame
 
         // If the user is in another game, take them out.
         Games.removeUserFromGames(user)
@@ -17,7 +17,7 @@ class CreateGameCommand : INormalServerCommand {
         user.ready = false
 
         // Notify the client that we created the game
-        user.queue.push(GameCreatedCommand(newGame.gameID))
+        user.queue.push(GameCreatedCommand(newGame.gameId))
     }
 }
 

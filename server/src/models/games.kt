@@ -35,7 +35,7 @@ object Games {
 }
 
 class Game(var name: String) {
-    val gameID = getNextGameID()
+    val gameId = getNextGameID()
     var players = mutableSetOf<User>()
     var started = false
 }
