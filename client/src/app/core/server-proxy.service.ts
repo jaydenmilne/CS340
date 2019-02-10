@@ -4,11 +4,11 @@ import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from './error-notifier.service';
 import { Subject } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class ServerProxyService {
 
   private commandEndpoint = '/command';
@@ -84,11 +84,17 @@ export class ServerProxyService {
    * @param command command like object
    * @param url where to send it
    */
-  private sendCommandToEndpoint(command: Command, url: string) {
+  private sendCommandToEndpoint(command: Command, url: string) {  
     this.http.post<ICommandArray>(
       url,
       command,
-      { observe: 'response'}).subscribe(
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': this.authToken
+        }),
+        observe: 'response'
+      }).subscribe(
         result => this.handleReponse(result),
         error => this.handleError(error));
   }
@@ -99,7 +105,13 @@ export class ServerProxyService {
   public poll() {
     this.http.get<ICommandArray>(
       this.getUrl(),
-      { observe: 'response'}).subscribe(
+      {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': this.authToken
+        }),
+        observe: 'response'
+      }).subscribe(
         result => this.handleReponse(result),
         error => this.handleError(error));
   }
