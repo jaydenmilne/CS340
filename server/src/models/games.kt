@@ -41,4 +41,14 @@ class Game(var name: String) {
             player.queue.push(command)
         }
     }
+
+    fun getUsedColors(): Set<Color> {
+        var usedColors = mutableSetOf<Color>()
+
+        for (player in players) {
+            usedColors.add(player.color)
+        }
+
+        return usedColors.toSet()
+    }
 }
