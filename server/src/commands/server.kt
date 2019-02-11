@@ -44,7 +44,9 @@ class JoinGameCommand : INormalServerCommand {
 
         if (game.players.size < 5) {
             game.players.add(user)
-            user.color = Color.values()[game.players.size - 1]
+
+            val availableColors = Color.values().toSet() - game.getUsedColors()
+            user.color = availableColors.shuffled()[0]
             user.ready = false
         } else {
             throw CommandException("Game Full")
@@ -186,12 +188,20 @@ class ChangeColorCommand : INormalServerCommand {
             throw CommandException("ChangeColorCommand: User is not in this game")
         }
 
-        enumValues<Color>().forEach { if (it.rgb.equals(newColor)) user.color = it }
+        if (game.getUsedColors().contains(Color.valueOf(newColor))) {
+            throw CommandException("ChangeColorCOmmand: Color already taken")
+        }
+
+        user.color = Color.valueOf(newColor)
     }
 }
 
 /**
- * TODO: Document
+ * Concrete type to make Gson happy when identifying the type of Server Command.
+ *
+ * In a future update, this will be replaced by making INormalServerCommand concrete.
+ *
+ * @deprecated
  */
 class ServerCommandData : IRegisterCommand, INormalCommand {
     override val command: String = ""
