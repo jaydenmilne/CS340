@@ -18,7 +18,6 @@ class RefreshGameListCommand : INormalClientCommand {
     override val command = REFRESH_GAME_LIST
 }
 
-class StartGameCommand : INormalClientCommand {
+class StartGameCommand(var gameId: String) : INormalClientCommand {
     override val command = START_GAME
-    var gameId = ""
 }
