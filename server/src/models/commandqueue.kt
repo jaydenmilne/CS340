@@ -4,6 +4,9 @@ import com.google.gson.Gson
 import commands.INormalClientCommand
 import commands.IRegisterClientCommand
 
+/**
+ * Contains the client commands that a particular user needs to properly know game state.
+ */
 class CommandQueue {
 
     var commands = mutableListOf<INormalClientCommand>()
@@ -12,7 +15,10 @@ class CommandQueue {
         commands.add(command)
     }
 
-    fun pollCommands(): String {
+    /**
+     * Render this CommandQueue in JSON, clearing the current queue of commands in the process.
+     */
+    fun render(): String {
         val rendered = Gson().toJson(this)
         commands.clear()
 
@@ -20,6 +26,9 @@ class CommandQueue {
     }
 }
 
+/**
+ * Temporarily used in the login and registration logic.
+ */
 class RegisterCommandQueue {
 
     var commands = mutableListOf<IRegisterClientCommand>()

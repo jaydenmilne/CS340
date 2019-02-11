@@ -29,7 +29,7 @@ interface IRegisterCommand : ICommand {
 
 interface IRegisterServerCommand : IRegisterCommand {
     override val command: String
-    fun execute() : IRegisterClientCommand
+    fun execute(): IRegisterClientCommand
 }
 
 interface IRegisterClientCommand : IRegisterCommand {

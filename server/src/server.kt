@@ -2,7 +2,6 @@ import com.google.gson.Gson
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import commands.*
-import javafx.scene.control.TextFormatter
 import models.AuthTokens
 import models.RegisterCommandQueue
 import org.apache.commons.io.IOUtils
@@ -48,6 +47,7 @@ fun handleOptions(httpExchange: HttpExchange) {
 
 fun handleRegistrationPost(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+
     val requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
     println("POST /register")
@@ -74,6 +74,7 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             writer.write(Gson().toJson(resultCommands))
             writer.close()
         }
+
     } catch (e : Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
@@ -81,11 +82,11 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
 
     println(httpExchange.responseCode.toString())
     httpExchange.close()
-
 }
 
 fun handleGet(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+
     try {
         if (!httpExchange.requestHeaders.containsKey("Authorization")) {
             httpExchange.sendResponseHeaders(HTTP_UNAUTHORIZED, 0)
@@ -95,7 +96,8 @@ fun handleGet(httpExchange: HttpExchange) {
 
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
-        println("GET /command - " + authToken)
+
+        println("GET /command - $authToken")
 
         if (user == null) {
             httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
@@ -103,7 +105,7 @@ fun handleGet(httpExchange: HttpExchange) {
         } else {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
-            writer.write(user.queue.pollCommands())
+            writer.write(user.queue.render())
             writer.close()
         }
     } catch (e : Exception) {
@@ -111,14 +113,13 @@ fun handleGet(httpExchange: HttpExchange) {
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
 
-
     println(httpExchange.responseCode.toString())
     httpExchange.close()
 }
 
 fun handlePost(httpExchange: HttpExchange) {
-    // Handle CORS
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+
     val requestBody = IOUtils.toString(InputStreamReader(httpExchange.requestBody))
 
     try {
@@ -138,6 +139,7 @@ fun handlePost(httpExchange: HttpExchange) {
             httpExchange.close()
             return
         }
+
         println("POST /command - " + user.username)
         println(requestBody)
 
@@ -154,22 +156,23 @@ fun handlePost(httpExchange: HttpExchange) {
         if (command == null) {
             httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
         } else {
-            httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
 
             try {
                 command.execute(user)
-                writer.write(user.queue.pollCommands())
-            } catch (e : CommandException) {
+                writer.write(user.queue.render())
+                httpExchange.sendResponseHeaders(HTTP_OK, 0)
+            } catch (e: CommandException) {
                 println(e.message)
                 writer.write(e.message)
 
                 httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
             }
+
             writer.close()
         }
 
-    } catch (e : Exception) {
+    } catch (e: Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }

@@ -1,6 +1,7 @@
 package models
 
 import commands.CommandException
+import commands.INormalClientCommand
 
 private var nextGameId = -1
 
@@ -16,16 +17,12 @@ object Games {
      * Removes the user from any pending games. Throws a CommandException if they are in a game that has already
      * started.
      */
-    fun removeUserFromGames(user : User) {
-        // Check to see if the user is already in a game
-        for (id_game in Games.games) {
-            val game = id_game.value
+    fun removeUserFromGames(user: User) {
+        for (game in Games.games.values) {
             if (user in game.players) {
-                // If the user is already in a started game, we have issues
                 if (game.started) {
                     throw CommandException("JoinGameCommand: User is in a started game but tried to join another!")
                 } else {
-                    // The user is in a game that hasn't started yet - remove the player from that game
                     game.players.remove(user)
                 }
             }
@@ -38,4 +35,10 @@ class Game(var name: String) {
     val gameId = getNextGameID()
     var players = mutableSetOf<User>()
     var started = false
+
+    fun broadcast(command: INormalClientCommand) {
+        for (player in players) {
+            player.queue.push(command)
+        }
+    }
 }

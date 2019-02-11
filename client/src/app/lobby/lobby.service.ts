@@ -35,7 +35,7 @@ export class LobbyService {
    }
 
   public gameList: GameList = new GameList([]);
-  private lastSelectedId: number = 0;
+  private lastSelectedId: number = -1;
 
   public getGamesList() {
     const command: ListGamesCommand = new ListGamesCommand();

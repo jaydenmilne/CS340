@@ -3,6 +3,12 @@ package models
 import java.math.BigInteger
 import java.security.SecureRandom
 
+/**
+ * A singleton that handles authTokens throughout the server.
+ *
+ * Contains a map of authTokens (Strings) to Users.  Also contains helper functions to verify a particular authToken is
+ * tied to a particular user, to get the user represented by an authToken, and to create new authTokens.
+ */
 object AuthTokens {
 
     private var authTokens = mutableMapOf<String, User>()

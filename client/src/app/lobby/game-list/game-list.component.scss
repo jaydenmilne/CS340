@@ -1,5 +1,6 @@
 .game-list-card {
     min-height: 80vh;
+    min-width: 230px;
     padding-bottom: 56px;
 }
 .game-list-actions{
@@ -11,10 +12,33 @@
     margin: 5px 0;
     width: 100%;
 }
+.game-list-game-card::after{
+    background: initial;
+}
 .game-player-num{
     position: absolute;
     right: 15px;
 }
+.submit-button-cell{
+    width: 20%;
+}
+.name-input-cell{
+    width: 60%;
+}
+.cancel-button-cell{
+    width: 20%;
+}
+.full-width{
+    width: 100%;
+}
+.form-cell{
+    text-align: center;
+}
 .name-input{
-    margin-right: 80px;
+    min-width: 150px;
+    max-width: 100%;
+}
+.new-game-button{
+    display: block;
+    float: right;
 }

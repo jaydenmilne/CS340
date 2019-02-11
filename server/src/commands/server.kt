@@ -2,6 +2,9 @@ package commands
 
 import models.*
 
+/**
+ * Create a new game on the server.
+ */
 class CreateGameCommand : INormalServerCommand {
     override val command = CREATE_GAME
     private var name = ""
@@ -12,6 +15,7 @@ class CreateGameCommand : INormalServerCommand {
 
         // If the user is in another game, take them out.
         Games.removeUserFromGames(user)
+
         // Add player to this new game's list of players
         newGame.players.add(user)
         user.ready = false
@@ -21,6 +25,9 @@ class CreateGameCommand : INormalServerCommand {
     }
 }
 
+/**
+ * Join a game that has not yet started.
+ */
 class JoinGameCommand : INormalServerCommand {
     override val command = JOIN_GAME
     private val gameId = ""
@@ -28,36 +35,45 @@ class JoinGameCommand : INormalServerCommand {
     override fun execute(user: User) {
         // Ensure that the user is only in one game
         Games.removeUserFromGames(user)
-        // Add the user to the new game
-        if (!Games.games.containsKey(gameId.toInt())) {
-            // game does not exist
+
+        val game = Games.games[gameId.toInt()]
+
+        if (game == null) {
             throw CommandException("JoinGameCommand: Game does not exist")
         }
 
-        if(Games.games[gameId.toInt()]!!.players.size < 5) {
-            Games.games[gameId.toInt()]!!.players.add(user)
+        if (game.players.size < 5) {
+            game.players.add(user)
+            user.color = Color.values()[game.players.size - 1]
             user.ready = false
-        }else{
+        } else {
             throw CommandException("Game Full")
         }
     }
 }
 
+/**
+ * Leave a game that has not yet started.
+ */
 class LeaveGameCommand : INormalServerCommand {
     override val command = LEAVE_GAME
     private val gameId = ""
 
     override fun execute(user: User) {
-        // Add the user to the new game
-        if (!Games.games.containsKey(gameId.toInt())) {
-            // game does not exist
+        val game = Games.games[gameId.toInt()]
+
+        if (game == null) {
             throw CommandException("LeaveGameCommand: Game does not exist")
         }
-        Games.games[gameId.toInt()]!!.players.remove(user)
+
+        game.players.remove(user)
         user.ready = false
     }
 }
 
+/**
+ * List all available games to play.
+ */
 class ListGamesCommand : INormalServerCommand {
     override val command = LIST_GAMES
 
@@ -67,7 +83,9 @@ class ListGamesCommand : INormalServerCommand {
     }
 }
 
-
+/**
+ * Log in to the server with the provided credentials.
+ */
 class LoginCommand : IRegisterServerCommand {
     override val command = LOGIN
     private val username = ""
@@ -94,6 +112,9 @@ class LoginCommand : IRegisterServerCommand {
     }
 }
 
+/**
+ * Change a user's ready status for a particular game.
+ */
 class PlayerReadyCommand : INormalServerCommand {
     override val command = PLAYER_READY
     private val gameId = ""
@@ -101,9 +122,24 @@ class PlayerReadyCommand : INormalServerCommand {
 
     override fun execute(user: User) {
         user.ready = playerIsReady
+
+        val game = Games.games[gameId.toInt()]
+
+        if (game == null) {
+            throw CommandException("That game doesn't exist.")
+        }
+
+        val notReadyPlayers = game.players.filter { u -> !u.ready }
+
+        if (notReadyPlayers.isEmpty() && game.players.size >= 2) {
+            game.broadcast(StartGameCommand())
+        }
     }
 }
 
+/**
+ * Register a new user with the server.
+ */
 class RegisterCommand : IRegisterServerCommand {
     override val command = REGISTER
     private val username = ""
@@ -118,11 +154,10 @@ class RegisterCommand : IRegisterServerCommand {
         }
 
         var newUser = User(username, password)
-
         Users.addUser(newUser)
+
         var token = AuthTokens.makeAuthTokenForUser(newUser)
         newUser.authToken = token
-
 
         response.user = ClientUser(newUser.userId, newUser.username, newUser.authToken)
 
@@ -130,24 +165,34 @@ class RegisterCommand : IRegisterServerCommand {
     }
 }
 
+/**
+ * Change a user's color for a particular game.
+ */
 class ChangeColorCommand : INormalServerCommand {
     override val command = CHANGE_COLOR
     private val gameId = ""
     private var newColor = ""
 
     override fun execute(user: User) {
-        if (!Games.games.containsKey(gameId.toInt())) {
-            // game does not exist
+        val game = Games.games[gameId.toInt()]
+
+        // Verify that the game exists
+        if (game == null) {
             throw CommandException("ChangeColorCommand: Game does not exist")
         }
-        if (!Games.games[gameId.toInt()]!!.players.contains(user)) {
-            // user is not in game
+
+        // Verify that the user is in the game
+        if (!game.players.contains(user)) {
             throw CommandException("ChangeColorCommand: User is not in this game")
         }
-        enumValues<Color>().forEach { if(it.rgb.equals(newColor)) Users.getUserById(user.userId)!!.color = it }
+
+        enumValues<Color>().forEach { if (it.rgb.equals(newColor)) user.color = it }
     }
 }
 
+/**
+ * TODO: Document
+ */
 class ServerCommandData : IRegisterCommand, INormalCommand {
     override val command: String = ""
 }
