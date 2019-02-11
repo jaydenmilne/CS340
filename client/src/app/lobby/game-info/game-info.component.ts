@@ -3,6 +3,7 @@ import { Player } from 'src/app/core/model/player';
 import { LobbyService } from '../lobby.service';
 import { Color } from '@core/model/color.enum';
 import { PollerService } from '@core/poller.service';
+import { UserService } from '@core/user.service';
 
 @Component({
   selector: 'app-game-info',
@@ -11,7 +12,7 @@ import { PollerService } from '@core/poller.service';
 })
 export class GameInfoComponent implements OnInit {
 
-  constructor(private lobbyService: LobbyService, private poller: PollerService) {
+  constructor(private lobbyService: LobbyService, private poller: PollerService, private userService: UserService) {
     this.poller.setLobbyMode(true);
     this.poller.startPolling();
   }
@@ -35,9 +36,13 @@ export class GameInfoComponent implements OnInit {
     return style;
   }
 
+  public isUserReady(): boolean{
+    this.playerReady = this.lobbyService.gameList.getSelectedGame().isPlayerReady(this.userService.user$.value.getUserId());
+    return this.playerReady;
+  }
+
   public onReady() {
-    this.playerReady = !this.playerReady;
-    this.lobbyService.setReady(this.playerReady);
+    this.lobbyService.setReady(!this.playerReady);
   }
 
   public onLeave() {
