@@ -132,9 +132,7 @@ class PlayerReadyCommand : INormalServerCommand {
         val notReadyPlayers = game.players.filter { u -> !u.ready }
 
         if (notReadyPlayers.isEmpty() && game.players.size >= 2) {
-            for (user in game.players) {
-                user.queue.push(StartGameCommand())
-            }
+            game.broadcast(StartGameCommand())
         }
     }
 }
