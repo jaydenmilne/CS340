@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/core/model/player';
 import { LobbyService } from '../lobby.service';
-import { Color } from '@core/model/color.enum';
+import { Color, StyleColor } from '@core/model/color.enum';
 import { PollerService } from '@core/poller.service';
 import { UserService } from '@core/user.service';
 
@@ -24,14 +24,14 @@ export class GameInfoComponent implements OnInit {
 
   public getPlayerColorStyle(player: Player) {
     const style = {
-      'background-color': '#' + player.getColor()
+      'background-color': '#' + StyleColor[player.getColor()]
     };
     return style;
   }
 
   public getColorStyle(color: Color) {
     const style = {
-      'background-color': '#' + color
+      'background-color': '#' + StyleColor[color]
     };
     return style;
   }
