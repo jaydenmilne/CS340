@@ -44,6 +44,7 @@ class JoinGameCommand : INormalServerCommand {
 
         if (game.players.size < 5) {
             game.players.add(user)
+            user.color = Color.values()[game.players.size - 1]
             user.ready = false
         } else {
             throw CommandException("Game Full")
