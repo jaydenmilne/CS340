@@ -70,6 +70,10 @@ class LeaveGameCommand : INormalServerCommand {
 
         game.players.remove(user)
         user.ready = false
+
+        if (game.players.size == 0) {
+            Games.games.remove(game.gameId)
+        }
     }
 }
 
