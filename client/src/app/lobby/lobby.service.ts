@@ -43,10 +43,12 @@ export class LobbyService {
   }
 
   public joinGame(game: GamePreview) {
-    const command: JoinGameCommand = new JoinGameCommand(game.getID());
-    this.lastSelectedId = game.getID();
-    this.setSelectedById(this.lastSelectedId);
-    this.server.transmitCommand(command);
+    if (game.getNumPlayers() <= 4 && !game.isStarted()) {
+      const command: JoinGameCommand = new JoinGameCommand(game.getID());
+      this.lastSelectedId = game.getID();
+      this.setSelectedById(this.lastSelectedId);
+      this.server.transmitCommand(command);
+    }
   }
 
   public createGame(name: string) {
