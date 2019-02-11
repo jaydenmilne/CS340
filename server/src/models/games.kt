@@ -1,6 +1,7 @@
 package models
 
 import commands.CommandException
+import commands.INormalClientCommand
 
 private var nextGameId = -1
 
@@ -34,4 +35,10 @@ class Game(var name: String) {
     val gameId = getNextGameID()
     var players = mutableSetOf<User>()
     var started = false
+
+    fun broadcast(command: INormalClientCommand) {
+        for (player in players) {
+            player.queue.push(command)
+        }
+    }
 }
