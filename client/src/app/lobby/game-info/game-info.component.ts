@@ -22,6 +22,10 @@ export class GameInfoComponent implements OnInit {
   ngOnInit() {
   }
 
+  public ngOnDestroy(){
+    this.poller.stopPolling();
+  }
+
   public getPlayerColorStyle(player: Player) {
     const style = {
       'background-color': '#' + player.getColor()
