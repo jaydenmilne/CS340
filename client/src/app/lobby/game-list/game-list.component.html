@@ -6,7 +6,7 @@
   </mat-card-header>
 
   <mat-chip-list class="mat-chip-list-stacked">
-    <mat-chip *ngFor="let game of lobbyService.gameList.getGames();trackBy:getID" class="game-list-game-card mat-primary"
+    <mat-chip *ngFor="let game of lobbyService.gameList.getGames();trackBy:getID" [disabled]="game.getNumPlayers() >= 5" class="game-list-game-card mat-primary"
       [selected]="lobbyService.gameList.isSelectedGame(game.getID())" [disableRipple]="true" (click)="onGameSelect(game)">
       <div class="game-name">{{game.getName()}}</div>
       <div class="game-player-num">{{game.getNumPlayers()}}</div>
