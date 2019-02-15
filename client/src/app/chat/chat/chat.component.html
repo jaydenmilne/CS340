@@ -13,11 +13,10 @@
 
   <mat-card-actions>
     <form [formGroup]="chatForm" id="chat_form" class="full-width">
-      <mat-form-field class="full-width name-input">
+      <mat-form-field class="full-width message-input">
         <!-- <input matInput placeholder="message" formControlName="chatInput" value=""> -->
         <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" formControlName="chatInput" placeholder="message"
-            cdkAutosizeMinRows="2"
-            cdkAutosizeMaxRows="5"></textarea>
+            cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"></textarea>
       </mat-form-field>
       <button mat-fab (click)="onSend()"><i class="material-icons">send</i></button>
     </form>
