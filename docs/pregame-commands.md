@@ -57,7 +57,6 @@ This should only be sent as part of the loginResult command.
 | [changeColor](#changecolor-command)    | Server                           | `gameCreated`    |
 | [gameCreated](#gamecreated-command)    | Client                           | `createGame`     |
 | [playerReady](#playerready-command)    | Server                           |                  |
-| [postChat](#postchat-command)          | Server / Client                  |                  |
 | [startGame](#startgame-command)        | Client                           |                  |
 * denotes a command that must be sent to the server and to the client via a request to the `/register` endpoint.
 
@@ -211,28 +210,6 @@ Updates the player's ready status for a game.
     "command": "playerReady",
     "gameId": "{id of relevant game}",
     "playerIsReady": true
-}
-```
-
-### `postChat` Command
-Client and Client Command. 
-
-If sent to the server, the client is sending a message that should be broadcast
-to other players in the game. When sending to the server the client may omit
-`playerId` and `playerName` since it is implied it is the user associated with
-the auth token.
-
-If sent to the client, the client is receiving a message it should display in 
-the chat window.
-
-#### Syntax
-```json
-{
-    "command": "postChat",
-    "gameId": "{id of relevant game}",
-    "playerId": "{id of relevant player}",
-    "playerName": "{name of relevant player}",
-    "message": "I like pie!"
 }
 ```
 
