@@ -20,7 +20,7 @@ Several commands transmit arrays of models, these are their descriptions.
     "sequenceNum": "{Sequence number assigned by the server for ordering}"
 }
 ```
-
+If the server wants to send a system message to the clients, it should use `userId: -1` and `username` can be whatever the server wants.
 ## Commands
 
 | Command                                | [Type](protocol.md#terminology)  | Related Commands |    
