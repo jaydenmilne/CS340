@@ -15,7 +15,6 @@ Several commands transmit arrays of models, these are their descriptions.
 ```json
 {
     "message": "the message",
-    "gameId": "{ID of the game the chat belongs to}",
     "userId": "{ID of the user who sent the chat}",
     "username": "{username of the user who sent the chat}",
     "sequenceNum": "{Sequence number assigned by the server for ordering}"
