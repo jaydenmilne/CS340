@@ -38,7 +38,6 @@ New message that should be broadcast to other players in the game.
 ```json
 {
     "command": "postChat",
-    "gameId": "{id of relevant game}",
     "message": "I like pie!"
 }
 ```
