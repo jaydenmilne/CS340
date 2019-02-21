@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ChatMessage } from '@core/model/chat-message';
 import { ServerProxyService } from '@core/server-proxy.service';
-import { PostChatCommand } from '@core/chat-commands';
+import { PostChatCommand, UpdateChatCommand } from '@core/chat-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -11,29 +11,29 @@ export class ChatService {
   constructor(private server: ServerProxyService) { }
 
   public chatHistory: ChatMessage[] = [
-    new ChatMessage('game1', '8652315', 'riffraff78', 'This is a message'),
-    new ChatMessage('game1', '865sdf15', 'toughstuff56', 'This is a message'),
-    new ChatMessage('game1', '8652gf5', 'riffraff78', 'This is a message'),
-    new ChatMessage('game1', '8652cv5', 'toughstuff56', 'This is a message'),
-    new ChatMessage('game1', '8652re5', 'hotshot33', 'This is a message'),
-    new ChatMessage('game1', '8652df5', 'riffraff78', 'This is a message'),
-    new ChatMessage('game1', '8652vcxb5', 'toughstuff56', 'This is a message'),
-    new ChatMessage('game1', '1234', 'user1', 'This is a message'),
-    new ChatMessage('game1', '865231xcv5', 'hotshot33', 'This is a message'),
-    new ChatMessage('game1', '865231xzv5', 'hotshot33', 'This is a message'),
-    new ChatMessage('game1', '1234', 'user1', 'This is a message'),
-    new ChatMessage('game1', '86523gfh15', 'hotshot33', 'This is a message'),
-    new ChatMessage('game1', '1234', 'user1', 'This is another message'),
-    new ChatMessage('game1', '865231tyu5', 'hotshot33', 'This is a really loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong message')
+    new ChatMessage(8652315, 'riffraff78', 'This is a message', 0),
+    new ChatMessage(86515, 'toughstuff56', 'This is a message', 1),
+    new ChatMessage(86525, 'riffraff78', 'This is a message', 2),
+    new ChatMessage(86525, 'toughstuff56', 'This is a message', 3),
+    new ChatMessage(8655, 'hotshot33', 'This is a message', 4),
+    new ChatMessage(865295, 'riffraff78', 'This is a message', 5),
+    new ChatMessage(86525, 'toughstuff56', 'This is a message', 6),
+    new ChatMessage(1234, 'user1', 'This is a message', 7),
+    new ChatMessage(8652315, 'hotshot33', 'This is a message', 8),
+    new ChatMessage(865215, 'hotshot33', 'This is a message', 9),
+    new ChatMessage(1234, 'user1', 'This is a message', 10),
+    new ChatMessage(815, 'hotshot33', 'This is a message', 11),
+    new ChatMessage(1234, 'user1', 'This is another message', 12),
+    new ChatMessage(8652315, 'hotshot33', 'This is a really loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong message', 13)
   ];
 
-  public sendChat(message: ChatMessage){
-    const command: PostChatCommand = new PostChatCommand(message.getgameId(), message.getuserId(), message.getUserName(), message.getMessage());
+  public sendChat(message: string){
+    const command: PostChatCommand = new PostChatCommand(message);
     this.server.transmitCommand(command);
   }
 
-  public handlePostChat(command: PostChatCommand){
-    this.chatHistory.push(new ChatMessage(command.gameId, command.userId, command.userName, command.message))
+  public handleUpdateChat(command: UpdateChatCommand){
+    this.chatHistory.push(new ChatMessage(command.userId, command.userName, command.message, command.sequenceNum))
   }
 
 }

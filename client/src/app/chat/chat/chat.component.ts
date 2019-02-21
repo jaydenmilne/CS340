@@ -31,13 +31,13 @@ export class ChatComponent implements OnInit, AfterViewInit{
   public onSend(){
     // Get message from form
     const message :string = this.chatForm.get('chatInput').value;
-    this.chatService.sendChat(new ChatMessage('GAME ID', this.userService.user$.value.getUserId(), this.userService.user$.value.getUsername(), message));
+    this.chatService.sendChat(message);
   }
 
   public isCurrentUserPost(message: ChatMessage): boolean{
     if (this.userService.user$.value == null){
       return false;
     }
-    return this.userService.user$.value.getUserId() === message.getuserId();
+    return this.userService.user$.value.getUserId() === message.getUserId();
   }
 }
