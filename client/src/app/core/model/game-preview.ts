@@ -3,15 +3,25 @@ import { Player } from './player';
 
 export class GamePreview {
     private name: string;
-    private ID: string;
+    private gameId: number;
     private started: boolean;
     private players: Player [];
 
-    constructor(name: string, id: string, started: boolean, players: Player []) {
-        this.name = name;
-        this.ID = id;
-        this.started = started;
-        this.players = players;
+    constructor(gamePreview: any) {
+        if (!('name' in gamePreview ||
+        'gameId' in gamePreview ||
+        'started' in gamePreview ||
+        'players' in gamePreview)) {
+            throw new TypeError('Unable to deserialize GamePreview object, ' + JSON.stringify(gamePreview));
+    }
+
+        this.name = gamePreview.name;
+        this.gameId = gamePreview.gameId;
+        this.started = gamePreview.started;
+        this.players = [];
+        gamePreview.players.forEach(player => {
+            this.players.push(new Player(player));
+        });
     }
 
     public getName(): string {
@@ -22,12 +32,12 @@ export class GamePreview {
         this.name = name;
     }
 
-    public getID(): string {
-        return this.ID;
+    public getID(): number {
+        return this.gameId;
     }
 
-    public setUserID(ID: string) {
-        this.ID = ID;
+    public setUserID(ID: number) {
+        this.gameId = ID;
     }
 
     public isStarted(): boolean {
@@ -67,6 +77,11 @@ export class GamePreview {
         });
 
         return avaiableColors;
+    }
+
+    public isPlayerReady(userId: number): boolean{ 
+        const player: Player = this.players.find(p => p.getuserId() === userId);
+        return (player !== undefined && player.isReady());
     }
 }
 

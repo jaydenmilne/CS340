@@ -4,29 +4,41 @@
       Available Games
     </mat-card-title>
   </mat-card-header>
- 
+
   <mat-chip-list class="mat-chip-list-stacked">
-    <mat-chip *ngFor="let game of lobbyService.gameList.getGames()" class="game-list-game-card,mat-primary" [class.mat-chip-selected]="lobbyService.gameList.isSelectedGame(game.getID())" (click)="onGameSelect(game.getID())">
+    <mat-chip *ngFor="let game of lobbyService.gameList.getGames();trackBy:getID" [disabled]="game.getNumPlayers() >= 5" class="game-list-game-card mat-primary"
+      [selected]="lobbyService.gameList.isSelectedGame(game.getID())" [disableRipple]="true" (click)="onGameSelect(game)">
       <div class="game-name">{{game.getName()}}</div>
       <div class="game-player-num">{{game.getNumPlayers()}}</div>
     </mat-chip>
   </mat-chip-list>
 
-  <mat-card-actions class="game-list-actions">
-      <form [formGroup]="createGameForm" id="game_create_form" *ngIf="showNamePrompt" class="full-width">
-          <button mat-icon-button class ="actionbutton"  (click)="onCancelNewGame()" *ngIf="showNamePrompt">
+  <mat-card-actions class="game-list-actions full-width">
+    <form [formGroup]="createGameForm" id="game_create_form" *ngIf="showNamePrompt" class="full-width" (ngSubmit)="onCreateGame()">
+      <table class="full-width">
+        <tr>
+          <td class="cancel-button-cell form-cell">
+            <button mat-icon-button class="actionbutton" type="button" (click)="onCancelNewGame()" *ngIf="showNamePrompt">
               <i class="material-icons">cancel</i>
-            </button>  
-          <mat-form-field class="full-width name-input">
-            <input matInput placeholder="Enter a Game Name" formControlName="gameName" value="">
-          </mat-form-field>
-          <button mat-fab class ="actionbutton" color="primary" (click)=onCreateGame() [disabled]="!createGameForm.valid">
+            </button>
+          </td>
+          <td class="name-input-cell form-cell">
+            <mat-form-field class="full-width name-input">
+              <input matInput placeholder="Enter a Game Name" formControlName="gameName" value="">
+            </mat-form-field>
+          </td>
+          <td class="submit-button-cell form-cell">
+            <button mat-mini-fab class="actionbutton" color="primary" type="submit" form="game_create_form" [disabled]="!createGameForm.valid">
               <i class="material-icons">check</i>
-          </button>
-        </form>
+            </button>
+          </td>
 
-      <button mat-fab class ="actionbutton" color="primary" (click)="onNewGame()" *ngIf="!showNamePrompt">
-          <i class="material-icons">add</i>
-      </button>
+        </tr>
+      </table>
+    </form>
+
+    <button mat-fab class="actionbutton new-game-button" type="button" color="primary" (click)="onNewGame()" *ngIf="!showNamePrompt">
+      <i class="material-icons">add</i>
+    </button>
   </mat-card-actions>
 </mat-card>

@@ -25,32 +25,30 @@ Several commands transmit arrays of models, these are their descriptions.
 }
 ```
 
-### `player` object
-```json
-{
-    "playerId": "{id of player}",
-    "name": "Bob",
-    "color": "blue",
-    "ready": true
-}
-```
+Valid colors are
+- `blue`
+- `red`
+- `green`
+- `yellow`
+- `black`
+
 ### `user` object
 This should only be sent as part of the loginResult command.
 ```json
 {
-    "userId": "{id of user}",
-    "username": "{username of player}",
-    "authToken": "{auth token}"
+    "username": "username",
+    "userId": "user ID number",
+    "color": "blue",
+    "ready": true
 }
 ```
 
 ## Commands
-
 | Command                                | [Type](protocol.md#terminology)  | Related Commands |    
 |----------------------------------------|----------------------------------|------------------|
-| [register](#register-command)          | Server                           | `loginResult`    |
-| [login](#login-command)                | Server                           | `loginResult`    |
-| [loginResult](#loginresult-command)    | Client                           | `register`, `login` |
+| [register](#register-command)*         | Server                           | `loginResult`    |
+| [login](#login-command)*               | Server                           | `loginResult`    |
+| [loginResult](#loginresult-command)*   | Client                           | `register`, `login` |
 | [listGames](#listgames-command)        | Server                           | `refreshGameList`|
 | [refreshGameList](#refreshgamelist-command) | Client                      | `listGames`      |
 | [joinGame](#joingame-command)          | Server                           | `leaveGame`      |
@@ -59,11 +57,11 @@ This should only be sent as part of the loginResult command.
 | [changeColor](#changecolor-command)    | Server                           | `gameCreated`    |
 | [gameCreated](#gamecreated-command)    | Client                           | `createGame`     |
 | [playerReady](#playerready-command)    | Server                           |                  |
-| [postChat](#postchat-command)          | Server / Client                  |                  |
 | [startGame](#startgame-command)        | Client                           |                  |
+* denotes a command that must be sent to the server and to the client via a request to the `/register` endpoint.
 
 ### `register` Command
-Server Command.
+Server Command (must be sent to the server via a request to the `/register` endpoint.).
 
 Registers a new user.
 `username` should be a maximum of 16 characters.
@@ -78,7 +76,7 @@ Registers a new user.
 ```
 
 ### `login` Command
-Server Command.
+Server Command (must be sent to the server via a request to the `/register` endpoint.).
 
 Logs in an existing user.
 
@@ -92,9 +90,9 @@ Logs in an existing user.
 ```
 
 ### `loginResult` Command
-Client Command.
+Client Command (must be sent to client via a request to the `/register` endpoint.).
 
-Informs the client the result of a login. If there was no error, `error` should be an empty string.
+Informs the client the result of a login. If there was no error, `error` should be an empty string. If there was an error, "user" should be empty
 
 #### Syntax
 ```json
@@ -212,28 +210,6 @@ Updates the player's ready status for a game.
     "command": "playerReady",
     "gameId": "{id of relevant game}",
     "playerIsReady": true
-}
-```
-
-### `postChat` Command
-Client and Client Command. 
-
-If sent to the server, the client is sending a message that should be broadcast
-to other players in the game. When sending to the server the client may omit
-`playerId` and `playerName` since it is implied it is the user associated with
-the auth token.
-
-If sent to the client, the client is receiving a message it should display in 
-the chat window.
-
-#### Syntax
-```json
-{
-    "command": "postChat",
-    "gameId": "{id of relevant game}",
-    "userId": "{id of relevant player}",
-    "userName": "{name of relevant player}",
-    "message": "I like pie!"
 }
 ```
 

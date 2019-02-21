@@ -3,28 +3,39 @@ import { GameList } from '../core/model/game-list';
 import { GamePreview } from '../core/model/game-preview';
 import { Player } from '../core/model/player';
 import { ServerProxyService } from '@core/server-proxy.service';
-import { JoinGameCommand, CreateGameCommand, LeaveGameCommand, PlayerReadyCommand, GameCreatedCommand, StartGameCommand, RefreshGameListCommand, ListGamesCommand, ChangeColorCommand } from '@core/lobby-commands';
+import { JoinGameCommand, CreateGameCommand, LeaveGameCommand,
+         PlayerReadyCommand, GameCreatedCommand, StartGameCommand,
+         RefreshGameListCommand, ListGamesCommand, ChangeColorCommand } from '@core/lobby-commands';
 import { Color } from '@core/model/color.enum';
+import { CommandRouterService } from '@core/command-router.service';
+import { Router } from '@angular/router';
+import { User } from '@core/model/user';
+import { UserService } from '@core/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyService {
 
-  constructor(private server: ServerProxyService) {
+  constructor(private server: ServerProxyService, private userService: UserService,
+    private commandRouter: CommandRouterService, private router: Router) {
       // this.gameList.setSelectedGameByID('asldk');
+      this.userService.user$.subscribe(
+        user => this.onUser(user)
+      );
+      this.commandRouter.gameCreated$.subscribe(
+        result => this.onGameCreatedCommand(result)
+      );
+      this.commandRouter.startGame$.subscribe(
+        result => this.onStartGameCommand(result)
+      );
+      this.commandRouter.refreshGameList$.subscribe(
+        result => this.onRefreshGameListCommand(result)
+      );
    }
 
-  public gameList: GameList = new GameList([
-    new GamePreview('game1', 'asldk', false, [
-      new Player(Color.YELLOW, 'user1', false, 'riffraff78'),
-      new Player(Color.BLUE, 'user2', true, 'toughstuff56'),
-      new Player(Color.GREEN, 'user3', true, 'hotshot33'),
-      new Player(Color.PURPLE, 'user4', false, 'tooslow64'),
-    ]),
-    new GamePreview('game2', '531', false, []),
-    new GamePreview('game3', 'vcb', false, []),
-  ]);
+  public gameList: GameList = new GameList([]);
+  private lastSelectedId: number = -1;
 
   public getGamesList() {
     const command: ListGamesCommand = new ListGamesCommand();
@@ -32,9 +43,12 @@ export class LobbyService {
   }
 
   public joinGame(game: GamePreview) {
-    // Create Join Game command
-    const command: JoinGameCommand = new JoinGameCommand(game.getID());
-    this.server.transmitCommand(command);
+    if (game.getNumPlayers() <= 4 && !game.isStarted()) {
+      const command: JoinGameCommand = new JoinGameCommand(game.getID());
+      this.lastSelectedId = game.getID();
+      this.setSelectedById(this.lastSelectedId);
+      this.server.transmitCommand(command);
+    }
   }
 
   public createGame(name: string) {
@@ -44,7 +58,8 @@ export class LobbyService {
 
   public leaveGame() {
     const command: LeaveGameCommand = new LeaveGameCommand(this.gameList.getSelectedGame().getID());
-    this.gameList.setSelectedGame(undefined);
+    this.lastSelectedId = undefined;
+    this.gameList.setSelectedGameByID(this.lastSelectedId);
     this.server.transmitCommand(command);
   }
 
@@ -59,14 +74,29 @@ export class LobbyService {
   }
 
   public onStartGameCommand(command: StartGameCommand) {
-
+      // navigate to /game/gameId
+      this.router.navigate(['/game/' + command.gameId]);
   }
 
   public onGameCreatedCommand(command: GameCreatedCommand) {
-
+    this.lastSelectedId = command.gameId;
+    this.setSelectedById(command.gameId);
   }
 
   public onRefreshGameListCommand(command: RefreshGameListCommand) {
+    this.gameList = new GameList(command.games);
+    this.setSelectedById(this.lastSelectedId);
+  }
 
+  public onUser(user: User) {
+    if (user == null) {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  private setSelectedById(gameId: number){
+    if(this.gameList !== undefined){
+      this.gameList.setSelectedGameByID(this.lastSelectedId);
+    }
   }
 }

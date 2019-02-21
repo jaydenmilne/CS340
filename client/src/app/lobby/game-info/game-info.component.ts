@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/core/model/player';
 import { LobbyService } from '../lobby.service';
-import { Color } from '@core/model/color.enum';
+import { Color, StyleColor } from '@core/model/color.enum';
+import { PollerService } from '@core/poller.service';
+import { UserService } from '@core/user.service';
 
 @Component({
   selector: 'app-game-info',
@@ -10,30 +12,41 @@ import { Color } from '@core/model/color.enum';
 })
 export class GameInfoComponent implements OnInit {
 
-  constructor(private lobbyService: LobbyService) { }
+  constructor(private lobbyService: LobbyService, private poller: PollerService, private userService: UserService) {
+    this.poller.setLobbyMode(true);
+    this.poller.startPolling();
+  }
 
   playerReady = false;
 
   ngOnInit() {
   }
 
+  public ngOnDestroy(){
+    this.poller.stopPolling();
+  }
+
   public getPlayerColorStyle(player: Player) {
     const style = {
-      'background-color': '#' + player.getColor()
+      'background-color': '#' + StyleColor[player.getColor()]
     };
     return style;
   }
 
   public getColorStyle(color: Color) {
     const style = {
-      'background-color': '#' + color
+      'background-color': '#' + StyleColor[color]
     };
     return style;
   }
 
+  public isUserReady(): boolean{
+    this.playerReady = this.lobbyService.gameList.getSelectedGame().isPlayerReady(this.userService.user$.value.getUserId());
+    return this.playerReady;
+  }
+
   public onReady() {
-    this.playerReady = !this.playerReady;
-    this.lobbyService.setReady(this.playerReady);
+    this.lobbyService.setReady(!this.playerReady);
   }
 
   public onLeave() {

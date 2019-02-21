@@ -2,15 +2,22 @@ import { Color } from './color.enum';
 
 export class Player {
     private color: Color;
-    private userId: string;
+    private userId: number;
     private ready: boolean;
-    private name: string;
+    private username: string;
 
-    constructor(color: Color, userId: string, ready: boolean, name: string) {
-        this.color = color;
-        this.userId = userId;
-        this.ready = ready;
-        this.name = name;
+    constructor(player: any) {
+        if (!('userId' in player ||
+            'ready' in player ||
+            'username' in player ||
+            'color' in player)) {
+            throw new TypeError('Unable to deserialize Player object, ' + JSON.stringify(player));
+        }
+
+        this.color = <Color> Color[player.color];
+        this.userId = player.userId;
+        this.ready = player.ready;
+        this.username = player.username;
     }
 
     public setColor(color: string) {
@@ -21,11 +28,11 @@ export class Player {
         return this.color;
     }
 
-    public getuserId(): string {
+    public getuserId(): number {
         return this.userId;
     }
 
-    public setuserId(userId: string) {
+    public setuserId(userId: number) {
         this.userId = userId;
     }
 
@@ -38,10 +45,10 @@ export class Player {
     }
 
     public getName(): string {
-        return this.name;
+        return this.username;
     }
 
     public setHandle(handle: string) {
-        this.name = handle;
+        this.username = handle;
     }
 }

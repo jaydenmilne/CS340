@@ -1,5 +1,5 @@
 export class User {
-    private userId: string;
+    private userId: number;
     private username: string;
     private authToken: string;
 
@@ -16,7 +16,7 @@ export class User {
         this.userId = user.userId;
     }
 
-    public getUserId(): string {
+    public getUserId(): number {
         return this.userId;
     }
 
