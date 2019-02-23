@@ -5,12 +5,12 @@ import { PlayerListComponent } from './player-list/player-list.component';
 import { GutterComponent } from './gutter/gutter.component';
 import { MapComponent } from './map/map.component';
 import { BankComponent } from './bank/bank.component';
-import { MatGridList } from '@angular/material';
+import { MatGridListModule } from '@angular/material';
 
 @NgModule({
   declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent],
   imports: [
-    CommonModule, MatGridList
+    CommonModule, MatGridListModule
   ]
 })
 export class GameModule { }
