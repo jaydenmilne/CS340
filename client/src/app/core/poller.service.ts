@@ -38,10 +38,14 @@ export class PollerService {
   }
 
   public stopPolling() {
-    this.timerSubscriptionNormal.unsubscribe();
-    this.timerSubscriptionError.unsubscribe();
-    this.timerSubscriptionNormal = undefined;
-    this.timerSubscriptionError = undefined;
+    if (this.timerSubscriptionError !== undefined) {
+      this.timerSubscriptionError.unsubscribe();
+      this.timerSubscriptionError = undefined;
+    }
+    if (this.timerSubscriptionNormal !== undefined) {
+      this.timerSubscriptionNormal.unsubscribe();
+      this.timerSubscriptionNormal = undefined;
+    }
   }
 
   private startErrorPolling() {
