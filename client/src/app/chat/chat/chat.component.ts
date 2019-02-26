@@ -14,7 +14,6 @@ export class ChatComponent implements OnInit, AfterViewInit{
   @ViewChild('chatBox') private chatBox: ElementRef;
 
   constructor(private chatService: ChatService, private userService: UserService) { 
-    this.userService.user$.next(new User({'authToken':'auth stuff', 'username':'user1', 'userId':'1234'})); // TODO: Remove this later
   }
 
   ngOnInit() {
