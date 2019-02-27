@@ -1,7 +1,5 @@
 package models
 
-import sun.awt.image.GifImageDecoder
-
 class RouteList {
 
     var routesByRouteId = mutableMapOf<String, Route>()
