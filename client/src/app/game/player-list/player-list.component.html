@@ -1,3 +1,15 @@
-<p>
-  player-list works!
-</p>
+<div class="player-list-div">
+  <mat-card *ngFor="let player of playerService.players" class="player-card"
+    [ngStyle]="getPlayerColorStyle(player)">
+    <table class="player-card-info">
+      <tr class="player-card-row">
+        <td class="player-handle player-list-text"> {{player.username}} </td>
+        
+        <td class="player-status">
+          {{player.points}}
+        </td>
+      </tr>
+    </table>
+  </mat-card>
+
+</div>
