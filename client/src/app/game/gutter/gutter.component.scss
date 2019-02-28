@@ -1,17 +1,20 @@
 .cards-gutter{
     height: 100%;
     width: 100%;
+}
+::ng-deep mat-tab-body{
     overflow-x: scroll;
+    white-space: nowrap;
 }
 .dest-card{
-    height: 100px;
-    width: 200px;
-    margin: auto 10px;
-    display: block;
+    height: 80px;
+    width: 160px;
+    margin: 10px 5px;
+    display: inline-block;
 }
 .train-card{
-    height: 100px;
-    width: 75px;
-    margin: auto 10px;
-    display: block;
+    height: 80px;
+    width: 60px;
+    margin: 10px 5px;
+    display: inline-block;
 }
