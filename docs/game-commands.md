@@ -87,18 +87,16 @@ Conveys a change in the state of the bank
 ### `updatePlayer` Command
 Client Command.
 
-Conveys a change in the state of a player
+Conveys a change in the state of a player. Sends the updated player object over.
+Also the mechanism used to add players at the beginning of the game.
 
 #### Syntax
 ```json
 {
     "command": "updatePlayer",
-    "userId": "{userId of player}",
-    "points": 4,
-    "numTrainCards": 4,
-    "numDestinationCards": 4,
-    "numRemainingTrains": 4,
-    "hasLongestRoute": false
+    "player": {
+        // player object
+    }
 }
 ```
 
