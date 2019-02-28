@@ -13,7 +13,7 @@ Several commands transmit arrays of models, these are their descriptions.
 | [route](#route-object)                    | Route that connects two cities |
 | [trainCard](#trainCard-object)            | Train card needed to claim a route |
 | [destinationCard](#trainCard-object)      | Destination card connecting two cities. Connecting these will earn the player points. |
-| [player](#player-object)      | Updated player object with additional fields |
+| [gamePlayer](#gamePlayer-object)      | Updated player object with additional fields |
 
 ### `route` object
 ```json
@@ -41,7 +41,7 @@ Several commands transmit arrays of models, these are their descriptions.
 }
 ```
 
-### `player` object
+### `gamePlayer` object
 ```json
 {
     "userId": "{id of player}",
@@ -94,8 +94,8 @@ Also the mechanism used to add players at the beginning of the game.
 ```json
 {
     "command": "updatePlayer",
-    "player": {
-        // player object
+    "gamePlayer": {
+        // gamePlayer object
     }
 }
 ```
