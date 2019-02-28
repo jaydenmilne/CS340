@@ -52,7 +52,8 @@ Several commands transmit arrays of models, these are their descriptions.
     "numTrainCards": 4,
     "numDestinationCards": 4,
     "numRemainingTrains": 4,
-    "hasLongestRoute": false
+    "hasLongestRoute": false,
+    "turnOrder": 2
 }
 ```
 
@@ -116,13 +117,14 @@ Requests destinationCards from the server. Step 1 of selecting destination cards
 ### `selectDestinations` Command
 Client Command.
 
-Sends destinationCards to the client. Step 2 of selecting destination cards.
+Sends destinationCards to the client, as well as the trainCards for that player. Step 2 of selecting destination cards.
 
 #### Syntax
 ```json
 {
     "command": "selectDestinations",
-    "destinations": ["{array of 3 destinationCards}"]
+    "destinations": ["{array of 3 destinationCards}"],
+    "trainCards": ["{array of trainCards}"]
 }
 ```
 
