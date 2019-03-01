@@ -1,5 +1,7 @@
 # Mary Lou - Ticket to Ride - CS340
-## [marylou.ga](./marylou.ga)
-Angular based frontend for the client. Typescript/Angular based
-## [api.marylou.ga](./api.marylou.ga)
+## [client](./client)
+Angular based frontend for the client. Typescript/Angular based.
+
+See the readme in that folder for instructions on how to get going.
+## [server](./server)
 This is the Java/Kotlin backend for the server
