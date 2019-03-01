@@ -1,8 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { StyleColor } from '@core/model/color.enum';
-import { Player } from '@core/model/player';
 import { PlayerService } from '../player.service';
 import { GamePlayer } from '@core/model/game-player';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
+@Component({
+  selector: 'app-login-error-dialog',
+  templateUrl: 'player-info-dialog.component.html',
+  styleUrls: ['./player-info-dialog.component.scss']
+})
+export class PlayerInfoDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<PlayerInfoDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public player: GamePlayer) {}
+
+  onOkClick(): void {
+    this.dialogRef.close();
+  }
+
+}
 
 @Component({
   selector: 'app-player-list',
@@ -11,7 +28,8 @@ import { GamePlayer } from '@core/model/game-player';
 })
 export class PlayerListComponent implements OnInit {
 
-  constructor(private playerService: PlayerService) { }
+  constructor(private playerService: PlayerService,
+    public dialog: MatDialog) { }
 
   public getPlayerColorStyle(player: GamePlayer) {
     const style = {
@@ -27,6 +45,34 @@ export class PlayerListComponent implements OnInit {
     }
 
     return style;
+  }
+
+  public onPlayerClick(player: GamePlayer) {
+    const dialogRef = this.dialog.open(PlayerInfoDialogComponent, {
+      width: '300px',
+      data: player
+    });
+  }
+
+  public getPlayerRank(player: GamePlayer) : String {
+    let playersCopy = [... this.playerService.players];
+    playersCopy.sort((p1, p2) => p2.points - p1.points);
+    let rank = playersCopy.findIndex(p => p.userId == player.userId);
+
+    switch(rank) {
+      case 0:
+      return "1st";
+      case 1:
+      return "2nd";
+      case 2:
+      return "3rd";
+      case 3:
+      return "4th";
+      case 4:
+      return "5th";
+      default:
+      return "unranked";
+    }
   }
 
   ngOnInit() {

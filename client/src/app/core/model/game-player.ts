@@ -74,7 +74,7 @@ export class GamePlayer {
         return this._numRemainingTrains;
     }
 
-    get gasLongestRoute(): boolean {
+    get hasLongestRoute(): boolean {
         return this._hasLongestRoute;
     }
 
