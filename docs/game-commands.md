@@ -112,7 +112,7 @@ Requests destinationCards from the server. Step 1 of selecting destination cards
 }
 ```
 
-### `selectDestinations` Command
+### `dealCards` Command
 Client Command.
 
 Sends destinationCards to the client, as well as the trainCards for that player. Step 2 of selecting destination cards.
