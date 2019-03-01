@@ -10,11 +10,15 @@ import { User } from '@core/model/user';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit, AfterViewInit{
+export class ChatComponent implements OnInit, AfterViewInit {
+
+  constructor(private chatService: ChatService, private userService: UserService) {
+  }
   @ViewChild('chatBox') private chatBox: ElementRef;
 
-  constructor(private chatService: ChatService, private userService: UserService) { 
-  }
+  chatForm = new FormGroup({
+    chatInput: new FormControl('', [Validators.required, Validators.maxLength(120)])
+  });
 
   ngOnInit() {
   }
@@ -23,18 +27,14 @@ export class ChatComponent implements OnInit, AfterViewInit{
     this.chatBox.nativeElement.scrollTop = this.chatBox.nativeElement.scrollHeight;
   }
 
-  chatForm = new FormGroup({
-    chatInput: new FormControl('', [Validators.required, Validators.maxLength(120)])
-  });
-
-  public onSend(){
+  public onSend() {
     // Get message from form
-    const message :string = this.chatForm.get('chatInput').value;
+    const message: string = this.chatForm.get('chatInput').value;
     this.chatService.sendChat(message);
   }
 
-  public isCurrentUserPost(message: ChatMessage): boolean{
-    if (this.userService.user$.value == null){
+  public isCurrentUserPost(message: ChatMessage): boolean {
+    if (this.userService.user$.value == null) {
       return false;
     }
     return this.userService.user$.value.getUserId() === message.getUserId();

@@ -20,7 +20,7 @@ export class ChatMessage {
     }
 
     public getSequenceNum() {
-        return this.sequenceNum
+        return this.sequenceNum;
     }
 
     public setUserId(userId: number) {

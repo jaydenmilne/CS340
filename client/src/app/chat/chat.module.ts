@@ -14,6 +14,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
   ],
   exports: [ChatComponent],
   providers: [ ChatService, ServerProxyService, UserService ]
-  
+
 })
 export class ChatModule { }
