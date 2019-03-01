@@ -1,10 +1,14 @@
 <mat-tab-group headerPosition="below" class="cards-gutter">
-    <mat-tab label="Train Cards" class="cards-box"> 
-      <mat-card *ngFor="let train of trainCards" class="train-card"> {{train}} </mat-card>  
-    </mat-tab>
-    <mat-tab label="Destination Cards" class="cards-box">
+  <mat-tab label="Shard Cards" class="cards-gutter">
+    <div class="cards-box">
+      <mat-card *ngFor="let shard of shardCards" class="shard-card"> {{shard}} </mat-card>
+    </div>
+  </mat-tab>
+  <mat-tab label="Destination Cards"  class="cards-gutter">
+    <div class="cards-box">
       <mat-card *ngFor="let dest of destCards" class="dest-card">
         {{dest}}
       </mat-card>
-    </mat-tab>
-  </mat-tab-group>
+    </div>
+  </mat-tab>
+</mat-tab-group>

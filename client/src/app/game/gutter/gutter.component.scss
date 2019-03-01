@@ -2,19 +2,31 @@
     height: 100%;
     width: 100%;
 }
-::ng-deep mat-tab-body{
+.cards-box{
     overflow-x: scroll;
     white-space: nowrap;
+    height: 100%;
 }
 .dest-card{
-    height: 80px;
-    width: 160px;
+    height: 65%;
+    max-height: 150px;
+    width: 25%;
     margin: 10px 5px;
     display: inline-block;
 }
-.train-card{
-    height: 80px;
-    width: 60px;
+.shard-card{
+    height: 65%;
+    max-height: calc(100% - 20px);
+    width: 15%;
     margin: 10px 5px;
     display: inline-block;
+}
+::ng-deep .mat-tab-label{
+    height: 30px;
+}
+::ng-deep mat-tab-header{
+    height: 30px;
+}
+::ng-deep .mat-tab-body-wrapper{
+    height: 100%;
 }
