@@ -46,7 +46,7 @@ class User(var username: String) {
     var color = Color.YELLOW
 
     var points = 0
-    var trainCards = TrainCardDeck(mutableListOf())
+    var trainCards = ShardCardDeck(mutableListOf())
     var destinationCards = DestinationCardDeck(mutableListOf())
 
     var hasLongestRoute = false

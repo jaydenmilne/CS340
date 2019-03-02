@@ -14,7 +14,7 @@ enum class MaterialType(val material: String) {
 
 interface ICard
 
-class TrainCard(val type: MaterialType) : ICard
+class ShardCard(val type: MaterialType) : ICard
 class DestinationCard(val cities: Set<String>)
 
 abstract class IDeck<T>(var cards: MutableList<T>) {
@@ -36,5 +36,5 @@ abstract class IDeck<T>(var cards: MutableList<T>) {
 
 }
 
-class TrainCardDeck(var trainCards: MutableList<TrainCard>) : IDeck<TrainCard>(trainCards)
+class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards)
 class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards)

@@ -43,7 +43,7 @@ class UpdateBankCommand : INormalClientCommand {
 class DealCardsCommand : INormalClientCommand {
     override val command = DEAL_CARDS
     var cards = mutableListOf<ICard>()
-    var faceUpCards = listOf<TrainCard>()
+    var faceUpCards = listOf<ShardCard>()
     var trainDrawPileSize = 0
     var trainDiscardPileSize = 0
     var destinationPileSize = 0
@@ -52,5 +52,5 @@ class DealCardsCommand : INormalClientCommand {
 class DealCardsComand : INormalClientCommand {
     override val command = DEAL_CARDS
     var destinations = mutableListOf<DestinationCard>()
-    var trainCards = mutableListOf<TrainCard>()
+    var trainCards = mutableListOf<ShardCard>()
 }
