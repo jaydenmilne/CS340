@@ -54,16 +54,16 @@ export class Player {
 }
 
 export class GamePlayer {
-    private userId: Number;
-    private username: String;
+    private userId: number;
+    private username: string;
     private color: Color;
-    private ready: Boolean;
-    private points: Number;
-    private numTrainCards: Number;
-    private numDestinationCards: Number;
-    private numRemainingTrains: Number;
-    private hasLongestRoute: Boolean;
-    private turnOrder: Number;
+    private ready: boolean;
+    private points: number;
+    private numTrainCards: number;
+    private numDestinationCards: number;
+    private numRemainingTrains: number;
+    private hasLongestRoute: boolean;
+    private turnOrder: number;
 
     constructor(gamePlayer: any) {
         if (!('userId' in gamePlayer ||
@@ -91,19 +91,19 @@ export class GamePlayer {
         this.turnOrder = gamePlayer.turnOrder;
     }
 
-    public setUserId(userId: Number) {
+    public setUserId(userId: number) {
         this.userId = userId
     }
 
-    public getUserId(): Number {
+    public getUserId(): number {
         return this.userId;
     }
 
-    public setUsername(username: String) {
+    public setUsername(username: string) {
         this.username = username;
     }
 
-    public getUsername(): String {
+    public getUsername(): string {
         return this.username;
     }
 
@@ -115,59 +115,59 @@ export class GamePlayer {
         return this.color;
     }
 
-    public setReady(ready: Boolean) {
+    public setReady(ready: boolean) {
         return this.ready;
     }
 
-    public getReady(): Boolean {
+    public getReady(): boolean {
         return this.ready;
     }
 
-    public setPoints(points: Number) {
+    public setPoints(points: number) {
         this.points = points;
     }
 
-    public getPoints(): Number {
+    public getPoints(): number {
         return this.points;
     }
 
-    public setNumTrainCards(numTrainCards: Number) {
+    public setNumTrainCards(numTrainCards: number) {
         this.numTrainCards = numTrainCards;
     }
 
-    public getNumTrainCards(): Number {
+    public getNumTrainCards(): number {
         return this.numTrainCards;
     }
 
-    public setNumDestinationCards(numDestinationCards: Number) {
+    public setNumDestinationCards(numDestinationCards: number) {
         this.numDestinationCards = numDestinationCards;
     }
 
-    public getNumDestinationCards(): Number {
+    public getNumDestinationCards(): number {
         return this.numDestinationCards;
     }
 
-    public setNumRemainingTrains(numRemainingTrains: Number) {
+    public setNumRemainingTrains(numRemainingTrains: number) {
         this.numRemainingTrains = numRemainingTrains;
     }
 
-    public getNumRemainingTrains(): Number {
+    public getNumRemainingTrains(): number {
         return this.numRemainingTrains;
     }
 
-    public setHasLongestRoute(hasLongestRoute: Boolean) {
+    public setHasLongestRoute(hasLongestRoute: boolean) {
         this.hasLongestRoute = hasLongestRoute;
     }
 
-    public getHasLongestRoute(): Boolean {
+    public getHasLongestRoute(): boolean {
         return this.hasLongestRoute;
     }
 
-    public setTurnOrder(turnOrder: Number) {
+    public setTurnOrder(turnOrder: number) {
         this.turnOrder = turnOrder;
     }
 
-    public getTurnOrder(): Number {
+    public getTurnOrder(): number {
         return this.turnOrder;
     }
 }
