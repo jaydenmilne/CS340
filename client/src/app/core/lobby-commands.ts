@@ -50,7 +50,7 @@ public gameId: number;
         if (!('gameId' in gameCreatedCommand)) {
                 throw new TypeError('Unable to deserialize GameCreatedCommand object, ' + JSON.stringify(gameCreatedCommand));
         }
-    this.gameId = gameCreatedCommand.gameId;
+        this.gameId = gameCreatedCommand.gameId;
 
     }
 }
@@ -63,7 +63,7 @@ export class StartGameCommand implements Command {
         if (!('gameId' in startGameCommand)) {
                 throw new TypeError('Unable to deserialize StartGameCommand object, ' + JSON.stringify(startGameCommand));
         }
-    this.gameId = startGameCommand.gameId;
+        this.gameId = startGameCommand.gameId;
 
     }
 }

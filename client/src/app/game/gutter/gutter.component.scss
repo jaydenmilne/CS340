@@ -1,0 +1,60 @@
+.cards-gutter{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.cards-box{
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+.dest-card{
+    height: 65%;
+    max-height: 150px;
+    width: 25%;
+    margin: 10px 5px;
+    display: inline-block;
+}
+.shards-table{
+
+}
+.full-width{
+    width: 100%;
+}
+.full-height{
+    height: 100%;
+}
+.shard-card{
+    height: 40px;
+    width: 35px;
+    padding: 5px;
+}
+.shard-icon{
+    height: 35px;
+}
+.shard-count{
+    margin-left: 15px;
+}
+.shard-cell{
+    height: 33%;
+    width: 25%;
+}
+.shard-count-cell{
+    height: 33%;
+    width: 75%;
+}
+.shard-count-cell mat-card{
+    margin-left: 66.6%;
+    box-shadow: none;
+}
+.inline{
+    display: inline-block;
+}
+::ng-deep .mat-tab-label{
+    height: 40px;
+}
+::ng-deep mat-tab-header{
+    height: 40px;
+}
+::ng-deep .mat-tab-body-wrapper{
+    height: 100%;
+}

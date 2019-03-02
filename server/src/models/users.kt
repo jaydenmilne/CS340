@@ -46,8 +46,8 @@ class User(var username: String) {
     var color = Color.YELLOW
 
     var points = 0
-    var trainCards = TrainCardDeck(listOf())
-    var destinationCards = DestinationCardDeck(listOf())
+    var trainCards = TrainCardDeck(mutableListOf())
+    var destinationCards = DestinationCardDeck(mutableListOf())
 
     var hasLongestRoute = false
 
@@ -67,6 +67,7 @@ class User(var username: String) {
     }
 
     fun toGamePlayer(): GamePlayer {
+
         return GamePlayer(this.userId,
                 this.username,
                 this.color,
@@ -76,7 +77,7 @@ class User(var username: String) {
                 this.destinationCards.size,
                 0,
                 this.hasLongestRoute,
-                Games.getGameForPlayer(this))
+                Games.getGameIdForPlayer(this) ?: throw RuntimeException("User not in game"))
     }
 }
 
