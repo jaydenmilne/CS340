@@ -8,7 +8,7 @@ enum class MaterialType(val material: String) {
     POWER_SHARD("power_shard"),
     TIME_SHARD("time_shard"),
     VIBRANIUM("vibranium"),
-    KYBER_CRYSTAL("kyber_crystal"),
+    PALLADIUM("palladium"),
     INFINITY_GAUNTLET("infinity_gauntlet")
 }
 

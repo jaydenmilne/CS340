@@ -244,6 +244,7 @@ class RequestDestinationsCommand : INormalServerCommand {
 
 class DiscardDestinationsCommand : INormalServerCommand {
     override val command = DISCARD_DESTINATIONS
+    val discardedDestinations = listOf<DestinationCard>()
 
     override fun execute(user: User) {
         TODO("not implemented")
