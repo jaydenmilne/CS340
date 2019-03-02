@@ -11,7 +11,7 @@ Several commands transmit arrays of models, these are their descriptions.
 | Name                                    | Description |
 |-----------------------------------------|----------------------------------------|
 | [route](#route-object)                    | Route that connects two cities |
-| [shardCard](#shardCard-object)            | Train card needed to claim a route |
+| [shardCard](#shardCard-object)            | Shard card needed to claim a route |
 | [destinationCard](#destinationCard-object)      | Destination card connecting two cities. Connecting these will earn the player points. |
 | [gamePlayer](#gamePlayer-object)      | Updated player object with additional fields |
 
@@ -29,7 +29,7 @@ Several commands transmit arrays of models, these are their descriptions.
 ### `shardCard` object
 ```json
 {
-    "type": "{type of train card}"
+    "type": "{type of shard card}"
 }
 ```
 
@@ -49,9 +49,9 @@ Several commands transmit arrays of models, these are their descriptions.
     "color": "BLUE",
     "ready": true,
     "points": 4,
-    "numTrainCards": 4,
+    "numShardCards": 4,
     "numDestinationCards": 4,
-    "numRemainingTrains": 4,
+    "numRemainingShards": 4,
     "hasLongestRoute": false,
     "turnOrder": 2
 }
@@ -78,8 +78,8 @@ Conveys a change in the state of the bank
 {
     "command": "updateBank",
     "faceUpCards": ["{array of shardCards}"],
-    "trainDrawPileSize": 4,
-    "trainDiscardPileSize": 4,
+    "shardDrawPileSize": 4,
+    "shardDiscardPileSize": 4,
     "destinationPileSize": 4,
 }
 ```
