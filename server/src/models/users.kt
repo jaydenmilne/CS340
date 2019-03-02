@@ -45,6 +45,12 @@ class User(var username: String) {
     var authToken = ""
     var color = Color.YELLOW
 
+    var points = 0
+    var trainCards = TrainCardDeck(listOf())
+    var destinationCards = DestinationCardDeck(listOf())
+
+    var hasLongestRoute = false
+
     @Transient private var passwordHash = ""
     @Transient var queue = CommandQueue()
 

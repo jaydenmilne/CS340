@@ -211,3 +211,19 @@ class ChangeColorCommand : INormalServerCommand {
 class ServerCommandData : IRegisterCommand, INormalCommand {
     override val command: String = ""
 }
+
+class RequestDestinationsCommand : INormalServerCommand {
+    override val command = REQUEST_DESTINATIONS
+
+    override fun execute(user: User) {
+        TODO("not implemented")
+    }
+}
+
+class DiscardDestinationsCommand : INormalServerCommand {
+    override val command = DISCARD_DESTINATIONS
+
+    override fun execute(user: User) {
+        TODO("not implemented")
+    }
+}
