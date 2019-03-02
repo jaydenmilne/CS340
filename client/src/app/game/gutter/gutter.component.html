@@ -1,3 +1,21 @@
-<p>
-  gutter works!
-</p>
+<mat-tab-group headerPosition="below" class="full-height">
+  <mat-tab label="Shard Cards" class="cards-gutter">
+    <div class="shard-box full-height">
+    <div class="shard-cell inline" *ngFor="let shard of shardCards"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/{{shard.img}}"></mat-card>
+      <p class="inline shard-count">x{{shard.count}}</p>
+    </div>
+    <div class="shard-count-cell inline"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/shard_circle.svg"></mat-card>
+      <p class="inline shard-count">x95</p>
+    </div>
+  </div>
+    </mat-tab>
+
+    <mat-tab label="Destination Cards" class="cards-gutter full-width full-height">
+      <div class="cards-box full-height">
+        <mat-card *ngFor="let dest of destCards" class="dest-card">
+          {{dest}}
+        </mat-card>
+      </div>
+    </mat-tab>
+
+</mat-tab-group>
