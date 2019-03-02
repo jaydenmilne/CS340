@@ -1,7 +1,6 @@
 package commands
 
-import models.ClientUser
-import models.Games
+import models.*
 
 class GameCreatedCommand(val gameId: Int) : INormalClientCommand {
     override val command = GAME_CREATED
@@ -20,4 +19,38 @@ class RefreshGameListCommand : INormalClientCommand {
 
 class StartGameCommand(var gameId: String) : INormalClientCommand {
     override val command = START_GAME
+}
+
+class UpdatePlayerCommand : INormalClientCommand {
+    override val command = UPDATE_PLAYER
+    var user = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0 )
+}
+
+class ChangeTurnCommand : INormalClientCommand {
+    override val command = CHANGE_TURN
+    var userId = 0
+}
+
+class SelectDestinationsCommand : INormalClientCommand {
+    override val command = SELECT_DESTINATIONS
+    var destinations = mutableListOf<DestinationCard>()
+}
+
+class UpdateBankCommand : INormalClientCommand {
+    override val command = UPDATE_BANK
+}
+
+class DealCardsCommand : INormalClientCommand {
+    override val command = DEAL_CARDS
+    var cards = mutableListOf<ICard>()
+    var faceUpCards = listOf<TrainCard>()
+    var trainDrawPileSize = 0
+    var trainDiscardPileSize = 0
+    var destinationPileSize = 0
+}
+
+class DealCardsComand : INormalClientCommand {
+    override val command = DEAL_CARDS
+    var destinations = mutableListOf<DestinationCard>()
+    var trainCards = mutableListOf<TrainCard>()
 }

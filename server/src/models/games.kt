@@ -27,7 +27,11 @@ object Games {
                 }
             }
         }
+    }
 
+    fun getGameForPlayer(user: User): Int {
+        val gameUserIn = games.filter { p -> p.value.players.contains(user) }[0]
+        return gameUserIn!!.gameId
     }
 }
 
@@ -35,6 +39,20 @@ class Game(var name: String) {
     val gameId = getNextGameID()
     var players = mutableSetOf<User>()
     var started = false
+
+    var trainCardDeck = TrainCardDeck(listOf())
+    var faceUpTrainCards = TrainCardDeck(listOf())
+    var trainCardDiscardPile = TrainCardDeck(listOf())
+
+    var destinationCardDeck = DestinationCardDeck(listOf())
+
+    var whoseTurn = players.first()
+
+    var chatMessages = mutableListOf<Message>()
+
+    @Transient private var routes = RouteList()
+
+    @Transient private var nextMessageId = -1
 
     fun broadcast(command: INormalClientCommand) {
         for (player in players) {
@@ -50,5 +68,14 @@ class Game(var name: String) {
         }
 
         return usedColors.toSet()
+    }
+
+    fun getNextMessageId(): Int {
+        nextMessageId++
+        return nextMessageId
+    }
+
+    fun getOrderForUser(user: User): Int {
+        return players.indexOf(user)
     }
 }
