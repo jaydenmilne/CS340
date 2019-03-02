@@ -29,6 +29,10 @@ abstract class IDeck<T>(var cards: List<T>) {
 
         return top
     }
+
+    val size: Int
+        get() = cards.size
+
 }
 
 class TrainCardDeck(var trainCards: List<TrainCard>) : IDeck<TrainCard>(trainCards)
