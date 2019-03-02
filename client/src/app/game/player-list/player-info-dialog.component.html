@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>{{player.username}}</h1>
+<table>
+    <tr>
+        <td class="row-label">Points:</td>
+        <td>{{player.points}}</td>
+    </tr>
+    <tr>
+        <td class="row-label">Number of Shard Cards:</td>
+        <td>{{player.numTrainCards}}</td>
+    </tr>
+    <tr>
+        <td class="row-label">Number of Destination Cards:</td>
+        <td>{{player.numDestinationCards}}</td>
+    </tr>
+    <tr>
+        <td class="row-label">Number of Shards Remaining:</td>
+        <td>{{player.numRemainingTrains}}</td>
+    </tr>
+    <tr>
+        <td class="row-label">Has Longest Route Card:</td>
+        <td>{{player.hasLongestRoute}}</td>
+    </tr>
+</table>
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial (click)="onOkClick()">Close</button>
+</div>

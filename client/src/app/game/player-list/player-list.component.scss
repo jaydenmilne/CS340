@@ -1,0 +1,42 @@
+.player-card{
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.player-card:hover {
+    cursor: pointer;
+}
+
+.player-info-div {
+    display:flex;
+    justify-content: space-between;
+}
+
+.player-list-card{
+    margin: 5px 0;
+}
+.player-card-info{
+    width: 100%;
+}
+
+.player-list-text{
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center
+}
+
+.player-status-text {
+    float:right;
+}
+
+.player-status{
+    width: 100%;
+    text-align: right;
+}
+
+.player-list-div{
+    width: 96%;
+    margin: 2%;
+    height:100%;
+}
