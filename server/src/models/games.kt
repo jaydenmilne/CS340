@@ -44,9 +44,9 @@ class Game(var name: String) {
     var players = mutableSetOf<User>()
     var started = false
 
-    var trainCardDeck = TrainCardDeck(mutableListOf())
-    var faceUpTrainCards = TrainCardDeck(mutableListOf())
-    var trainCardDiscardPile = TrainCardDeck(mutableListOf())
+    var trainCardDeck = ShardCardDeck(mutableListOf())
+    var faceUpShardCards = ShardCardDeck(mutableListOf())
+    var shardCardDiscardPile = ShardCardDeck(mutableListOf())
 
     var destinationCardDeck = DestinationCardDeck(mutableListOf())
     var destinationCardDiscardDeck = DestinationCardDeck(mutableListOf())

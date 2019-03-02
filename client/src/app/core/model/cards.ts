@@ -63,7 +63,7 @@ export class DestinationCard extends ICard {
 	}
 }
 
-export class TrainCard extends ICard {
+export class ShardCard extends ICard {
 	private type: MaterialType
 
 	public setMaterialType(type: MaterialType) {
@@ -91,8 +91,8 @@ export class CardDeck extends ICardDeck<DestinationCard> {
 	}
 }
 
-export class TrainCardDeck extends ICardDeck<TrainCard> {
-	public getTop(): TrainCard {
+export class ShardCardDeck extends ICardDeck<ShardCard> {
+	public getTop(): ShardCard {
 		return this.cards.shift()
 	}
 
