@@ -1,9 +1,6 @@
 package commands
 
-import models.ClientUser
-import models.DestinationCard
-import models.Games
-import models.User
+import models.*
 
 class GameCreatedCommand(val gameId: Int) : INormalClientCommand {
     override val command = GAME_CREATED
@@ -36,13 +33,13 @@ class ChangeTurnCommand : INormalClientCommand {
 
 }
 
-class SelectDestinationsCommand : INormalClientCommand {
-    override val command = SELECT_DESTINATIONS
-    var destinations = mutableListOf<DestinationCard>()
-}
-
 class UpdateBankCommand : INormalClientCommand {
     override val command = UPDATE_BANK
 
     //TODO
+}
+
+class DealCardsCommand : INormalClientCommand {
+    override val command = DEAL_CARDS
+    var cards = mutableListOf<ICard>()
 }
