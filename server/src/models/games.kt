@@ -29,9 +29,13 @@ object Games {
         }
     }
 
-    fun getGameForPlayer(user: User): Int {
+    fun getGameForPlayer(user: User): Game? {
+        return games.filter { p -> p.value.players.contains(user) }[0]
+    }
+
+    fun getGameIdForPlayer(user: User): Int? {
         val gameUserIn = games.filter { p -> p.value.players.contains(user) }[0]
-        return gameUserIn!!.gameId
+        return gameUserIn?.gameId
     }
 }
 
@@ -40,11 +44,12 @@ class Game(var name: String) {
     var players = mutableSetOf<User>()
     var started = false
 
-    var trainCardDeck = TrainCardDeck(listOf())
-    var faceUpTrainCards = TrainCardDeck(listOf())
-    var trainCardDiscardPile = TrainCardDeck(listOf())
+    var trainCardDeck = TrainCardDeck(mutableListOf())
+    var faceUpTrainCards = TrainCardDeck(mutableListOf())
+    var trainCardDiscardPile = TrainCardDeck(mutableListOf())
 
-    var destinationCardDeck = DestinationCardDeck(listOf())
+    var destinationCardDeck = DestinationCardDeck(mutableListOf())
+    var destinationCardDiscardDeck = DestinationCardDeck(mutableListOf())
 
     var whoseTurn = players.first()
 

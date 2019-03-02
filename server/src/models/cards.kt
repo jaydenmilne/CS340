@@ -17,17 +17,18 @@ interface ICard
 class TrainCard(val type: MaterialType) : ICard
 class DestinationCard(val cities: Set<String>)
 
-abstract class IDeck<T>(var cards: List<T>) {
+abstract class IDeck<T>(var cards: MutableList<T>) {
 
     fun shuffle() {
-        cards = cards.shuffled()
+        cards.shuffle()
     }
 
     fun getNext(): T {
-        var top = cards.first()
-        cards = cards.drop(1)
+        return cards.removeAt(0)
+    }
 
-        return top
+    fun push(t: T) {
+        cards.add(t)
     }
 
     val size: Int
@@ -35,5 +36,5 @@ abstract class IDeck<T>(var cards: List<T>) {
 
 }
 
-class TrainCardDeck(var trainCards: List<TrainCard>) : IDeck<TrainCard>(trainCards)
-class DestinationCardDeck(var destinationCards: List<DestinationCard>) : IDeck<DestinationCard>(destinationCards)
+class TrainCardDeck(var trainCards: MutableList<TrainCard>) : IDeck<TrainCard>(trainCards)
+class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards)
