@@ -83,20 +83,6 @@ export class DestinationCardDeck {
 	public size(): Number {
 		return this.cards.length
 	}
-
-	// Fisher-Yates shuffle in TS. Adapted from https://www.frankmitchell.org/2015/01/fisher-yates/.
-	public shuffle() {
-		var i = 0;
-		var j = 0;
-		var temp = null;
-
-		for (i = this.cards.length - 1; i > 0; i -= 0) {
-			j = Math.floor(Math.random() * (i + 1))
-			temp = this.cards[i]
-			this.cards[i] = this.cards[j]
-			this.cards[j] = temp
-		}
-	}
 }
 
 export class TrainCardDeck {
@@ -108,19 +94,5 @@ export class TrainCardDeck {
 
 	public size(): Number {
 		return this.cards.length
-	}
-
-	// Fisher-Yates shuffle in TS. Adapted from https://www.frankmitchell.org/2015/01/fisher-yates/.
-	public shuffle() {
-		var i = 0;
-		var j = 0;
-		var temp = null;
-
-		for (i = this.cards.length - 1; i > 0; i -= 0) {
-			j = Math.floor(Math.random() * (i + 1))
-			temp = this.cards[i]
-			this.cards[i] = this.cards[j]
-			this.cards[j] = temp
-		}
 	}
 }
