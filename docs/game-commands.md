@@ -11,8 +11,8 @@ Several commands transmit arrays of models, these are their descriptions.
 | Name                                    | Description |
 |-----------------------------------------|----------------------------------------|
 | [route](#route-object)                    | Route that connects two cities |
-| [trainCard](#trainCard-object)            | Train card needed to claim a route |
-| [destinationCard](#trainCard-object)      | Destination card connecting two cities. Connecting these will earn the player points. |
+| [shardCard](#shardCard-object)            | Shard card needed to claim a route |
+| [destinationCard](#destinationCard-object)      | Destination card connecting two cities. Connecting these will earn the player points. |
 | [gamePlayer](#gamePlayer-object)      | Updated player object with additional fields |
 
 ### `route` object
@@ -26,10 +26,10 @@ Several commands transmit arrays of models, these are their descriptions.
 }
 ```
 
-### `trainCard` object
+### `shardCard` object
 ```json
 {
-    "type": "{type of train card}"
+    "type": "{type of shard card}"
 }
 ```
 
@@ -49,9 +49,9 @@ Several commands transmit arrays of models, these are their descriptions.
     "color": "BLUE",
     "ready": true,
     "points": 4,
-    "numTrainCards": 4,
+    "numShardCards": 4,
     "numDestinationCards": 4,
-    "numRemainingTrains": 4,
+    "numRemainingShards": 4,
     "hasLongestRoute": false,
     "turnOrder": 2
 }
@@ -77,9 +77,9 @@ Conveys a change in the state of the bank
 ```json
 {
     "command": "updateBank",
-    "faceUpCards": ["{array of trainCards}"],
-    "trainDrawPileSize": 4,
-    "trainDiscardPileSize": 4,
+    "faceUpCards": ["{array of shardCards}"],
+    "shardDrawPileSize": 4,
+    "shardDiscardPileSize": 4,
     "destinationPileSize": 4,
 }
 ```
@@ -115,14 +115,14 @@ Requests destinationCards from the server. Step 1 of selecting destination cards
 ### `dealCards` Command
 Client Command.
 
-Sends destinationCards to the client, as well as the trainCards for that player. Step 2 of selecting destination cards.
+Sends destinationCards to the client, as well as the shardCards for that player. Step 2 of selecting destination cards.
 
 #### Syntax
 ```json
 {
-    "command": "selectDestinations",
+    "command": "dealCards",
     "destinations": ["{array of 3 destinationCards}"],
-    "trainCards": ["{array of trainCards}"]
+    "shardCards": ["{array of shardCards}"]
 }
 ```
 
