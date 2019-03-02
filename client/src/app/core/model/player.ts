@@ -7,9 +7,9 @@ export class Player {
     private username: string;
 
     constructor(player: any) {
-        if (!('userId' in player ||
-            'ready' in player ||
-            'username' in player ||
+        if (!('userId' in player &&
+            'ready' in player &&
+            'username' in player &&
             'color' in player)) {
             throw new TypeError('Unable to deserialize Player object, ' + JSON.stringify(player));
         }
@@ -66,15 +66,15 @@ export class GamePlayer {
     private turnOrder: number;
 
     constructor(gamePlayer: any) {
-        if (!('userId' in gamePlayer ||
-            'username' in gamePlayer ||
-            'color' in gamePlayer ||
-            'ready' in gamePlayer ||
-            'points' in gamePlayer ||
-            'numTrainCards' in gamePlayer ||
-            'numDestinationCards' in gamePlayer ||
-            'numRemainingTrains' in gamePlayer ||
-            'hasLongestRoute' in gamePlayer ||
+        if (!('userId' in gamePlayer &&
+            'username' in gamePlayer &&
+            'color' in gamePlayer &&
+            'ready' in gamePlayer &&
+            'points' in gamePlayer &&
+            'numTrainCards' in gamePlayer &&
+            'numDestinationCards' in gamePlayer &&
+            'numRemainingTrains' in gamePlayer &&
+            'hasLongestRoute' in gamePlayer &&
             'turnOrder' in gamePlayer)) {
             throw new TypeError('Unable to deserialize gamePlayer object, ' + JSON.stringify(gamePlayer));
         }
