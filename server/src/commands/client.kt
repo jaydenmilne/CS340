@@ -21,7 +21,6 @@ class StartGameCommand(var gameId: String) : INormalClientCommand {
     override val command = START_GAME
 }
 
-
 class UpdatePlayerCommand : INormalClientCommand {
     override val command = UPDATE_PLAYER
     var user = ClientUser()
@@ -30,13 +29,15 @@ class UpdatePlayerCommand : INormalClientCommand {
 class ChangeTurnCommand : INormalClientCommand {
     override val command = CHANGE_TURN
     var userId = 0
+}
 
+class SelectDestinationsCommand : INormalClientCommand {
+    override val command = SELECT_DESTINATIONS
+    var destinations = mutableListOf<DestinationCard>()
 }
 
 class UpdateBankCommand : INormalClientCommand {
     override val command = UPDATE_BANK
-
-    //TODO
 }
 
 class DealCardsCommand : INormalClientCommand {
