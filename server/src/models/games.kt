@@ -27,7 +27,6 @@ object Games {
                 }
             }
         }
-
     }
 }
 
@@ -35,6 +34,13 @@ class Game(var name: String) {
     val gameId = getNextGameID()
     var players = mutableSetOf<User>()
     var started = false
+
+    var trainCardDeck = TrainCardDeck(listOf())
+    var destinationCardDeck = DestinationCardDeck(listOf())
+    var whoseTurn = players.first()
+    var chatMessages = mutableListOf<Message>()
+
+    @Transient private var nextMessageId = -1
 
     fun broadcast(command: INormalClientCommand) {
         for (player in players) {
@@ -50,5 +56,10 @@ class Game(var name: String) {
         }
 
         return usedColors.toSet()
+    }
+
+    fun getNextMessageId(): Int {
+        nextMessageId++
+        return nextMessageId
     }
 }

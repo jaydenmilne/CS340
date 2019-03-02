@@ -14,6 +14,14 @@ const val REFRESH_GAME_LIST = "refreshGameList"
 const val REGISTER = "register"
 const val START_GAME = "startGame"
 const val CHANGE_COLOR = "changeColor"
+const val UPDATE_PLAYER = "updatePlayer"
+const val UPDATE_BANK = "updateBank"
+const val REQUEST_DESTINATIONS = "requestDestinations"
+const val CHANGE_TURN = "changeTurn"
+const val DISCARD_DESTINATIONS = "discardDestinations"
+const val SELECT_DESTINATIONS = "selectDestinations"
+const val POST_CHAT = "postChat"
+const val UPDATE_CHAT = "updateChat"
 
 interface ICommand {
     val command: String
