@@ -49,7 +49,9 @@ export enum City {
     MUSPELHEIM = "muspelheim"
 }
 
-export class DestinationCard {
+abstract class ICard {}
+
+export class DestinationCard extends ICard {
 	private cities: City[]
 
 	public setCities(cities: City[]) {
@@ -61,7 +63,7 @@ export class DestinationCard {
 	}
 }
 
-export class TrainCard {
+export class TrainCard extends ICard {
 	private type: MaterialType
 
 	public setMaterialType(type: MaterialType) {
@@ -73,9 +75,13 @@ export class TrainCard {
 	}
 }
 
-export class DestinationCardDeck {
-	private cards: DestinationCard[]
+abstract class ICardDeck<T> {
+	protected cards: T[]
+	abstract getTop(): T;
+	abstract size(): Number;
+}
 
+export class CardDeck extends ICardDeck<DestinationCard> {
 	public getTop(): DestinationCard {
 		return this.cards.shift()
 	}
@@ -85,9 +91,7 @@ export class DestinationCardDeck {
 	}
 }
 
-export class TrainCardDeck {
-	private cards: TrainCard[]
-
+export class TrainCardDeck extends ICardDeck<TrainCard> {
 	public getTop(): TrainCard {
 		return this.cards.shift()
 	}
