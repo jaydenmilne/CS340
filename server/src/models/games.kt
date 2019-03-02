@@ -28,6 +28,11 @@ object Games {
             }
         }
     }
+
+    fun getGameForPlayer(user: User): Int {
+        val gameUserIn = games.filter { p -> p.value.players.contains(user) }[0]
+        return gameUserIn!!.gameId
+    }
 }
 
 class Game(var name: String) {
@@ -61,5 +66,9 @@ class Game(var name: String) {
     fun getNextMessageId(): Int {
         nextMessageId++
         return nextMessageId
+    }
+
+    fun getOrderForUser(user: User): Int {
+        return players.indexOf(user)
     }
 }

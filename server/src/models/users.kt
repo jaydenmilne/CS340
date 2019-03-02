@@ -65,11 +65,35 @@ class User(var username: String) {
     fun verifyPassword(password: String): Boolean {
         return PasswordStorage.verifyPassword(password, passwordHash)
     }
+
+    fun toGamePlayer(): GamePlayer {
+        return GamePlayer(this.userId,
+                this.username,
+                this.color,
+                this.ready,
+                this.points,
+                this.trainCards.size,
+                this.destinationCards.size,
+                0,
+                this.hasLongestRoute,
+                Games.getGameForPlayer(this))
+    }
 }
 
 class ClientUser(val userId: Int, var username: String, val authToken: String) {
     constructor() : this(0, "", "")
 }
+
+class GamePlayer(val userId: Int,
+                 val username: String,
+                 val color: Color,
+                 val ready: Boolean,
+                 val points: Int,
+                 val numTrainCards: Int,
+                 val numDestinationCards: Int,
+                 val numRemainingTrains: Int,
+                 val hasLongestRoute: Boolean,
+                 val turnOrder: Int)
 
 enum class Color(val rgb: String) {
     YELLOW("fdd835"),
