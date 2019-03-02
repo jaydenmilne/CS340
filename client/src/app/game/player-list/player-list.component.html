@@ -1,3 +1,18 @@
-<p>
-  player-list works!
-</p>
+<div class="player-list-div">
+  <mat-card *ngFor="let player of playerService.players" class="player-card"
+    [ngStyle]="getPlayerColorStyle(player)" (click)="onPlayerClick(player)">
+    <div class="player-info-div">
+        <div class="player-status-text">
+            <mat-chip-list><mat-chip>{{getPlayerRank(player)}}</mat-chip></mat-chip-list>
+          </div>
+        <div class="player-list-text">
+            {{player.username}}
+          </div>
+          <div class="player-status-text">
+              <mat-chip-list><mat-chip color="primary" selected>{{player.points}} pts</mat-chip></mat-chip-list>
+          </div>
+    </div>
+
+  </mat-card>
+
+</div>

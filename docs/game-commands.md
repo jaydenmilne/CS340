@@ -13,7 +13,7 @@ Several commands transmit arrays of models, these are their descriptions.
 | [route](#route-object)                    | Route that connects two cities |
 | [trainCard](#trainCard-object)            | Train card needed to claim a route |
 | [destinationCard](#trainCard-object)      | Destination card connecting two cities. Connecting these will earn the player points. |
-| [player](#player-object)      | Updated player object with additional fields |
+| [gamePlayer](#gamePlayer-object)      | Updated player object with additional fields |
 
 ### `route` object
 ```json
@@ -41,7 +41,7 @@ Several commands transmit arrays of models, these are their descriptions.
 }
 ```
 
-### `player` object
+### `gamePlayer` object
 ```json
 {
     "userId": "{id of player}",
@@ -52,7 +52,8 @@ Several commands transmit arrays of models, these are their descriptions.
     "numTrainCards": 4,
     "numDestinationCards": 4,
     "numRemainingTrains": 4,
-    "hasLongestRoute": false
+    "hasLongestRoute": false,
+    "turnOrder": 2
 }
 ```
 
@@ -86,18 +87,16 @@ Conveys a change in the state of the bank
 ### `updatePlayer` Command
 Client Command.
 
-Conveys a change in the state of a player
+Conveys a change in the state of a player. Sends the updated player object over.
+Also the mechanism used to add players at the beginning of the game.
 
 #### Syntax
 ```json
 {
     "command": "updatePlayer",
-    "userId": "{userId of player}",
-    "points": 4,
-    "numTrainCards": 4,
-    "numDestinationCards": 4,
-    "numRemainingTrains": 4,
-    "hasLongestRoute": false
+    "gamePlayer": {
+        // gamePlayer object
+    }
 }
 ```
 
@@ -113,16 +112,17 @@ Requests destinationCards from the server. Step 1 of selecting destination cards
 }
 ```
 
-### `selectDestinations` Command
+### `dealCards` Command
 Client Command.
 
-Sends destinationCards to the client. Step 2 of selecting destination cards.
+Sends destinationCards to the client, as well as the trainCards for that player. Step 2 of selecting destination cards.
 
 #### Syntax
 ```json
 {
     "command": "selectDestinations",
-    "destinations": ["{array of 3 destinationCards}"]
+    "destinations": ["{array of 3 destinationCards}"],
+    "trainCards": ["{array of trainCards}"]
 }
 ```
 

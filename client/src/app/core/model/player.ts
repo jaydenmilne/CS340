@@ -7,10 +7,10 @@ export class Player {
     private username: string;
 
     constructor(player: any) {
-        if (!('userId' in player ||
-            'ready' in player ||
-            'username' in player ||
-            'color' in player)) {
+        if (!('userId' in player) ||
+            !('ready' in player) ||
+            !('username' in player) ||
+            !('color' in player)) {
             throw new TypeError('Unable to deserialize Player object, ' + JSON.stringify(player));
         }
 

@@ -1,9 +1,7 @@
 export class ChatMessage {
-    private message: string;
-    private gameID: string;
-    private userID: string;
 
-    constructor() {}
+    constructor(private userId: number, private username: string, private message: string, private sequenceNum: number) {
+    }
 
     public getMessage(): string {
         return this.message;
@@ -13,19 +11,27 @@ export class ChatMessage {
         this.message = message;
     }
 
-    public getGameID(): string {
-        return this.gameID;
+    public getUserId(): number {
+        return this.userId;
     }
 
-    public setGameID(gameID: string) {
-        this.gameID = gameID;
+    public getUserName(): string {
+        return this.username;
     }
 
-    public getUserID(): string {
-        return this.userID;
+    public getSequenceNum() {
+        return this.sequenceNum;
     }
 
-    public setUserID(userID: string) {
-        this.userID = userID;
+    public setUserId(userId: number) {
+        this.userId = userId;
+    }
+
+    public setUserName(username: string) {
+        this.username = username;
+    }
+
+    public setSequenceNum(sequenceNum: number) {
+        this.sequenceNum = sequenceNum;
     }
 }
