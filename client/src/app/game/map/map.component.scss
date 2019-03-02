@@ -1,3 +1,4 @@
+@import "colors.scss";
 
  .scaling-svg {
     position: absolute; 
@@ -24,43 +25,43 @@
     }
 
    .soul{
-	fill:orange !important;
-	stroke:orange !important;
+	fill:$soul_color !important;
+	stroke:$soul_color !important;
 }
 
 .time{
-	fill:green !important;
-	stroke:green !important;
+	fill:$time_color !important;
+	stroke:$time_color !important;
 }
 
 .space{
-	fill:blue !important;
-	stroke:blue !important;
+	fill:$space_color !important;
+	stroke:$space_color !important;
 }
 
 .mind{
-	fill:yellow !important;
-	stroke:yellow !important;
+	fill:$mind_color !important;
+	stroke:$mind_color !important;
 }
 
 .reality{
-	fill:red !important;
-	stroke:red !important;
+	fill:$reality_color !important;
+	stroke:$reality_color !important;
 }
 
 .power{
-	fill:purple !important;
-	stroke:purple !important;
+	fill:$power_color !important;
+	stroke:$power_color !important;
 }
 
 .palladium{
-	fill:lightsteelblue !important;
-	stroke:lightsteelblue !important;
+	fill:$palladium_color !important;
+	stroke:$palladium_color !important;
 }
 
 .vibranium{
-	fill:dimgrey !important;
-	stroke:dimgrey !important;
+	fill:$vibranium_color !important;
+	stroke:$vibranium_color !important;
 }
 
 .generic{
