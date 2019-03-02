@@ -1,0 +1,33 @@
+<mat-card class="chat-window">
+  <mat-card-header>
+    <mat-card-title>
+      Chat
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="chat-box" #chatBox>
+    <mat-card class="chat-message-card" *ngFor="let message of chatService.chatHistory" [class.my-message]="isCurrentUserPost(message)"
+      [class.other-message]="!isCurrentUserPost(message)">
+      {{message.username}}: {{message.message}}
+    </mat-card>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <form [formGroup]="chatForm" id="chat_form">
+      <table class="full-width">
+        <tr>
+          <td class="msg-input-cell form-cell">
+            <mat-form-field class="full-width message-input">
+              <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" formControlName="chatInput"
+                placeholder="message" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="3"></textarea>
+            </mat-form-field>
+          </td>
+          <td class="send-button-cell form-cell">
+            <button mat-fab (click)="onSend()"><i class="material-icons">send</i></button>
+          </td>
+        </tr>
+      </table>
+    </form>
+
+  </mat-card-actions>
+</mat-card>
