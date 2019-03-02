@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/core/model/player';
 import { LobbyService } from '../lobby.service';
 import { Color, StyleColor } from '@core/model/color.enum';
-import { PollerService } from '@core/poller.service';
 import { UserService } from '@core/user.service';
+import { ServerConnectionService } from '@core/server/server-connection.service';
+import { LobbyState } from '@core/server/server-connection-state';
 
 @Component({
   selector: 'app-game-info',
@@ -12,19 +13,18 @@ import { UserService } from '@core/user.service';
 })
 export class GameInfoComponent implements OnInit {
 
-  constructor(private lobbyService: LobbyService, private poller: PollerService, private userService: UserService) {
-    this.poller.setLobbyMode(true);
-    this.poller.startPolling();
-  }
+  constructor(
+    private lobbyService: LobbyService, 
+    private userService: UserService,
+    private serverConnection: ServerConnectionService) {}
 
   playerReady = false;
 
   ngOnInit() {
+    // Change the server connection to lobby mode
+    this.serverConnection.changeState(new LobbyState(this.serverConnection));
   }
 
-  public ngOnDestroy(){
-    this.poller.stopPolling();
-  }
 
   public getPlayerColorStyle(player: Player) {
     const style = {
