@@ -41,9 +41,16 @@ class Game(var name: String) {
     var started = false
 
     var trainCardDeck = TrainCardDeck(listOf())
+    var faceUpTrainCards = TrainCardDeck(listOf())
+    var trainCardDiscardPile = TrainCardDeck(listOf())
+
     var destinationCardDeck = DestinationCardDeck(listOf())
+
     var whoseTurn = players.first()
+
     var chatMessages = mutableListOf<Message>()
+
+    @Transient private var routes = RouteList()
 
     @Transient private var nextMessageId = -1
 
