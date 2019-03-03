@@ -2,17 +2,26 @@
     height: 100vh;
 }
 .player-list-window{
-    background: lightblue;
 }
+
 .chat-window{
     background: lightpink;
 }
+::ng-deep .chat-window{
+    height: 100%;
+    width: 100%;
+}
 .map-window{
-    background: lightgreen;
+    background: black;
 }
 .gutter-window{
-    background: lightgoldenrodyellow;
+    // background: lightgoldenrodyellow;
 }
 .bank-window{
     background: lightsteelblue;
 }
+.app-window{
+    height: 100%;
+    width: 100%;
+}
+

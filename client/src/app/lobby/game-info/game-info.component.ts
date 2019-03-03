@@ -22,7 +22,7 @@ export class GameInfoComponent implements OnInit {
   ngOnInit() {
   }
 
-  public ngOnDestroy(){
+  public ngOnDestroy() {
     this.poller.stopPolling();
   }
 
@@ -40,7 +40,7 @@ export class GameInfoComponent implements OnInit {
     return style;
   }
 
-  public isUserReady(): boolean{
+  public isUserReady(): boolean {
     this.playerReady = this.lobbyService.gameList.getSelectedGame().isPlayerReady(this.userService.user$.value.getUserId());
     return this.playerReady;
   }

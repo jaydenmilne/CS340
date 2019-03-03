@@ -8,28 +8,33 @@ enum class MaterialType(val material: String) {
     POWER_SHARD("power_shard"),
     TIME_SHARD("time_shard"),
     VIBRANIUM("vibranium"),
-    KYBER_CRYSTAL("kyber_crystal"),
+    PALLADIUM("palladium"),
     INFINITY_GAUNTLET("infinity_gauntlet")
 }
 
 interface ICard
 
-class TrainCard(val type: MaterialType) : ICard
+class ShardCard(val type: MaterialType) : ICard
 class DestinationCard(val cities: Set<String>)
 
-abstract class IDeck<T>(var cards: List<T>) {
+abstract class IDeck<T>(var cards: MutableList<T>) {
 
     fun shuffle() {
-        cards = cards.shuffled()
+        cards.shuffle()
     }
 
     fun getNext(): T {
-        var top = cards.first()
-        cards = cards.drop(1)
-
-        return top
+        return cards.removeAt(0)
     }
+
+    fun push(t: T) {
+        cards.add(t)
+    }
+
+    val size: Int
+        get() = cards.size
+
 }
 
-class TrainCardDeck(var trainCards: List<TrainCard>) : IDeck<TrainCard>(trainCards)
-class DestinationCardDeck(var destinationCards: List<DestinationCard>) : IDeck<DestinationCard>(destinationCards)
+class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards)
+class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards)
