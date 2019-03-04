@@ -54,7 +54,8 @@ export class AppComponent implements OnInit {
   title = 'Mary Lou';
   constructor (public dialog: MatDialog,
                public errorService: ErrorNotifierService,
-               public pollerService: ServerPollerService) {}
+               public pollerService: ServerPollerService,
+               private serverConnection: ServerConnectionService) {}
 
   ngOnInit() {
   this.errorService.errors$.subscribe(loginError => this.oops(loginError));
@@ -62,8 +63,24 @@ export class AppComponent implements OnInit {
 
   @HostListener('document:keypress', ['$event'])
   private handleKeypress(event : KeyboardEvent) {
-    if (event.key == "m" || event.key == 'p') {
-      this.pollerService.handleKeypress(event);
+    if (event.srcElement.nodeName != "INPUT" && event.srcElement.nodeName != "TEXTAREA") {
+      switch(event.key) {
+        case "m":
+        case "p":
+        this.pollerService.handleKeypress(event);
+        break;
+        case "u":
+        let url = prompt("Server URL:")
+        if (!url) {
+          return;
+        }
+
+        if (!url.startsWith("http")) {
+          url = "http://" + url;
+        }
+        this.serverConnection.setServerUrl(url);
+        break;
+      }
     }
   }
 

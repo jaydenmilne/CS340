@@ -12,7 +12,8 @@ import { ServerConnectionState } from './server-connection-state';
 export class ServerConnectionService {
   private previousState: ServerConnectionState;
   private state : ServerConnectionState;
-
+  private serverUrlOverride: string = "";
+  
   // Queue of commands that are ready to be sent
   private outgoingQueue = new Array<Command>();
   // Command that has a pending request, or couldn't be send because of a transmission error.
@@ -31,7 +32,6 @@ export class ServerConnectionService {
 
   constructor(public http: HttpClient,
     public errorService: ErrorNotifierService) {
-
   }
 
   public changeState(newState: ServerConnectionState) {
@@ -47,10 +47,17 @@ export class ServerConnectionService {
     this.authToken = token;
   }
 
+  public setServerUrl(url: string) {
+    this.serverUrlOverride = url;
+  }
+
   /**
    * Gets the correct url depending on development mode or not
    */
   public getServerUrl(): string {
+    if (this.serverUrlOverride != "") {
+      return this.serverUrlOverride;
+    }
     if (isDevMode()) { return 'http://127.0.0.1:4300'; } else { return 'api.marylou.ga'; }
   }
 
