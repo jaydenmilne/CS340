@@ -25,7 +25,6 @@ export class GameInfoComponent implements OnInit {
     this.serverConnection.changeState(new LobbyState(this.serverConnection));
   }
 
-
   public getPlayerColorStyle(player: Player) {
     const style = {
       'background-color': '#' + StyleColor[player.getColor()]
@@ -40,7 +39,7 @@ export class GameInfoComponent implements OnInit {
     return style;
   }
 
-  public isUserReady(): boolean{
+  public isUserReady(): boolean {
     this.playerReady = this.lobbyService.gameList.getSelectedGame().isPlayerReady(this.userService.user$.value.getUserId());
     return this.playerReady;
   }

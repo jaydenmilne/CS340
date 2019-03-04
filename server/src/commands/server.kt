@@ -1,6 +1,7 @@
 package commands
 
 import models.*
+import java.lang.RuntimeException
 
 /**
  * Create a new game on the server.
@@ -139,6 +140,8 @@ class PlayerReadyCommand : INormalServerCommand {
 
         if (notReadyPlayers.isEmpty() && game.players.size >= 2) {
             game.started = true
+            game.trainCardDeck.shuffle()
+            game.destinationCardDeck.shuffle()
             game.broadcast(StartGameCommand(game.gameId.toString()))
         }
     }
@@ -210,4 +213,56 @@ class ChangeColorCommand : INormalServerCommand {
  */
 class ServerCommandData : IRegisterCommand, INormalCommand {
     override val command: String = ""
+}
+
+class RequestDestinationsCommand : INormalServerCommand {
+    override val command = REQUEST_DESTINATIONS
+
+    override fun execute(user: User) {
+        var game = Games.getGameForPlayer(user)
+
+        if (game == null) {
+            throw RuntimeException("User not in a game")
+        }
+
+        var dealtTrainCards = mutableListOf<ICard>()
+        var dealtDestinationCards = mutableListOf<ICard>()
+
+        /* Deal 4 train cards to user */
+        for (i in 0..3) {
+            // Draw a card from the train card deck and add it to the list
+            user.trainCards.push(game.trainCardDeck.getNext())
+        }
+
+        var dealTrainCards = DealCardsCommand()
+        dealTrainCards.cards = dealtTrainCards
+        user.queue.push(dealTrainCards)
+
+        /* Deal 3 destination cards to user */
+        for (i in 0..2) {
+            // Draw a card from the destination card deck and add it to the list
+            user.destinationCards.push(game.destinationCardDeck.getNext())
+        }
+        var dealDestinationCards = DealCardsCommand()
+        dealDestinationCards.cards = dealtDestinationCards
+        user.queue.push(dealDestinationCards)
+
+        /* Send UpdateBankCommand to user's client */
+        /* Send UpdatePlayerCommand to user's client */
+    }
+}
+
+class DiscardDestinationsCommand : INormalServerCommand {
+    override val command = DISCARD_DESTINATIONS
+    val discardedDestinations = listOf<DestinationCard>()
+
+    override fun execute(user: User) {
+        val game = Games.getGameForPlayer(user)
+
+        if (game == null) {
+            throw RuntimeException("User not in a game")
+        }
+
+        discardedDestinations.forEach { d -> game.destinationCardDiscardDeck.push(d) }
+    }
 }

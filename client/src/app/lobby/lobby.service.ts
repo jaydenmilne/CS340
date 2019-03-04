@@ -37,11 +37,11 @@ export class LobbyService {
    }
 
   public gameList: GameList = new GameList([]);
-  private lastSelectedId: number = -1;
+  private lastSelectedId = -1;
 
   public getGamesList() {
     const command: ListGamesCommand = new ListGamesCommand();
-    this.server.sendCommand(command);
+    this.server.executeCommand(command);
   }
 
   public joinGame(game: GamePreview) {
@@ -49,30 +49,30 @@ export class LobbyService {
       const command: JoinGameCommand = new JoinGameCommand(game.getID());
       this.lastSelectedId = game.getID();
       this.setSelectedById(this.lastSelectedId);
-      this.server.sendCommand(command);
+      this.server.executeCommand(command);
     }
   }
 
   public createGame(name: string) {
     const command: CreateGameCommand = new CreateGameCommand(name);
-    this.server.sendCommand(command);
+    this.server.executeCommand(command);
   }
 
   public leaveGame() {
     const command: LeaveGameCommand = new LeaveGameCommand(this.gameList.getSelectedGame().getID());
     this.lastSelectedId = undefined;
     this.gameList.setSelectedGameByID(this.lastSelectedId);
-    this.server.sendCommand(command);
+    this.server.executeCommand(command);
   }
 
   public setReady(ready: boolean) {
     const command: PlayerReadyCommand = new PlayerReadyCommand(this.gameList.getSelectedGame().getID(), ready);
-    this.server.sendCommand(command);
+    this.server.executeCommand(command);
   }
 
   public changeColor(color: Color) {
     const command: ChangeColorCommand =  new ChangeColorCommand(this.gameList.getSelectedGame().getID(), color);
-    this.server.sendCommand(command);
+    this.server.executeCommand(command);
   }
 
   public onStartGameCommand(command: StartGameCommand) {
@@ -96,8 +96,8 @@ export class LobbyService {
     }
   }
 
-  private setSelectedById(gameId: number){
-    if(this.gameList !== undefined){
+  private setSelectedById(gameId: number) {
+    if (this.gameList !== undefined) {
       this.gameList.setSelectedGameByID(this.lastSelectedId);
     }
   }

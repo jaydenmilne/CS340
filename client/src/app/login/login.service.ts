@@ -49,14 +49,14 @@ export class LoginService {
    * Begins the login process
    */
   public commenceLogin(username: string, password: string) {
-    this.serverProxy.sendCommand(new LoginCommand(username, password));
+    this.serverProxy.executeCommand(new LoginCommand(username, password));
   }
 
   /**
    * Begins the registration process
    */
   public commenceRegister(username: string, password: string) {
-    this.serverProxy.sendCommand(new RegisterCommand(username, password));
+    this.serverProxy.executeCommand(new RegisterCommand(username, password));
   }
 
 }

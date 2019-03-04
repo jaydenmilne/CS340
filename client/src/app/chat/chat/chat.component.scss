@@ -1,0 +1,40 @@
+.chat-message-card{
+    max-width: 100%;
+    word-wrap: break-word;
+    margin-top: 16px;
+}
+.chat-box{
+    overflow-y: scroll;
+    height: calc(100% - 114px - 35px - 16px);    // entire Card - height of msg bar - height of header - padding
+    padding: 16px 5px;
+    margin-bottom: 0px;
+}
+.my-message{
+    margin-left: 20%;
+}
+.other-message{
+    margin-right: 20%;
+}
+.message-input{
+    margin-left: 5px;
+}
+.chat-window{
+    box-sizing: border-box;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+.send-button-cell{
+    width: 20%;
+}
+.msg-input-cell{
+    width: 80%;
+}
+.form-cell{
+    text-align: center;
+}
+.full-width{
+    width: 100%;
+}
+.mat-card-actions{
+    margin: 0;
+}

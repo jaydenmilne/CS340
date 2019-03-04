@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
+import { UpdatePlayerCommand, ChangeTurnCommand } from './game-commands.ts';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,12 @@ export class CommandRouterService {
   // ------------------------------
   // OBSERVABLES (one for every client command type)
 
-  public loginResult$ = new Subject<LoginResult>();
-  public gameCreated$ = new Subject<GameCreatedCommand>();
-  public startGame$ = new Subject<StartGameCommand>();
+  public loginResult$     = new Subject<LoginResult>();
+  public gameCreated$     = new Subject<GameCreatedCommand>();
+  public startGame$       = new Subject<StartGameCommand>();
   public refreshGameList$ = new Subject<RefreshGameListCommand>();
+  public updatePlayer$    = new Subject<UpdatePlayerCommand>();
+  public changeTurn$      = new Subject<ChangeTurnCommand>();
 
   /**
    * Identifies each command, deserializes it, and signals the observables.
@@ -35,9 +38,21 @@ export class CommandRouterService {
         case 'loginResult':
           this.loginResult$.next(new LoginResult(cmd));
           break;
-        case 'gameCreated': this.gameCreated$.next(new GameCreatedCommand(cmd)); break;
-        case 'startGame': this.startGame$.next(new StartGameCommand(cmd)); break;
-        case 'refreshGameList': this.refreshGameList$.next(new RefreshGameListCommand(cmd)); break;
+        case 'gameCreated':
+          this.gameCreated$.next(new GameCreatedCommand(cmd));
+          break;
+        case 'startGame':
+          this.startGame$.next(new StartGameCommand(cmd));
+          break;
+        case 'refreshGameList':
+          this.refreshGameList$.next(new RefreshGameListCommand(cmd));
+          break;
+        case 'updatePlayer':
+          this.updatePlayer$.next(new UpdatePlayerCommand(cmd));
+          break;
+        case 'changeTurn':
+          this.changeTurn$.next(new ChangeTurnCommand(cmd));
+          break;
 
         default:
           const msg = new ErrorMessage(

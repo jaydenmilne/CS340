@@ -11,10 +11,10 @@ export class ServerProxyService {
   public incomingCmd$ = new Subject<Command>();
 
   /**
-   * Sends a command to the server and parses commands it receives in response.
+   * Executes a command on the server and parses commands it receives in response.
    * @param command Command-like object to transmit to the server
    */
-  public sendCommand(command: Command) {
+  public executeCommand(command: Command) {
     this.serverConnection.transmitCommand(command);
   }
 

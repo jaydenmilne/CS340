@@ -27,7 +27,15 @@ object Games {
                 }
             }
         }
+    }
 
+    fun getGameForPlayer(user: User): Game? {
+        return games.filter { p -> p.value.players.contains(user) }[0]
+    }
+
+    fun getGameIdForPlayer(user: User): Int? {
+        val gameUserIn = games.filter { p -> p.value.players.contains(user) }[0]
+        return gameUserIn?.gameId
     }
 }
 
@@ -35,6 +43,21 @@ class Game(var name: String) {
     val gameId = getNextGameID()
     var players = mutableSetOf<User>()
     var started = false
+
+    var trainCardDeck = ShardCardDeck(mutableListOf())
+    var faceUpShardCards = ShardCardDeck(mutableListOf())
+    var shardCardDiscardPile = ShardCardDeck(mutableListOf())
+
+    var destinationCardDeck = DestinationCardDeck(mutableListOf())
+    var destinationCardDiscardDeck = DestinationCardDeck(mutableListOf())
+
+    var whoseTurn: User? = null;
+
+    var chatMessages = mutableListOf<Message>()
+
+    @Transient private var routes = RouteList()
+
+    @Transient private var nextMessageId = -1
 
     fun broadcast(command: INormalClientCommand) {
         for (player in players) {
@@ -50,5 +73,14 @@ class Game(var name: String) {
         }
 
         return usedColors.toSet()
+    }
+
+    fun getNextMessageId(): Int {
+        nextMessageId++
+        return nextMessageId
+    }
+
+    fun getOrderForUser(user: User): Int {
+        return players.indexOf(user)
     }
 }
