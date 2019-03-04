@@ -23,7 +23,7 @@ class StartGameCommand(var gameId: String) : INormalClientCommand {
 
 class UpdatePlayerCommand : INormalClientCommand {
     override val command = UPDATE_PLAYER
-    var user = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0 )
+    var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0 )
 }
 
 class ChangeTurnCommand : INormalClientCommand {
@@ -37,20 +37,15 @@ class SelectDestinationsCommand : INormalClientCommand {
 }
 
 class UpdateBankCommand : INormalClientCommand {
-    override val command = UPDATE_BANK
+    override val command = DEAL_CARDS
+    var faceUpCards = listOf<ShardCard>()
+    var shardDrawPileSize = 0
+    var shardDiscardPileSize = 0
+    var destinationPileSize = 0
 }
 
 class DealCardsCommand : INormalClientCommand {
     override val command = DEAL_CARDS
-    var cards = mutableListOf<ICard>()
-    var faceUpCards = listOf<ShardCard>()
-    var trainDrawPileSize = 0
-    var trainDiscardPileSize = 0
-    var destinationPileSize = 0
-}
-
-class DealCardsComand : INormalClientCommand {
-    override val command = DEAL_CARDS
     var destinations = mutableListOf<DestinationCard>()
-    var trainCards = mutableListOf<ShardCard>()
+    var shardCards = mutableListOf<ShardCard>()
 }
