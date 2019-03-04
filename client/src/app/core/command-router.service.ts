@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
-import { UpdatePlayerCommand, ChangeTurnCommand } from './game-commands.ts';
+import { UpdatePlayerCommand, ChangeTurnCommand } from './game-commands';
 
 @Injectable({
   providedIn: 'root'
