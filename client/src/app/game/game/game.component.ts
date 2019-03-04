@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ServerConnectionService } from '@core/server/server-connection.service';
+import { GameState } from '@core/server/server-connection-state';
 
 @Component({
   selector: 'app-game',
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  constructor() { }
+  constructor(private serverConnection: ServerConnectionService) { }
 
   ngOnInit() {
+    // Change the game connection to server mode
+    this.serverConnection.changeState(new GameState(this.serverConnection));
   }
 
 }
