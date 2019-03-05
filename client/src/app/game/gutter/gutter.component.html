@@ -12,9 +12,7 @@
 
     <mat-tab label="Destination Cards" class="cards-gutter full-width full-height">
       <div class="cards-box full-height">
-        <mat-card *ngFor="let dest of destCards" class="dest-card">
-          {{dest}}
-        </mat-card>
+          <app-dest-card *ngFor="let dest of destCards" class="dest-card" [route]="dest"></app-dest-card>
       </div>
     </mat-tab>
 
