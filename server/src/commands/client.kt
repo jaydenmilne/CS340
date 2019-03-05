@@ -49,8 +49,6 @@ class DealCardsCommand : INormalClientCommand {
     var destinationPileSize = 0
 }
 
-class DealCardsComand : INormalClientCommand {
-    override val command = DEAL_CARDS
-    var destinations = mutableListOf<DestinationCard>()
-    var trainCards = mutableListOf<ShardCard>()
+class UpdateChatCommand(val message: Message) : INormalClientCommand {
+    override val command = UPDATE_CHAT
 }
