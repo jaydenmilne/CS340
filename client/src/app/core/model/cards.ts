@@ -52,15 +52,9 @@ export enum City {
 abstract class ICard {}
 
 export class DestinationCard extends ICard {
-	private cities: City[]
-
-	public setCities(cities: City[]) {
-		this.cities = cities;
-	}
-
-	public getCities(): City[] {
-		return this.cities;
-	}
+    constructor(public cities: City[]){
+        super();
+    }
 }
 
 export class ShardCard extends ICard {

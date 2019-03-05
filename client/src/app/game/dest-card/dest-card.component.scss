@@ -1,0 +1,35 @@
+@import "colors.scss";
+
+ .scaling-svg {
+    width: 100%;
+    left:0;
+    top:0;
+    display:block;
+   }
+
+.shield, .city-name{
+    visibility: hidden;
+}
+.hidden{
+    visibility: hidden
+}
+
+.outer-line{
+	fill:$vibranium_color !important;
+	stroke:$vibranium_color !important;
+	fill-opacity: 0.0 !important;
+}
+
+.dest-card-route-name{
+    display: block;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1vw;
+    margin: 5px;
+}
+
+.city-spot{
+    rx: 30px; 
+    ry: 30px
+}
