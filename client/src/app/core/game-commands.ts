@@ -72,13 +72,13 @@ export class DealCardsCommand implements Command {
     }
 }
 
-export class DiscardDestionationsCommand implements Command {
+export class DiscardDestinationsCommand implements Command {
     public command = 'discardDestinations';
     public discardedDestinations: DestinationCard[];
 
     constructor(discardDestinoationsCommand: any) {
         if (!('discardedDestinations' in discardDestinoationsCommand)) {
-            throw new TypeError('Unable to deserialize DiscardDestionationsCommand object, ' + JSON.stringify(discardDestinoationsCommand));
+            throw new TypeError('Unable to deserialize DiscardDestinationsCommand object, ' + JSON.stringify(discardDestinoationsCommand));
         }
     }
 }
