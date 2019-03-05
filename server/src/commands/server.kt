@@ -248,7 +248,9 @@ class RequestDestinationsCommand : INormalServerCommand {
         user.queue.push(dealDestinationCards)
 
         /* Send UpdateBankCommand to user's client */
+        user.queue.push(UpdateBankCommand())
         /* Send UpdatePlayerCommand to user's client */
+        user.queue.push(UpdatePlayerCommand())
     }
 }
 
