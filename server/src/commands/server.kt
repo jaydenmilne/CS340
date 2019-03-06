@@ -140,8 +140,12 @@ class PlayerReadyCommand : INormalServerCommand {
 
         if (notReadyPlayers.isEmpty() && game.players.size >= 2) {
             game.started = true
-            game.trainCardDeck.shuffle()
+            game.shardCardDeck.shuffle()
             game.destinationCardDeck.shuffle()
+            for (i in 0..4) {
+                var nextFaceUpShardCard = game.shardCardDeck.getNext()
+                game.faceUpShardCards.push(nextFaceUpShardCard)
+            }
             game.broadcast(StartGameCommand(game.gameId.toString()))
         }
     }
@@ -225,32 +229,42 @@ class RequestDestinationsCommand : INormalServerCommand {
             throw RuntimeException("User not in a game")
         }
 
-        var dealtTrainCards = mutableListOf<ICard>()
-        var dealtDestinationCards = mutableListOf<ICard>()
+        var dealtShardCards = mutableListOf<ShardCard>()
+        var dealtDestinationCards = mutableListOf<DestinationCard>()
 
         /* Deal 4 train cards to user */
         for (i in 0..3) {
             // Draw a card from the train card deck and add it to the list
-            user.trainCards.push(game.trainCardDeck.getNext())
+            var nextShardCard = game.shardCardDeck.getNext()
+            user.shardCards.push(nextShardCard)
+            dealtShardCards.add(nextShardCard)
         }
 
-        var dealTrainCards = DealCardsCommand()
-        dealTrainCards.cards = dealtTrainCards
-        user.queue.push(dealTrainCards)
+        var dealCardsCommand = DealCardsCommand()
+        dealCardsCommand.shardCards = dealtShardCards
 
         /* Deal 3 destination cards to user */
         for (i in 0..2) {
             // Draw a card from the destination card deck and add it to the list
-            user.destinationCards.push(game.destinationCardDeck.getNext())
+            var nextDestinationCard = game.destinationCardDeck.getNext()
+            user.destinationCards.push(nextDestinationCard)
+            dealtDestinationCards.add(nextDestinationCard)
         }
-        var dealDestinationCards = DealCardsCommand()
-        dealDestinationCards.cards = dealtDestinationCards
-        user.queue.push(dealDestinationCards)
+        dealCardsCommand.destinations = dealtDestinationCards
+        user.queue.push(dealCardsCommand)
 
         /* Send UpdateBankCommand to user's client */
-        user.queue.push(UpdateBankCommand())
+        var updatebankCommand = UpdateBankCommand()
+        updatebankCommand.faceUpCards = game.faceUpShardCards.cards
+        updatebankCommand.shardDrawPileSize = game.shardCardDeck.cards.size
+        updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
+        updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
+        user.queue.push(updatebankCommand)
+
         /* Send UpdatePlayerCommand to user's client */
-        user.queue.push(UpdatePlayerCommand())
+        var updatePlayerCommand = UpdatePlayerCommand()
+        updatePlayerCommand.gamePlayer = user.toGamePlayer()
+        user.queue.push(updatePlayerCommand)
     }
 }
 
