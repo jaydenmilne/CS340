@@ -153,41 +153,17 @@ export enum City {
 }
 
 export class Route {
-	private routeName: RouteName;
-	private cities: City[];
-	private numCars: number;
-	private type: RouteType;
-	private ownerId: number;
+	public routeName: RouteName;
+	public cities: City[];
+	public numCars: number;
+	public type: RouteType;
+	public ownerId: number;
 
 	constructor(routeName: RouteName, cities: City[], numCars: number, type: RouteType, ownerId: number) {
 		this.routeName = routeName;
 		this.cities = cities;
 		this.numCars = numCars;
 		this.type = type;
-		this.ownerId = ownerId;
-	}
-
-	public getRouteName(): RouteName {
-		return this.routeName;
-	}
-
-	public getCities(): City[] {
-		return this.cities;
-	}
-
-	public getNumCars(): number {
-		return this.numCars;
-	}
-
-	public getRouteType(): RouteType {
-		return this.type;
-	}
-
-	public getOwnerId(): number {
-		return this.ownerId;
-	}
-
-	public setOwnerId(ownerId: number) {
 		this.ownerId = ownerId;
 	}
 }
