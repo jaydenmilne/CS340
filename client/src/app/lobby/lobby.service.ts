@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GameList } from '../core/model/game-list';
 import { GamePreview } from '../core/model/game-preview';
 import { Player } from '../core/model/player';
-import { ServerProxyService } from '@core/server-proxy.service';
+import { ServerProxyService } from '@core/server/server-proxy.service';
 import { JoinGameCommand, CreateGameCommand, LeaveGameCommand,
          PlayerReadyCommand, GameCreatedCommand, StartGameCommand,
          RefreshGameListCommand, ListGamesCommand, ChangeColorCommand } from '@core/lobby-commands';
@@ -11,6 +11,7 @@ import { CommandRouterService } from '@core/command-router.service';
 import { Router } from '@angular/router';
 import { User } from '@core/model/user';
 import { UserService } from '@core/user.service';
+import { ServerPollerService } from '@core/server/server-poller.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ import { UserService } from '@core/user.service';
 export class LobbyService {
 
   constructor(private server: ServerProxyService, private userService: UserService,
-    private commandRouter: CommandRouterService, private router: Router) {
+    private commandRouter: CommandRouterService, private router: Router,
+    private poller: ServerPollerService) {
       // this.gameList.setSelectedGameByID('asldk');
       this.userService.user$.subscribe(
         user => this.onUser(user)
@@ -39,7 +41,7 @@ export class LobbyService {
 
   public getGamesList() {
     const command: ListGamesCommand = new ListGamesCommand();
-    this.server.transmitCommand(command);
+    this.server.executeCommand(command);
   }
 
   public joinGame(game: GamePreview) {
@@ -47,30 +49,30 @@ export class LobbyService {
       const command: JoinGameCommand = new JoinGameCommand(game.getID());
       this.lastSelectedId = game.getID();
       this.setSelectedById(this.lastSelectedId);
-      this.server.transmitCommand(command);
+      this.server.executeCommand(command);
     }
   }
 
   public createGame(name: string) {
     const command: CreateGameCommand = new CreateGameCommand(name);
-    this.server.transmitCommand(command);
+    this.server.executeCommand(command);
   }
 
   public leaveGame() {
     const command: LeaveGameCommand = new LeaveGameCommand(this.gameList.getSelectedGame().getID());
     this.lastSelectedId = undefined;
     this.gameList.setSelectedGameByID(this.lastSelectedId);
-    this.server.transmitCommand(command);
+    this.server.executeCommand(command);
   }
 
   public setReady(ready: boolean) {
     const command: PlayerReadyCommand = new PlayerReadyCommand(this.gameList.getSelectedGame().getID(), ready);
-    this.server.transmitCommand(command);
+    this.server.executeCommand(command);
   }
 
   public changeColor(color: Color) {
     const command: ChangeColorCommand =  new ChangeColorCommand(this.gameList.getSelectedGame().getID(), color);
-    this.server.transmitCommand(command);
+    this.server.executeCommand(command);
   }
 
   public onStartGameCommand(command: StartGameCommand) {

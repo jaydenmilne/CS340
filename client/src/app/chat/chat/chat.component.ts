@@ -31,6 +31,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
     // Get message from form
     const message: string = this.chatForm.get('chatInput').value;
     this.chatService.sendChat(message);
+
+    // Clear the message
+    this.chatForm.get("chatInput").setValue("");
   }
 
   public isCurrentUserPost(message: ChatMessage): boolean {
@@ -38,5 +41,13 @@ export class ChatComponent implements OnInit, AfterViewInit {
       return false;
     }
     return this.userService.user$.value.getUserId() === message.getUserId();
+  }
+
+  public onKeydown(event : KeyboardEvent) : boolean {
+    if (event.key == "Enter" && !event.shiftKey) {
+      this.onSend()
+      return false;
+    }
+    return true;
   }
 }

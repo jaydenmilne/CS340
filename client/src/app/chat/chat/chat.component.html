@@ -18,7 +18,7 @@
         <tr>
           <td class="msg-input-cell form-cell">
             <mat-form-field class="full-width message-input">
-              <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" formControlName="chatInput"
+              <textarea (keydown)="onKeydown($event)" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" formControlName="chatInput"
                 placeholder="message" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="3"></textarea>
             </mat-form-field>
           </td>
