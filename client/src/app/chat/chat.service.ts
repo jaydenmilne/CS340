@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ChatMessage } from '@core/model/chat-message';
-import { ServerProxyService } from '@core/server-proxy.service';
+import { ServerProxyService } from '@core/server/server-proxy.service';
 import { PostChatCommand, UpdateChatCommand } from '@core/chat-commands';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class ChatService {
 
   public sendChat(message: string) {
     const command: PostChatCommand = new PostChatCommand(message);
-    this.server.transmitCommand(command);
+    this.server.executeCommand(command);
   }
 
   public handleUpdateChat(command: UpdateChatCommand) {

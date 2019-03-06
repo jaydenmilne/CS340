@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ServerProxyService } from '@core/server-proxy.service';
+import { ServerProxyService } from '@core/server/server-proxy.service';
 import { Command } from '@core/command';
 import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
