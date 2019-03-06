@@ -1,6 +1,7 @@
 <mat-card class="destination-card" [ngStyle]="showCitySpot">
 
-   <mat-card-content>
+   <mat-card-content class="map-wrapper" matBadge="{{route.points}}" matBadgePosition="before">
+
       <!-- README: To add logic for turning off other City Markers some HTML need to be 
          injected to the SVG. This is best done using a find an replace with regular expressions
          The following regex is setup to work in VSCode without any modifications:

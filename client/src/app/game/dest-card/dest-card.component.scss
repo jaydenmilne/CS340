@@ -1,7 +1,14 @@
 @import "colors.scss";
-
+.destination-card{
+    height: inherit;
+}
+.map-wrapper{
+    margin-bottom: 0px;
+    height: calc(100% - 10px);
+    text-align: center;
+}
  .scaling-svg {
-    width: 100%;
+    height: 100%;
     left:0;
     top:0;
     display:block;

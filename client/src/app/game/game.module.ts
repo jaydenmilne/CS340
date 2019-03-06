@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material';
 import { PlayerInfoDialogComponent } from './player-list/player-list.component'
 import { ChatModule } from '../chat/chat.module';
 import { DestCardComponent } from './dest-card/dest-card.component';
+import {MatBadgeModule} from '@angular/material/badge';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { DestCardComponent } from './dest-card/dest-card.component';
     MatChipsModule,
     MatDialogModule,
     MatButtonModule,
+    MatBadgeModule,
     ChatModule
   ]
 })
