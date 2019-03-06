@@ -46,7 +46,11 @@ export class UpdateBankCommand implements Command {
             throw new TypeError('Unable to deserialize UpdateBankCommand object, ' + JSON.stringify(updateBankCommand));
         }
 
-        this.faceUpCards = updateBankCommand.faceUpCards;
+        this.faceUpCards = [];
+        updateBankCommand.faceUpCards.forEach(card => {
+            this.faceUpCards.push(new ShardCard(card));
+        });
+
         this.shardDrawPileSize = updateBankCommand.shardDrawPileSize;
         this.shardDiscardPileSize = updateBankCommand.shardDiscardPileSize;
         this.destinationPileSize = updateBankCommand.updateBankCommand;
@@ -55,8 +59,6 @@ export class UpdateBankCommand implements Command {
 
 export class RequestDestinationsCommand implements Command {
     public command = 'requestDestinations';
-
-    constructor(requestDestinationsCommand: any) {}
 }
 
 export class DealCardsCommand implements Command {
@@ -69,6 +71,16 @@ export class DealCardsCommand implements Command {
             'shardCards' in dealCardsCommand)) {
             throw new TypeError('Unable to deserialize DealCardsCommand object, ' + JSON.stringify(dealCardsCommand));
         }
+
+        this.destinations = [];
+        dealCardsCommand.destinations.forEach(card => {
+            this.destinations.push(new DestinationCard(card));
+        });
+
+        this.shardCards = [];
+        dealCardsCommand.shardCards.forEach(card => {
+            this.shardCards.push(new ShardCard(card));
+        });
     }
 }
 
@@ -76,9 +88,7 @@ export class DiscardDestinationsCommand implements Command {
     public command = 'discardDestinations';
     public discardedDestinations: DestinationCard[];
 
-    constructor(discardDestinoationsCommand: any) {
-        if (!('discardedDestinations' in discardDestinoationsCommand)) {
-            throw new TypeError('Unable to deserialize DiscardDestinationsCommand object, ' + JSON.stringify(discardDestinoationsCommand));
-        }
+    constructor(discardedDestinations: DestinationCard[]) {
+        this.discardedDestinations = discardedDestinations;
     }
 }

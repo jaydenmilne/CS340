@@ -54,6 +54,19 @@ abstract class ICard {}
 export class DestinationCard extends ICard {
 	private cities: City[]
 
+    constructor(destinationCard: any) {
+        super();
+        if (!("cities" in destinationCard)) {
+            throw new TypeError('Unable to deserialize DestinationCard object, ' + JSON.stringify(destinationCard));
+
+        }
+
+        this.cities = [];
+        destinationCard.cities.forEach(city => {
+            this.cities.push(City[city as keyof typeof City]);
+        });
+    }
+
 	public setCities(cities: City[]) {
 		this.cities = cities;
 	}
@@ -65,6 +78,15 @@ export class DestinationCard extends ICard {
 
 export class ShardCard extends ICard {
 	private type: MaterialType
+
+    constructor(shardCard: any) {
+        super();
+        if (!("type" in shardCard)) {
+            throw new TypeError('Unable to deserialize ShardCard object, ' + JSON.stringify(shardCard));
+        }
+
+        this.type = shardCard.type;
+    }
 
 	public setMaterialType(type: MaterialType) {
 		this.type = type;
