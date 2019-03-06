@@ -25,9 +25,9 @@ export class GutterComponent implements OnInit {
 
 
   private destCards = [
-    new DestinationCard([City.XANDAR, City.ASGARD]),
-    new DestinationCard([City.CHITAURI_SANCTUARY, City.HONG_KONG_SANCTUM]),
-    new DestinationCard([City.GALACTUS, City.YOTUNHEIM]),
+    new DestinationCard([City.XANDAR, City.ASGARD], 5),
+    new DestinationCard([City.CHITAURI_SANCTUARY, City.HONG_KONG_SANCTUM], 10),
+    new DestinationCard([City.GALACTUS, City.YOTUNHEIM], 15),
   ]
 
   ngOnInit() {
