@@ -9,8 +9,6 @@
 }
 .dest-card{
     height: calc(100% - 20px - 10px);    // Allow for scroll bar and margin.
-    max-height: 150px;
-    width: 30%;
     margin: 10px 5px;
     display: inline-block;
 }
