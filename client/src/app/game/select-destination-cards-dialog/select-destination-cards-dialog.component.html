@@ -1,0 +1,7 @@
+<h1 mat-dialog-title>Select Destination Cards</h1>
+<div mat-dialog-content class="dest-cards-container">
+  <app-dest-card *ngFor="let card of cards" [route]="card.card" [selected]="card.selected" (click)="onCardClick(card)"></app-dest-card>
+</div>
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial (click)="onSelectClick()">Select</button>
+</div>
