@@ -3,5 +3,5 @@
   <app-dest-card class="dest-card" *ngFor="let card of cards" [route]="card.card" [selected]="card.selected" (click)="onCardClick(card)"></app-dest-card>
 </div>
 <div mat-dialog-actions class="action-bar">
-  <button mat-raised-button  cdkFocusInitial class="actionbutton select-button" (click)="onSelectClick()" [disabled]="numSelectedCards < data.minRequired" color="primary">Select</button>
+  <button mat-raised-button class="actionbutton select-button" (click)="onSelectClick()" [disabled]="numSelectedCards < data.minRequired" color="primary">Select</button>
 </div>
