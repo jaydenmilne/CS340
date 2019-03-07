@@ -10,20 +10,29 @@ import { DestinationCard } from '@core/model/cards';
 export class SelectDestinationCardsDialogComponent {
   private cards: {'card': DestinationCard, 'selected': boolean}[] = [];
   private numSelectedCards: number = 0;
-  private minRequired: number;
 
   constructor(
     public dialogRef: MatDialogRef<SelectDestinationCardsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {'newCards': DestinationCard[], 'minRequired': number}) {
+    @Inject(MAT_DIALOG_DATA) public data: SelectDestinationCardsData) {
       data.newCards.forEach(card => {
         this.cards.push({'card': card, 'selected': false});
       });
-      this.minRequired = data.minRequired;
     }
 
   onSelectClick(): void {
     // Call card service to discard cards
-    this.dialogRef.close();
+    let result = new SelectDestinationCardsResult([], []);
+
+    this.cards.forEach(cardPair => {
+      if (cardPair.selected){
+        result.selectedCards.push(cardPair.card);
+      }
+      else{
+        result.discardedCards.push(cardPair.card);
+      }
+    })
+
+    this.dialogRef.close(result);
   }
 
   onCardClick(card: {'card': DestinationCard, 'selected': boolean}){
@@ -31,4 +40,12 @@ export class SelectDestinationCardsDialogComponent {
     this.numSelectedCards = this.cards.filter(destCard => destCard.selected == true).length;
   }
 
+}
+
+export class SelectDestinationCardsData {
+  constructor(public newCards: DestinationCard[], public minRequired: number){}
+}
+
+export class SelectDestinationCardsResult {
+  constructor(public selectedCards: DestinationCard[], public discardedCards: DestinationCard[]){}
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
 import { MatDialog } from '@angular/material';
-import { SelectDestinationCardsDialogComponent } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
+import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData, SelectDestinationCardsResult } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { DestinationCard, City } from '@core/model/cards';
 
 @Component({
@@ -20,12 +20,18 @@ export class GameComponent implements OnInit {
 
     const dialogRef = this.dialog.open(SelectDestinationCardsDialogComponent, {
       width: '60%',
-      data: {'newCards':[  
-      new DestinationCard([City.XANDAR, City.ASGARD], 5),
-      new DestinationCard([City.CHITAURI_SANCTUARY, City.HONG_KONG_SANCTUM], 10),
-      new DestinationCard([City.GALACTUS, City.YOTUNHEIM], 15),],
-      'minRequired': 2 },
+      data: new SelectDestinationCardsData([
+        new DestinationCard([City.XANDAR, City.ASGARD], 5),
+        new DestinationCard([City.CHITAURI_SANCTUARY, City.HONG_KONG_SANCTUM], 10),
+        new DestinationCard([City.GALACTUS, City.YOTUNHEIM], 15),
+      ], 2),
       disableClose: true
+    });
+    let selectedCards: SelectDestinationCardsResult;
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The select cards dialog was closed');
+      selectedCards = result;
+      // Call Card Service
     });
   }
 
