@@ -1,0 +1,20 @@
+.dest-cards-container{
+    white-space: nowrap;
+    overflow: hidden;
+    height: 60%;
+    text-align: center;
+}
+.dest-card{
+    height: calc(100% - 20px - 10px);
+    width: 30%;
+    // Allow for scroll bar and margin.
+    margin: 10px 5px;
+    display: inline-block;
+}
+.select-button{
+    position: relative;
+    right: 0;
+}
+.action-bar{
+    flex-direction: row-reverse;
+}

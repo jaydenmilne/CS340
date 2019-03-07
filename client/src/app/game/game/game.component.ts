@@ -19,11 +19,13 @@ export class GameComponent implements OnInit {
     this.serverConnection.changeState(new GameState(this.serverConnection));
 
     const dialogRef = this.dialog.open(SelectDestinationCardsDialogComponent, {
-      width: '400px',
-      data: [  
+      width: '60%',
+      data: {'newCards':[  
       new DestinationCard([City.XANDAR, City.ASGARD], 5),
       new DestinationCard([City.CHITAURI_SANCTUARY, City.HONG_KONG_SANCTUM], 10),
-      new DestinationCard([City.GALACTUS, City.YOTUNHEIM], 15),]
+      new DestinationCard([City.GALACTUS, City.YOTUNHEIM], 15),],
+      'minRequired': 2 },
+      disableClose: true
     });
   }
 
