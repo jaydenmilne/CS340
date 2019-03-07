@@ -1,5 +1,5 @@
 <mat-card class="destination-card" [ngStyle]="showCitySpot">
-
+   <i class="material-icons check-mark" *ngIf="selected">check_circle</i>
    <mat-card-content class="map-wrapper" matBadge="{{route.points}}" matBadgePosition="before">
 
       <!-- README: To add logic for turning off other City Markers some HTML need to be 
