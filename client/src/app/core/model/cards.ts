@@ -52,7 +52,7 @@ export enum City {
 abstract class ICard {}
 
 export class DestinationCard extends ICard {
-    constructor(public cities: City[]){
+    constructor(public cities: City[], public points: number){
         super();
     }
 }
