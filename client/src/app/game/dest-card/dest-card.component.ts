@@ -8,6 +8,7 @@ import { DestinationCard } from '@core/model/cards';
 })
 export class DestCardComponent implements OnInit {
   @Input() route: DestinationCard;
+  @Input() selected: boolean;
   
   constructor() { 
     }
