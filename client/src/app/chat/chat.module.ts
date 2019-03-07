@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChatComponent } from './chat/chat.component';
 import { MatCardModule, MatButtonModule, MatInputModule, MatFormFieldModule } from '@angular/material';
 import { ChatService } from './chat.service';
-import { ServerProxyService } from '@core/server-proxy.service';
+import { ServerProxyService } from '@core/server/server-proxy.service';
 import { UserService } from '@core/user.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 

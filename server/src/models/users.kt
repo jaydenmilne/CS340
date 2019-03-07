@@ -46,7 +46,7 @@ class User(var username: String) {
     var color = Color.YELLOW
 
     var points = 0
-    var trainCards = ShardCardDeck(mutableListOf())
+    var shardCards = ShardCardDeck(mutableListOf())
     var destinationCards = DestinationCardDeck(mutableListOf())
 
     var hasLongestRoute = false
@@ -73,7 +73,7 @@ class User(var username: String) {
                 this.color,
                 this.ready,
                 this.points,
-                this.trainCards.size,
+                this.shardCards.size,
                 this.destinationCards.size,
                 0,
                 this.hasLongestRoute,
