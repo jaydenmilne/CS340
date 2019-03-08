@@ -15,13 +15,35 @@ export enum MaterialType {
 abstract class ICard {}
 
 export class DestinationCard extends ICard {
-    constructor(public cities: City[], public points: number){
+	public cities: City[];
+  public points: number;
+
+    constructor(destinationCard: any) {
         super();
+        if (!("cities" in destinationCard && "points" in destinationCard)) {
+            throw new TypeError('Unable to deserialize DestinationCard object, ' + JSON.stringify(destinationCard));
+
+        }
+
+        this.cities = [];
+        this.points = destinationCard.points;
+        destinationCard.cities.forEach(city => {
+            this.cities.push(City[city as keyof typeof City]);
+        });
     }
 }
 
 export class ShardCard extends ICard {
 	private type: MaterialType
+
+    constructor(shardCard: any) {
+        super();
+        if (!("type" in shardCard)) {
+            throw new TypeError('Unable to deserialize ShardCard object, ' + JSON.stringify(shardCard));
+        }
+
+        this.type = shardCard.type;
+    }
 
 	public setMaterialType(type: MaterialType) {
 		this.type = type;

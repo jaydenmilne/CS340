@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { ChatMessage } from '@core/model/chat-message';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { PostChatCommand, UpdateChatCommand } from '@core/chat-commands';
+import { CommandRouterService } from '@core/command-router.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  constructor(private server: ServerProxyService) { }
+  constructor(private server: ServerProxyService, private commandRouter: CommandRouterService) { 
+    this.commandRouter.updateChat$.subscribe(updateChat => this.handleUpdateChat(updateChat))
+  }
 
   public chatHistory: ChatMessage[] = [];
 
@@ -18,7 +21,7 @@ export class ChatService {
   }
 
   public handleUpdateChat(command: UpdateChatCommand) {
-    this.chatHistory.push(new ChatMessage(command.userId, command.userName, command.message, command.sequenceNum));
+    this.chatHistory.push(new ChatMessage(command.userId, command.username, command.message, command.sequenceNum));
   }
 
 }

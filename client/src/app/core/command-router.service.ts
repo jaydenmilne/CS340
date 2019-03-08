@@ -5,7 +5,8 @@ import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
-import { UpdatePlayerCommand, ChangeTurnCommand } from './game-commands.ts';
+import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand } from './game-commands';
+import { UpdateChatCommand } from './chat-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +21,15 @@ export class CommandRouterService {
   // ------------------------------
   // OBSERVABLES (one for every client command type)
 
-  public loginResult$     = new Subject<LoginResult>();
-  public gameCreated$     = new Subject<GameCreatedCommand>();
-  public startGame$       = new Subject<StartGameCommand>();
-  public refreshGameList$ = new Subject<RefreshGameListCommand>();
-  public updatePlayer$    = new Subject<UpdatePlayerCommand>();
-  public changeTurn$      = new Subject<ChangeTurnCommand>();
-  public dealCards$       = new Subject<DealCardsCommand>();
-  public updateBank$      = new Subject<UpdateBankCommand>();
+  public loginResult$               = new Subject<LoginResult>();
+  public gameCreated$               = new Subject<GameCreatedCommand>();
+  public startGame$                 = new Subject<StartGameCommand>();
+  public refreshGameList$           = new Subject<RefreshGameListCommand>();
+  public updatePlayer$              = new Subject<UpdatePlayerCommand>();
+  public updateChat$                = new Subject<UpdateChatCommand>();
+  public changeTurn$                = new Subject<ChangeTurnCommand>();
+  public updateBank$                = new Subject<UpdateBankCommand>();
+  public dealCards$                 = new Subject<DealCardsCommand>();
 
   /**
    * Identifies each command, deserializes it, and signals the observables.
@@ -49,17 +51,19 @@ export class CommandRouterService {
         case 'refreshGameList':
           this.refreshGameList$.next(new RefreshGameListCommand(cmd));
           break;
+        case 'updateChat':
+            this.updateChat$.next(new UpdateChatCommand(cmd));
         case 'updatePlayer':
           this.updatePlayer$.next(new UpdatePlayerCommand(cmd));
-          break;
-        case 'dealCards':
-          this.dealCards$.next(new DealCardsCommand(cmd));
           break;
         case 'updateBank':
           this.updateBank$.next(new UpdateBankCommand(cmd));
           break;
         case 'changeTurn':
           this.changeTurn$.next(new ChangeTurnCommand(cmd));
+          break;
+        case 'dealCards':
+          this.dealCards$.next(new DealCardsCommand(cmd));
           break;
 
         default:
