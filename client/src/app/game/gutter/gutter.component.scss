@@ -8,15 +8,11 @@
     white-space: nowrap;
 }
 .dest-card{
-    height: 65%;
-    max-height: 150px;
-    width: 25%;
+    height: calc(100% - 20px - 10px);    // Allow for scroll bar and margin.
     margin: 10px 5px;
     display: inline-block;
 }
-.shards-table{
 
-}
 .full-width{
     width: 100%;
 }

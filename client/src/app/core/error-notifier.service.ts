@@ -29,6 +29,9 @@ export class ErrorNotifierService {
     this.errorSource.next(new ErrorMessage('', message, '', true));
   }
 
+  public notifyHeading(heading: string, message: string) {
+    this.errorSource.next(new ErrorMessage(heading, message, '', true));
+  }
   public notifyMessage(message: ErrorMessage) {
     this.errorSource.next(message);
   }
