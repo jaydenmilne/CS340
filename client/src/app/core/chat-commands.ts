@@ -1,25 +1,16 @@
 import { Command } from './command';
+import { ChatMessage } from './model/chat-message';
 
 // CLIENT COMMANDS
 export class UpdateChatCommand implements Command {
     public command = 'updateChat';
-    public userId: number;
-    public username: string;
-    public message: string;
-    public sequenceNum: number;
+    public message: ChatMessage;
 
     constructor(updateChatCommand: any) {
-        if (!('userId' in updateChatCommand &&
-            'username' in updateChatCommand &&
-            'message' in updateChatCommand && 
-            'sequenceNum' in updateChatCommand)) {
+        if (!('message' in updateChatCommand)) {
             throw new TypeError('Unable to deserialize UpdateChatCommand object, ' + JSON.stringify(updateChatCommand));
         }
-        this.userId = updateChatCommand.userId;
-        this.username = updateChatCommand.username;
-        this.message = updateChatCommand.message;
-        this.sequenceNum = updateChatCommand.sequenceNum;
-
+        this.message = new ChatMessage(updateChatCommand.message);
     }
 
 }

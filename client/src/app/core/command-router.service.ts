@@ -52,7 +52,8 @@ export class CommandRouterService {
           this.refreshGameList$.next(new RefreshGameListCommand(cmd));
           break;
         case 'updateChat':
-            this.updateChat$.next(new UpdateChatCommand(cmd));
+          this.updateChat$.next(new UpdateChatCommand(cmd));
+          break;
         case 'updatePlayer':
           this.updatePlayer$.next(new UpdatePlayerCommand(cmd));
           break;
