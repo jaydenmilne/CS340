@@ -27,14 +27,17 @@
 .inline{
   display: inline-block;
 }
-.decstination-deck{
+.destination-deck{
     text-align: center;
+    width: 50%;
     height: 66%;
 }
-.dest-card{
-    height: 65%;
-    max-height: 150px;
-    width: 35%;
-    margin: 10px 5px;
-    display: inline-block;
+.shard-card-deck{
+    text-align: center;
+    width: 50%;
+    height: 66%;
+}
+
+.deck-text{
+
 }
