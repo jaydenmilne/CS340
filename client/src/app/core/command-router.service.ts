@@ -55,7 +55,7 @@ export class CommandRouterService {
         case 'dealCards':
           this.dealCards$.next(new DealCardsCommand(cmd));
           break;
-        case 'updateBand':
+        case 'updateBank':
           this.updateBank$.next(new UpdateBankCommand(cmd));
           break;
         case 'changeTurn':
