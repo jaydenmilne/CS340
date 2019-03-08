@@ -1,6 +1,21 @@
 export class ChatMessage {
+    private userId: number;
+    private username: string; 
+    private message: string; 
+    private sequenceNum: number;
 
-    constructor(private userId: number, private username: string, private message: string, private sequenceNum: number) {
+    constructor(chatMessage : any) {
+        if (!('message' in chatMessage &&
+              'userId' in chatMessage &&
+              'username' in chatMessage &&
+              'sequenceNum' in chatMessage)) {
+            throw new TypeError('Unable to deserialize chatMessage object, ' + JSON.stringify(chatMessage));
+        }
+
+        this.userId = chatMessage.userId;
+        this.message = chatMessage.message;
+        this.sequenceNum = chatMessage.sequenceNum;
+        this.username = chatMessage.username;
     }
 
     public getMessage(): string {
