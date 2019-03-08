@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DestinationCard, City } from '@core/model/cards';
+import { DestinationCard} from '@core/model/cards';
+import { City } from '@core/model/route';
 
 
 @Component({
