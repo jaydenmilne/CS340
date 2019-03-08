@@ -36,5 +36,56 @@ abstract class IDeck<T>(var cards: MutableList<T>) {
 
 }
 
-class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards)
-class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards)
+class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards){
+    fun initializeDeck(){
+        for(i in 0..11){
+            shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
+            shardCards.add(ShardCard(MaterialType.MIND_SHARD))
+            shardCards.add(ShardCard(MaterialType.PALLADIUM))
+            shardCards.add(ShardCard(MaterialType.VIBRANIUM))
+            shardCards.add(ShardCard(MaterialType.REALITY_SHARD))
+            shardCards.add(ShardCard(MaterialType.POWER_SHARD))
+            shardCards.add(ShardCard(MaterialType.SOUL_SHARD))
+            shardCards.add(ShardCard(MaterialType.SPACE_SHARD))
+            shardCards.add(ShardCard(MaterialType.TIME_SHARD))
+            if( i < 2){
+                shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
+            }
+        }
+    }
+}
+class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards){
+    fun initializeDeck(){
+        destinationCards.add(DestinationCard(setOf("titan", "kunlun"), 4))
+        destinationCards.add(DestinationCard(setOf("caveofages", "svartlheim"), 5))
+        destinationCards.add(DestinationCard(setOf("avengershq", "yotunheim"), 6))
+        destinationCards.add(DestinationCard(setOf("nidavellir", "niflheim"), 7))
+        destinationCards.add(DestinationCard(setOf("chitaurisanctuary", "ego"), 7))
+        destinationCards.add(DestinationCard(setOf("zenwhoberi", "knowhere"), 8))
+        destinationCards.add(DestinationCard(setOf("sakaar", "svartlheim"), 8))
+        destinationCards.add(DestinationCard(setOf("hongkongsanctum", "quantumrealm"), 8))
+        destinationCards.add(DestinationCard(setOf("wakanda", "yotunheim"), 9))
+        destinationCards.add(DestinationCard(setOf("hongkongsanctum", "surturslair"), 9))
+        destinationCards.add(DestinationCard(setOf("gibborim", "knowhere"), 9))
+        destinationCards.add(DestinationCard(setOf("nidavellir", "vanaheim"), 9))
+        destinationCards.add(DestinationCard(setOf("sakaar", "kunlun"), 10))
+        destinationCards.add(DestinationCard(setOf("pymlabs", "muspelheim"), 10))
+        destinationCards.add(DestinationCard(setOf("galactus", "caveofthedragon"), 11))
+        destinationCards.add(DestinationCard(setOf("hala", "avengershq"), 11))
+        destinationCards.add(DestinationCard(setOf("titan", "newyorkcity"), 11))
+        destinationCards.add(DestinationCard(setOf("vormir", "contraxia"), 11))
+        destinationCards.add(DestinationCard(setOf("vormir", "svartlheim"), 12))
+        destinationCards.add(DestinationCard(setOf("sokovia", "muspelheim"), 12))
+        destinationCards.add(DestinationCard(setOf("darkdimension", "vanaheim"), 13))
+        destinationCards.add(DestinationCard(setOf("chitaurisanctuary", "caveofthedragon"), 13))
+        destinationCards.add(DestinationCard(setOf("wakanda", "niflheim"), 13))
+        destinationCards.add(DestinationCard(setOf("knowhere", "nidavellir"), 16))
+        destinationCards.add(DestinationCard(setOf("zennla", "yotunheim"), 17))
+        destinationCards.add(DestinationCard(setOf("galactus", "quantumrealm"), 17))
+        destinationCards.add(DestinationCard(setOf("darkdimension", "wakanda"), 20))
+        destinationCards.add(DestinationCard(setOf("knowhere", "muspelheim"), 20))
+        destinationCards.add(DestinationCard(setOf("knowhere", "avengershq"), 21))
+        destinationCards.add(DestinationCard(setOf("gibborim", "avengershq"), 22))
+    }
+
+}
