@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ServerProxyService } from '@core/server-proxy.service';
+import { ServerProxyService } from '@core/server/server-proxy.service';
 import { Command } from '@core/command';
 import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
@@ -26,6 +26,8 @@ export class CommandRouterService {
   public refreshGameList$ = new Subject<RefreshGameListCommand>();
   public updatePlayer$    = new Subject<UpdatePlayerCommand>();
   public changeTurn$      = new Subject<ChangeTurnCommand>();
+  public dealCards$       = new Subject<DealCardsCommand>();
+  public updateBank$      = new Subject<UpdateBankCommand>();
 
   /**
    * Identifies each command, deserializes it, and signals the observables.
@@ -49,6 +51,12 @@ export class CommandRouterService {
           break;
         case 'updatePlayer':
           this.updatePlayer$.next(new UpdatePlayerCommand(cmd));
+          break;
+        case 'dealCards':
+          this.dealCards$.next(new DealCardsCommand(cmd));
+          break;
+        case 'updateBank':
+          this.updateBank$.next(new UpdateBankCommand(cmd));
           break;
         case 'changeTurn':
           this.changeTurn$.next(new ChangeTurnCommand(cmd));

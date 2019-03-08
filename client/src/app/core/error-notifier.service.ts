@@ -29,6 +29,9 @@ export class ErrorNotifierService {
     this.errorSource.next(new ErrorMessage('', message, '', true));
   }
 
+  public notifyHeading(heading: string, message: string) {
+    this.errorSource.next(new ErrorMessage(heading, message, '', true));
+  }
   public notifyMessage(message: ErrorMessage) {
     this.errorSource.next(message);
   }
@@ -40,9 +43,14 @@ export class ErrorNotifierService {
       message, true));
   }
 
+  /**
+   * Used when the client can't communicate at all with the server (disconnect).
+   * Must be closed by a successfull poll/transmission
+   * @param message Message to display to user
+   */
   public notifyServerCommError(message: string) {
     this.notifyMessage( new ErrorMessage(
-      'Failed to communicate with the server.',
-      message, '', true));
+      'Unable to connect to the server. Retrying...',
+      message, '', false));
   }
 }

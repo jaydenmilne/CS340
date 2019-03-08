@@ -1,8 +1,14 @@
 import { Command } from './command';
 import { GamePlayer } from './model/game-player';
+import { DestinationCard, ShardCard } from './model/cards';
 
 
 // Server commands
+export class RequestDestinationsCommand implements Command {
+    public command = "requestDestinations"
+
+    constructor() {}
+}
 
 // Client Commands
 export class UpdatePlayerCommand implements Command {
