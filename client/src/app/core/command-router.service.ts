@@ -5,7 +5,8 @@ import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
-import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, RequestDestinationsCommand, DiscardDestinationsCommand } from './game-commands';
+import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, RequestDestinationsCommand, DiscardDestinationsCommand, DealCardsCommand } from './game-commands';
+import { UpdateChatCommand } from './chat-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +26,10 @@ export class CommandRouterService {
   public startGame$                 = new Subject<StartGameCommand>();
   public refreshGameList$           = new Subject<RefreshGameListCommand>();
   public updatePlayer$              = new Subject<UpdatePlayerCommand>();
+  public updateChat$                = new Subject<UpdateChatCommand>();
   public changeTurn$                = new Subject<ChangeTurnCommand>();
   public updateBank$                = new Subject<UpdateBankCommand>();
-  public requestDestinations$       = new Subject<RequestDestinationsCommand>();
-  public discardDestinations$       = new Subject<DiscardDestinationsCommand>();
+  public dealCards$                 = new Subject<DealCardsCommand>();
 
   /**
    * Identifies each command, deserializes it, and signals the observables.
@@ -53,17 +54,17 @@ export class CommandRouterService {
         case 'updatePlayer':
           this.updatePlayer$.next(new UpdatePlayerCommand(cmd));
           break;
+        case 'updateChat':
+          this.updateChat$.next(new UpdateChatCommand(cmd));
+          break;
         case 'changeTurn':
           this.changeTurn$.next(new ChangeTurnCommand(cmd));
           break;
         case 'updateBank':
           this.updateBank$.next(new UpdateBankCommand(cmd));
           break;
-        case 'requestDestinations':
-          this.requestDestinations$.next(new RequestDestinationsCommand(cmd));
-          break;
-        case 'discardDestinations':
-          this.discardDestinations$.next(new DiscardDestinationsCommand(cmd));
+        case 'dealCards':
+          this.dealCards$.next(new DealCardsCommand(cmd));
           break;
 
         default:
