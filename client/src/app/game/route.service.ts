@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Route, RouteName, City, RouteType } from '../core/model/route';
+import { Subject } from 'rxjs';
+import { ErrorNotifierService } from '@core/error-notifier.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouteService {
 
-  private routes: Map<RouteName, Route> = new Map();
+  public routes: Map<RouteName, Route> = new Map();
+  public routeOwnershipChanged$ = new Subject<Route>();
 
-  constructor() {
+  constructor(private errorNotifier : ErrorNotifierService) {
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_1,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_1,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_2,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_2,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.CHITAURISANCTUARY_DARKDIMENSION,      (new Route(RouteName.CHITAURISANCTUARY_DARKDIMENSION,      [City.DARK_DIMENSION, City.CHITAURI_SANCTUARY],    3, RouteType.ANY, -1)));
@@ -112,6 +115,12 @@ export class RouteService {
   }
 
   public updateOwnership(routeName: RouteName, ownerId: number) {
-    this.routes[routeName].setOwnerId(ownerId);
+    let route = this.routes.get(routeName);
+    if (!route) {
+      this.errorNotifier.notifyHeading("RouteService::updateOwnership", "Cannot update ownership, route not found: " + routeName);
+      return;
+    }
+    route.ownerId = ownerId;
+    this.routeOwnershipChanged$.next(route);
   }
 }
