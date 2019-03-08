@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ShardCard, DestinationCard } from '@core/model/cards';
 import { CommandRouterService } from '@core/command-router.service';
-import { UpdatePlayerCommand } from '@core/game-commands.ts';
+import { UpdatePlayerCommand, DealCardsCommand, UpdateBankCommand } from '@core/game-commands.ts';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { RequestDestinationsCommand } from '@core/game-commands.ts'
 

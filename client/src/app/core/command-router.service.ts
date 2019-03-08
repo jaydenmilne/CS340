@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
-import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, RequestDestinationsCommand, DiscardDestinationsCommand, DealCardsCommand } from './game-commands';
+import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand } from './game-commands';
 import { UpdateChatCommand } from './chat-commands';
 
 @Injectable({
