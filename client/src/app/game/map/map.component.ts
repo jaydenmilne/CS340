@@ -12,7 +12,7 @@ import { StyleColor } from '@core/model/color.enum';
 })
 export class MapComponent implements OnInit {
 
-  constructor(private routeService : RouteService,
+  constructor(public routeService : RouteService,
     private playerService : PlayerService,
     private errorNotifier : ErrorNotifierService) { }
 
