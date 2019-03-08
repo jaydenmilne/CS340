@@ -3,7 +3,8 @@ import { ServerConnectionService } from '@core/server/server-connection.service'
 import { GameState } from '@core/server/server-connection-state';
 import { MatDialog } from '@angular/material';
 import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData, SelectDestinationCardsResult } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
-import { DestinationCard, City } from '@core/model/cards';
+import { DestinationCard } from '@core/model/cards';
+import { City } from '@core/model/route';
 
 @Component({
   selector: 'app-game',
@@ -21,9 +22,9 @@ export class GameComponent implements OnInit {
     const dialogRef = this.dialog.open(SelectDestinationCardsDialogComponent, {
       width: '60%',
       data: new SelectDestinationCardsData([
-        new DestinationCard([City.XANDAR, City.ASGARD], 5),
-        new DestinationCard([City.CHITAURI_SANCTUARY, City.HONG_KONG_SANCTUM], 10),
-        new DestinationCard([City.GALACTUS, City.YOTUNHEIM], 15),
+        new DestinationCard({'cities':[City.XANDAR, City.ASGARD], 'points': 5}),
+        new DestinationCard({'cities':[City.CHITAURI_SANCTUARY, City.HONG_KONG_SANCTUM], 'points': 10}),
+        new DestinationCard({'cities':[City.GALACTUS, City.YOTUNHEIM], 'points': 15}),
       ], 2),
       disableClose: true
     });

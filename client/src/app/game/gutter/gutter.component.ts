@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DestinationCard, City } from '@core/model/cards';
+import { DestinationCard} from '@core/model/cards';
+import { City } from '@core/model/route';
 
 
 @Component({
@@ -24,11 +25,7 @@ export class GutterComponent implements OnInit {
   ]
 
 
-  private destCards = [
-    new DestinationCard([City.XANDAR, City.ASGARD], 5),
-    new DestinationCard([City.CHITAURI_SANCTUARY, City.HONG_KONG_SANCTUM], 10),
-    new DestinationCard([City.GALACTUS, City.YOTUNHEIM], 15),
-  ]
+  private destCards: DestinationCard[] = [];
 
   ngOnInit() {
   }

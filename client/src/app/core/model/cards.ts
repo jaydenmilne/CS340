@@ -1,3 +1,5 @@
+import { City } from './route';
+
 export enum MaterialType {
     REALITY_SHARD = "reality_shard",
     SOUL_SHARD = "soul_shard",
@@ -10,55 +12,38 @@ export enum MaterialType {
     INFINITY_GAUNTLET = "infinity_gauntlet"
 }
 
-export enum City {
-	DARK_DIMENSION = "darkdimension",
-    GIBBORIM = "gibborim",
-    GALACTUS = "galactus",
-    ZENN_LA = "zennla",
-    KNOWHERE = "knowhere",
-    CHITAURI_SANCTUARY = "chitaurisanctuary",
-    ZEN_WHOBERI = "zenwhoberi",
-    EGO = "ego",
-    KITSON = "kitson",
-    CAVE_OF_THE_DRAGON = "caveofthedragon",
-    KUN_LUN = "kunlun",
-    VANAHEIM = "vanaheim",
-    TITAN = "titan",
-    VORMIR = "vormin",
-    SAKAAR = "sakaar",
-    XANDAR = "xandar",
-    CAVE_OF_AGES = "caveofages",
-    SURTURS_LAIR = "surturslair",
-    HALA = "hala",
-    SVARTLHEIM = "svartlheim",
-    NIFLHEIM = "niflheim",
-    CONTRAXIA = "contraxia",
-    QUANTUM_REALM = "quantumrealm",
-    ASGARD = "asgard",
-    NIDAVELLIR = "nidavellir",
-    YOTUNHEIM = "yotunheim",
-    HONG_KONG_SANCTUM = "hongkongsanctum",
-    WAKANDA = "wakanda",
-    SOKOVIA = "sokovia",
-    PYM_LABS = "pymlabs",
-    AVENGERS_HQ = "avengershq",
-    NEW_YORK_CITY = "newyorkcity",
-    TRISKELION = "triskelion",
-    HELICARRIER = "helicarrier",
-    KAMAR_TAJ = "kamartaj",
-    MUSPELHEIM = "muspelheim"
-}
-
 abstract class ICard {}
 
 export class DestinationCard extends ICard {
-    constructor(public cities: City[], public points: number){
+    public cities: City[];
+    public points: number;
+
+    constructor(destinationCard: any) {
         super();
+        if (!("cities" in destinationCard && "points" in destinationCard)) {
+            throw new TypeError('Unable to deserialize DestinationCard object, ' + JSON.stringify(destinationCard));
+
+        }
+
+        this.cities = [];
+        this.points = destinationCard.points;
+        destinationCard.cities.forEach(city => {
+            this.cities.push(City[city as keyof typeof City]);
+        });
     }
 }
 
 export class ShardCard extends ICard {
 	private type: MaterialType
+
+    constructor(shardCard: any) {
+        super();
+        if (!("type" in shardCard)) {
+            throw new TypeError('Unable to deserialize ShardCard object, ' + JSON.stringify(shardCard));
+        }
+
+        this.type = shardCard.type;
+    }
 
 	public setMaterialType(type: MaterialType) {
 		this.type = type;
