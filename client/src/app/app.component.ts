@@ -9,7 +9,7 @@ import { HostListener } from '@angular/core/';
   selector: 'app-fatal-error-dialog',
   template: `
   <h1 mat-dialog-title>Thanos snapped and your game got dusted</h1>
-  <img style="border-radius:8px; max-width:100%" src="/assets/img/thanos_snapping.png">
+  <img style="border-radius:8px; height:217px; max-width:100%" src="/assets/img/thanos_snapping.png">
   <div mat-dialog-content>
     <h3>{{data.subheading}}</h3>
     <p>{{data.errorline1}}</p>
