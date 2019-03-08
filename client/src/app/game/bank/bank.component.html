@@ -1,3 +1,13 @@
-<p>
-  bank works!
-</p>
+<div class="bank-box full-height full-width">
+<div class="shard-box">
+  <div class="shard-cell inline" *ngFor="let shard of shardCards"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/{{shard.img}}"></mat-card>
+  </div>
+</div>
+<div class="decks-box">
+    <div class="destination-deck">
+        <mat-card class="dest-card">
+          {{dest}}
+        </mat-card>
+      </div>
+</div>
+</div>
