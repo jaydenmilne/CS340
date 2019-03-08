@@ -51,17 +51,16 @@ export class CommandRouterService {
         case 'refreshGameList':
           this.refreshGameList$.next(new RefreshGameListCommand(cmd));
           break;
+        case 'updateChat':
+            this.updateChat$.next(new UpdateChatCommand(cmd));
         case 'updatePlayer':
           this.updatePlayer$.next(new UpdatePlayerCommand(cmd));
           break;
-        case 'updateChat':
-          this.updateChat$.next(new UpdateChatCommand(cmd));
+        case 'updateBank':
+          this.updateBank$.next(new UpdateBankCommand(cmd));
           break;
         case 'changeTurn':
           this.changeTurn$.next(new ChangeTurnCommand(cmd));
-          break;
-        case 'updateBank':
-          this.updateBank$.next(new UpdateBankCommand(cmd));
           break;
         case 'dealCards':
           this.dealCards$.next(new DealCardsCommand(cmd));

@@ -44,9 +44,11 @@ class UpdateBankCommand : INormalClientCommand {
     var destinationPileSize = 0
 }
 
+
 class UpdateChatCommand(val message: Message) : INormalClientCommand {
     override val command = UPDATE_CHAT
 }
+
 
 class DealCardsCommand : INormalClientCommand {
     override val command = DEAL_CARDS

@@ -44,12 +44,12 @@ class Game(var name: String) {
     var players = mutableSetOf<User>()
     var started = false
 
-    var shardCardDeck = ShardCardDeck(mutableListOf())
+    var shardCardDeck = ShardCardDeck(mutableListOf()).initializeDeck()
     var faceUpShardCards = ShardCardDeck(mutableListOf())
     var shardCardDiscardPile = ShardCardDeck(mutableListOf())
 
-    var destinationCardDeck = DestinationCardDeck(mutableListOf())
-    var destinationCardDiscardDeck = DestinationCardDeck(mutableListOf())
+    @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
+    @Transient var destinationCardDiscardDeck = DestinationCardDeck(mutableListOf())
 
     var whoseTurn: User? = null;
 
