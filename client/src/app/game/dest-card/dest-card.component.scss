@@ -1,0 +1,50 @@
+@import "colors.scss";
+.destination-card{
+    height: inherit;
+}
+.map-wrapper{
+    margin-bottom: 0px;
+    height: calc(100% - 1.5vh);
+}
+ .scaling-svg {
+    height: 100%;
+    left:0;
+    top:0;
+    display:block;
+    margin: auto;
+   }
+
+.shield, .city-name{
+    visibility: hidden;
+}
+.hidden{
+    visibility: hidden
+}
+
+.outer-line{
+	fill:$vibranium_color !important;
+	stroke:$vibranium_color !important;
+	fill-opacity: 0.0 !important;
+}
+
+.dest-card-route-name{
+    display: block;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1vw;
+    max-width: 14vw;
+    margin: 5px auto;
+}
+
+.city-spot{
+    rx: 30px; 
+    ry: 30px
+}
+
+.check-mark{
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #e2d484;
+}
