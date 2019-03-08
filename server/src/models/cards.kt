@@ -37,7 +37,7 @@ abstract class IDeck<T>(var cards: MutableList<T>) {
 }
 
 class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards){
-    fun initializeDeck(){
+    fun initializeDeck(): ShardCardDeck{
         for(i in 0..11){
             shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
             shardCards.add(ShardCard(MaterialType.MIND_SHARD))
@@ -52,10 +52,11 @@ class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(s
                 shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
             }
         }
+        return this
     }
 }
 class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards){
-    fun initializeDeck(){
+    fun initializeDeck(): DestinationCardDeck{
         destinationCards.add(DestinationCard(setOf("titan", "kunlun"), 4))
         destinationCards.add(DestinationCard(setOf("caveofages", "svartlheim"), 5))
         destinationCards.add(DestinationCard(setOf("avengershq", "yotunheim"), 6))
@@ -86,6 +87,7 @@ class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : 
         destinationCards.add(DestinationCard(setOf("knowhere", "muspelheim"), 20))
         destinationCards.add(DestinationCard(setOf("knowhere", "avengershq"), 21))
         destinationCards.add(DestinationCard(setOf("gibborim", "avengershq"), 22))
+        return this
     }
 
 }
