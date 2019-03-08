@@ -1,4 +1,6 @@
-
+.bank-box{
+    margin-top: 10px;
+}
 
 .full-width{
     width: 100%;
@@ -14,6 +16,7 @@
 .shard-box{
     text-align: center;
     vertical-align: middle;
+    margin-bottom: 10px;
 }
 
 .shard-icon{
@@ -29,15 +32,27 @@
 }
 .destination-deck{
     text-align: center;
+    background-color: aqua;
     width: 50%;
     height: 66%;
 }
+.decks-box{
+    text-align: center;
+    vertical-align: middle;
+    display: flex;
+}
 .shard-card-deck{
+    background-color: bisque;
     text-align: center;
     width: 50%;
     height: 66%;
 }
+p{
+    font-size: 2.5vh;
+}
 
 .deck-text{
-
+    text-align: center;
+    width: 50%;
+    height: 66%;
 }
