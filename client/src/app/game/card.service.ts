@@ -17,7 +17,6 @@ export class CardService {
     this.serverProxy.executeCommand(new RequestDestinationsCommand());
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
-    this.commandRouter.updatePlayer$.subscribe( cmd => this.onUpdatePlayer(cmd));
   }
 
   public faceUpShardCards : ShardCard[];
@@ -28,15 +27,12 @@ export class CardService {
   public playerDestCards : DestinationCard[];
 
   public stagedDestinationCards$ = new Subject<DealCardsCommand>();
-  public stagedShardCards$ = new Subject<DealCardsCommand>();
 
   private onDealCards(dealCardsCmd : DealCardsCommand) {
     if (dealCardsCmd.destinations.length > 0) {
       this.stagedDestinationCards$.next(dealCardsCmd);
     }
-    if (dealCardsCmd.shardCards.length > 0) {
-      this.stagedShardCards$.next(dealCardsCmd);
-    }
+    this.playerTrainCards = this.playerTrainCards.concat(dealCardsCmd.shardCards);
   }
 
   private onUpdateBank(updateBankCmd : UpdateBankCommand) {
@@ -44,10 +40,6 @@ export class CardService {
     this.shardCardDeckSize = updateBankCmd.shardDrawPileSize;
     this.shardCardDiscardSize = updateBankCmd.shardDiscardPileSize;
     this.destCardDeckSize = updateBankCmd.destinationPileSize;
-  }
-
-  private onUpdatePlayer(updatePlayerCmd : UpdatePlayerCommand) {
-    let gamePlayer = updatePlayerCmd.player;
   }
 
   public selectDestinationCards(selectedCards : DestinationCard[], discardedCards : DestinationCard[]) {
