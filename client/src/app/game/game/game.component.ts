@@ -3,8 +3,6 @@ import { ServerConnectionService } from '@core/server/server-connection.service'
 import { GameState } from '@core/server/server-connection-state';
 import { MatDialog } from '@angular/material';
 import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData, SelectDestinationCardsResult } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
-import { DestinationCard } from '@core/model/cards';
-import { City } from '@core/model/route';
 import { CardService } from '../card.service';
 
 @Component({
@@ -23,6 +21,7 @@ export class GameComponent implements OnInit {
     this.serverConnection.changeState(new GameState(this.serverConnection));
     this.cardService.requestDestinationCards();
   }
+
 
   public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData){
     const dialogRef = this.dialog.open(SelectDestinationCardsDialogComponent, {

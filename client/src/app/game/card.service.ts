@@ -16,7 +16,6 @@ export class CardService {
   constructor(private commandRouter : CommandRouterService,
     private serverProxy : ServerProxyService) {
     
-    this.serverProxy.executeCommand(new RequestDestinationsCommand());
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
   }
