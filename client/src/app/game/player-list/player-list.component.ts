@@ -49,7 +49,7 @@ export class PlayerListComponent implements OnInit {
 
   public onPlayerClick(player: GamePlayer) {
     const dialogRef = this.dialog.open(PlayerInfoDialogComponent, {
-      width: '300px',
+      width: '343px',
       data: player
     });
   }
