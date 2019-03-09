@@ -20,7 +20,7 @@ export class CardService {
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
   }
 
-  public faceUpShardCards : ShardCard[];
+  public faceUpShardCards : ShardCardDeck = new ShardCardDeck([]);
   public shardCardDeckSize : number;
   public shardCardDiscardSize : number;
   public destCardDeckSize : number;
@@ -37,7 +37,7 @@ export class CardService {
   }
 
   private onUpdateBank(updateBankCmd : UpdateBankCommand) {
-    this.faceUpShardCards = updateBankCmd.faceUpCards;
+    this.faceUpShardCards = new ShardCardDeck(updateBankCmd.faceUpCards);
     this.shardCardDeckSize = updateBankCmd.shardDrawPileSize;
     this.shardCardDiscardSize = updateBankCmd.shardDiscardPileSize;
     this.destCardDeckSize = updateBankCmd.destinationPileSize;

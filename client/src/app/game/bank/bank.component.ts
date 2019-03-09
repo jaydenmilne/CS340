@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CardService } from '../card.service';
+import { MaterialType, ShardCard } from '@core/model/cards';
 
 
 @Component({
@@ -11,20 +12,12 @@ export class BankComponent implements OnInit {
 
   constructor(private cardService: CardService) { }
 
-  private shardCards = [
-    new shardCount('Reality Stone', 1, 'reality_stone.svg'),
-    new shardCount('Soul Stone', 2, 'soul_stone.svg'),
-    new shardCount('Time Stone', 3, 'time_stone.svg'),
-    new shardCount('Space Stone', 4, 'space_stone.svg'),
-    new shardCount('Power Stone', 5, 'power_stone.svg'),
-  ]
-
   ngOnInit() {
   }
 
-  
+  private getCardImage(type: MaterialType): string{
+    return ShardCard.getImage(type);
+  }
 
 }
-class shardCount {
-  constructor(public type: string, public count: number, public img: string){}
-}
+
