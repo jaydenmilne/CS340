@@ -34,7 +34,31 @@ export class DestinationCard extends ICard {
 }
 
 export class ShardCard extends ICard {
-	private type: MaterialType
+    public type: MaterialType
+    
+    private static readonly shardImageMap: {[material: string]: string} = {
+        "reality_shard" : "reality_stone.svg",
+        "soul_shard" : "soul_stone.svg",
+        "space_shard" : "space_stone.svg",
+        "mind_shard" : "mind_stone.svg",
+        "power_shard" : "power_stone.svg",
+        "time_shard" : "time_stone.svg",
+        "vibranium" : "vibranium.svg",
+        "palladium" : "palladium.svg",
+        "infinity_gauntlet" : "gauntlet.svg",
+    }
+
+    private static readonly printNamesMap: {[material: string]: string} = {
+        "reality_shard" : "Reality Stone",
+        "soul_shard" : "Soul Stone",
+        "space_shard" : "Space Stone",
+        "mind_shard" : "Mind Stone",
+        "power_shard" : "Power Stone",
+        "time_shard" : "Time Stone",
+        "vibranium" : "Vibranium",
+        "palladium" : "Palladium",
+        "infinity_gauntlet" : "Infinity Gauntlet",
+    }
 
     constructor(shardCard: any) {
         super();
@@ -42,40 +66,38 @@ export class ShardCard extends ICard {
             throw new TypeError('Unable to deserialize ShardCard object, ' + JSON.stringify(shardCard));
         }
 
-        this.type = shardCard.type;
+        this.type = <MaterialType> MaterialType[shardCard.type];
     }
 
-	public setMaterialType(type: MaterialType) {
-		this.type = type;
-	}
-
-	public getMaterialType(): MaterialType {
-		return this.type;
-	}
+    public static getPrintName(type: MaterialType): string{
+        return this.printNamesMap[type];
+    }
+    public static getImage(type: MaterialType): string{
+        return this.shardImageMap[type];
+    }
 }
 
 abstract class ICardDeck<T> {
-	protected cards: T[]
-	abstract getTop(): T;
-	abstract size(): Number;
+	public cards: T[]
+    abstract size(): Number;
+    
+    constructor(cards: T[]){
+        this.cards = cards
+    }
 }
 
-export class CardDeck extends ICardDeck<DestinationCard> {
-	public getTop(): DestinationCard {
-		return this.cards.shift()
-	}
-
+export class DestinationCardDeck extends ICardDeck<DestinationCard> {
 	public size(): Number {
 		return this.cards.length
 	}
 }
 
 export class ShardCardDeck extends ICardDeck<ShardCard> {
-	public getTop(): ShardCard {
-		return this.cards.shift()
-	}
-
 	public size(): Number {
 		return this.cards.length
-	}
+    }
+    
+    public getCountOf(type: MaterialType): number{
+        return this.cards.filter(card => card.type === type).length;
+    }
 }

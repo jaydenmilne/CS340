@@ -33,7 +33,7 @@ export class PlayerListComponent implements OnInit {
 
   public getPlayerColorStyle(player: GamePlayer) {
     const style = {
-      'border-color': '#' + StyleColor[player.getColor()],
+      'border-color': '#' + StyleColor[player.color],
       'border-width': '4px',
       'border-style': 'solid',
       'background-color': 'transparent'
@@ -41,7 +41,7 @@ export class PlayerListComponent implements OnInit {
 
     if (this.playerService.activePlayerId == player.userId) {
       // Highlight this player
-      style["background-color"] = '#' + StyleColor[player.getColor()];
+      style["background-color"] = '#' + StyleColor[player.color];
     }
 
     return style;
@@ -49,7 +49,7 @@ export class PlayerListComponent implements OnInit {
 
   public onPlayerClick(player: GamePlayer) {
     const dialogRef = this.dialog.open(PlayerInfoDialogComponent, {
-      width: '300px',
+      width: '343px',
       data: player
     });
   }
