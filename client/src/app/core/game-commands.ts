@@ -53,7 +53,7 @@ export class UpdateBankCommand implements Command {
 
         this.shardDrawPileSize = updateBankCommand.shardDrawPileSize;
         this.shardDiscardPileSize = updateBankCommand.shardDiscardPileSize;
-        this.destinationPileSize = updateBankCommand.updateBankCommand;
+        this.destinationPileSize = updateBankCommand.destinationPileSize;
     }
 }
 
