@@ -51,6 +51,8 @@ class User(var username: String) {
 
     var hasLongestRoute = false
 
+    var turnOrder = -1
+
     @Transient private var passwordHash = ""
     @Transient var queue = CommandQueue()
 
@@ -77,7 +79,7 @@ class User(var username: String) {
                 this.destinationCards.size,
                 0,
                 this.hasLongestRoute,
-                Games.getGameIdForPlayer(this) ?: throw RuntimeException("User not in game"))
+                this.turnOrder)
     }
 }
 
