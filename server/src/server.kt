@@ -150,6 +150,9 @@ fun handlePost(httpExchange: HttpExchange) {
             LIST_GAMES -> Gson().fromJson(requestBody, ListGamesCommand::class.java)
             PLAYER_READY -> Gson().fromJson(requestBody, PlayerReadyCommand::class.java)
             CHANGE_COLOR -> Gson().fromJson(requestBody, ChangeColorCommand::class.java)
+            POST_CHAT -> Gson().fromJson(requestBody, PostChatCommand::class.java)
+            REQUEST_DESTINATIONS -> Gson().fromJson(requestBody, RequestDestinationsCommand::class.java)
+            DISCARD_DESTINATIONS -> Gson().fromJson(requestBody, DiscardDestinationsCommand::class.java)
             else -> null
         }
 

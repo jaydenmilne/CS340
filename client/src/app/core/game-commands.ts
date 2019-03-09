@@ -7,14 +7,14 @@ import { DestinationCard, ShardCard } from './model/cards';
 // Client Commands
 export class UpdatePlayerCommand implements Command {
     public command = 'updatePlayer';
-    public player : GamePlayer;
+    public gamePlayer : GamePlayer;
 
     constructor(updatePlayerCommand: any) {
-        if (!("player" in updatePlayerCommand)) {
+        if (!("gamePlayer" in updatePlayerCommand)) {
             throw new TypeError('Unable to deserialize updatePlayerCommand object, ' + JSON.stringify(updatePlayerCommand));
         }
 
-        this.player = new GamePlayer(updatePlayerCommand.player);
+        this.gamePlayer = new GamePlayer(updatePlayerCommand.gamePlayer);
     }
 }
 
@@ -62,15 +62,17 @@ export class RequestDestinationsCommand implements Command {
 }
 
 export class DealCardsCommand implements Command {
-    public command = 'selectDestinations';
+    public command = 'dealCards';
     public destinations: DestinationCard[];
     public shardCards: ShardCard[];
+    public minDestinations: number;
 
     constructor(dealCardsCommand: any) {
         if (!('destinations' in dealCardsCommand &&
-            'shardCards' in dealCardsCommand)) {
+            'shardCards' in dealCardsCommand && 'minDestinations' in dealCardsCommand)) {
             throw new TypeError('Unable to deserialize DealCardsCommand object, ' + JSON.stringify(dealCardsCommand));
         }
+        this.minDestinations = dealCardsCommand.minDestinations;
 
         this.destinations = [];
         dealCardsCommand.destinations.forEach(card => {

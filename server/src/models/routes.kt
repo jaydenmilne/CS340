@@ -123,7 +123,7 @@ class RouteList {
         const val KUN_LUN = "kunlun"
         const val VANAHEIM = "vanaheim"
         const val TITAN = "titan"
-        const val VORMIR = "vormin"
+        const val VORMIR = "vormir"
         const val SAKAAR = "sakaar"
         const val XANDAR = "xandar"
         const val CAVE_OF_AGES = "caveofages"

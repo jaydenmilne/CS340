@@ -11,11 +11,12 @@ import { PlayerInfoDialogComponent } from './player-list/player-list.component'
 import { ChatModule } from '../chat/chat.module';
 import { DestCardComponent } from './dest-card/dest-card.component';
 import {MatBadgeModule} from '@angular/material/badge';
+import { SelectDestinationCardsDialogComponent } from './select-destination-cards-dialog/select-destination-cards-dialog.component';
 
 
 @NgModule({
-  declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent],
-  entryComponents: [ PlayerInfoDialogComponent ],
+  declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent],
+  entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent ],
   imports: [
     CommonModule, 
     MatGridListModule,

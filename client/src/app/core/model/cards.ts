@@ -15,8 +15,8 @@ export enum MaterialType {
 abstract class ICard {}
 
 export class DestinationCard extends ICard {
-	public cities: City[];
-  public points: number;
+    public cities: City[];
+    public points: number;
 
     constructor(destinationCard: any) {
         super();
@@ -28,7 +28,7 @@ export class DestinationCard extends ICard {
         this.cities = [];
         this.points = destinationCard.points;
         destinationCard.cities.forEach(city => {
-            this.cities.push(City[city as keyof typeof City]);
+            this.cities.push(city as City);
         });
     }
 }

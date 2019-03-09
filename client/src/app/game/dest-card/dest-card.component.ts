@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DestinationCard } from '@core/model/cards';
+import { City, cityPrintNames } from '@core/model/route';
 
 @Component({
   selector: 'app-dest-card',
@@ -16,6 +17,9 @@ export class DestCardComponent implements OnInit {
   ngOnInit() {
   }
 
-
+  getPrintName(city: City): string{
+    let str: string = cityPrintNames[city];
+    return str;
+  }
 
 }

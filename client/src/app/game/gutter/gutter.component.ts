@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DestinationCard} from '@core/model/cards';
 import { City } from '@core/model/route';
+import { CardService } from '../card.service';
 
 
 @Component({
@@ -10,7 +11,7 @@ import { City } from '@core/model/route';
 })
 export class GutterComponent implements OnInit {
 
-  constructor() { }
+  constructor(private cardService: CardService) { }
 
   private shardCards = [
     new shardCount('Reality Stone', 1, 'reality_stone.svg'),

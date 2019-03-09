@@ -21,7 +21,7 @@ export class ChatService {
   }
 
   public handleUpdateChat(command: UpdateChatCommand) {
-    this.chatHistory.push(new ChatMessage(command.userId, command.username, command.message, command.sequenceNum));
+    this.chatHistory.push(command.message);
   }
 
 }

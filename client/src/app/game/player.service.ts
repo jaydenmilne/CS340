@@ -16,7 +16,7 @@ export class PlayerService {
   public activePlayerId : Number = null;
 
   private onUpdatePlayer(updatePlayerCommand : UpdatePlayerCommand) {
-    let gamePlayer = updatePlayerCommand.player;
+    let gamePlayer = updatePlayerCommand.gamePlayer;
 
     // Check if this is a new player or an updated one
     if (this.playersById.has(gamePlayer.userId)) {
@@ -77,13 +77,8 @@ export class PlayerService {
     "hasLongestRoute": false,
     "turnOrder": 2
   };
-  let c1 = new UpdatePlayerCommand({"player": p1});
-  let c2 = new UpdatePlayerCommand({"player": p2});
 
-  this.activePlayerId = 1;
-
-  this.onUpdatePlayer(c1);
-  this.onUpdatePlayer(c2);
+  this.activePlayerId = 0;
 
   }
 }
