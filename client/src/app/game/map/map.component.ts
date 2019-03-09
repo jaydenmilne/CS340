@@ -47,7 +47,7 @@ export class MapComponent implements OnInit {
       this.errorNotifier.notifyHeading("MapComponent::onRouteOwnershipChange", "Got a player that doesn't exist! playerid = " + route.ownerId);
     }
 
-    let color = '#' + StyleColor[player.getColor()];
+    let color = '#' + StyleColor[player.color];
 
     let routeLine = this.mapSvg.nativeElement.getElementById(route.routeName + '-fg');
     if (!routeLine) {

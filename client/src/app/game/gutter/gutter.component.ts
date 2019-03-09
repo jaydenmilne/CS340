@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { DestinationCard, MaterialType, ShardCard} from '@core/model/cards';
 import { City } from '@core/model/route';
 import { CardService } from '../card.service';
+import { UserService } from '@core/user.service';
+import { PlayerService } from '../player.service';
+import { GamePlayer } from '@core/model/game-player';
 
 
 @Component({
@@ -10,8 +13,11 @@ import { CardService } from '../card.service';
   styleUrls: ['./gutter.component.scss']
 })
 export class GutterComponent implements OnInit {
+  private myPlayer: number;
 
-  constructor(private cardService: CardService) { }
+  constructor(private cardService: CardService, private userService: UserService, private playerService: PlayerService) {
+    this.myPlayer = userService.user$.value.getUserId();
+   }
 
   ngOnInit() {
   }
@@ -28,9 +34,19 @@ export class GutterComponent implements OnInit {
     MaterialType.INFINITY_GAUNTLET
   ];
 
-  getCardImage(type: MaterialType): string{
+  private getCardImage(type: MaterialType): string{
     return ShardCard.getImage(type);
   }
   
+  private getRemainingShards(): number{
+    let gamePlayer: GamePlayer = this.playerService.playersById.get(this.myPlayer);
+
+    if (gamePlayer === undefined){
+      return 0;
+    }
+
+    return gamePlayer.numRemainingTrains;
+  }
+
 }
 
