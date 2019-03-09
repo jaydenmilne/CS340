@@ -37,7 +37,7 @@ export class SelectDestinationCardsDialogComponent {
 
   onCardClick(card: {'card': DestinationCard, 'selected': boolean}){
     card.selected = !card.selected;
-    this.numSelectedCards = this.cards.filter(destCard => destCard.selected == true).length;
+    this.numSelectedCards = this.cards.filter(destCard => destCard.selected === true).length;
   }
 
 }
