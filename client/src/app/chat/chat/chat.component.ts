@@ -17,7 +17,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   @ViewChild('chatBox') private chatBox: ElementRef;
 
   chatForm = new FormGroup({
-    chatInput: new FormControl('', [Validators.required, Validators.maxLength(120)])
+    chatInput: new FormControl('')
   });
 
   ngOnInit() {
