@@ -22,7 +22,6 @@ export class GameComponent implements OnInit {
     this.cardService.requestDestinationCards();
   }
 
-
   public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData){
     const dialogRef = this.dialog.open(SelectDestinationCardsDialogComponent, {
       width: '60%',
