@@ -1,6 +1,7 @@
 package models
 
 private var nextUserId = -1
+private const val STARTING_TRAINS = 45
 
 fun getNextUserId(): Int {
     nextUserId++
@@ -48,7 +49,7 @@ class User(var username: String) {
     var points = 0
     var shardCards = ShardCardDeck(mutableListOf())
     var destinationCards = DestinationCardDeck(mutableListOf())
-
+    var numRemainingTrains = STARTING_TRAINS;
     var hasLongestRoute = false
 
     @Transient private var passwordHash = ""
@@ -75,7 +76,7 @@ class User(var username: String) {
                 this.points,
                 this.shardCards.size,
                 this.destinationCards.size,
-                0,
+                this.numRemainingTrains,
                 this.hasLongestRoute,
                 Games.getGameIdForPlayer(this) ?: throw RuntimeException("User not in game"))
     }

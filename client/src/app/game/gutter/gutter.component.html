@@ -1,18 +1,18 @@
 <mat-tab-group headerPosition="below" class="full-height">
   <mat-tab label="Shard Cards" class="cards-gutter">
     <div class="shard-box full-height">
-    <div class="shard-cell inline" *ngFor="let shard of shardCards"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/{{shard.img}}"></mat-card>
-      <p class="inline shard-count">x{{shard.count}}</p>
+    <div class="shard-cell inline" *ngFor="let shardType of shardTypes"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/{{getCardImage(shardType)}}"></mat-card>
+      <p class="inline shard-count">x{{cardService.playerTrainCards.getCountOf(shardType)}}</p>
     </div>
     <div class="shard-count-cell inline"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/shard_circle.svg"></mat-card>
-      <p class="inline shard-count">x95</p>
+      <p class="inline shard-count">x{{getRemainingShards()}}</p>
     </div>
   </div>
     </mat-tab>
 
     <mat-tab label="Destination Cards" class="cards-gutter full-width full-height">
       <div class="cards-box full-height">
-          <app-dest-card *ngFor="let dest of destCards" class="dest-card" [route]="dest" [selected]="false"></app-dest-card>
+          <app-dest-card *ngFor="let dest of cardService.playerDestCards.cards" class="dest-card" [route]="dest" [selected]="false"></app-dest-card>
       </div>
     </mat-tab>
 

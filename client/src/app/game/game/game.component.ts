@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
+import { MatDialog } from '@angular/material';
+import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData, SelectDestinationCardsResult } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
+import { CardService } from '../card.service';
 
 @Component({
   selector: 'app-game',
@@ -9,11 +12,25 @@ import { GameState } from '@core/server/server-connection-state';
 })
 export class GameComponent implements OnInit {
 
-  constructor(private serverConnection: ServerConnectionService) { }
+  constructor(private serverConnection: ServerConnectionService, public dialog: MatDialog, private cardService: CardService) { 
+    this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result))
+  }
 
   ngOnInit() {
     // Change the game connection to server mode
     this.serverConnection.changeState(new GameState(this.serverConnection));
+    this.cardService.requestDestinationCards();
   }
 
+  public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData){
+    const dialogRef = this.dialog.open(SelectDestinationCardsDialogComponent, {
+      width: '60%',
+      data: newDestCardsData,  
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(selectDestCardsResult => {
+      console.log('The select cards dialog was closed');
+      this.cardService.selectDestinationCards(selectDestCardsResult);
+    });
+  }
 }
