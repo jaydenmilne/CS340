@@ -35,6 +35,17 @@ export class DestinationCard extends ICard {
 
 export class ShardCard extends ICard {
 	private type: MaterialType
+    public readonly imageMap = {
+        REALITY_SHARD: "reality_stone.svg",
+        SOUL_SHARD: "soul_stone.svg",
+        SPACE_SHARD: "space_stone.svg",
+        MIND_SHARD: "mind_stone.svg",
+        POWER_SHARD: "power_stone.svg",
+        TIME_SHARD: "time_stone.svg",
+        VIBRANIUM: "vibranium.svg",
+        PALLADIUM: "palladium.svg",
+        INFINITY_GAUNTLET: "gauntlet.svg"
+    }
 
     constructor(shardCard: any) {
         super();

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CardService } from '../card.service';
+
 
 @Component({
   selector: 'app-bank',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BankComponent implements OnInit {
 
-  constructor() { }
+  constructor(private cardService: CardService) { }
 
   private shardCards = [
     new shardCount('Reality Stone', 1, 'reality_stone.svg'),
