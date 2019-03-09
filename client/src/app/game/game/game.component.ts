@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData, SelectDestinationCardsResult } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { DestinationCard } from '@core/model/cards';
 import { City } from '@core/model/route';
+import { CardService } from '../card.service';
 
 @Component({
   selector: 'app-game',
@@ -13,22 +14,25 @@ import { City } from '@core/model/route';
 })
 export class GameComponent implements OnInit {
 
-  constructor(private serverConnection: ServerConnectionService, public dialog: MatDialog) { }
+  constructor(private serverConnection: ServerConnectionService, public dialog: MatDialog, private cardService: CardService) { 
+    this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result))
+  }
 
   ngOnInit() {
     // Change the game connection to server mode
     this.serverConnection.changeState(new GameState(this.serverConnection));
+    this.cardService.requestDestinationCards();
   }
 
-  public handleNewDestinationCards(newDestCards: DestinationCard[]){
+  public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData){
     const dialogRef = this.dialog.open(SelectDestinationCardsDialogComponent, {
       width: '60%',
-      data: new SelectDestinationCardsData(newDestCards, 2),    // TODO, this min required needs to be an argument
+      data: newDestCardsData,  
       disableClose: true
     });
     dialogRef.afterClosed().subscribe(selectDestCardsResult => {
       console.log('The select cards dialog was closed');
-      // TODO: Call card service
+      this.cardService.selectDestinationCards(selectDestCardsResult);
     });
   }
 }

@@ -28,7 +28,7 @@ export class DestinationCard extends ICard {
         this.cities = [];
         this.points = destinationCard.points;
         destinationCard.cities.forEach(city => {
-            this.cities.push(City[city as keyof typeof City]);
+            this.cities.push(city as City);
         });
     }
 }

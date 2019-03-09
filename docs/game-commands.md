@@ -64,7 +64,7 @@ Several commands transmit arrays of models, these are their descriptions.
 | [updateBank](#updateBank-command)          | Client                           | `drawCards`    |
 | [updatePlayer](#updatePlayer-command)     | Client                           | `changeTurn`    |
 | [requestDestinations](#requestDestinations-command)     | Server             | `discardDestinations`, `selectDestinations`    |
-| [selectDestinations](#selectDestinations-command)     | Client               | `discardDestinations`, `requestDestinations`    |
+| [dealCards](#dealCards-command)     | Client               | `discardDestinations`, `requestDestinations`    |
 | [discardDestinations](#discardDestinations-command)     | Server             | `requestDestinations`, `selectDestinations`    |
 | [changeTurn](#changeTurn-command)         | Client                            |     |
 
@@ -122,7 +122,8 @@ Sends destinationCards to the client, as well as the shardCards for that player.
 {
     "command": "dealCards",
     "destinations": ["{array of 3 destinationCards}"],
-    "shardCards": ["{array of shardCards}"]
+    "shardCards": ["{array of shardCards}"],
+    "minDestinations": 2
 }
 ```
 
