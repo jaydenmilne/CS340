@@ -279,6 +279,14 @@ class DiscardDestinationsCommand : INormalServerCommand {
             throw RuntimeException("User not in a game")
         }
 
-        discardedDestinations.forEach { d -> game.destinationCardDiscardDeck.push(d) }
+        discardedDestinations.forEach { discarded -> game.destinationCardDiscardDeck.push(discarded) }
+        // Remove the discarded cards from the player's hand
+        user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
+
+        // Broadcast the updated player to everyone else
+        var updatedPlayer = UpdatePlayerCommand()
+        updatedPlayer.gamePlayer = user.toGamePlayer()
+
+        game.broadcast(updatedPlayer)
     }
 }
