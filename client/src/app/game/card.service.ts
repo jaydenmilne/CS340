@@ -29,8 +29,6 @@ export class CardService {
 
   public stagedDestinationCards$ = new Subject<SelectDestinationCardsData>();
 
-  public stagedShardCards$ = new Subject<DealCardsCommand>();
-
   private onDealCards(dealCardsCmd : DealCardsCommand) {
     if (dealCardsCmd.destinations.length > 0) {
       this.stagedDestinationCards$.next(new SelectDestinationCardsData(dealCardsCmd.destinations, dealCardsCmd.minDestinations));
