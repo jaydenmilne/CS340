@@ -5,13 +5,11 @@
   </div>
   <div class="decks-box">
     <div class="shard-card-deck">
-        <p><b>Shard Card Deck</b></p>
-        <p>Cards Remaining:   {{cardService.shardCardDeckSize}}</p>
-        <p>Cards Discarded: {{cardService.shardCardDiscardSize}}</p>
+        <div class="inline"><mat-card class="deck-card inline" matBadge="{{cardService.shardCardDeckSize}}"><img class="deck-icon" src="assets/img/shards/shard_circle.svg"></mat-card>
+        </div>
     </div>
     <div class="destination-deck">
-          <p><b>Destination Card Deck</b></p>
-          <p>Cards Remaining:   {{cardService.destCardDeckSize}}</p>
+        <div class="inline"><mat-card class="dest-card inline" matBadge="{{cardService.destCardDeckSize}}"><img class="deck-icon" src="assets/img/shards/route_map.svg"></mat-card>
     </div>
   </div>
 </div>
