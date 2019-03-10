@@ -279,6 +279,10 @@ class DiscardDestinationsCommand : INormalServerCommand {
             throw RuntimeException("User not in a game")
         }
 
+        if (user.turnOrder == -1) {
+            user.turnOrder = game.destDiscardOrder++
+        }
+
         discardedDestinations.forEach { discarded -> game.destinationCardDiscardDeck.push(discarded) }
         // Remove the discarded cards from the player's hand
         user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }

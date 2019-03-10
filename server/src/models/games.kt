@@ -51,9 +51,11 @@ class Game(var name: String) {
     @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
     @Transient var destinationCardDiscardDeck = DestinationCardDeck(mutableListOf())
 
-    var whoseTurn: User? = null;
+    var whoseTurn: User? = null
 
     var chatMessages = mutableListOf<Message>()
+
+    var destDiscardOrder = 0
 
     @Transient private var routes = RouteList()
 
