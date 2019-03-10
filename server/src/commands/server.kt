@@ -259,7 +259,7 @@ class RequestDestinationsCommand : INormalServerCommand {
         updatebankCommand.shardDrawPileSize = game.shardCardDeck.cards.size
         updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
         updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
-        user.queue.push(updatebankCommand)
+        game.broadcast(updatebankCommand)
 
         /* Send UpdatePlayerCommand to user's client */
         var updatePlayerCommand = UpdatePlayerCommand()
@@ -283,7 +283,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
             user.turnOrder = game.destDiscardOrder++
         }
 
-        discardedDestinations.forEach { discarded -> game.destinationCardDiscardDeck.push(discarded) }
+        discardedDestinations.forEach { discarded -> game.destinationCardDeck.push(discarded) }
         // Remove the discarded cards from the player's hand
         user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
 
@@ -292,5 +292,12 @@ class DiscardDestinationsCommand : INormalServerCommand {
         updatedPlayer.gamePlayer = user.toGamePlayer()
 
         game.broadcast(updatedPlayer)
+
+        var updatebankCommand = UpdateBankCommand()
+        updatebankCommand.faceUpCards = game.faceUpShardCards.cards
+        updatebankCommand.shardDrawPileSize = game.shardCardDeck.cards.size
+        updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
+        updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
+        game.broadcast(updatebankCommand)
     }
 }
