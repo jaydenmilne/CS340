@@ -41,7 +41,7 @@ export class ConsoleCommandService {
         this.killDecks();
         break;
       }
-      case"/finalDestination":{
+      case"/finaldestination":{
         this.finalDestination();
         break;
       }
