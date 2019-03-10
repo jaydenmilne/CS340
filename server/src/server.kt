@@ -163,8 +163,8 @@ fun handlePost(httpExchange: HttpExchange) {
 
             try {
                 command.execute(user)
-                writer.write(user.queue.render())
                 httpExchange.sendResponseHeaders(HTTP_OK, 0)
+                writer.write(user.queue.render())
             } catch (e: CommandException) {
                 println(e.message)
                 writer.write(e.message)
