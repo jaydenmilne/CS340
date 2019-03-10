@@ -15,7 +15,27 @@ enum class MaterialType(val material: String) {
 interface ICard
 
 class ShardCard(val type: MaterialType) : ICard
-class DestinationCard(val cities: Set<String>, val points: Int)
+
+class DestinationCard(val cities: Set<String>, val points: Int) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DestinationCard
+
+        if (cities != other.cities) return false
+        if (points != other.points) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = cities.hashCode()
+        result = 31 * result + points
+        return result
+    }
+}
+
 
 abstract class IDeck<T>(var cards: MutableList<T>) {
 

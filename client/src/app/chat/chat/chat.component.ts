@@ -17,7 +17,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   @ViewChild('chatBox') private chatBox: ElementRef;
 
   chatForm = new FormGroup({
-    chatInput: new FormControl('', [Validators.required, Validators.maxLength(120)])
+    chatInput: new FormControl('')
   });
 
   ngOnInit() {
@@ -30,7 +30,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
   public onSend() {
     // Get message from form
     const message: string = this.chatForm.get('chatInput').value;
-    this.chatService.sendChat(message);
+    if (message != "") {
+      this.chatService.sendChat(message);
+    }
 
     // Clear the message
     this.chatForm.get("chatInput").setValue("");
