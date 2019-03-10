@@ -93,6 +93,17 @@ export class DestinationCardDeck extends ICardDeck<DestinationCard> {
 }
 
 export class ShardCardDeck extends ICardDeck<ShardCard> {
+    public types: Set<MaterialType> = new Set<MaterialType>();
+
+    constructor(cards: ShardCard[]){
+        super(cards);
+        let types: Set<MaterialType> = new Set<MaterialType>();
+        cards.forEach(card => {
+            types.add(card.type);
+        });
+        this.types = types;
+    }
+
 	public size(): Number {
 		return this.cards.length
     }

@@ -1,11 +1,10 @@
 <mat-tab-group headerPosition="below" class="full-height">
   <mat-tab label="Shard Cards" class="cards-gutter">
     <div class="shard-box full-height">
-    <div class="shard-cell inline" *ngFor="let shardType of shardTypes"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/{{getCardImage(shardType)}}"></mat-card>
-      <p class="inline shard-count">x{{cardService.playerTrainCards.getCountOf(shardType)}}</p>
+    <div class="shard-cell inline" *ngFor="let shardType of cardService.playerTrainCards.types"><mat-card class="shard-card inline" matBadge="{{cardService.playerTrainCards.getCountOf(shardType)}}"><img class="shard-icon" src="assets/img/shards/{{getCardImage(shardType)}}"></mat-card>
     </div>
-    <div class="shard-count-cell inline"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/shard_circle.svg"></mat-card>
-      <p class="inline shard-count">x{{getRemainingShards()}}</p>
+    <div class="shard-dummy-cell"></div>
+    <div class="shard-cell inline"><mat-card class="shard-card inline" matBadge="{{getRemainingShards()}}"><img class="shard-icon" src="assets/img/shards/shard_circle.svg"></mat-card>
     </div>
   </div>
     </mat-tab>
