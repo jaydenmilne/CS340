@@ -264,7 +264,7 @@ class RequestDestinationsCommand : INormalServerCommand {
         /* Send UpdatePlayerCommand to user's client */
         var updatePlayerCommand = UpdatePlayerCommand()
         updatePlayerCommand.gamePlayer = user.toGamePlayer()
-        user.queue.push(updatePlayerCommand)
+        game.broadcast(updatePlayerCommand)
     }
 }
 

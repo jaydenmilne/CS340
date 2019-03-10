@@ -40,6 +40,12 @@ export class PlayerService {
       // Add to the map
       this.playersById.set(gamePlayer.userId, gamePlayer);
     }
+
+    this.players.sort((l,r): number => {
+      if (l.turnOrder < r.turnOrder) {return -1;}
+      if (l.turnOrder > r.turnOrder) {return 1;}
+      return 0;
+    });
   }
 
   private onTurnChange(changeTurnCommand : ChangeTurnCommand) {
