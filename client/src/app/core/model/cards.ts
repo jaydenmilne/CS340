@@ -73,7 +73,7 @@ export class ShardCard extends ICard {
         return this.printNamesMap[type];
     }
     public static getImage(type: MaterialType): string{
-        return this.shardImageMap[type];
+        return this.shardImageMap[type];  
     }
 }
 
