@@ -21,13 +21,12 @@
 
 .player-list-text{
     font-weight: bold;
-    display: flex;
-    flex-direction: column;
-    justify-content: center
+    padding-left: 7px;
 }
 
 .player-status-text {
     float:right;
+    padding-right: 3px;
 }
 
 .player-status{
