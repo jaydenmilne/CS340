@@ -49,7 +49,6 @@ class Game(var name: String) {
     var shardCardDiscardPile = ShardCardDeck(mutableListOf())
 
     @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
-    @Transient var destinationCardDiscardDeck = DestinationCardDeck(mutableListOf())
 
     var whoseTurn: User? = null
 
