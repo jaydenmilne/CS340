@@ -43,7 +43,7 @@ export class PlayerService {
 
     this.players.sort((l,r): number => {
       if (l.turnOrder < r.turnOrder) {return -1;}
-      if (l.turnOrder < r.turnOrder) {return 1;}
+      if (l.turnOrder > r.turnOrder) {return 1;}
       return 0;
     });
   }
