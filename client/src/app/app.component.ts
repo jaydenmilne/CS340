@@ -51,7 +51,7 @@ export class FatalErrorDialogComponent {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Mary Lou';
+  title = 'Ticket to Ride: End Game';
   constructor (public dialog: MatDialog,
                public errorService: ErrorNotifierService,
                public pollerService: ServerPollerService,
