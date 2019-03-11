@@ -3,7 +3,6 @@
     <div class="shard-cell inline" *ngFor="let shard of cardService.faceUpShardCards.cards"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/{{getCardImage(shard.type)}}"></mat-card>
     </div>
   </div>
-  <p class="bank-text"> Bank </p>
   <div class="decks-box">
     <div class="shard-card-deck">
         <div class="inline"><mat-card class="deck-card inline" matBadge="{{cardService.shardCardDeckSize}}"><img class="deck-icon" src="assets/img/shards/shard_circle.svg"></mat-card>
