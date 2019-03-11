@@ -1,11 +1,14 @@
+@import "colors.scss";
+
 .game-panels{
     height: 100vh;
 }
 .player-list-window{
+    border-bottom: 1px $app_border_color solid;
 }
 
 .chat-window{
-    background: lightpink;
+    border-right: 1px $app_border_color solid;
 }
 ::ng-deep .chat-window{
     height: 100%;
@@ -19,6 +22,7 @@
 }
 .bank-window{
     // background: lightsteelblue;
+    border-left: 1px $app_border_color solid;
 }
 .app-window{
     height: 100%;
