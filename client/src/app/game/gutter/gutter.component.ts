@@ -5,6 +5,7 @@ import { CardService } from '../card.service';
 import { UserService } from '@core/user.service';
 import { PlayerService } from '../player.service';
 import { GamePlayer } from '@core/model/game-player';
+import { StyleColor } from '@core/model/color.enum';
 
 
 @Component({
@@ -13,10 +14,8 @@ import { GamePlayer } from '@core/model/game-player';
   styleUrls: ['./gutter.component.scss']
 })
 export class GutterComponent implements OnInit {
-  private myPlayer: number;
 
-  constructor(private cardService: CardService, private userService: UserService, private playerService: PlayerService) {
-    this.myPlayer = userService.user$.value.getUserId();
+  constructor(private cardService: CardService,  private playerService: PlayerService) {
    }
 
   ngOnInit() {
@@ -39,14 +38,19 @@ export class GutterComponent implements OnInit {
   }
   
   private getRemainingShards(): number{
-    let gamePlayer: GamePlayer = this.playerService.playersById.get(this.myPlayer);
-
-    if (gamePlayer === undefined){
+    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null){
       return 0;
     }
 
-    return gamePlayer.numRemainingTrains;
+    return this.playerService.myPlayer.numRemainingTrains;
   }
 
+  getPlayerColorStyle(){
+    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null){
+      return {"fill": "#"+ StyleColor.YELLOW};
+    }
+
+    return {"fill": "#"+ StyleColor[this.playerService.myPlayer.color]};
+  }
 }
 
