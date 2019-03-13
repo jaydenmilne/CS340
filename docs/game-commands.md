@@ -57,16 +57,34 @@ Several commands transmit arrays of models, these are their descriptions.
 }
 ```
 
+### `playerPoint` object
+```json
+{
+    "userId": "{id of player}",
+    "username": "{username}",
+    "totalPoints": 100, // Could be calculated on client
+    "claimedRoutePoints": 73,
+    "completedDestinationPoints": 50,
+    "incompleteDestinationPoints": -32,
+    "longestRoutePoints": 10,
+}
+```
+
 ## Commands
 
 | Command                                | [Type](protocol.md#terminology)  | Related Commands |    
 |----------------------------------------|----------------------------------|------------------|
-| [updateBank](#updateBank-command)          | Client                           | `drawCards`    |
+| [updateBank](#updateBank-command)          | Client                           | `drawShardCard`    |
 | [updatePlayer](#updatePlayer-command)     | Client                           | `changeTurn`    |
 | [requestDestinations](#requestDestinations-command)     | Server             | `discardDestinations`, `selectDestinations`    |
 | [dealCards](#dealCards-command)     | Client               | `discardDestinations`, `requestDestinations`    |
 | [discardDestinations](#discardDestinations-command)     | Server             | `requestDestinations`, `selectDestinations`    |
 | [changeTurn](#changeTurn-command)         | Client                            |     |
+| [claimRoute](#claimRoute-command)         | Server                            | `routeClaimed`    |
+| [routeClaimed](#routeClaimed-command)         | Client                        | `claimRoute`    |
+| [drawShardCard](#drawShardCard-command)         | Server                      | `dealCards`    |
+| [lastRound](#lastRound-command)         | Client                              |     |
+| [gameOver](#gameOver-command)         | Client                                |     |
 
 ### `updateBank` Command
 Client Command.
@@ -150,5 +168,70 @@ Informs the client tha the turn has passed to the next player.
 {
     "command": "changeTurn",
     "userId": "{userId of player who's turn it is}"
+}
+```
+### `claimRoute` Command
+Server Command.
+
+Informs the server that a player has claimed a route with the specified shard cards.
+
+#### Syntax
+```json
+{
+    "command": "claimRoute",
+    "routeId": "{Id of the route being claimed}",
+    "shardsUsed": "[{Array of ShardCards from the users hand}]"
+}
+```
+
+### `routeClaimed` Command
+Client Command.
+
+Informs clients that a player has claimed a route.
+
+#### Syntax
+```json
+{
+    "command": "routeClaimed",
+    "userId": "{Id of player}",
+    "routeId": "{Id of the route claimed}",
+}
+```
+
+### `drawShardCard` Command
+Server Command.
+
+Informs the server that a player has drawn a card from the face up pile or from the deck.
+
+#### Syntax
+```json
+{
+    "command": "drawShardCard",
+    "card": "{MaterialType of card picked up or 'deck' if card was drawn from the pile. }",
+}
+```
+
+### `lastRound` Command
+Client Command.
+
+Informs the client that this is the last round.
+
+#### Syntax
+```json
+{
+    "command": "lastRound",
+}
+```
+
+### `gameOver` Command
+Client Command.
+
+Informs the client that the game is over.
+
+#### Syntax
+```json
+{
+    "command": "gameOver",
+    "players": "[{Array of PlayerPoint objects}]"
 }
 ```
