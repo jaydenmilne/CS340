@@ -75,13 +75,14 @@ Several commands transmit arrays of models, these are their descriptions.
 | Command                                | [Type](protocol.md#terminology)  | Related Commands |    
 |----------------------------------------|----------------------------------|------------------|
 | [updateBank](#updateBank-command)          | Client                           | `drawShardCard`    |
-| [updatePlayer](#updatePlayer-command)     | Client                           | `changeTurn`    |
-| [requestDestinations](#requestDestinations-command)     | Server             | `discardDestinations`, `selectDestinations`    |
-| [dealCards](#dealCards-command)     | Client               | `discardDestinations`, `requestDestinations`    |
-| [discardDestinations](#discardDestinations-command)     | Server             | `requestDestinations`, `selectDestinations`    |
+| [updatePlayer](#updatePlayer-command)     | Client                            | `changeTurn`    |
+| [requestDestinations](#requestDestinations-command)     | Server              | `discardDestinations`, `selectDestinations`    |
+| [dealCards](#dealCards-command)     | Client                                  | `discardDestinations`, `requestDestinations`    |
+| [discardDestinations](#discardDestinations-command)     | Server              | `requestDestinations`, `selectDestinations`    |
+| [updateHand](#updateHand-command)         | Client                            | `claimRoute`  |
 | [changeTurn](#changeTurn-command)         | Client                            |     |
-| [claimRoute](#claimRoute-command)         | Server                            | `routeClaimed`    |
-| [routeClaimed](#routeClaimed-command)         | Client                        | `claimRoute`    |
+| [claimRoute](#claimRoute-command)         | Server                            | `routeClaimed`, `updateHand` |
+| [routeClaimed](#routeClaimed-command)     | Client                            | `claimRoute`    |
 | [drawShardCard](#drawShardCard-command)         | Server                      | `dealCards`    |
 | [lastRound](#lastRound-command)         | Client                              |     |
 | [gameOver](#gameOver-command)         | Client                                |     |
@@ -133,7 +134,7 @@ Requests destinationCards from the server. Step 1 of selecting destination cards
 ### `dealCards` Command
 Client Command.
 
-Sends destinationCards to the client, as well as the shardCards for that player. Step 2 of selecting destination cards.
+Sends DestinationCards and ShardCards to the player. These are new cards to be added to their hand. Step 2 of selecting destination cards.
 
 #### Syntax
 ```json
@@ -155,6 +156,20 @@ Sends discarded destinationCards back to the server. Step 3 of selecting destina
 {
     "command": "discardDestinations",
     "discardedDestinations": ["{array of 0-2 destinationCards}"]
+}
+```
+
+### `updateHand` Command
+Client Command.
+
+Sends DestinationCards and ShardCards to the server. This command contains the current state of their hand and replaces the current model. Used when claiming routes.
+
+#### Syntax
+```json
+{
+    "command": "updateHand",
+    "destinations": ["{array of DestinationCards}"],
+    "shardCards": ["{array of ShardCards}"],
 }
 ```
 
