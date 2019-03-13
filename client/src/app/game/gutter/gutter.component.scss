@@ -7,6 +7,12 @@
     overflow-x: scroll;
     white-space: nowrap;
 }
+.shard-box{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;    
+}
 .dest-card{
     height: calc(100% - 20px - 10px);    // Allow for scroll bar and margin.
     margin: 10px 5px;
@@ -31,16 +37,16 @@
     margin-left: 15px;
 }
 .shard-cell{
-    height: 33%;
-    width: 25%;
-}
-.shard-count-cell{
-    height: 33%;
-    width: 75%;
+    height: 55px;
+    width: 60px;
+    margin: 12px;
+    flex-grow: 0;
 }
 .shard-count-cell mat-card{
-    margin-left: 66.6%;
     box-shadow: none;
+}
+.shard-dummy-cell{
+    flex-grow: 3;
 }
 .inline{
     display: inline-block;
