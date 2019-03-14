@@ -4,6 +4,7 @@ import { Color } from '@core/model/color.enum';
 import { UpdatePlayerCommand, ChangeTurnCommand } from '@core/game-commands';
 import { GamePlayer } from '@core/model/game-player';
 import { notEqual } from 'assert';
+import { UserService } from '@core/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,8 @@ export class PlayerService {
   public players : GamePlayer[] = [];
   public playersById : Map<Number, GamePlayer> = new Map();
   public activePlayerId : Number = null;
+  public myPlayerId : number = 0;
+  public myPlayer : GamePlayer = null;
 
   private onUpdatePlayer(updatePlayerCommand : UpdatePlayerCommand) {
     let gamePlayer = updatePlayerCommand.gamePlayer;
@@ -46,13 +49,19 @@ export class PlayerService {
       if (l.turnOrder > r.turnOrder) {return 1;}
       return 0;
     });
+
+    this.myPlayer = this.playersById.get(this.myPlayerId)
   }
 
   private onTurnChange(changeTurnCommand : ChangeTurnCommand) {
     this.activePlayerId = changeTurnCommand.userId;
   }
 
-  constructor(private commandRouter : CommandRouterService) {
+  constructor(private commandRouter : CommandRouterService, userService: UserService) {
+    userService.user$.subscribe(user => {
+      this.myPlayerId = (user === null || user === undefined) ? 0 : user.getUserId();
+    })
+
     commandRouter.updatePlayer$.subscribe(updatePlayerCommand => this.onUpdatePlayer(updatePlayerCommand));
     commandRouter.changeTurn$.subscribe(changeTurnCommand => this.onTurnChange(changeTurnCommand));
 

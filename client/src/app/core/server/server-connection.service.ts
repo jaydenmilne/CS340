@@ -126,7 +126,7 @@ export class ServerConnectionService {
    * nothing happens, since we'll hear back from the server soon enough.
    */
   public poll() {
-    if (!this.pendingRequest) {
+    if (!this.pendingRequest && this.state !== undefined) {
       this.state.poll();
     }
   }
