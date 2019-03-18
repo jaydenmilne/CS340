@@ -28,7 +28,7 @@ export class PlayerInfoDialogComponent {
 })
 export class PlayerListComponent implements OnInit {
 
-  constructor(private playerService: PlayerService,
+  constructor(public playerService: PlayerService,
     public dialog: MatDialog) { }
 
   public getPlayerColorStyle(player: GamePlayer) {

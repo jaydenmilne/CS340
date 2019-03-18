@@ -10,7 +10,7 @@ import { GamePreview } from '@core/model/game-preview';
 })
 export class GameListComponent implements OnInit {
 
-  constructor(private lobbyService: LobbyService) { }
+  constructor(public lobbyService: LobbyService) { }
 
   showNamePrompt = false;
 

@@ -14,9 +14,9 @@ import { LobbyState } from '@core/server/server-connection-state';
 export class GameInfoComponent implements OnInit {
 
   constructor(
-    private lobbyService: LobbyService, 
-    private userService: UserService,
-    private serverConnection: ServerConnectionService) {}
+    public lobbyService: LobbyService, 
+    public userService: UserService,
+    public serverConnection: ServerConnectionService) {}
 
   playerReady = false;
 

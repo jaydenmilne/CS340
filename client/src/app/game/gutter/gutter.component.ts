@@ -15,7 +15,7 @@ import { StyleColor } from '@core/model/color.enum';
 })
 export class GutterComponent implements OnInit {
 
-  constructor(private cardService: CardService,  private playerService: PlayerService) {
+  constructor(public cardService: CardService, public playerService: PlayerService) {
    }
 
   ngOnInit() {
@@ -33,11 +33,11 @@ export class GutterComponent implements OnInit {
     MaterialType.INFINITY_GAUNTLET
   ];
 
-  private getCardImage(type: MaterialType): string{
+  getCardImage(type: MaterialType): string{
     return ShardCard.getImage(type);
   }
   
-  private getRemainingShards(): number{
+  getRemainingShards(): number{
     if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null){
       return 0;
     }

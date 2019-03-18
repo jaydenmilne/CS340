@@ -9,7 +9,7 @@
     <form [formGroup]="loginForm" id="login_form" (ngSubmit)="onLogin()">
       <mat-form-field class="full-width">
         <input matInput placeholder="Username" formControlName="username" required>
-        <mat-error *ngIf="usernameError != '' || loginForm.get('username').invalid">{{getHumanReadableErrors('username')}}</mat-error>
+        <mat-error *ngIf="loginForm.get('username').invalid">{{getHumanReadableErrors('username')}}</mat-error>
         <mat-hint align="end">{{loginForm.get('username').value.length}} / 16</mat-hint>
       </mat-form-field>
       <mat-form-field class="full-width">
