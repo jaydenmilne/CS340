@@ -12,7 +12,7 @@ import { User } from '@core/model/user';
 })
 export class ChatComponent implements OnInit, AfterViewInit {
 
-  constructor(private chatService: ChatService, private userService: UserService) {
+  constructor(public chatService: ChatService, public userService: UserService) {
   }
   @ViewChild('chatBox') private chatBox: ElementRef;
 
