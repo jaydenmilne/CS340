@@ -1,0 +1,51 @@
+.shard-cards-container{
+    white-space: nowrap;
+    overflow: hidden;
+    height: 60%;
+    text-align: center;
+}
+.dest-card{
+    height: calc(100% - 20px - 10px);
+    width: 30%;
+    // Allow for scroll bar and margin.
+    margin: 10px 5px;
+    display: inline-block;
+}
+.select-button{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.cancel-button{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.action-bar{
+    justify-content: flex-end;
+}
+.shard-box{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;    
+} 
+.shard-card{
+    height: 40px;
+    width: 35px;
+    padding: 5px;
+}
+.shard-icon{
+    height: 35px;
+}
+.shard-cell{
+    height: 55px;
+    width: 60px;
+    margin: 12px;
+    flex-grow: 0;
+}
+
+.check-mark{
+    position: absolute;
+    right: -11px;
+    top: -11px;
+    color: #e2d484;
+}
