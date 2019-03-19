@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Route, RouteName, City, RouteType } from '../core/model/route';
 import { Subject } from 'rxjs';
 import { ErrorNotifierService } from '@core/error-notifier.service';
+import { ShardCardDeck } from '@core/model/cards';
 
 @Injectable({
   providedIn: 'root'
@@ -123,4 +124,27 @@ export class RouteService {
     route.ownerId = ownerId;
     this.routeOwnershipChanged$.next(route);
   }
+
+  /* Look up route by ID*/
+  public getRouteById(routeId: string): Route { return null }
+
+  /* Determine if the provided hand contains enough cards to claim the specified route.
+    * @return true if route claim is possible, false if impossible
+    * @param route Route we would like to claim
+    * @param hand Users current hand
+    * */
+  public claimRoutePossible(route: Route, hand: ShardCardDeck): boolean { return false }
+
+    /* Determine if the supplied cards can be used to claim the specified route. 
+    * @return true if the cards are an exact match to claim the route, false if too many, two few, or the wrong cards are provided.
+    * @param route  Route we would like to claim
+    * @param cards  ShardCards we would like to use to claim the route
+    * */
+   public claimRouteValid(route: Route, cards: ShardCardDeck): boolean { return false }
+
+    /* Claims the route using the specified cards by sending a ClaimRouteCommand to the server.
+    * @param route  Route to claim
+    * @param cards  ShardCards used to claim the route
+    * */
+   public claimRoute(route: Route, cards: ShardCardDeck) {  }
 }
