@@ -1,3 +1,5 @@
+import { MaterialType } from './cards';
+
 export enum RouteType {
   	ANY = "any",
 	REALITY = "reality",
@@ -191,6 +193,26 @@ export let cityPrintNames: {[index:string]: string} = {
     "muspelheim" : "Muspelheim"
 }
 
+export let carsToPoints: {[index:number]: number} = {
+    2: 1,
+    3: 4,
+    4: 7,
+    5: 10,
+    6: 15,
+}
+
+export let typeToMaterial: {[material:string]: MaterialType} = {
+    "any" : MaterialType.ANY,
+	"reality" : MaterialType.REALITY_SHARD,
+	"soul" : MaterialType.SOUL_SHARD,
+	"space" : MaterialType.SPACE_SHARD,
+	"mind" : MaterialType.MIND_SHARD,
+	"power" : MaterialType.POWER_SHARD,
+	"time" : MaterialType.TIME_SHARD,
+	"vibranium" : MaterialType.VIBRANIUM,
+	"palladium" : MaterialType.PALLADIUM
+}
+
 export class Route {
 	public routeName: RouteName;
 	public cities: City[];
@@ -204,5 +226,9 @@ export class Route {
 		this.numCars = numCars;
 		this.type = type;
 		this.ownerId = ownerId;
-	}
+    }
+    
+    public getPoints(): number {
+        return carsToPoints[this.numCars];
+    }
 }

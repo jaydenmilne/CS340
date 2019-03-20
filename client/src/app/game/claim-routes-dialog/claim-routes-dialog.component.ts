@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { Route } from '@core/model/route';
-import { ShardCard, DestinationCard } from '@core/model/cards';
+import { Route, typeToMaterial } from '@core/model/route';
+import { ShardCard, DestinationCard, MaterialType } from '@core/model/cards';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
@@ -42,13 +42,16 @@ export class ClaimRoutesDialogComponent {
   }
 
   routeToDestCard(): DestinationCard {
-    return new DestinationCard({"cities": this.data.route.cities, "points": this.data.route.numCars});
+    return new DestinationCard({"cities": this.data.route.cities, "points": this.data.route.getPoints()});
   }
 
   getCardImage(card: ShardCard): string{
     return ShardCard.getImage(card.type);
   }
 
+  getRouteTypeImage(): string{
+    return ShardCard.getImage(typeToMaterial[this.data.route.type]);
+  }
 }
 
 export class ClaimRouteData {

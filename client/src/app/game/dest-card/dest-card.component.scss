@@ -1,6 +1,7 @@
 @import "colors.scss";
 .destination-card{
     height: inherit;
+    box-sizing: border-box;
 }
 .map-wrapper{
     margin-bottom: 0px;

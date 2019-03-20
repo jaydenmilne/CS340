@@ -1,16 +1,32 @@
-.shard-cards-container{
-    white-space: nowrap;
-    overflow: hidden;
-    height: 60%;
-    text-align: center;
+@import "colors.scss";
+
+.claim-route-header{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px $app_border_color solid;
 }
 .dest-card{
-    height: calc(100% - 20px - 10px);
-    width: 30%;
-    // Allow for scroll bar and margin.
+    height: 115px;
     margin: 10px 5px;
-    display: inline-block;
 }
+.required-shard-indicator{
+    height: 115px;
+    margin: 10px 5px;
+}
+.required-shard-card{
+    height: 70px;   // Subtract margin and padding
+    width:  60px;
+    padding: 5px;
+}
+.required-shard-icon{
+    height: 60px;
+}
+.required-shard-text{
+    margin-top: 0;
+}
+
 .select-button{
     padding-left: 20px;
     padding-right: 20px;
@@ -22,11 +38,11 @@
 .action-bar{
     justify-content: flex-end;
 }
+
 .shard-box{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;    
 } 
 .shard-card{
     height: 40px;
@@ -39,7 +55,7 @@
 .shard-cell{
     height: 55px;
     width: 60px;
-    margin: 12px;
+    margin: 12px 5px;
     flex-grow: 0;
 }
 

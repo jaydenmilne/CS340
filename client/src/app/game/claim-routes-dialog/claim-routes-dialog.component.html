@@ -1,7 +1,15 @@
 <h1 mat-dialog-title>Claim Route</h1>
 
 <!-- Add Type indicator here and maybe dest card? -->
-<app-dest-card class="dest-card"  [route]="routeToDestCard()" [selected]="false"></app-dest-card>
+<div class="claim-route-header">
+  <app-dest-card class="dest-card"  [route]="routeToDestCard()" [selected]="false"></app-dest-card>
+  <div class="required-shard-indicator">
+    <p class="required-shard-text">Requires</p>
+    <mat-card class="required-shard-card" matBadge="{{data.route.numCars}}">
+      <img class="required-shard-icon" src="assets/img/shards/{{getRouteTypeImage()}}">
+    </mat-card>
+  </div>
+</div>
 
 <div mat-dialog-content class="shard-box">
     <div class="shard-cell inline" *ngFor="let card of cards">
