@@ -3,6 +3,11 @@ import { GamePlayer } from './model/game-player';
 import { DestinationCard, ShardCard, MaterialType } from './model/cards';
 
 // Server commands
+export class drawShardCard implements Command {
+    public command = 'drawShardCard';
+
+    constructor(public card: String){}
+}
 
 // Client Commands
 export class UpdatePlayerCommand implements Command {
@@ -95,11 +100,3 @@ export class DiscardDestinationsCommand implements Command {
     }
 }
 
-export class drawShardCard implements Command {
-    public command = 'drawShardCard';
-    card: String;
-
-    constructor(card: String){
-        this.card = card;
-    }
-}
