@@ -153,6 +153,7 @@ fun handlePost(httpExchange: HttpExchange) {
             POST_CHAT -> Gson().fromJson(requestBody, PostChatCommand::class.java)
             REQUEST_DESTINATIONS -> Gson().fromJson(requestBody, RequestDestinationsCommand::class.java)
             DISCARD_DESTINATIONS -> Gson().fromJson(requestBody, DiscardDestinationsCommand::class.java)
+            DRAW_SHARD_CARD -> Gson().fromJson(requestBody, DiscardDestinationsCommand::class.java)
             else -> null
         }
 

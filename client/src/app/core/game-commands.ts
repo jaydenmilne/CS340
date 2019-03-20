@@ -1,6 +1,6 @@
 import { Command } from './command';
 import { GamePlayer } from './model/game-player';
-import { DestinationCard, ShardCard } from './model/cards';
+import { DestinationCard, ShardCard, MaterialType } from './model/cards';
 
 // Server commands
 
@@ -92,5 +92,14 @@ export class DiscardDestinationsCommand implements Command {
 
     constructor(discardedDestinations: DestinationCard[]) {
         this.discardedDestinations = discardedDestinations;
+    }
+}
+
+export class drawShardCard implements Command {
+    public command = 'drawShardCard';
+    card: String;
+
+    constructor(card: String){
+        this.card = card;
     }
 }
