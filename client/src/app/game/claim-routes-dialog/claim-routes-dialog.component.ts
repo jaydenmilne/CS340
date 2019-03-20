@@ -11,7 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 export class ClaimRoutesDialogComponent {
   private cards: {'card': ShardCard, 'selected': boolean}[] = [];
   private useableCards: {'card': ShardCard, 'selected': boolean}[] = [];
-  public numSelectedCards: number = 0;
+  public numSelectedCards: number = 0;    // Replace this with calls tou routeService.claimRouteValid()
   private selectedType: MaterialType;
 
   constructor(

@@ -244,6 +244,10 @@ export class Route {
         return carsToPoints[this.numCars];
     }
 
+    public getPrintName(){
+        return cityPrintNames[this.cities[0]] + " to " + cityPrintNames[this.cities[1]];
+    }
+
     public getClaimableTypes(): MaterialType[]{
         return typeToClaimableMaterials[this.type];
     }
