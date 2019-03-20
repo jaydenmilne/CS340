@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { Route, typeToMaterial } from '@core/model/route';
+import { Route, typeToMaterial, RouteType } from '@core/model/route';
 import { ShardCard, DestinationCard, MaterialType } from '@core/model/cards';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -10,6 +10,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class ClaimRoutesDialogComponent {
   private cards: {'card': ShardCard, 'selected': boolean}[] = [];
+  private useableCards: {'card': ShardCard, 'selected': boolean}[] = [];
+  public numSelectedCards: number = 0;
+  private selectedType: MaterialType;
 
   constructor(
     public dialogRef: MatDialogRef<ClaimRoutesDialogComponent>,
@@ -17,13 +20,19 @@ export class ClaimRoutesDialogComponent {
       data.hand.forEach(card => {
         this.cards.push({'card': card, 'selected': false});
       });
+      this.selectedType = MaterialType.ANY;
+      this.filterOnType(this.data.route.getClaimableTypes());
     }
 
-  onSelectClick(): void {
+  private filterOnType(types: MaterialType[]){
+    this.useableCards = this.cards.filter(cardPair => types.includes(cardPair.card.type));
+  }
+
+  onClaimClick(): void {
     // Call card service to discard cards
     let result = new ClaimRouteResult(true, []);
 
-    this.cards.forEach(cardPair => {
+    this.useableCards.forEach(cardPair => {
       if (cardPair.selected){
         result.usedCards.push(cardPair.card);
       }
@@ -39,6 +48,35 @@ export class ClaimRoutesDialogComponent {
 
   onCardClick(card: {'card': ShardCard, 'selected': boolean}){
     card.selected = !card.selected;
+    if(card.selected){
+      this.numSelectedCards++;
+      this.setSelectedType(card.card.type);
+      this.filterOnSelectedType();
+    } else{
+      this.numSelectedCards--;
+      this.unsetSelectedType(card.card.type);
+      this.filterOnSelectedType();
+    }
+  }
+
+  private setSelectedType(type: MaterialType){
+    if (this.selectedType === MaterialType.ANY && type !== MaterialType.INFINITY_GAUNTLET){
+      this.selectedType = type;
+    }
+  }
+
+  private unsetSelectedType(type: MaterialType){
+    if (this.numSelectedCards === 0){
+      this.selectedType = MaterialType.ANY;
+    }
+  }
+
+  private filterOnSelectedType(){
+    if(this.selectedType === MaterialType.ANY){
+      this.filterOnType(this.data.route.getClaimableTypes())
+    } else {
+      this.filterOnType([this.selectedType, MaterialType.INFINITY_GAUNTLET])
+    }
   }
 
   routeToDestCard(): DestinationCard {

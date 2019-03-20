@@ -12,7 +12,7 @@
 </div>
 
 <div mat-dialog-content class="shard-box">
-    <div class="shard-cell inline" *ngFor="let card of cards">
+    <div class="shard-cell inline" *ngFor="let card of useableCards">
       <mat-card class="shard-card inline" (click)="onCardClick(card)">
         <img class="shard-icon" src="assets/img/shards/{{getCardImage(card.card)}}">
         <i class="material-icons check-mark" *ngIf="card.selected">check_circle</i>
@@ -22,5 +22,5 @@
 
 <div mat-dialog-actions class="action-bar">
   <button mat-raised-button class="actionbutton cancel-button" (click)="onCancelClick()" >Cancel</button>
-  <button mat-raised-button class="actionbutton select-button" (click)="onSelectClick()" [disabled]="numSelectedCards < data.minRequired" color="primary">Select</button>
+  <button mat-raised-button class="actionbutton select-button" (click)="onClaimClick()" [disabled]="numSelectedCards !== data.route.numCars" color="primary">Claim</button>
 </div>

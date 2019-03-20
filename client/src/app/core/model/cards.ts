@@ -9,7 +9,8 @@ export enum MaterialType {
     TIME_SHARD = "time_shard",
     VIBRANIUM = "vibranium",
     PALLADIUM = "palladium",
-    INFINITY_GAUNTLET = "infinity_gauntlet"
+    INFINITY_GAUNTLET = "infinity_gauntlet",
+    ANY = "any"
 }
 
 abstract class ICard {}
@@ -46,6 +47,7 @@ export class ShardCard extends ICard {
         "vibranium" : "vibranium.svg",
         "palladium" : "palladium.svg",
         "infinity_gauntlet" : "gauntlet.svg",
+        "any" : "shard_circle.svg",
     }
 
     private static readonly printNamesMap: {[material: string]: string} = {
@@ -58,6 +60,7 @@ export class ShardCard extends ICard {
         "vibranium" : "Vibranium",
         "palladium" : "Palladium",
         "infinity_gauntlet" : "Infinity Gauntlet",
+        "any" : "Any Type",
     }
 
     constructor(shardCard: any) {

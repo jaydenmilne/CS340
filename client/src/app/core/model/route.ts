@@ -213,6 +213,18 @@ export let typeToMaterial: {[material:string]: MaterialType} = {
 	"palladium" : MaterialType.PALLADIUM
 }
 
+export let typeToClaimableMaterials: {[material:string]: MaterialType[]} = {
+    "any" : [MaterialType.VIBRANIUM, MaterialType.TIME_SHARD, MaterialType.SPACE_SHARD, MaterialType.SOUL_SHARD, MaterialType.REALITY_SHARD, MaterialType.POWER_SHARD, MaterialType.PALLADIUM, MaterialType.MIND_SHARD, MaterialType.INFINITY_GAUNTLET],
+	"reality" : [MaterialType.REALITY_SHARD, MaterialType.INFINITY_GAUNTLET],
+	"soul" : [MaterialType.SOUL_SHARD, MaterialType.INFINITY_GAUNTLET],
+	"space" : [MaterialType.SPACE_SHARD, MaterialType.INFINITY_GAUNTLET],
+	"mind" : [MaterialType.MIND_SHARD, MaterialType.INFINITY_GAUNTLET],
+	"power" : [MaterialType.POWER_SHARD, MaterialType.INFINITY_GAUNTLET],
+	"time" : [MaterialType.TIME_SHARD, MaterialType.INFINITY_GAUNTLET],
+	"vibranium" : [MaterialType.VIBRANIUM, MaterialType.INFINITY_GAUNTLET],
+	"palladium" : [MaterialType.PALLADIUM, MaterialType.INFINITY_GAUNTLET]
+}
+
 export class Route {
 	public routeName: RouteName;
 	public cities: City[];
@@ -230,5 +242,9 @@ export class Route {
     
     public getPoints(): number {
         return carsToPoints[this.numCars];
+    }
+
+    public getClaimableTypes(): MaterialType[]{
+        return typeToClaimableMaterials[this.type];
     }
 }
