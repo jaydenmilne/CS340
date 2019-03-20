@@ -3,26 +3,37 @@
 .route-info-header{
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
     margin: 20px;    
 }
-.dest-card{
-    height: 115px;
-    margin: 10px 5px;
-}
-.required-shard-indicator{
-    height: 115px;
-    margin: 10px 5px;
-}
+
 .required-shard-card{
-    height: 70px;   // Subtract margin and padding
+    height: 60px;   // Subtract margin and padding
     width:  60px;
-    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .required-shard-icon{
     height: 60px;
 }
-.required-shard-text{
-    margin-top: 0;
+
+.rounded{
+    border-radius: 20px;
+}
+
+.owner-card{
+    height: 20px;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0px;
+}
+.points-card{
+    height: 20px;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0px;
 }
 
 .claim-button{

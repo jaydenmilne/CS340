@@ -42,7 +42,7 @@ export class RouteInfoDialogComponent {
 
   getRouteOwnerName(): string{
     if(this.data.route.ownerId === -1){
-      return "Unclaimed"
+      return "Available"
     }
     return this.playerService.playersById.get(this.data.route.ownerId).username;
   }

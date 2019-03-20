@@ -1,16 +1,22 @@
 <h1 mat-dialog-title>{{data.route.getPrintName()}}</h1>
 
 <div class="route-info-header">
-  <app-dest-card class="dest-card"  [route]="routeToDestCard()" [selected]="false"></app-dest-card>
-  <div class="required-shard-indicator">
-    <p class="required-shard-text">{{data.route.ownerId == -1 ? "Requires" : ""}}</p>
-    <mat-card class="required-shard-card" matBadge="{{data.route.numCars}}">
+  <mat-card class="required-shard-card rounded">
+    <div class="icon-container" matBadge="{{data.route.numCars}}">
       <img class="required-shard-icon" src="assets/img/shards/{{getRouteTypeImage()}}">
+    </div>
+  </mat-card>
+  <div class="route-info-text">
+    <mat-card class="points-card rounded">
+      <p class="route-info-points">{{data.route.getPoints()}} point{{data.route.getPoints() > 1 ? "s" : ""}}</p>
+    </mat-card>
+    <mat-card class="owner-card rounded">
+      <p class="route-info-owner">{{getRouteOwnerName()}}</p>
     </mat-card>
   </div>
 </div>
 
-<p class="route-info-owner">{{getRouteOwnerName()}}</p>
+
 
 <div mat-dialog-actions class="action-bar">
   <button mat-raised-button class="actionbutton close-button" (click)="onCloseClick()" >Close</button>
