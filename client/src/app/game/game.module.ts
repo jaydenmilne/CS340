@@ -18,7 +18,7 @@ import { RouteInfoDialogComponent } from './map/route-info-dialog/route-info-dia
 
 @NgModule({
   declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent],
-  entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent ],
+  entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent ],
   imports: [
     CommonModule, 
     MatGridListModule,

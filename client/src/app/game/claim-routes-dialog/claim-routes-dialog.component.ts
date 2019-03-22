@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { Route, typeToMaterial, RouteType } from '@core/model/route';
-import { ShardCard, DestinationCard, MaterialType } from '@core/model/cards';
+import { ShardCard, DestinationCard, MaterialType, ShardCardDeck } from '@core/model/cards';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
@@ -17,7 +17,7 @@ export class ClaimRoutesDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ClaimRoutesDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ClaimRouteData) {
-      data.hand.forEach(card => {
+      data.hand.cards.forEach(card => {
         this.cards.push({'card': card, 'selected': false});
       });
       this.selectedType = MaterialType.ANY;
@@ -30,19 +30,19 @@ export class ClaimRoutesDialogComponent {
 
   onClaimClick(): void {
     // Call card service to discard cards
-    let result = new ClaimRouteResult(true, []);
-
+    const cards: ShardCard[] = [];
     this.useableCards.forEach(cardPair => {
       if (cardPair.selected){
-        result.usedCards.push(cardPair.card);
+        cards.push(cardPair.card);
       }
     })
 
+    let result = new ClaimRouteResult(true, new ShardCardDeck(cards));
     this.dialogRef.close(result);
   }
 
   onCancelClick(){
-    let result = new ClaimRouteResult(false, []);
+    let result = new ClaimRouteResult(false, new ShardCardDeck([]));
     this.dialogRef.close(result);
   }
 
@@ -93,9 +93,9 @@ export class ClaimRoutesDialogComponent {
 }
 
 export class ClaimRouteData {
-  constructor(public route: Route, public hand: ShardCard[]){}
+  constructor(public route: Route, public hand: ShardCardDeck){}
 }
 
 export class ClaimRouteResult {
-  constructor(public routeClaimed: boolean, public usedCards: ShardCard[]){}
+  constructor(public routeClaimed: boolean, public usedCards: ShardCardDeck){}
 }
