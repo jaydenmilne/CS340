@@ -18,9 +18,6 @@ export class GutterComponent implements OnInit {
   constructor(public cardService: CardService, public playerService: PlayerService) {
    }
 
-  ngOnInit() {
-  }
-
   shardTypes: MaterialType[] = [
     MaterialType.REALITY_SHARD,
     MaterialType.SOUL_SHARD,
@@ -33,24 +30,27 @@ export class GutterComponent implements OnInit {
     MaterialType.INFINITY_GAUNTLET
   ];
 
-  getCardImage(type: MaterialType): string{
+  ngOnInit() {
+  }
+
+  getCardImage(type: MaterialType): string {
     return ShardCard.getImage(type);
   }
-  
-  getRemainingShards(): number{
-    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null){
+
+  getRemainingShards(): number {
+    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null) {
       return 0;
     }
 
     return this.playerService.myPlayer.numRemainingTrains;
   }
 
-  getPlayerColorStyle(){
-    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null){
-      return {"fill": "#"+ StyleColor.YELLOW};
+  getPlayerColorStyle() {
+    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null) {
+      return {'fill': '#' + StyleColor.YELLOW};
     }
 
-    return {"fill": "#"+ StyleColor[this.playerService.myPlayer.color]};
+    return {'fill': '#' + StyleColor[this.playerService.myPlayer.color]};
   }
 }
 

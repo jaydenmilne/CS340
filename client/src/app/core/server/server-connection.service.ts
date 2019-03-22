@@ -11,9 +11,9 @@ import { ServerConnectionState } from './server-connection-state';
 })
 export class ServerConnectionService {
   private previousState: ServerConnectionState;
-  private state : ServerConnectionState;
-  private serverUrlOverride: string = "";
-  
+  private state: ServerConnectionState;
+  private serverUrlOverride = '';
+
   // Queue of commands that are ready to be sent
   private outgoingQueue = new Array<Command>();
   // Command that has a pending request, or couldn't be send because of a transmission error.
@@ -43,7 +43,7 @@ export class ServerConnectionService {
     this.state = this.previousState;
   }
 
-  public registerAuthToken(token : string) {
+  public registerAuthToken(token: string) {
     this.authToken = token;
   }
 
@@ -55,7 +55,7 @@ export class ServerConnectionService {
    * Gets the correct url depending on development mode or not
    */
   public getServerUrl(): string {
-    if (this.serverUrlOverride != "") {
+    if (this.serverUrlOverride !== '') {
       return this.serverUrlOverride;
     }
     if (isDevMode()) { return 'http://127.0.0.1:4300'; } else { return 'api.marylou.ga'; }
@@ -83,7 +83,7 @@ export class ServerConnectionService {
     this.state.handleResponse(result);
 
     // If there are any pending commands, send them
-    if (this.outgoingQueue.length != 0) {
+    if (this.outgoingQueue.length !== 0) {
       this.transmitCommand(this.outgoingQueue.pop());
     }
   }

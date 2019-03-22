@@ -9,7 +9,7 @@ export class PlayerNotifierService {
 
   constructor() { }
 
-  public notifyPlayer(message: string){
+  public notifyPlayer(message: string) {
     this.playerNotification.next(message);
   }
 
