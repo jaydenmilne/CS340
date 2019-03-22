@@ -49,8 +49,9 @@ class User(var username: String) {
     var points = 0
     var shardCards = ShardCardDeck(mutableListOf())
     var destinationCards = DestinationCardDeck(mutableListOf())
-    var numRemainingTrains = STARTING_TRAINS;
+    var numRemainingTrains = STARTING_TRAINS
     var hasLongestRoute = false
+    var longestRouteLength = 0
 
     var turnOrder = -1
 

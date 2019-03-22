@@ -252,7 +252,6 @@ class RouteList {
 }
 
 enum class RouteType(val type: String) {
-
     ANY("any"),
     REALITY("reality"),
     SOUL("soul"),
@@ -264,4 +263,4 @@ enum class RouteType(val type: String) {
     PALLADIUM("palladium")
 }
 
-class Route(routeId: String, cities: Array<String>, numCars: Int, type: RouteType, ownerId: Int?)
+class Route(val routeId: String, val cities: Array<String>, val numCars: Int, val type: RouteType, val ownerId: Int?)

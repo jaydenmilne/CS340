@@ -56,7 +56,7 @@ class Game(var name: String) {
 
     var destDiscardOrder = 0
 
-    @Transient private var routes = RouteList()
+    @Transient public var routes = RouteList()
 
     @Transient private var nextMessageId = -1
 
