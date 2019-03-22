@@ -68,7 +68,7 @@ export class ShardCard extends ICard {
         'infinity_gauntlet' : 'Infinity Gauntlet',
     };
 
-    private static readonly typeMap: {[material: string]: RouteType} = {
+    public static readonly typeMap: {[material: string]: RouteType} = {
         'reality_shard' : RouteType.REALITY,
         'soul_shard' : RouteType.SOUL,
         'space_shard' : RouteType.SPACE,
@@ -79,6 +79,7 @@ export class ShardCard extends ICard {
         'palladium' : RouteType.PALLADIUM,
         'infinity_gauntlet' : RouteType.ANY,
     };
+
     public type: MaterialType;
 
     public static getPrintName(type: MaterialType): string {

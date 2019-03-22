@@ -15,7 +15,7 @@ export class ConsoleCommandService {
    }
 
   public parseCommand(message: string) {
-    let first = message.split(' ')[0];
+    const first = message.split(' ')[0];
     switch (first) {
       case '/rainbowroad': {
         this.rainbowCommand();
@@ -70,8 +70,8 @@ export class ConsoleCommandService {
   }
 
   private claimCommand(message: string) {
-      let player = message.split(' ')[1];
-      let route = message.split(' ')[2];
+      const player = message.split(' ')[1];
+      const route = message.split(' ')[2];
       let userId;
       this.playerService.players.forEach(function (value) {
         if (value.username === player) {
@@ -84,7 +84,7 @@ export class ConsoleCommandService {
   }
 
   private changeTurn(message) {
-    let player = message.split(' ')[1];
+    const player = message.split(' ')[1];
     let userId;
     this.playerService.players.forEach(function (value) {
       if (value.username === player) {
@@ -122,10 +122,10 @@ export class ConsoleCommandService {
   }
 
   private newRoad(message: string) {
-    let cityOne = message.split(' ')[1];
-    let cityTwo = message.split(' ')[2];
-    let points = message.split(' ')[3];
-    let ends = [cityOne, cityTwo];
+    const cityOne = message.split(' ')[1];
+    const cityTwo = message.split(' ')[2];
+    const points = message.split(' ')[3];
+    const ends = [cityOne, cityTwo];
     this.cardService.playerDestCards.cards.push(new DestinationCard({'cities': ends, 'points': points}));
   }
 
