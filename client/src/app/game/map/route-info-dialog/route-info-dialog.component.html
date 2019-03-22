@@ -1,16 +1,16 @@
 <h1 mat-dialog-title>{{data.route.getPrintName()}}</h1>
 
 <div class="route-info-header">
-  <mat-card class="required-shard-card rounded">
+  <mat-card class="required-shard-card info-card rounded">
     <div class="icon-container" matBadge="{{data.route.numCars}}">
       <img class="required-shard-icon" src="assets/img/shards/{{getRouteTypeImage()}}">
     </div>
   </mat-card>
   <div class="route-info-text">
-    <mat-card class="points-card rounded">
+    <mat-card class="points-card info-card rounded">
       <p class="route-info-points">{{data.route.getPoints()}} point{{data.route.getPoints() > 1 ? "s" : ""}}</p>
     </mat-card>
-    <mat-card class="owner-card rounded">
+    <mat-card class="owner-card info-card rounded">
       <p class="route-info-owner">{{getRouteOwnerName()}}</p>
     </mat-card>
   </div>

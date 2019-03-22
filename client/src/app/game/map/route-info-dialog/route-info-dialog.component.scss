@@ -1,4 +1,5 @@
 @import "colors.scss";
+@import "~@angular/material/theming";
 
 .route-info-header{
     display: flex;
@@ -34,6 +35,12 @@
     width: 100%;
     padding: 10px;
     margin: 5px 0px;
+
+}
+.info-card{
+    background-color: mat-color($primaryPalette, 300);
+    color: mat-contrast($primaryPalette, 300);
+    text-align: center;
 }
 
 .claim-button{
