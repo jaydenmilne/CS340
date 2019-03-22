@@ -10,7 +10,7 @@ import { MaterialType, ShardCard } from '@core/model/cards';
 })
 export class BankComponent implements OnInit {
 
-  constructor(private cardService: CardService) { }
+  constructor(public cardService: CardService) { }
 
   ngOnInit() {
   }

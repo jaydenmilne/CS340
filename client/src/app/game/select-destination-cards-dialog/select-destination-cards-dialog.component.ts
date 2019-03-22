@@ -8,8 +8,8 @@ import { DestinationCard } from '@core/model/cards';
   styleUrls: ['./select-destination-cards-dialog.component.scss']
 })
 export class SelectDestinationCardsDialogComponent {
-  private cards: {'card': DestinationCard, 'selected': boolean}[] = [];
-  private numSelectedCards: number = 0;
+  public cards: {'card': DestinationCard, 'selected': boolean}[] = [];
+  public numSelectedCards: number = 0;
 
   constructor(
     public dialogRef: MatDialogRef<SelectDestinationCardsDialogComponent>,
