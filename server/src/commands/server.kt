@@ -305,16 +305,16 @@ class DrawShardCardCommand : INormalServerCommand{
         if(card == "deck"){
             user.shardCards.push(game.shardCardDeck.getNext())
         } else {
-            if(game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }.size > 0){
+            if(game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }.size > 0){//this filter sees if stuff exists
                 var found = -1;
-                for(cards in game.faceUpShardCards.shardCards){
+                for(cards in game.faceUpShardCards.shardCards){//this for loop finds the first card and takes it
                     if(cards.type.equals(MaterialType.valueOf(card)) && found == -1){
                         user.shardCards.push(cards)
                         found = game.faceUpShardCards.shardCards.indexOf(cards);
                         break;
                     }
                 }
-                game.faceUpShardCards.shardCards.removeAt(found)
+                game.faceUpShardCards.shardCards.removeAt(found)//card is replaced
                 game.faceUpShardCards.push(game.shardCardDeck.getNext())
             }else{
                 throw RuntimeException("Card does not exist")
