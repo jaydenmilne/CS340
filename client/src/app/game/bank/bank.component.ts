@@ -15,7 +15,7 @@ export class BankComponent implements OnInit {
   ngOnInit() {
   }
 
-  private getCardImage(type: MaterialType): string{
+  private getCardImage(type: MaterialType): string {
     return ShardCard.getImage(type);
   }
 

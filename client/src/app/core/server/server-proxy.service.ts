@@ -18,7 +18,7 @@ export class ServerProxyService {
     this.serverConnection.transmitCommand(command);
   }
 
-  constructor(private serverConnection : ServerConnectionService) {
+  constructor(private serverConnection: ServerConnectionService) {
     serverConnection.incomingCmd$.subscribe(cmd => {
       this.incomingCmd$.next(cmd);
     });

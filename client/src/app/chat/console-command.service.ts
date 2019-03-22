@@ -11,122 +11,122 @@ import { RouteName } from '@core/model/route';
 })
 export class ConsoleCommandService {
 
-  constructor(private playerService: PlayerService, private cardService: CardService, private myUser: UserService, private routeService:RouteService) {
+  constructor(private playerService: PlayerService, private cardService: CardService, private myUser: UserService, private routeService: RouteService) {
    }
 
-  public parseCommand(message: string){
-    var first = message.split(" ")[0];
-    switch(first){
-      case "/rainbowroad":{
+  public parseCommand(message: string) {
+    let first = message.split(' ')[0];
+    switch (first) {
+      case '/rainbowroad': {
         this.rainbowCommand();
         break;
       }
-      case "/allyourbasesaremine":{
+      case '/allyourbasesaremine': {
         this.allYourBasesCommand();
         break;
       }
-      case "/claim":{
+      case '/claim': {
         this.claimCommand(message);
         break;
       }
-      case "/givethemtrainsorgivemedeath":{
+      case '/givethemtrainsorgivemedeath': {
         this.giveThemTrains();
         break;
       }
-      case"/myturn":{
+      case'/myturn': {
         this.changeTurn(message);
         break;
       }
-      case"/heartinthecards":{
+      case'/heartinthecards': {
         this.killDecks();
         break;
       }
-      case"/finaldestination":{
+      case'/finaldestination': {
         this.finalDestination();
         break;
       }
-      case"/newroad":{
+      case'/newroad': {
         this.newRoad(message);
         break;
       }
-      default:{
+      default: {
         break;
       }
     }
 
   }
 
-  private rainbowCommand(){
-    this.cardService.faceUpShardCards = new ShardCardDeck([new ShardCard({"type":"INFINITY_GAUNTLET"}), 
-        new ShardCard({"type":"INFINITY_GAUNTLET"}), new ShardCard({"type":"INFINITY_GAUNTLET"}), 
-        new ShardCard({"type":"INFINITY_GAUNTLET"}), new ShardCard({"type":"INFINITY_GAUNTLET"})]);
+  private rainbowCommand() {
+    this.cardService.faceUpShardCards = new ShardCardDeck([new ShardCard({'type': 'INFINITY_GAUNTLET'}),
+        new ShardCard({'type': 'INFINITY_GAUNTLET'}), new ShardCard({'type': 'INFINITY_GAUNTLET'}),
+        new ShardCard({'type': 'INFINITY_GAUNTLET'}), new ShardCard({'type': 'INFINITY_GAUNTLET'})]);
   }
 
-  private allYourBasesCommand(){
-    this.playerService.players.forEach(function (value){
+  private allYourBasesCommand() {
+    this.playerService.players.forEach(function (value) {
       value.points = -100;
     });
     this.playerService.playersById.get(this.myUser.user$.value.getUserId()).points = 1000;
   }
 
-  private claimCommand(message: string){
-      var player = message.split(" ")[1];
-      var route = message.split(" ")[2];
-      var userId;
-      this.playerService.players.forEach(function (value){
-        if(value.username === player){
+  private claimCommand(message: string) {
+      let player = message.split(' ')[1];
+      let route = message.split(' ')[2];
+      let userId;
+      this.playerService.players.forEach(function (value) {
+        if (value.username === player) {
           userId = value.userId;
         }
-      })
-      if(userId != null){
+      });
+      if (userId != null) {
       this.routeService.updateOwnership(route as RouteName, userId);
       }
   }
 
-  private changeTurn(message){
-    var player = message.split(" ")[1];
-    var userId;
-    this.playerService.players.forEach(function (value){
-      if(value.username === player){
+  private changeTurn(message) {
+    let player = message.split(' ')[1];
+    let userId;
+    this.playerService.players.forEach(function (value) {
+      if (value.username === player) {
         userId = value.userId;
       }
-    })
-    if(userId != null){
+    });
+    if (userId != null) {
     this.playerService.activePlayerId = userId;
     }
   }
 
-  private giveThemTrains(){
-    this.playerService.players.forEach(function (value){
+  private giveThemTrains() {
+    this.playerService.players.forEach(function (value) {
       value.numRemainingTrains = 100;
     });
     this.playerService.playersById.get(this.myUser.user$.value.getUserId()).numRemainingTrains = 10;
   }
 
-  private killDecks(){
+  private killDecks() {
     this.cardService.destCardDeckSize = 0;
     this.cardService.shardCardDeckSize = 0;
     this.cardService.shardCardDiscardSize = 47;
-    this.playerService.players.forEach(function (value){
+    this.playerService.players.forEach(function (value) {
       value.numDestinationCards = 30;
       value.numTrainCards = 0;
     });
-    for(var i = 0; i <100; i++){
-    this.cardService.playerTrainCards.cards.push(new ShardCard({"type":"INFINITY_GAUNTLET"}));
+    for (let i = 0; i < 100; i++) {
+    this.cardService.playerTrainCards.cards.push(new ShardCard({'type': 'INFINITY_GAUNTLET'}));
     }
 
   }
 
-  private finalDestination(){
+  private finalDestination() {
     this.cardService.playerDestCards = new DestinationCardDeck([]);
   }
 
-  private newRoad(message: string){
-    var cityOne = message.split(" ")[1];
-    var cityTwo = message.split(" ")[2];
-    var points = message.split(" ")[3];
-    var ends = [cityOne, cityTwo];
-    this.cardService.playerDestCards.cards.push(new DestinationCard({"cities": ends, "points": points}));
+  private newRoad(message: string) {
+    let cityOne = message.split(' ')[1];
+    let cityTwo = message.split(' ')[2];
+    let points = message.split(' ')[3];
+    let ends = [cityOne, cityTwo];
+    this.cardService.playerDestCards.cards.push(new DestinationCard({'cities': ends, 'points': points}));
   }
 
 

@@ -9,7 +9,7 @@ import { DestinationCard } from '@core/model/cards';
 })
 export class SelectDestinationCardsDialogComponent {
   public cards: {'card': DestinationCard, 'selected': boolean}[] = [];
-  public numSelectedCards: number = 0;
+  public numSelectedCards = 0;
 
   constructor(
     public dialogRef: MatDialogRef<SelectDestinationCardsDialogComponent>,
@@ -21,21 +21,20 @@ export class SelectDestinationCardsDialogComponent {
 
   onSelectClick(): void {
     // Call card service to discard cards
-    let result = new SelectDestinationCardsResult([], []);
+    const result = new SelectDestinationCardsResult([], []);
 
     this.cards.forEach(cardPair => {
-      if (cardPair.selected){
+      if (cardPair.selected) {
         result.selectedCards.push(cardPair.card);
-      }
-      else{
+      } else {
         result.discardedCards.push(cardPair.card);
       }
-    })
+    });
 
     this.dialogRef.close(result);
   }
 
-  onCardClick(card: {'card': DestinationCard, 'selected': boolean}){
+  onCardClick(card: {'card': DestinationCard, 'selected': boolean}) {
     card.selected = !card.selected;
     this.numSelectedCards = this.cards.filter(destCard => destCard.selected === true).length;
   }
@@ -43,9 +42,9 @@ export class SelectDestinationCardsDialogComponent {
 }
 
 export class SelectDestinationCardsData {
-  constructor(public newCards: DestinationCard[], public minRequired: number){}
+  constructor(public newCards: DestinationCard[], public minRequired: number) {}
 }
 
 export class SelectDestinationCardsResult {
-  constructor(public selectedCards: DestinationCard[], public discardedCards: DestinationCard[]){}
+  constructor(public selectedCards: DestinationCard[], public discardedCards: DestinationCard[]) {}
 }

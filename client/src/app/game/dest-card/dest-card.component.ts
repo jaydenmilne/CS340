@@ -10,15 +10,15 @@ import { City, cityPrintNames } from '@core/model/route';
 export class DestCardComponent implements OnInit {
   @Input() route: DestinationCard;
   @Input() selected: boolean;
-  
-  constructor() { 
+
+  constructor() {
     }
 
   ngOnInit() {
   }
 
-  getPrintName(city: City): string{
-    let str: string = cityPrintNames[city];
+  getPrintName(city: City): string {
+    const str: string = cityPrintNames[city];
     return str;
   }
 

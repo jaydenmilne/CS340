@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Route, RouteName, City, RouteType } from '../core/model/route';
-import { Subject } from 'rxjs';
+import { Subject, from } from 'rxjs';
 import { ErrorNotifierService } from '@core/error-notifier.service';
-import { ShardCardDeck } from '@core/model/cards';
+import { ShardCardDeck, ShardCard } from '@core/model/cards';
+import { TurnService } from '../game/turn/turn.service';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class RouteService {
   public routes: Map<RouteName, Route> = new Map();
   public routeOwnershipChanged$ = new Subject<Route>();
 
-  constructor(private errorNotifier : ErrorNotifierService) {
+  constructor(private errorNotifier: ErrorNotifierService, private turnService: TurnService) {
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_1,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_1,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_2,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_2,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.CHITAURISANCTUARY_DARKDIMENSION,      (new Route(RouteName.CHITAURISANCTUARY_DARKDIMENSION,      [City.DARK_DIMENSION, City.CHITAURI_SANCTUARY],    3, RouteType.ANY, -1)));
@@ -116,9 +118,9 @@ export class RouteService {
   }
 
   public updateOwnership(routeName: RouteName, ownerId: number) {
-    let route = this.routes.get(routeName);
+    const route = this.routes.get(routeName);
     if (!route) {
-      this.errorNotifier.notifyHeading("RouteService::updateOwnership", "Cannot update ownership, route not found: " + routeName);
+      this.errorNotifier.notifyHeading('RouteService::updateOwnership', 'Cannot update ownership, route not found: ' + routeName);
       return;
     }
     route.ownerId = ownerId;
@@ -126,21 +128,59 @@ export class RouteService {
   }
 
   /* Look up route by ID*/
-  public getRouteById(routeId: string): Route { return null }
+  public getRouteById(routeId: string): Route {
+    // this.routes.get(RouteName)
+    return null; }
 
   /* Determine if the provided hand contains enough cards to claim the specified route.
     * @return true if route claim is possible, false if impossible
     * @param route Route we would like to claim
     * @param hand Users current hand
     * */
-  public claimRoutePossible(route: Route, hand: ShardCardDeck): boolean { return false }
+  public claimRoutePossible(route: Route, hand: ShardCardDeck): boolean {
+    let numGoodCards: number;
+    if (route.type === RouteType.ANY) {
+      return this.claimAnyRoute(route.numCars, hand);
+    } else {
+      numGoodCards = this.claimTypeRoute(route.type, hand);
+      if (numGoodCards >= route.numCars) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    }
 
-    /* Determine if the supplied cards can be used to claim the specified route. 
+    private claimAnyRoute(cardsNeeded: number, hand: ShardCardDeck): boolean {
+      if (cardsNeeded >= this.claimTypeRoute(RouteType.MIND, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.PALLADIUM, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.POWER, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.REALITY, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.SOUL, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.SPACE, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.TIME, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.VIBRANIUM, hand)) {return true; } else {return false; }
+    }
+
+    private claimTypeRoute(type: RouteType, hand: ShardCardDeck): number {
+      let numCards = 0;
+      for (const card in hand) {
+        if (type === card || card === RouteType.ANY) {
+          numCards ++;
+        }
+      }
+      return numCards;
+    }
+
+    /* Determine if the supplied cards can be used to claim the specified route.
     * @return true if the cards are an exact match to claim the route, false if too many, two few, or the wrong cards are provided.
     * @param route  Route we would like to claim
     * @param cards  ShardCards we would like to use to claim the route
     * */
-   public claimRouteValid(route: Route, cards: ShardCardDeck): boolean { return false }
+   public claimRouteValid(route: Route, cards: ShardCardDeck): boolean {
+     if (this.claimRoutePossible(route, cards)) {
+    if (cards.size.length === route.numCars) {
+      return true;
+    } else {
+      return false;
+    }
+    } else {
+     return false;
+     }
+    }
 
     /* Claims the route using the specified cards by sending a ClaimRouteCommand to the server.
     * @param route  Route to claim
