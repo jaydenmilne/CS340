@@ -284,11 +284,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
 
         // Broadcast the updated player to everyone else
-        var updatedPlayer = UpdatePlayerCommand()
-        updatedPlayer.gamePlayer = user.toGamePlayer()
-
-        game.broadcast(updatedPlayer)
-
+        updatePlayerHand(game, user)
         updatebank(game)
     }
 }
@@ -307,14 +303,15 @@ class DrawShardCardCommand : INormalServerCommand{
             throw RuntimeException("Not Your Turn")
         }
         if(card == "deck"){
-        user.shardCards.push(game.shardCardDeck.getNext())
-        }else{
+            user.shardCards.push(game.shardCardDeck.getNext())
+        } else {
             if(game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }.size > 0){
                 var found = -1;
                 for(cards in game.faceUpShardCards.shardCards){
                     if(cards.type.equals(MaterialType.valueOf(card)) && found == -1){
                         user.shardCards.push(cards)
                         found = game.faceUpShardCards.shardCards.indexOf(cards);
+                        break;
                     }
                 }
                 game.faceUpShardCards.shardCards.removeAt(found)
@@ -323,9 +320,15 @@ class DrawShardCardCommand : INormalServerCommand{
                 throw RuntimeException("Card does not exist")
             }
         }
-
+        updatePlayerHand(game, user)
         updatebank(game)
     }
+}
+
+fun updatePlayerHand(game: Game, user: User){
+    var updatePlayerCommand = UpdatePlayerCommand()
+    updatePlayerCommand.gamePlayer = user.toGamePlayer()
+    game.broadcast(updatePlayerCommand)
 }
 
 fun updatebank(game: Game){
