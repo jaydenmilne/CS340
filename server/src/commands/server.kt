@@ -284,10 +284,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
 
         // Broadcast the updated player to everyone else
-        var updatedPlayer = UpdatePlayerCommand()
-        updatedPlayer.gamePlayer = user.toGamePlayer()
-
-        game.broadcast(updatedPlayer)
+        updatePlayerHand(game, user)
 
         updatebank(game)
     }
@@ -301,10 +298,10 @@ class DrawShardCardCommand : INormalServerCommand{
         val game = Games.getGameForPlayer(user)
 
         if (game == null) {
-            throw RuntimeException("User not in a game")
+            throw CommandException("User not in a game")
         }
         if(game.whoseTurn != user){
-            throw RuntimeException("Not Your Turn")
+            throw CommandException("Not Your Turn")
         }
         if(card == "deck"){
         user.shardCards.push(game.shardCardDeck.getNext())
@@ -313,19 +310,24 @@ class DrawShardCardCommand : INormalServerCommand{
                 var found = -1;
                 for(cards in game.faceUpShardCards.shardCards){
                     if(cards.type.equals(MaterialType.valueOf(card)) && found == -1){
-                        user.shardCards.push(cards)
-                        found = game.faceUpShardCards.shardCards.indexOf(cards);
+                        found = game.faceUpShardCards.shardCards.indexOf(cards)
                     }
                 }
+                user.shardCards.push(game.faceUpShardCards.shardCards.get(found))
                 game.faceUpShardCards.shardCards.removeAt(found)
                 game.faceUpShardCards.push(game.shardCardDeck.getNext())
             }else{
-                throw RuntimeException("Card does not exist")
+                throw CommandException("Card does not exist")
             }
         }
-
         updatebank(game)
+        updatePlayerHand(game, user)
     }
+}
+fun updatePlayerHand(game: Game, user: User){
+    var updatePlayerCommand = UpdatePlayerCommand()
+    updatePlayerCommand.gamePlayer = user.toGamePlayer()
+    game.broadcast(updatePlayerCommand)
 }
 
 fun updatebank(game: Game){
