@@ -129,8 +129,9 @@ export class RouteService {
 
   /* Look up route by ID*/
   public getRouteById(routeId: string): Route {
-    // this.routes.get(RouteName)
-    return null; }
+    let routeName: RouteName = RouteName[routeId]
+    return this.routes.get(routeName); 
+  }
 
   /* Determine if the provided hand contains enough cards to claim the specified route.
     * @return true if route claim is possible, false if impossible
@@ -138,6 +139,9 @@ export class RouteService {
     * @param hand Users current hand
     * */
   public claimRoutePossible(route: Route, hand: ShardCardDeck): boolean {
+    if(!this.turnService.canClaimRoutes){
+      return false;
+    }
     let numGoodCards: number;
     if (route.type === RouteType.ANY) {
       return this.claimAnyRoute(route.numCars, hand);
@@ -149,42 +153,44 @@ export class RouteService {
         return false;
       }
     }
-    }
+  }
 
-    private claimAnyRoute(cardsNeeded: number, hand: ShardCardDeck): boolean {
-      if (cardsNeeded >= this.claimTypeRoute(RouteType.MIND, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.PALLADIUM, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.POWER, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.REALITY, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.SOUL, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.SPACE, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.TIME, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.VIBRANIUM, hand)) {return true; } else {return false; }
-    }
+  private claimAnyRoute(cardsNeeded: number, hand: ShardCardDeck): boolean {
+    if (cardsNeeded >= this.claimTypeRoute(RouteType.MIND, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.PALLADIUM, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.POWER, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.REALITY, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.SOUL, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.SPACE, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.TIME, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.VIBRANIUM, hand)) {return true; } else {return false; }
+  }
 
-    private claimTypeRoute(type: RouteType, hand: ShardCardDeck): number {
-      let numCards = 0;
-      for (const card in hand) {
-        if (type === card || card === RouteType.ANY) {
-          numCards ++;
-        }
+  private claimTypeRoute(type: RouteType, hand: ShardCardDeck): number {
+    let numCards = 0;
+    for (const card in hand) {
+      if (type === card || card === RouteType.ANY) {
+        numCards ++;
       }
-      return numCards;
     }
+    return numCards;
+  }
 
     /* Determine if the supplied cards can be used to claim the specified route.
     * @return true if the cards are an exact match to claim the route, false if too many, two few, or the wrong cards are provided.
     * @param route  Route we would like to claim
     * @param cards  ShardCards we would like to use to claim the route
     * */
-   public claimRouteValid(route: Route, cards: ShardCardDeck): boolean {
-     if (this.claimRoutePossible(route, cards)) {
-    if (cards.size.length === route.numCars) {
-      return true;
-    } else {
-      return false;
-    }
+  public claimRouteValid(route: Route, cards: ShardCardDeck): boolean {
+    if (this.claimRoutePossible(route, cards)) {
+      if (cards.size.length === route.numCars) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
      return false;
-     }
     }
+  }
 
     /* Claims the route using the specified cards by sending a ClaimRouteCommand to the server.
     * @param route  Route to claim
     * @param cards  ShardCards used to claim the route
     * */
-   public claimRoute(route: Route, cards: ShardCardDeck) {  }
+   public claimRoute(route: Route, cards: ShardCardDeck) {
+
+   }
 }
