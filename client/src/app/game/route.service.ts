@@ -4,7 +4,6 @@ import { Subject, from } from 'rxjs';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { ShardCardDeck, ShardCard } from '@core/model/cards';
 import { TurnService } from '../game/turn/turn.service';
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Injectable({
   providedIn: 'root'
@@ -129,8 +128,8 @@ export class RouteService {
 
   /* Look up route by ID*/
   public getRouteById(routeId: string): Route {
-    let routeName: RouteName = RouteName[routeId]
-    return this.routes.get(routeName); 
+    const routeName: RouteName = RouteName[routeId];
+    return this.routes.get(routeName);
   }
 
   /* Determine if the provided hand contains enough cards to claim the specified route.
@@ -139,34 +138,32 @@ export class RouteService {
     * @param hand Users current hand
     * */
   public claimRoutePossible(route: Route, hand: ShardCardDeck): boolean {
-    if(!this.turnService.canClaimRoutes){
+    if (!this.turnService.canClaimRoutes) {
       return false;
     }
     let numGoodCards: number;
     if (route.type === RouteType.ANY) {
-      return this.claimAnyRoute(route.numCars, hand);
+      return this.canClaimAnyRouteType(route.numCars, hand);
     } else {
-      numGoodCards = this.claimTypeRoute(route.type, hand);
-      if (numGoodCards >= route.numCars) {
-        return true;
-      } else {
-        return false;
-      }
+        return this.canClaimRouteType(route.type, hand, route.numCars);
     }
   }
 
-  private claimAnyRoute(cardsNeeded: number, hand: ShardCardDeck): boolean {
-    if (cardsNeeded >= this.claimTypeRoute(RouteType.MIND, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.PALLADIUM, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.POWER, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.REALITY, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.SOUL, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.SPACE, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.TIME, hand)) {return true; } else if (cardsNeeded >= this.claimTypeRoute(RouteType.VIBRANIUM, hand)) {return true; } else {return false; }
-  }
-
-  private claimTypeRoute(type: RouteType, hand: ShardCardDeck): number {
-    let numCards = 0;
-    for (const card in hand) {
-      if (type === card || card === RouteType.ANY) {
-        numCards ++;
-      }
+  private canClaimAnyRouteType(cardsNeeded: number, hand: ShardCardDeck): boolean {
+    const types = [RouteType.MIND, RouteType.PALLADIUM, RouteType.POWER, RouteType.REALITY, RouteType.SOUL, RouteType.SPACE, RouteType.TIME, RouteType.VIBRANIUM];
+  for (const type of types) {
+    if (this.canClaimRouteType(type, hand, cardsNeeded)) {
+      return true;
     }
-    return numCards;
+  }
+  return false;
+}
+
+  private canClaimRouteType(type: RouteType, hand: ShardCardDeck, cardsNeeded: number): boolean {
+    if (cardsNeeded >= hand.cards.filter(card => ShardCard.typeMap[card.type] === type || ShardCard.typeMap[card.type] === RouteType.ANY).length) {
+      return true;
+    }
+    return false;
   }
 
     /* Determine if the supplied cards can be used to claim the specified route.
@@ -175,12 +172,8 @@ export class RouteService {
     * @param cards  ShardCards we would like to use to claim the route
     * */
   public claimRouteValid(route: Route, cards: ShardCardDeck): boolean {
-    if (this.claimRoutePossible(route, cards)) {
-      if (cards.size.length === route.numCars) {
+    if (this.claimRoutePossible(route, cards) && cards.size.length === route.numCars) {
         return true;
-      } else {
-        return false;
-      }
     } else {
      return false;
     }

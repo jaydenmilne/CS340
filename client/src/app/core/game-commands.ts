@@ -3,7 +3,7 @@ import { GamePlayer } from './model/game-player';
 import { DestinationCard, ShardCard, MaterialType } from './model/cards';
 
 // Server commands
-export class drawShardCard implements Command {
+export class DrawShardCard implements Command {
     public command = 'drawShardCard';
 
     constructor(public card: String) {}
