@@ -270,7 +270,7 @@ class RequestDestinationsCommand : INormalServerCommand {
 
 class DiscardDestinationsCommand : INormalServerCommand {
     override val command = DISCARD_DESTINATIONS
-    val discardedDestinations = listOf<DestinationCard>()
+    private val discardedDestinations = listOf<DestinationCard>()
 
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user)
@@ -299,5 +299,36 @@ class DiscardDestinationsCommand : INormalServerCommand {
         updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
         updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
         game.broadcast(updatebankCommand)
+    }
+}
+
+class ClaimRouteCommand : INormalServerCommand {
+    override val command = CLAIM_ROUTE
+    private val routeId = ""
+    private val shardsUsed = arrayOf<ShardCard>()
+
+    override fun execute(user: User) {
+        val game = Games.getGameForPlayer(user)
+
+        if (game == null) {
+            throw RuntimeException("User not in a game")
+        }
+
+        if(game.canClaimRoute(routeId, shardsUsed)) {
+            for (s in shardsUsed) {
+                game.shardCardDiscardPile.push(s)
+                user.shardCards.shardCards.remove(s)
+            }
+
+            game.claimRoute(user.userId, routeId)
+
+            val routeClaimed = RouteClaimedCommand()
+            routeClaimed.routeId = this.routeId
+            routeClaimed.userId = user.userId
+            game.broadcast(routeClaimed)
+        }
+        else {
+            throw CommandException("ClaimRouteCommand: Route cannot be claimed")
+        }
     }
 }

@@ -69,6 +69,10 @@ export class ShardCard extends ICard {
         this.type = <MaterialType> MaterialType[shardCard.type];
     }
 
+    public setType(materialType: MaterialType) {
+        this.type = materialType;
+    }
+
     public static getPrintName(type: MaterialType): string{
         return this.printNamesMap[type];
     }

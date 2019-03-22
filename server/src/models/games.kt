@@ -2,6 +2,7 @@ package models
 
 import commands.CommandException
 import commands.INormalClientCommand
+import java.lang.RuntimeException
 
 private var nextGameId = -1
 
@@ -83,5 +84,58 @@ class Game(var name: String) {
 
     fun getOrderForUser(user: User): Int {
         return players.indexOf(user)
+    }
+
+    fun canClaimRoute(routeId: String, cards: Array<ShardCard>): Boolean {
+
+        val currentRoute = routes.routesByRouteId[routeId]
+
+        if (currentRoute != null) {
+            if (currentRoute.ownerId != null) {
+                return false
+            }
+        }
+        else {
+            throw RuntimeException("Invalid route ID")
+        }
+
+        val infinityGauntlets = mutableListOf<ShardCard>()
+        val secondaryCards = mutableListOf<ShardCard>()
+
+        for (s in cards) {
+            if (s.type == MaterialType.INFINITY_GAUNTLET) {
+                infinityGauntlets.add(s)
+            }
+            else {
+                secondaryCards.add(s)
+            }
+        }
+
+        if (infinityGauntlets.size >= currentRoute.numCars) {
+            return true
+        }
+
+        if (currentRoute.numCars > secondaryCards.size + infinityGauntlets.size) {
+            return false
+        }
+
+        when (currentRoute.type) {
+            RouteType.ANY -> return true
+            RouteType.REALITY -> return secondaryCards[0].type == MaterialType.REALITY_SHARD
+            RouteType.SOUL -> return secondaryCards[0].type == MaterialType.SOUL_SHARD
+            RouteType.SPACE -> return secondaryCards[0].type == MaterialType.SPACE_SHARD
+            RouteType.MIND -> return secondaryCards[0].type == MaterialType.MIND_SHARD
+            RouteType.POWER -> return secondaryCards[0].type == MaterialType.POWER_SHARD
+            RouteType.TIME -> return secondaryCards[0].type == MaterialType.TIME_SHARD
+            RouteType.VIBRANIUM -> return secondaryCards[0].type == MaterialType.VIBRANIUM
+            RouteType.PALLADIUM -> return secondaryCards[0].type == MaterialType.PALLADIUM
+        }
+    }
+
+    fun claimRoute(userId: Int, routeId: String) {
+
+        val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
+
+        route.ownerId = userId
     }
 }

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Route, RouteName, City, RouteType } from '../core/model/route';
 import { Subject } from 'rxjs';
 import { ErrorNotifierService } from '@core/error-notifier.service';
+import { CommandRouterService } from '@core/command-router.service';
+import { RouteClaimedCommand } from '@core/game-commands';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class RouteService {
   public routes: Map<RouteName, Route> = new Map();
   public routeOwnershipChanged$ = new Subject<Route>();
 
-  constructor(private errorNotifier : ErrorNotifierService) {
+  constructor(private errorNotifier : ErrorNotifierService, private commandRouter : CommandRouterService) {
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_1,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_1,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_2,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_2,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.CHITAURISANCTUARY_DARKDIMENSION,      (new Route(RouteName.CHITAURISANCTUARY_DARKDIMENSION,      [City.DARK_DIMENSION, City.CHITAURI_SANCTUARY],    3, RouteType.ANY, -1)));
@@ -112,6 +114,8 @@ export class RouteService {
     this.routes.set(RouteName.AVENGERSHQ_SOKOVIA_2,                 (new Route(RouteName.AVENGERSHQ_SOKOVIA_2,                 [City.AVENGERS_HQ, City.SOKOVIA],                  2, RouteType.VIBRANIUM, -1)));
     this.routes.set(RouteName.SOKOVIA_WAKANDA_1,                    (new Route(RouteName.SOKOVIA_WAKANDA_1,                    [City.SOKOVIA, City.WAKANDA],                      2, RouteType.ANY, -1)));
     this.routes.set(RouteName.SOKOVIA_WAKANDA_2,                    (new Route(RouteName.SOKOVIA_WAKANDA_2,                    [City.SOKOVIA, City.WAKANDA],                      2, RouteType.ANY, -1)));
+
+    commandRouter.routeClaimed$.subscribe( cmd => this.onRouteClaimed(cmd));
   }
 
   public updateOwnership(routeName: RouteName, ownerId: number) {
@@ -122,5 +126,9 @@ export class RouteService {
     }
     route.ownerId = ownerId;
     this.routeOwnershipChanged$.next(route);
+  }
+
+  public onRouteClaimed(routeClaimedCommand : RouteClaimedCommand) {
+    this.updateOwnership(routeClaimedCommand.routeId as RouteName, routeClaimedCommand.userId);
   }
 }

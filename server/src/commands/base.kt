@@ -23,6 +23,8 @@ const val SELECT_DESTINATIONS = "selectDestinations"
 const val POST_CHAT = "postChat"
 const val UPDATE_CHAT = "updateChat"
 const val DEAL_CARDS = "dealCards"
+const val CLAIM_ROUTE = "claimRoute"
+const val ROUTE_CLAIMED = "routeClaimed"
 
 interface ICommand {
     val command: String

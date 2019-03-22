@@ -5,13 +5,15 @@ import { ShardCardDeck, ShardCard, MaterialType, DestinationCardDeck, Destinatio
 import { UserService } from '@core/user.service';
 import { RouteService } from '../game/route.service';
 import { RouteName } from '@core/model/route';
+import { ServerProxyService } from '@core/server/server-proxy.service';
+import { ClaimRouteCommand } from '@core/game-commands';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConsoleCommandService {
 
-  constructor(private playerService: PlayerService, private cardService: CardService, private myUser: UserService, private routeService:RouteService) {
+  constructor(private playerService: PlayerService, private cardService: CardService, private myUser: UserService, private routeService:RouteService, private serverProxyService:ServerProxyService) {
    }
 
   public parseCommand(message: string){
@@ -79,7 +81,7 @@ export class ConsoleCommandService {
         }
       })
       if(userId != null){
-      this.routeService.updateOwnership(route as RouteName, userId);
+        this.routeService.updateOwnership(route as RouteName, userId);
       }
   }
 
