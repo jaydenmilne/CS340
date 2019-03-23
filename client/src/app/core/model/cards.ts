@@ -1,16 +1,16 @@
 import { City, RouteType, Route } from './route';
 
 export enum MaterialType {
-    REALITY_SHARD = "reality_shard",
-    SOUL_SHARD = "soul_shard",
-    SPACE_SHARD = "space_shard",
-    MIND_SHARD = "mind_shard",
-    POWER_SHARD = "power_shard",
-    TIME_SHARD = "time_shard",
-    VIBRANIUM = "vibranium",
-    PALLADIUM = "palladium",
-    INFINITY_GAUNTLET = "infinity_gauntlet",
-    ANY = "any"
+    REALITY_SHARD = 'reality_shard',
+    SOUL_SHARD = 'soul_shard',
+    SPACE_SHARD = 'space_shard',
+    MIND_SHARD = 'mind_shard',
+    POWER_SHARD = 'power_shard',
+    TIME_SHARD = 'time_shard',
+    VIBRANIUM = 'vibranium',
+    PALLADIUM = 'palladium',
+    INFINITY_GAUNTLET = 'infinity_gauntlet',
+    ANY = 'any'
 }
 
 abstract class ICard {}
@@ -126,40 +126,40 @@ export class ShardCardDeck extends ICardDeck<ShardCard> {
     }
 }
 
-abstract class ICardSelectionPair<ICard>{
-    public card: ICard
+abstract class ICardSelectionPair<ICard> {
+    public card: ICard;
     public selected: boolean;
-    
-    constructor(card: ICard){
-        this.card = card
+
+    constructor(card: ICard) {
+        this.card = card;
         this.selected = false;
     }
 }
 
-export class ShardCardSelectionPair extends ICardSelectionPair <ShardCard>{
-    constructor(card: ShardCard){
+export class ShardCardSelectionPair extends ICardSelectionPair <ShardCard> {
+    constructor(card: ShardCard) {
         super(card);
     }
 }
 
-export class DestCardSelectionPair extends ICardSelectionPair <DestinationCard>{
-    constructor(card: DestinationCard){
+export class DestCardSelectionPair extends ICardSelectionPair <DestinationCard> {
+    constructor(card: DestinationCard) {
         super(card);
     }
 }
 
-abstract class ICardSelectionDeck<ICard>{
+abstract class ICardSelectionDeck<ICard> {
     public cardPairs: ICardSelectionPair<ICard>[];
     public numSelected;
-    
-    constructor(cardPairs: ICardSelectionPair<ICard>[]){
+
+    constructor(cardPairs: ICardSelectionPair<ICard>[]) {
         this.numSelected = 0;
         this.cardPairs = cardPairs;
     }
-    
-    public size(): number{
+
+    public size(): number {
         return this.cardPairs.length;
-    };
+    }
 
     public abstract fromCards(cards: ICard[]);
 
@@ -169,15 +169,15 @@ abstract class ICardSelectionDeck<ICard>{
 
     public selectCard(cardPair: ICardSelectionPair<ICard>) {
         cardPair.selected = !cardPair.selected;
-        if(cardPair.selected){
+        if (cardPair.selected) {
             this.numSelected++;
-        } else{
+        } else {
             this.numSelected--;
         }
     }
 
     public getCards(): ICard[] {
-        let cards: ICard[] = [];
+        const cards: ICard[] = [];
         this.cardPairs.forEach(cardPair => {
             cards.push(cardPair.card);
         });
@@ -187,13 +187,13 @@ abstract class ICardSelectionDeck<ICard>{
 
 export class ShardCardSelectionDeck extends ICardSelectionDeck<ShardCard> {
     private selectedType: MaterialType;
-    constructor(cardPairs: ICardSelectionPair<ShardCard>[]){
+    constructor(cardPairs: ICardSelectionPair<ShardCard>[]) {
         super(cardPairs);
         this.selectedType = MaterialType.ANY;
     }
 
     public fromCards(cards: ShardCard[]) {
-        let cardPairs: ShardCardSelectionPair[] = [];
+        const cardPairs: ShardCardSelectionPair[] = [];
         cards.forEach(card => {
             cardPairs.push(new ShardCardSelectionPair(card));
         });
@@ -206,7 +206,7 @@ export class ShardCardSelectionDeck extends ICardSelectionDeck<ShardCard> {
 
 
     public toDeck(): ShardCardDeck {
-        let cards: ShardCard[] = [];
+        const cards: ShardCard[] = [];
         this.cardPairs.forEach(cardPair => {
             cards.push(cardPair.card);
         });
@@ -217,53 +217,53 @@ export class ShardCardSelectionDeck extends ICardSelectionDeck<ShardCard> {
         return new ShardCardSelectionDeck(this.cardPairs.filter(cardPair => types.includes(cardPair.card.type)));
     }
 
-    public getSelectedType(): MaterialType{
+    public getSelectedType(): MaterialType {
         return this.selectedType;
     }
 
-    public filterOnSelectedType(includeWild: boolean = true){
-        if(includeWild){
+    public filterOnSelectedType(includeWild: boolean = true) {
+        if (includeWild) {
             return this.filterOnType([this.selectedType, MaterialType.INFINITY_GAUNTLET]);
         } else {
             return this.filterOnType([this.selectedType]);
         }
       }
 
-    public selectCard(cardPair: ShardCardSelectionPair){
+    public selectCard(cardPair: ShardCardSelectionPair) {
         super.selectCard(cardPair);
-        if(cardPair.selected){
+        if (cardPair.selected) {
             this.setSelectedType(cardPair.card.type);
-        } else{
+        } else {
             this.unsetSelectedType(cardPair.card.type);
         }
     }
 
-    private setSelectedType(type: MaterialType){
-        if (this.selectedType === MaterialType.ANY && type !== MaterialType.INFINITY_GAUNTLET){
+    private setSelectedType(type: MaterialType) {
+        if (this.selectedType === MaterialType.ANY && type !== MaterialType.INFINITY_GAUNTLET) {
           this.selectedType = type;
         }
       }
-    
-      private unsetSelectedType(type: MaterialType){
-        if (this.numSelected === 0){
+
+      private unsetSelectedType(type: MaterialType) {
+        if (this.numSelected === 0) {
           this.selectedType = MaterialType.ANY;
         }
       }
 }
 
 export class DestCardSelectionDeck extends ICardSelectionDeck<DestinationCard> {
-    constructor(cardPairs: ICardSelectionPair<DestinationCard>[]){
+    constructor(cardPairs: ICardSelectionPair<DestinationCard>[]) {
         super(cardPairs);
     }
 
     public fromCards(cards: DestinationCard[]) {
-        let cardPairs: DestCardSelectionPair[] = [];
+        const cardPairs: DestCardSelectionPair[] = [];
         cards.forEach(card => {
             cardPairs.push(new DestCardSelectionPair(card));
         });
         this.cardPairs = cardPairs;
     }
-    
+
     public getSelected(): ICardSelectionDeck<DestinationCard> {
         return new DestCardSelectionDeck(this.cardPairs.filter(cardPair => cardPair.selected));
     }
@@ -273,7 +273,7 @@ export class DestCardSelectionDeck extends ICardSelectionDeck<DestinationCard> {
     }
 
     public toDeck(): DestinationCardDeck {
-        let cards: DestinationCard[] = [];
+        const cards: DestinationCard[] = [];
         this.cardPairs.forEach(cardPair => {
             cards.push(cardPair.card);
         });

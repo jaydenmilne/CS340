@@ -193,37 +193,37 @@ export let cityPrintNames: {[index: string]: string} = {
     'muspelheim' : 'Muspelheim'
 };
 
-export let carsToPoints: {[index:number]: number} = {
+export let carsToPoints: {[index: number]: number} = {
     2: 1,
     3: 4,
     4: 7,
     5: 10,
     6: 15,
-}
+};
 
-export let typeToMaterial: {[material:string]: MaterialType} = {
-    "any" : MaterialType.ANY,
-	"reality" : MaterialType.REALITY_SHARD,
-	"soul" : MaterialType.SOUL_SHARD,
-	"space" : MaterialType.SPACE_SHARD,
-	"mind" : MaterialType.MIND_SHARD,
-	"power" : MaterialType.POWER_SHARD,
-	"time" : MaterialType.TIME_SHARD,
-	"vibranium" : MaterialType.VIBRANIUM,
-	"palladium" : MaterialType.PALLADIUM
-}
+export let typeToMaterial: {[material: string]: MaterialType} = {
+    'any' : MaterialType.ANY,
+	'reality' : MaterialType.REALITY_SHARD,
+	'soul' : MaterialType.SOUL_SHARD,
+	'space' : MaterialType.SPACE_SHARD,
+	'mind' : MaterialType.MIND_SHARD,
+	'power' : MaterialType.POWER_SHARD,
+	'time' : MaterialType.TIME_SHARD,
+	'vibranium' : MaterialType.VIBRANIUM,
+	'palladium' : MaterialType.PALLADIUM
+};
 
-export let typeToClaimableMaterials: {[material:string]: MaterialType[]} = {
-    "any" : [MaterialType.VIBRANIUM, MaterialType.TIME_SHARD, MaterialType.SPACE_SHARD, MaterialType.SOUL_SHARD, MaterialType.REALITY_SHARD, MaterialType.POWER_SHARD, MaterialType.PALLADIUM, MaterialType.MIND_SHARD, MaterialType.INFINITY_GAUNTLET],
-	"reality" : [MaterialType.REALITY_SHARD, MaterialType.INFINITY_GAUNTLET],
-	"soul" : [MaterialType.SOUL_SHARD, MaterialType.INFINITY_GAUNTLET],
-	"space" : [MaterialType.SPACE_SHARD, MaterialType.INFINITY_GAUNTLET],
-	"mind" : [MaterialType.MIND_SHARD, MaterialType.INFINITY_GAUNTLET],
-	"power" : [MaterialType.POWER_SHARD, MaterialType.INFINITY_GAUNTLET],
-	"time" : [MaterialType.TIME_SHARD, MaterialType.INFINITY_GAUNTLET],
-	"vibranium" : [MaterialType.VIBRANIUM, MaterialType.INFINITY_GAUNTLET],
-	"palladium" : [MaterialType.PALLADIUM, MaterialType.INFINITY_GAUNTLET]
-}
+export let typeToClaimableMaterials: {[material: string]: MaterialType[]} = {
+    'any' : [MaterialType.VIBRANIUM, MaterialType.TIME_SHARD, MaterialType.SPACE_SHARD, MaterialType.SOUL_SHARD, MaterialType.REALITY_SHARD, MaterialType.POWER_SHARD, MaterialType.PALLADIUM, MaterialType.MIND_SHARD, MaterialType.INFINITY_GAUNTLET],
+	'reality' : [MaterialType.REALITY_SHARD, MaterialType.INFINITY_GAUNTLET],
+	'soul' : [MaterialType.SOUL_SHARD, MaterialType.INFINITY_GAUNTLET],
+	'space' : [MaterialType.SPACE_SHARD, MaterialType.INFINITY_GAUNTLET],
+	'mind' : [MaterialType.MIND_SHARD, MaterialType.INFINITY_GAUNTLET],
+	'power' : [MaterialType.POWER_SHARD, MaterialType.INFINITY_GAUNTLET],
+	'time' : [MaterialType.TIME_SHARD, MaterialType.INFINITY_GAUNTLET],
+	'vibranium' : [MaterialType.VIBRANIUM, MaterialType.INFINITY_GAUNTLET],
+	'palladium' : [MaterialType.PALLADIUM, MaterialType.INFINITY_GAUNTLET]
+};
 
 export class Route {
 	public routeName: RouteName;
@@ -239,20 +239,20 @@ export class Route {
 		this.type = type;
 		this.ownerId = ownerId;
     }
-    
+
     public getPoints(): number {
         return carsToPoints[this.numCars];
     }
 
-    public getPrintName(){
-        return cityPrintNames[this.cities[0]] + " to " + cityPrintNames[this.cities[1]];
+    public getPrintName() {
+        return cityPrintNames[this.cities[0]] + ' to ' + cityPrintNames[this.cities[1]];
     }
 
-    public getClaimableTypes(): MaterialType[]{
+    public getClaimableTypes(): MaterialType[] {
         return typeToClaimableMaterials[this.type];
     }
 
     toDestCard(): DestinationCard {
-        return new DestinationCard({"cities": this.cities, "points": this.getPoints()});
+        return new DestinationCard({'cities': this.cities, 'points': this.getPoints()});
     }
 }

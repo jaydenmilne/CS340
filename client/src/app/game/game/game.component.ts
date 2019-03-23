@@ -36,7 +36,7 @@ export class GameComponent implements OnInit {
     });
   }
 
-  public displayNotification(message: string){
+  public displayNotification(message: string) {
     this.snackBar.open(message, '', {duration: 2500});
   }
 }

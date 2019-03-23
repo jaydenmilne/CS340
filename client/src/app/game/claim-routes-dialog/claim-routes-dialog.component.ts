@@ -24,42 +24,42 @@ export class ClaimRoutesDialogComponent {
 
   onClaimClick(): void {
     // Call card service to discard cards
-    let result = new ClaimRouteResult(true, this.cards.getSelected().toDeck());
+    const result = new ClaimRouteResult(true, this.cards.getSelected().toDeck());
     this.dialogRef.close(result);
   }
 
-  onCancelClick(){
-    let result = new ClaimRouteResult(false, new ShardCardDeck([]));
+  onCancelClick() {
+    const result = new ClaimRouteResult(false, new ShardCardDeck([]));
     this.dialogRef.close(result);
   }
 
-  onCardClick(card: ShardCardSelectionPair){
+  onCardClick(card: ShardCardSelectionPair) {
     this.cards.selectCard(card);
     this.filterUsableCards();
     this.claimValid = this.routeService.claimRouteValid(this.data.route, this.cards.toDeck());
   }
 
-  private filterUsableCards(){
-    if(this.cards.getSelectedType() === MaterialType.ANY){
-      this.useableCards = this.cards.filterOnType(this.data.route.getClaimableTypes())
+  private filterUsableCards() {
+    if (this.cards.getSelectedType() === MaterialType.ANY) {
+      this.useableCards = this.cards.filterOnType(this.data.route.getClaimableTypes());
     } else {
       this.useableCards = this.cards.filterOnSelectedType(true);
     }
   }
 
-  getCardImage(card: ShardCard): string{
+  getCardImage(card: ShardCard): string {
     return ShardCard.getImage(card.type);
   }
 
-  getRouteTypeImage(): string{
+  getRouteTypeImage(): string {
     return ShardCard.getImage(typeToMaterial[this.data.route.type]);
   }
 }
 
 export class ClaimRouteData {
-  constructor(public route: Route, public hand: ShardCardDeck){}
+  constructor(public route: Route, public hand: ShardCardDeck) {}
 }
 
 export class ClaimRouteResult {
-  constructor(public routeClaimed: boolean, public usedCards: ShardCardDeck){}
+  constructor(public routeClaimed: boolean, public usedCards: ShardCardDeck) {}
 }

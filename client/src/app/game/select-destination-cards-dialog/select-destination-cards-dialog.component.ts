@@ -19,11 +19,11 @@ export class SelectDestinationCardsDialogComponent {
 
   onSelectClick(): void {
     // Call card service to discard cards
-    let result = new SelectDestinationCardsResult(this.cards.getSelected().toDeck(), this.cards.getDiscarded().toDeck());
+    const result = new SelectDestinationCardsResult(this.cards.getSelected().toDeck(), this.cards.getDiscarded().toDeck());
     this.dialogRef.close(result);
   }
 
-  onCardClick(cardPair: DestCardSelectionPair){
+  onCardClick(cardPair: DestCardSelectionPair) {
     this.cards.selectCard(cardPair);
     this.minSelected = this.cards.numSelected >= this.data.minRequired;
   }
@@ -31,9 +31,9 @@ export class SelectDestinationCardsDialogComponent {
 }
 
 export class SelectDestinationCardsData {
-  constructor(public newCards: DestinationCardDeck, public minRequired: number){}
+  constructor(public newCards: DestinationCardDeck, public minRequired: number) {}
 }
 
 export class SelectDestinationCardsResult {
-  constructor(public selectedCards: DestinationCardDeck, public discardedCards: DestinationCardDeck){}
+  constructor(public selectedCards: DestinationCardDeck, public discardedCards: DestinationCardDeck) {}
 }

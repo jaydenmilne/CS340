@@ -17,7 +17,7 @@ import { ClaimRoutesDialogComponent, ClaimRouteData } from '../claim-routes-dial
 })
 export class MapComponent implements OnInit {
 
-  constructor(public routeService : RouteService, private cardService: CardService ,private playerService : PlayerService, private errorNotifier : ErrorNotifierService,  public dialog: MatDialog) {
+  constructor(public routeService: RouteService, private cardService: CardService , private playerService: PlayerService, private errorNotifier: ErrorNotifierService,  public dialog: MatDialog) {
       this.routeService.routeOwnershipChanged$.subscribe( route => this.onRouteOwnershipChange(route));
      }
 
@@ -26,13 +26,13 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     if (this.mapSvg == undefined) {
-      console.error("Map not found!");
+      console.error('Map not found!');
     }
 
     this.mapSvg.nativeElement.addEventListener('click', this.onSvgClick.bind(this));
   }
 
-  private onSvgClick(event : any) {
+  private onSvgClick(event: any) {
     if (event.target) {
       // Walk up the path to try and find the group that contains the path, shield, and line
       for (let i = 0; i < event.path.length; ++i) {
@@ -70,7 +70,7 @@ export class MapComponent implements OnInit {
     routeLine.style.stroke = color;
   }
 
-  private openRouteInfo(routeName: RouteName){
+  private openRouteInfo(routeName: RouteName) {
     // Get route by Id
     const route: Route = this.routeService.getRouteById(routeName);
     const hand: ShardCardDeck = this.cardService.playerTrainCards;
@@ -79,32 +79,32 @@ export class MapComponent implements OnInit {
     // Open route info modal
     const routeInfoBox = this.dialog.open(RouteInfoDialogComponent, {
       width: '350px',
-      data: new RouteInfoData(route, canClaim),  
+      data: new RouteInfoData(route, canClaim),
       disableClose: false
     });
 
     routeInfoBox.afterClosed().subscribe(routeInfoResult => {
       // On close, determine if we need to open claim route
-      if(routeInfoResult !== undefined && routeInfoResult.claimRoute){
+      if (routeInfoResult !== undefined && routeInfoResult.claimRoute) {
         this.openClaimRoute(route, hand);
       }
-    });    
+    });
   }
 
-  private openClaimRoute(route: Route, hand: ShardCardDeck){
+  private openClaimRoute(route: Route, hand: ShardCardDeck) {
     // Open claim route modal
     const claimRouteBox = this.dialog.open(ClaimRoutesDialogComponent, {
       width: '350px',
-      data: new ClaimRouteData(route, hand),  
+      data: new ClaimRouteData(route, hand),
       disableClose: true
     });
 
     claimRouteBox.afterClosed().subscribe(claimRouteResult => {
     // On close, determine if we need to claim route
-      if(claimRouteResult.routeClaimed && this.routeService.claimRouteValid(route, claimRouteResult.usedCards)){
+      if (claimRouteResult.routeClaimed && this.routeService.claimRouteValid(route, claimRouteResult.usedCards)) {
         // Call claim route
         this.routeService.claimRoute(route, claimRouteResult.usedCards);
       }
-    }); 
+    });
   }
 }

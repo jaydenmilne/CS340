@@ -13,7 +13,7 @@ import { DealCardsCommand } from '@core/game-commands';
 })
 export class ConsoleCommandService {
 
-  constructor(private playerService: PlayerService, private cardService: CardService, private myUser: UserService, private routeService:RouteService, private commandRouter: CommandRouterService) {
+  constructor(private playerService: PlayerService, private cardService: CardService, private myUser: UserService, private routeService: RouteService, private commandRouter: CommandRouterService) {
    }
 
   public parseCommand(message: string) {
@@ -51,15 +51,15 @@ export class ConsoleCommandService {
         this.newRoad(message);
         break;
       }
-      case"/whereto":{
+      case'/whereto': {
         this.whereTo(message);
         break;
       }
-      case"/makeitrain":{
+      case'/makeitrain': {
         this.makeItRain(message);
         break;
       }
-      default:{
+      default: {
         break;
       }
     }
@@ -139,47 +139,47 @@ export class ConsoleCommandService {
     this.cardService.playerDestCards.cards.push(new DestinationCard({'cities': ends, 'points': points}));
   }
 
-  private whereTo(message: string){
+  private whereTo(message: string) {
     this.commandRouter.dealCards$.next(new DealCardsCommand({
       'shardCards': [],
-      'destinations':[
-        new DestinationCard({"cities":["gibborim","avengershq"],"points":22}),
-        new DestinationCard({"cities":["gibborim","knowhere"],"points":9}),
-        new DestinationCard({"cities":["galactus","quantumrealm"],"points":17}),
-      ], 
+      'destinations': [
+        new DestinationCard({'cities': ['gibborim', 'avengershq'], 'points': 22}),
+        new DestinationCard({'cities': ['gibborim', 'knowhere'], 'points': 9}),
+        new DestinationCard({'cities': ['galactus', 'quantumrealm'], 'points': 17}),
+      ],
       'minDestinations': 2
-    }))
+    }));
   }
 
-  private makeItRain(message: string){
-    const args = message.split(" ");
+  private makeItRain(message: string) {
+    const args = message.split(' ');
     let shards;
-    if(args.length > 1){
+    if (args.length > 1) {
       const cardType = args[1].toUpperCase();
-      if(MaterialType[cardType] === undefined) return;
+      if (MaterialType[cardType] === undefined) { return; }
 
       shards = [
-        { "type": cardType },{ "type": cardType },{ "type": cardType },
-      ]
+        { 'type': cardType }, { 'type': cardType }, { 'type': cardType },
+      ];
     } else {
       shards = [
-        { "type": "VIBRANIUM" },{ "type": "VIBRANIUM" },{ "type": "VIBRANIUM" },
-        { "type": "INFINITY_GAUNTLET" },{ "type": "INFINITY_GAUNTLET" },{ "type": "INFINITY_GAUNTLET" },
-        { "type": "REALITY_SHARD" },{ "type": "REALITY_SHARD" },{ "type": "REALITY_SHARD" },
-        { "type": "SOUL_SHARD" },{ "type": "SOUL_SHARD" },{ "type": "SOUL_SHARD" },
-        { "type": "SPACE_SHARD" },{ "type": "SPACE_SHARD" },{ "type": "SPACE_SHARD" },
-        { "type": "MIND_SHARD" },{ "type": "MIND_SHARD" },{ "type": "MIND_SHARD" },
-        { "type": "POWER_SHARD" },{ "type": "POWER_SHARD" },{ "type": "POWER_SHARD" },
-        { "type": "TIME_SHARD" },{ "type": "TIME_SHARD" },{ "type": "TIME_SHARD" },
-        { "type": "PALLADIUM" },{ "type": "PALLADIUM" },{ "type": "PALLADIUM" },
-      ]
+        { 'type': 'VIBRANIUM' }, { 'type': 'VIBRANIUM' }, { 'type': 'VIBRANIUM' },
+        { 'type': 'INFINITY_GAUNTLET' }, { 'type': 'INFINITY_GAUNTLET' }, { 'type': 'INFINITY_GAUNTLET' },
+        { 'type': 'REALITY_SHARD' }, { 'type': 'REALITY_SHARD' }, { 'type': 'REALITY_SHARD' },
+        { 'type': 'SOUL_SHARD' }, { 'type': 'SOUL_SHARD' }, { 'type': 'SOUL_SHARD' },
+        { 'type': 'SPACE_SHARD' }, { 'type': 'SPACE_SHARD' }, { 'type': 'SPACE_SHARD' },
+        { 'type': 'MIND_SHARD' }, { 'type': 'MIND_SHARD' }, { 'type': 'MIND_SHARD' },
+        { 'type': 'POWER_SHARD' }, { 'type': 'POWER_SHARD' }, { 'type': 'POWER_SHARD' },
+        { 'type': 'TIME_SHARD' }, { 'type': 'TIME_SHARD' }, { 'type': 'TIME_SHARD' },
+        { 'type': 'PALLADIUM' }, { 'type': 'PALLADIUM' }, { 'type': 'PALLADIUM' },
+      ];
     }
 
     this.commandRouter.dealCards$.next(new DealCardsCommand({
       'shardCards': shards,
-      'destinations':[], 
+      'destinations': [],
       'minDestinations': 0
-    }))
+    }));
   }
 
 }

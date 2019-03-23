@@ -19,13 +19,13 @@ export class CardService {
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
   }
-  
-  public faceUpShardCards : ShardCardDeck = new ShardCardDeck([]);
-  public shardCardDeckSize : number;
-  public shardCardDiscardSize : number;
-  public destCardDeckSize : number;
-  public playerTrainCards : ShardCardDeck = new ShardCardDeck([]);
-  public playerDestCards : DestinationCardDeck = new DestinationCardDeck([]);
+
+  public faceUpShardCards: ShardCardDeck = new ShardCardDeck([]);
+  public shardCardDeckSize: number;
+  public shardCardDiscardSize: number;
+  public destCardDeckSize: number;
+  public playerTrainCards: ShardCardDeck = new ShardCardDeck([]);
+  public playerDestCards: DestinationCardDeck = new DestinationCardDeck([]);
 
   public stagedDestinationCards$ = new Subject<SelectDestinationCardsData>();
 
