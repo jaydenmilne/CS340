@@ -2,6 +2,8 @@ package models
 
 import commands.CommandException
 import commands.INormalClientCommand
+import commands.UpdateBankCommand
+import commands.UpdatePlayerCommand
 
 private var nextGameId = -1
 
@@ -83,5 +85,20 @@ class Game(var name: String) {
 
     fun getOrderForUser(user: User): Int {
         return players.indexOf(user)
+    }
+
+    fun updatePlayer(user: User){
+        var updatePlayerCommand = UpdatePlayerCommand()
+        updatePlayerCommand.gamePlayer = user.toGamePlayer()
+        broadcast(updatePlayerCommand)
+    }
+
+    fun updatebank(){
+        var updatebankCommand = UpdateBankCommand()
+        updatebankCommand.faceUpCards = faceUpShardCards.cards
+        updatebankCommand.shardDrawPileSize = shardCardDeck.cards.size
+        updatebankCommand.shardDiscardPileSize = shardCardDiscardPile.cards.size
+        updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
+        broadcast(updatebankCommand)
     }
 }

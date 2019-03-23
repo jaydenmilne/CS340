@@ -255,12 +255,10 @@ class RequestDestinationsCommand : INormalServerCommand {
         user.queue.push(dealCardsCommand)
 
         /* Send UpdateBankCommand to user's client */
-        updatebank(game)
+        game.updatebank()
 
         /* Send UpdatePlayerCommand to user's client */
-        var updatePlayerCommand = UpdatePlayerCommand()
-        updatePlayerCommand.gamePlayer = user.toGamePlayer()
-        game.broadcast(updatePlayerCommand)
+        game.updatePlayer(user)
     }
 }
 
@@ -284,8 +282,8 @@ class DiscardDestinationsCommand : INormalServerCommand {
         user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
 
         // Broadcast the updated player to everyone else
-        updatePlayerHand(game, user)
-        updatebank(game)
+        game.updatePlayer(user)
+        game.updatebank()
     }
 }
 
@@ -307,10 +305,10 @@ class DrawShardCardCommand : INormalServerCommand{
         } else {
             if(game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }.size > 0){//this filter sees if stuff exists
                 var found = -1;
-                for(cards in game.faceUpShardCards.shardCards){//this for loop finds the first card and takes it
-                    if(cards.type.equals(MaterialType.valueOf(card)) && found == -1){
-                        user.shardCards.push(cards)
-                        found = game.faceUpShardCards.shardCards.indexOf(cards);
+                for(selectedCard in game.faceUpShardCards.shardCards){//this for loop finds the first card and takes it
+                    if(selectedCard.type.equals(MaterialType.valueOf(card)) && found == -1){
+                        user.shardCards.push(selectedCard)
+                        found = game.faceUpShardCards.shardCards.indexOf(selectedCard);
                         break;
                     }
                 }
@@ -320,22 +318,7 @@ class DrawShardCardCommand : INormalServerCommand{
                 throw RuntimeException("Card does not exist")
             }
         }
-        updatePlayerHand(game, user)
-        updatebank(game)
+        game.updatebank()
     }
 }
 
-fun updatePlayerHand(game: Game, user: User){
-    var updatePlayerCommand = UpdatePlayerCommand()
-    updatePlayerCommand.gamePlayer = user.toGamePlayer()
-    game.broadcast(updatePlayerCommand)
-}
-
-fun updatebank(game: Game){
-    var updatebankCommand = UpdateBankCommand()
-    updatebankCommand.faceUpCards = game.faceUpShardCards.cards
-    updatebankCommand.shardDrawPileSize = game.shardCardDeck.cards.size
-    updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
-    updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
-    game.broadcast(updatebankCommand)
-}
