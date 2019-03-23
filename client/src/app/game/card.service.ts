@@ -19,7 +19,7 @@ export class CardService {
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
   }
-
+  
   public faceUpShardCards : ShardCardDeck = new ShardCardDeck([]);
   public shardCardDeckSize : number;
   public shardCardDiscardSize : number;
@@ -31,7 +31,7 @@ export class CardService {
 
   private onDealCards(dealCardsCmd : DealCardsCommand) {
     if (dealCardsCmd.destinations.length > 0) {
-      this.stagedDestinationCards$.next(new SelectDestinationCardsData(dealCardsCmd.destinations, dealCardsCmd.minDestinations));
+      this.stagedDestinationCards$.next(new SelectDestinationCardsData(new DestinationCardDeck(dealCardsCmd.destinations), dealCardsCmd.minDestinations));
     }
     this.playerTrainCards = new ShardCardDeck(this.playerTrainCards.cards.concat(dealCardsCmd.shardCards));
   }
@@ -44,9 +44,9 @@ export class CardService {
   }
 
   public selectDestinationCards(selectCardsResult: SelectDestinationCardsResult) {
-    this.serverProxy.executeCommand( new DiscardDestinationsCommand(selectCardsResult.discardedCards));
+    this.serverProxy.executeCommand( new DiscardDestinationsCommand(selectCardsResult.discardedCards.cards));
 
-    this.playerDestCards = new DestinationCardDeck(this.playerDestCards.cards.concat(selectCardsResult.selectedCards));
+    this.playerDestCards = new DestinationCardDeck(this.playerDestCards.cards.concat(selectCardsResult.selectedCards.cards));
   }
 
   public requestDestinationCards(){

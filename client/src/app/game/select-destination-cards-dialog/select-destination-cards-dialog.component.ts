@@ -1,6 +1,6 @@
 import { Component,  Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { DestinationCard } from '@core/model/cards';
+import { DestCardSelectionDeck, DestinationCardDeck, DestCardSelectionPair } from '@core/model/cards';
 
 @Component({
   selector: 'app-select-destination-cards-dialog',
@@ -8,44 +8,32 @@ import { DestinationCard } from '@core/model/cards';
   styleUrls: ['./select-destination-cards-dialog.component.scss']
 })
 export class SelectDestinationCardsDialogComponent {
-  private cards: {'card': DestinationCard, 'selected': boolean}[] = [];
-  private numSelectedCards: number = 0;
-
+  private cards: DestCardSelectionDeck;
+  public minSelected = false;
   constructor(
     public dialogRef: MatDialogRef<SelectDestinationCardsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SelectDestinationCardsData) {
-      data.newCards.forEach(card => {
-        this.cards.push({'card': card, 'selected': false});
-      });
+      this.cards = new DestCardSelectionDeck([]);
+      this.cards.fromCards(data.newCards.cards);
     }
 
   onSelectClick(): void {
     // Call card service to discard cards
-    let result = new SelectDestinationCardsResult([], []);
-
-    this.cards.forEach(cardPair => {
-      if (cardPair.selected){
-        result.selectedCards.push(cardPair.card);
-      }
-      else{
-        result.discardedCards.push(cardPair.card);
-      }
-    })
-
+    let result = new SelectDestinationCardsResult(this.cards.getSelected().toDeck(), this.cards.getDiscarded().toDeck());
     this.dialogRef.close(result);
   }
 
-  onCardClick(card: {'card': DestinationCard, 'selected': boolean}){
-    card.selected = !card.selected;
-    this.numSelectedCards = this.cards.filter(destCard => destCard.selected === true).length;
+  onCardClick(cardPair: DestCardSelectionPair){
+    this.cards.selectCard(cardPair);
+    this.minSelected = this.cards.numSelected >= this.data.minRequired;
   }
 
 }
 
 export class SelectDestinationCardsData {
-  constructor(public newCards: DestinationCard[], public minRequired: number){}
+  constructor(public newCards: DestinationCardDeck, public minRequired: number){}
 }
 
 export class SelectDestinationCardsResult {
-  constructor(public selectedCards: DestinationCard[], public discardedCards: DestinationCard[]){}
+  constructor(public selectedCards: DestinationCardDeck, public discardedCards: DestinationCardDeck){}
 }

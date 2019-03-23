@@ -132,6 +132,12 @@ export class ShardCardSelectionPair extends ICardSelectionPair <ShardCard>{
     }
 }
 
+export class DestCardSelectionPair extends ICardSelectionPair <DestinationCard>{
+    constructor(card: DestinationCard){
+        super(card);
+    }
+}
+
 abstract class ICardSelectionDeck<ICard>{
     public cardPairs: ICardSelectionPair<ICard>[];
     public numSelected;
@@ -141,13 +147,32 @@ abstract class ICardSelectionDeck<ICard>{
         this.cardPairs = cardPairs;
     }
     
+    public size(): number{
+        return this.cardPairs.length;
+    };
+
     public abstract fromCards(cards: ICard[]);
 
     public abstract getSelected(): ICardSelectionDeck<ICard>;
 
     public abstract toDeck();
 
-    public abstract selectCard(cardPair: ICardSelectionPair<ICard>);
+    public selectCard(cardPair: ICardSelectionPair<ICard>) {
+        cardPair.selected = !cardPair.selected;
+        if(cardPair.selected){
+            this.numSelected++;
+        } else{
+            this.numSelected--;
+        }
+    }
+
+    public getCards(): ICard[] {
+        let cards: ICard[] = [];
+        this.cardPairs.forEach(cardPair => {
+            cards.push(cardPair.card);
+        });
+        return cards;
+    }
 }
 
 export class ShardCardSelectionDeck extends ICardSelectionDeck<ShardCard> {
@@ -165,24 +190,10 @@ export class ShardCardSelectionDeck extends ICardSelectionDeck<ShardCard> {
         this.cardPairs = cardPairs;
     }
 
-	public size(): Number {
-		return this.cardPairs.length
-    }
-    
     public getSelected(): ICardSelectionDeck<ShardCard> {
         return new ShardCardSelectionDeck(this.cardPairs.filter(cardPair => cardPair.selected));
     }
 
-    public selectCard(cardPair: ShardCardSelectionPair) {
-        cardPair.selected = !cardPair.selected;
-        if(cardPair.selected){
-            this.numSelected++;
-            this.setSelectedType(cardPair.card.type);
-        } else{
-            this.numSelected--;
-            this.unsetSelectedType(cardPair.card.type);
-        }
-    }
 
     public toDeck(): ShardCardDeck {
         let cards: ShardCard[] = [];
@@ -208,6 +219,15 @@ export class ShardCardSelectionDeck extends ICardSelectionDeck<ShardCard> {
         }
       }
 
+    public selectCard(cardPair: ShardCardSelectionPair){
+        super.selectCard(cardPair);
+        if(cardPair.selected){
+            this.setSelectedType(cardPair.card.type);
+        } else{
+            this.unsetSelectedType(cardPair.card.type);
+        }
+    }
+
     private setSelectedType(type: MaterialType){
         if (this.selectedType === MaterialType.ANY && type !== MaterialType.INFINITY_GAUNTLET){
           this.selectedType = type;
@@ -219,4 +239,34 @@ export class ShardCardSelectionDeck extends ICardSelectionDeck<ShardCard> {
           this.selectedType = MaterialType.ANY;
         }
       }
+}
+
+export class DestCardSelectionDeck extends ICardSelectionDeck<DestinationCard> {
+    constructor(cardPairs: ICardSelectionPair<DestinationCard>[]){
+        super(cardPairs);
+    }
+
+    public fromCards(cards: DestinationCard[]) {
+        let cardPairs: DestCardSelectionPair[] = [];
+        cards.forEach(card => {
+            cardPairs.push(new DestCardSelectionPair(card));
+        });
+        this.cardPairs = cardPairs;
+    }
+    
+    public getSelected(): ICardSelectionDeck<DestinationCard> {
+        return new DestCardSelectionDeck(this.cardPairs.filter(cardPair => cardPair.selected));
+    }
+
+    public getDiscarded(): ICardSelectionDeck<DestinationCard> {
+        return new DestCardSelectionDeck(this.cardPairs.filter(cardPair => !cardPair.selected));
+    }
+
+    public toDeck(): DestinationCardDeck {
+        let cards: DestinationCard[] = [];
+        this.cardPairs.forEach(cardPair => {
+            cards.push(cardPair.card);
+        });
+        return new DestinationCardDeck(cards);
+    }
 }
