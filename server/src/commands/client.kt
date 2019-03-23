@@ -49,7 +49,6 @@ class UpdateChatCommand(val message: Message) : INormalClientCommand {
     override val command = UPDATE_CHAT
 }
 
-
 class DealCardsCommand : INormalClientCommand {
     override val command = DEAL_CARDS
     var destinations = mutableListOf<DestinationCard>()
@@ -57,16 +56,23 @@ class DealCardsCommand : INormalClientCommand {
     var minDestinations = 2
 }
 
-
 class UpdateHandCommand : INormalClientCommand{
     override val command = UPDATE_HAND
     var destinations = mutableListOf<DestinationCard>();
     var shardCards = mutableListOf<ShardCard>();
 }
 
-
 class RouteClaimedCommand : INormalClientCommand {
     override val command = ROUTE_CLAIMED
     var userId = 0
     var routeId = ""
+}
+
+class LastRoundCommand : INormalClientCommand {
+    override val command = LAST_ROUND
+}
+
+class GameOverCommand : INormalClientCommand {
+    override val command = GAME_OVER
+    var players = mutableListOf<PlayerPoints>()
 }
