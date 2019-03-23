@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { Route, typeToMaterial, RouteType } from '@core/model/route';
-import { ShardCard, MaterialType, ShardCardDeck, ShardCardSelectionDeck, ShardCardSelectionPair } from '@core/model/cards';
+import { Route, typeToMaterial } from '@core/model/route';
+import { ShardCard, ShardCardDeck, ShardCardSelectionDeck, ShardCardSelectionPair } from '@core/model/cards';
+import { MaterialType } from "@core/model/material-type.enum";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { RouteService } from '../route.service';
 

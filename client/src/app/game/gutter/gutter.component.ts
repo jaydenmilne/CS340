@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DestinationCard, MaterialType, ShardCard} from '@core/model/cards';
-import { City } from '@core/model/route';
+import { MaterialType } from "@core/model/material-type.enum";
 import { CardService } from '../card.service';
-import { UserService } from '@core/user.service';
 import { PlayerService } from '../player.service';
-import { GamePlayer } from '@core/model/game-player';
 import { StyleColor } from '@core/model/color.enum';
 
 

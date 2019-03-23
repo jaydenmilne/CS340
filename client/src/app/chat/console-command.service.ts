@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CardService } from '../game/card.service';
 import { PlayerService } from '../game/player.service';
-import { ShardCardDeck, ShardCard, MaterialType, DestinationCardDeck, DestinationCard } from '@core/model/cards';
+import { ShardCardDeck, ShardCard, DestinationCardDeck, DestinationCard } from '@core/model/cards';
+import { MaterialType } from "@core/model/material-type.enum";
 import { UserService } from '@core/user.service';
 import { RouteService } from '../game/route.service';
-import { RouteName } from '@core/model/route';
+import { RouteName } from "@core/model/route-name.enum";
 import { CommandRouterService } from '@core/command-router.service';
 import { DealCardsCommand } from '@core/game-commands';
 

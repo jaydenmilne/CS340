@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ShardCard, DestinationCard, ShardCardDeck, DestinationCardDeck } from '@core/model/cards';
+import { ShardCardDeck, DestinationCardDeck } from '@core/model/cards';
 import { CommandRouterService } from '@core/command-router.service';
 import { DealCardsCommand, UpdateBankCommand, DiscardDestinationsCommand } from '@core/game-commands.ts';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { RequestDestinationsCommand } from '@core/game-commands.ts';
 import { Subject } from 'rxjs';
 import { SelectDestinationCardsResult, SelectDestinationCardsData } from './select-destination-cards-dialog/select-destination-cards-dialog.component';
-import { City } from '@core/model/route';
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CardService } from '../card.service';
-import { MaterialType, ShardCard } from '@core/model/cards';
+import { ShardCard } from '@core/model/cards';
+import { MaterialType } from "@core/model/material-type.enum";
 
 
 @Component({

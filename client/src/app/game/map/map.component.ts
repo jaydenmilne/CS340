@@ -1,6 +1,7 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { RouteService } from '../route.service';
-import { Route, RouteName } from '@core/model/route';
+import { Route } from '@core/model/route';
+import { RouteName } from "@core/model/route-name.enum";
 import { PlayerService } from '../player.service';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { StyleColor } from '@core/model/color.enum';
