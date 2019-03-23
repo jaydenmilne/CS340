@@ -109,7 +109,7 @@ export class DrawnFirstCardState extends ITurnState {
   }
 
   canDrawWild(): boolean {
-    return true;
+    return false;
   }
 
   canDrawDestinations(): boolean {
@@ -123,15 +123,15 @@ export class DrawnFirstCardState extends ITurnState {
 
 export class GameOverState extends ITurnState {
   isMyTurn(): boolean {
-    return true;
+    return false;
   }
 
   canDrawShards(): boolean {
-    return true;
+    return false;
   }
 
   canDrawWild(): boolean {
-    return true;
+    return false;
   }
 
   canDrawDestinations(): boolean {
