@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ShardCard, DestinationCard, ShardCardDeck, DestinationCardDeck } from '@core/model/cards';
+import { ShardCardDeck, DestinationCardDeck } from '@core/model/cards';
 import { CommandRouterService } from '@core/command-router.service';
 import { DealCardsCommand, UpdateBankCommand, DiscardDestinationsCommand } from '@core/game-commands.ts';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { RequestDestinationsCommand } from '@core/game-commands.ts';
 import { Subject } from 'rxjs';
 import { SelectDestinationCardsResult, SelectDestinationCardsData } from './select-destination-cards-dialog/select-destination-cards-dialog.component';
-import { City } from '@core/model/route';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +30,7 @@ export class CardService {
 
   private onDealCards(dealCardsCmd: DealCardsCommand) {
     if (dealCardsCmd.destinations.length > 0) {
-      this.stagedDestinationCards$.next(new SelectDestinationCardsData(dealCardsCmd.destinations, dealCardsCmd.minDestinations));
+      this.stagedDestinationCards$.next(new SelectDestinationCardsData(new DestinationCardDeck(dealCardsCmd.destinations), dealCardsCmd.minDestinations));
     }
     this.playerTrainCards = new ShardCardDeck(this.playerTrainCards.cards.concat(dealCardsCmd.shardCards));
   }
@@ -44,9 +43,9 @@ export class CardService {
   }
 
   public selectDestinationCards(selectCardsResult: SelectDestinationCardsResult) {
-    this.serverProxy.executeCommand( new DiscardDestinationsCommand(selectCardsResult.discardedCards));
+    this.serverProxy.executeCommand( new DiscardDestinationsCommand(selectCardsResult.discardedCards.cards));
 
-    this.playerDestCards = new DestinationCardDeck(this.playerDestCards.cards.concat(selectCardsResult.selectedCards));
+    this.playerDestCards = new DestinationCardDeck(this.playerDestCards.cards.concat(selectCardsResult.selectedCards.cards));
   }
 
   public requestDestinationCards() {

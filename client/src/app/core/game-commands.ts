@@ -1,6 +1,6 @@
 import { Command } from './command';
 import { GamePlayer } from './model/game-player';
-import { DestinationCard, ShardCard, MaterialType } from './model/cards';
+import { DestinationCard, ShardCard } from './model/cards';
 
 // Server commands
 export class DrawShardCard implements Command {

@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Route, RouteName, City, RouteType } from '../core/model/route';
+import { Route } from '../core/model/route';
+import { RouteName } from "../core/model/route-name.enum";
+import { City } from "../core/model/city.enum";
+import { RouteType } from "../core/model/route-type.enum";
 import { Subject, from } from 'rxjs';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { ShardCardDeck, ShardCard } from '@core/model/cards';

@@ -1,11 +1,23 @@
+@import "~@angular/material/theming";
+
 // Global Colors
-$soul_color: #ffd738ff;
+$mind_color: #ffd738ff;
 $power_color: #a046ffff;
 $reality_color: #ff4f66ff;
 $time_color: #37c551ff;
-$mind_color: #ffa95dff;
+$soul_color: #ffa95dff;
 $vibranium_color: #476081ff;
 $space_color: #2093ffff;
 $palladium_color: #2fdcffff;
 
 $app_border_color: #e0e0e0;
+
+$primaryPalette: mat-palette($mat-deep-purple);
+$accentPalette: mat-palette($mat-amber);
+$warnPalette: mat-palette($mat-red);
+$text-light: white;
+$text-dark: black;
+
+$primary: mat-color($primaryPalette);
+$accent: mat-color($accentPalette);
+$warn: mat-color($warnPalette);
