@@ -86,10 +86,11 @@ class Game(var name: String) {
         return players.indexOf(user)
     }
 
-    fun canClaimRoute(routeId: String, cards: Array<ShardCard>): Boolean {
+    fun canClaimRoute(user: User, routeId: String, cards: Array<ShardCard>): Boolean {
 
         val currentRoute = routes.routesByRouteId[routeId]
 
+        // Check if route is not owned
         if (currentRoute != null) {
             if (currentRoute.ownerId != null) {
                 return false
@@ -111,6 +112,24 @@ class Game(var name: String) {
             }
         }
 
+        // Check user's hand
+        val userInfinityGauntlets = mutableListOf<ShardCard>()
+        val userSecondaryCards = mutableListOf<ShardCard>()
+
+        for (s in user.shardCards.shardCards) {
+            if (s.type == MaterialType.INFINITY_GAUNTLET) {
+                userInfinityGauntlets.add(s)
+            }
+            else if (s.type == secondaryCards[0].type) {
+                userSecondaryCards.add(s)
+            }
+        }
+
+        if (infinityGauntlets.size > userInfinityGauntlets.size || secondaryCards.size > userSecondaryCards.size) {
+            return false
+        }
+
+        // Check route requirements
         if (infinityGauntlets.size >= currentRoute.numCars) {
             return true
         }
