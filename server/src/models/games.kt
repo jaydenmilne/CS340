@@ -130,11 +130,11 @@ class Game(var name: String) {
         }
 
         // Check route requirements
-        if (infinityGauntlets.size >= currentRoute.numCars) {
+        if (infinityGauntlets.size == currentRoute.numCars) {
             return true
         }
 
-        if (currentRoute.numCars > secondaryCards.size + infinityGauntlets.size) {
+        if (currentRoute.numCars != secondaryCards.size + infinityGauntlets.size) {
             return false
         }
 
