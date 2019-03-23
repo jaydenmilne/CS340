@@ -112,9 +112,16 @@ class Game(var name: String) {
             }
         }
 
+        if (secondaryCards.filter { card -> card.type == secondaryCards[0].type }.size != secondaryCards.size) {
+            return false
+        }
+
         // Check user's hand
         val userInfinityGauntlets = mutableListOf<ShardCard>()
         val userSecondaryCards = mutableListOf<ShardCard>()
+
+        val numUserInfinityGauntlets = user.shardCards.shardCards.filter { s -> s.type == MaterialType.INFINITY_GAUNTLET }.size
+        val numUserSecondaryCards = user.shardCards.shardCards.filter{ s -> s.type == secondaryCards[0].type}.size
 
         for (s in user.shardCards.shardCards) {
             if (s.type == MaterialType.INFINITY_GAUNTLET) {
@@ -130,10 +137,6 @@ class Game(var name: String) {
         }
 
         // Check route requirements
-        if (infinityGauntlets.size == currentRoute.numCars) {
-            return true
-        }
-
         if (currentRoute.numCars != secondaryCards.size + infinityGauntlets.size) {
             return false
         }
