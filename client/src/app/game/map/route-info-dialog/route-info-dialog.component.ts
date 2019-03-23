@@ -9,49 +9,49 @@ import { PlayerService } from '../../player.service';
   templateUrl: './route-info-dialog.component.html',
   styleUrls: ['./route-info-dialog.component.scss']
 })
-export class RouteInfoDialogComponent { 
+export class RouteInfoDialogComponent {
     constructor(
       private playerService: PlayerService,
       public dialogRef: MatDialogRef<RouteInfoDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: RouteInfoData) {
       }
-    
+
     onClaimClick(): void {
       // Call card service to discard cards
-      let result = new RouteInfoResult(true);
+      const result = new RouteInfoResult(true);
       this.dialogRef.close(result);
     }
-  
-    onCloseClick(){
-      let result = new RouteInfoResult(false);
+
+    onCloseClick() {
+      const result = new RouteInfoResult(false);
       this.dialogRef.close(result);
     }
-  
+
     routeToDestCard(): DestinationCard {
-      return new DestinationCard({"cities": this.data.route.cities, "points": this.data.route.getPoints()});
+      return new DestinationCard({'cities': this.data.route.cities, 'points': this.data.route.getPoints()});
     }
-  
-    getCardImage(card: ShardCard): string{
+
+    getCardImage(card: ShardCard): string {
       return ShardCard.getImage(card.type);
     }
-  
-    getRouteTypeImage(): string{
+
+    getRouteTypeImage(): string {
       return ShardCard.getImage(typeToMaterial[this.data.route.type]);
     }
 
 
-  getRouteOwnerName(): string{
-    if(this.data.route.ownerId === -1){
-      return "Available"
+  getRouteOwnerName(): string {
+    if (this.data.route.ownerId === -1) {
+      return 'Available';
     }
     return this.playerService.playersById.get(this.data.route.ownerId).username;
   }
 }
 
 export class RouteInfoData {
-  constructor(public route: Route, public canClaim: boolean){}
+  constructor(public route: Route, public canClaim: boolean) {}
 }
 
 export class RouteInfoResult {
-  constructor(public claimRoute: boolean){}
+  constructor(public claimRoute: boolean) {}
 }
