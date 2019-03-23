@@ -1,4 +1,4 @@
-import { MaterialType } from './cards';
+import { MaterialType, DestinationCard } from './cards';
 
 export enum RouteType {
   	ANY = "any",
@@ -250,5 +250,9 @@ export class Route {
 
     public getClaimableTypes(): MaterialType[]{
         return typeToClaimableMaterials[this.type];
+    }
+
+    toDestCard(): DestinationCard {
+        return new DestinationCard({"cities": this.cities, "points": this.getPoints()});
     }
 }

@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { Route, typeToMaterial, RouteType } from '@core/model/route';
-import { ShardCard, DestinationCard, MaterialType, ShardCardDeck } from '@core/model/cards';
+import { ShardCard, MaterialType, ShardCardDeck, ShardCardSelectionDeck, ShardCardSelectionPair } from '@core/model/cards';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { RouteService } from '../route.service';
 
 @Component({
   selector: 'app-claim-routes-dialog',
@@ -9,35 +10,21 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./claim-routes-dialog.component.scss']
 })
 export class ClaimRoutesDialogComponent {
-  private cards: {'card': ShardCard, 'selected': boolean}[] = [];
-  private useableCards: {'card': ShardCard, 'selected': boolean}[] = [];
-  public numSelectedCards: number = 0;    // Replace this with calls tou routeService.claimRouteValid()
-  private selectedType: MaterialType;
+  private cards: ShardCardSelectionDeck;
+  private useableCards: ShardCardSelectionDeck;
+  public claimValid: boolean = false;
 
-  constructor(
+  constructor(private routeService: RouteService,
     public dialogRef: MatDialogRef<ClaimRoutesDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ClaimRouteData) {
-      data.hand.cards.forEach(card => {
-        this.cards.push({'card': card, 'selected': false});
-      });
-      this.selectedType = MaterialType.ANY;
-      this.filterOnType(this.data.route.getClaimableTypes());
+      this.cards = new ShardCardSelectionDeck([]);
+      this.cards.fromCards(this.data.hand.cards);
+      this.filterUsableCards();
     }
-
-  private filterOnType(types: MaterialType[]){
-    this.useableCards = this.cards.filter(cardPair => types.includes(cardPair.card.type));
-  }
 
   onClaimClick(): void {
     // Call card service to discard cards
-    const cards: ShardCard[] = [];
-    this.useableCards.forEach(cardPair => {
-      if (cardPair.selected){
-        cards.push(cardPair.card);
-      }
-    })
-
-    let result = new ClaimRouteResult(true, new ShardCardDeck(cards));
+    let result = new ClaimRouteResult(true, this.cards.getSelected().toDeck());
     this.dialogRef.close(result);
   }
 
@@ -46,41 +33,18 @@ export class ClaimRoutesDialogComponent {
     this.dialogRef.close(result);
   }
 
-  onCardClick(card: {'card': ShardCard, 'selected': boolean}){
-    card.selected = !card.selected;
-    if(card.selected){
-      this.numSelectedCards++;
-      this.setSelectedType(card.card.type);
-      this.filterOnSelectedType();
-    } else{
-      this.numSelectedCards--;
-      this.unsetSelectedType(card.card.type);
-      this.filterOnSelectedType();
-    }
+  onCardClick(card: ShardCardSelectionPair){
+    this.cards.selectCard(card);
+    this.filterUsableCards();
+    this.claimValid = this.routeService.claimRouteValid(this.data.route, this.cards.toDeck());
   }
 
-  private setSelectedType(type: MaterialType){
-    if (this.selectedType === MaterialType.ANY && type !== MaterialType.INFINITY_GAUNTLET){
-      this.selectedType = type;
-    }
-  }
-
-  private unsetSelectedType(type: MaterialType){
-    if (this.numSelectedCards === 0){
-      this.selectedType = MaterialType.ANY;
-    }
-  }
-
-  private filterOnSelectedType(){
-    if(this.selectedType === MaterialType.ANY){
-      this.filterOnType(this.data.route.getClaimableTypes())
+  private filterUsableCards(){
+    if(this.cards.getSelectedType() === MaterialType.ANY){
+      this.useableCards = this.cards.filterOnType(this.data.route.getClaimableTypes())
     } else {
-      this.filterOnType([this.selectedType, MaterialType.INFINITY_GAUNTLET])
+      this.useableCards = this.cards.filterOnSelectedType(true);
     }
-  }
-
-  routeToDestCard(): DestinationCard {
-    return new DestinationCard({"cities": this.data.route.cities, "points": this.data.route.getPoints()});
   }
 
   getCardImage(card: ShardCard): string{

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Claim Route</h1>
 
 <div class="claim-route-header">
-  <app-dest-card class="dest-card"  [route]="routeToDestCard()" [selected]="false"></app-dest-card>
+  <app-dest-card class="dest-card"  [route]="data.route.toDestCard()" [selected]="false"></app-dest-card>
   <div class="required-shard-indicator">
     <p class="required-shard-text">Requires</p>
     <mat-card class="required-shard-card" matBadge="{{data.route.numCars}}">
@@ -11,15 +11,15 @@
 </div>
 
 <div mat-dialog-content class="shard-box">
-    <div class="shard-cell inline" *ngFor="let card of useableCards">
-      <mat-card class="shard-card inline" (click)="onCardClick(card)">
-        <img class="shard-icon" src="assets/img/shards/{{getCardImage(card.card)}}">
-        <i class="material-icons check-mark" *ngIf="card.selected">check_circle</i>
+    <div class="shard-cell inline" *ngFor="let cardPair of useableCards.cardPairs">
+      <mat-card class="shard-card inline" (click)="onCardClick(cardPair)">
+        <img class="shard-icon" src="assets/img/shards/{{getCardImage(cardPair.card)}}">
+        <i class="material-icons check-mark" *ngIf="cardPair.selected">check_circle</i>
       </mat-card>
   </div>
 </div>
 
 <div mat-dialog-actions class="action-bar">
   <button mat-raised-button class="actionbutton cancel-button" (click)="onCancelClick()" >Cancel</button>
-  <button mat-raised-button class="actionbutton select-button" (click)="onClaimClick()" [disabled]="numSelectedCards !== data.route.numCars" color="primary">Claim</button>
+  <button mat-raised-button class="actionbutton select-button" (click)="onClaimClick()" [disabled]="!claimValid" color="primary">Claim</button>
 </div>
