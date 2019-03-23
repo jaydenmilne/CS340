@@ -1,16 +1,21 @@
 import { Command } from './command';
 import { GamePlayer } from './model/game-player';
-import { DestinationCard, ShardCard } from './model/cards';
+import { DestinationCard, ShardCard, MaterialType } from './model/cards';
 
 // Server commands
+export class DrawShardCard implements Command {
+    public command = 'drawShardCard';
+
+    constructor(public card: String) {}
+}
 
 // Client Commands
 export class UpdatePlayerCommand implements Command {
     public command = 'updatePlayer';
-    public gamePlayer : GamePlayer;
+    public gamePlayer: GamePlayer;
 
     constructor(updatePlayerCommand: any) {
-        if (!("gamePlayer" in updatePlayerCommand)) {
+        if (!('gamePlayer' in updatePlayerCommand)) {
             throw new TypeError('Unable to deserialize updatePlayerCommand object, ' + JSON.stringify(updatePlayerCommand));
         }
 
@@ -19,11 +24,11 @@ export class UpdatePlayerCommand implements Command {
 }
 
 export class ChangeTurnCommand implements Command {
-    public command = "changeTurn";
-    public userId : Number;
+    public command = 'changeTurn';
+    public userId: Number;
 
     constructor(changeTurnCommand: any) {
-        if (!("userId" in changeTurnCommand)) {
+        if (!('userId' in changeTurnCommand)) {
             throw new TypeError('Unable to deserialize changeTurnCommand object, ' + JSON.stringify(changeTurnCommand));
         }
 
@@ -94,3 +99,4 @@ export class DiscardDestinationsCommand implements Command {
         this.discardedDestinations = discardedDestinations;
     }
 }
+

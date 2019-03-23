@@ -3,6 +3,7 @@ package commands
 import models.*
 import java.lang.RuntimeException
 
+
 /**
  * Create a new game on the server.
  */
@@ -254,12 +255,7 @@ class RequestDestinationsCommand : INormalServerCommand {
         user.queue.push(dealCardsCommand)
 
         /* Send UpdateBankCommand to user's client */
-        var updatebankCommand = UpdateBankCommand()
-        updatebankCommand.faceUpCards = game.faceUpShardCards.cards
-        updatebankCommand.shardDrawPileSize = game.shardCardDeck.cards.size
-        updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
-        updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
-        game.broadcast(updatebankCommand)
+        updatebank(game)
 
         /* Send UpdatePlayerCommand to user's client */
         var updatePlayerCommand = UpdatePlayerCommand()
@@ -293,11 +289,50 @@ class DiscardDestinationsCommand : INormalServerCommand {
 
         game.broadcast(updatedPlayer)
 
-        var updatebankCommand = UpdateBankCommand()
-        updatebankCommand.faceUpCards = game.faceUpShardCards.cards
-        updatebankCommand.shardDrawPileSize = game.shardCardDeck.cards.size
-        updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
-        updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
-        game.broadcast(updatebankCommand)
+        updatebank(game)
     }
+}
+
+class DrawShardCardCommand : INormalServerCommand{
+    override val command = DRAW_SHARD_CARD
+    val card= "";
+
+    override fun execute(user: User) {
+        val game = Games.getGameForPlayer(user)
+
+        if (game == null) {
+            throw RuntimeException("User not in a game")
+        }
+        if(game.whoseTurn != user){
+            throw RuntimeException("Not Your Turn")
+        }
+        if(card == "deck"){
+        user.shardCards.push(game.shardCardDeck.getNext())
+        }else{
+            if(game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }.size > 0){
+                var found = -1;
+                for(cards in game.faceUpShardCards.shardCards){
+                    if(cards.type.equals(MaterialType.valueOf(card)) && found == -1){
+                        user.shardCards.push(cards)
+                        found = game.faceUpShardCards.shardCards.indexOf(cards);
+                    }
+                }
+                game.faceUpShardCards.shardCards.removeAt(found)
+                game.faceUpShardCards.push(game.shardCardDeck.getNext())
+            }else{
+                throw RuntimeException("Card does not exist")
+            }
+        }
+
+        updatebank(game)
+    }
+}
+
+fun updatebank(game: Game){
+    var updatebankCommand = UpdateBankCommand()
+    updatebankCommand.faceUpCards = game.faceUpShardCards.cards
+    updatebankCommand.shardDrawPileSize = game.shardCardDeck.cards.size
+    updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
+    updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
+    game.broadcast(updatebankCommand)
 }

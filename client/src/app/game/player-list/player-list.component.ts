@@ -28,7 +28,7 @@ export class PlayerInfoDialogComponent {
 })
 export class PlayerListComponent implements OnInit {
 
-  constructor(private playerService: PlayerService,
+  constructor(public playerService: PlayerService,
     public dialog: MatDialog) { }
 
   public getPlayerColorStyle(player: GamePlayer) {
@@ -39,9 +39,9 @@ export class PlayerListComponent implements OnInit {
       'background-color': 'transparent'
     };
 
-    if (this.playerService.activePlayerId == player.userId) {
+    if (this.playerService.activePlayerId === player.userId) {
       // Highlight this player
-      style["background-color"] = '#' + StyleColor[player.color];
+      style['background-color'] = '#' + StyleColor[player.color];
     }
 
     return style;
@@ -54,24 +54,24 @@ export class PlayerListComponent implements OnInit {
     });
   }
 
-  public getPlayerRank(player: GamePlayer) : String {
-    let playersCopy = [... this.playerService.players];
+  public getPlayerRank(player: GamePlayer): String {
+    const playersCopy = [... this.playerService.players];
     playersCopy.sort((p1, p2) => p2.points - p1.points);
-    let rank = playersCopy.findIndex(p => p.userId == player.userId);
+    const rank = playersCopy.findIndex(p => p.userId === player.userId);
 
-    switch(rank) {
+    switch (rank) {
       case 0:
-      return "1st";
+      return '1st';
       case 1:
-      return "2nd";
+      return '2nd';
       case 2:
-      return "3rd";
+      return '3rd';
       case 3:
-      return "4th";
+      return '4th';
       case 4:
-      return "5th";
+      return '5th';
       default:
-      return "unranked";
+      return 'unranked';
     }
   }
 

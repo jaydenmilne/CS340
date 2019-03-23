@@ -7,7 +7,7 @@ import { MapComponent } from './map/map.component';
 import { BankComponent } from './bank/bank.component';
 import { MatGridListModule, MatChipsModule, MatDialogModule, MatButtonModule, MatTabsModule, MatSnackBarModule } from '@angular/material';
 import { MatCardModule } from '@angular/material';
-import { PlayerInfoDialogComponent } from './player-list/player-list.component'
+import { PlayerInfoDialogComponent } from './player-list/player-list.component';
 import { ChatModule } from '../chat/chat.module';
 import { DestCardComponent } from './dest-card/dest-card.component';
 import {MatBadgeModule} from '@angular/material/badge';
@@ -20,7 +20,7 @@ import { RouteInfoDialogComponent } from './map/route-info-dialog/route-info-dia
   declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent],
   entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent ],
   imports: [
-    CommonModule, 
+    CommonModule,
     MatGridListModule,
     MatTabsModule,
     MatCardModule,

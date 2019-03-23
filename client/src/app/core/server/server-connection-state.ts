@@ -8,9 +8,9 @@ export class ServerConnectionState {
   private COMMAND_ENDPOINT = '/command';
 
   constructor(protected connection: ServerConnectionService) { }
-  
+
   public handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent || error.status == 0) {
+    if (error.error instanceof ErrorEvent || error.status === 0) {
       // A client-side or network error occurred.
       // Go to the reconnecting state
       this.connection.changeState(new ReconnectingState(this.connection));
@@ -47,7 +47,7 @@ export class ServerConnectionState {
   /**
    * Sends a GET to the active endpoint.
    */
-  public poll() {    
+  public poll() {
     this.connection.http.get<ICommandArray>(
     this.connection.getServerUrl() + this.getEndpoint(),
     {
@@ -58,11 +58,11 @@ export class ServerConnectionState {
       error => this.connection.handleError(error));
   }
 
-  public getHeaders() : HttpHeaders {
+  public getHeaders(): HttpHeaders {
     return new HttpHeaders({
         'Content-Type':  'application/json',
         'Authorization': this.connection.authToken
-    })
+    });
   }
 }
 
@@ -78,7 +78,7 @@ export class ReconnectingState extends ServerConnectionState {
     if (this.connection.pendingCommand != null) {
 
       if (this.connection.pendingRequest) {
-        alert("That impossible thing is happening. Shame Jayden.");
+        alert('That impossible thing is happening. Shame Jayden.');
       }
 
       this.connection.transmitCommand(this.connection.pendingCommand);
@@ -93,14 +93,14 @@ export class ReconnectingState extends ServerConnectionState {
   }
 
   public handleError(error: HttpErrorResponse) {
-    // nop - we are kind of expecting errors in this state. 
+    // nop - we are kind of expecting errors in this state.
     // Wait for reconnection
   }
 
 }
 
 /**
- * Initial state, used for login. Uses the /register endpoint and skips auth headers. 
+ * Initial state, used for login. Uses the /register endpoint and skips auth headers.
  * No polling either.
  */
 export class LoginState extends ServerConnectionState {
@@ -114,7 +114,7 @@ export class LoginState extends ServerConnectionState {
     // Don't send auth header in login
     return new HttpHeaders({
         'Content-Type':  'application/json'
-    })
+    });
   }
 
   public getEndpoint(): string {

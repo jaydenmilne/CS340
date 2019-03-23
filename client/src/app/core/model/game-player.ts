@@ -11,7 +11,7 @@ export class GamePlayer {
     public numRemainingTrains: number;
     public hasLongestRoute: boolean;
     public turnOrder: number;
-    
+
     constructor(gamePlayer: any) {
         if (!('userId' in gamePlayer) ||
             !('ready' in gamePlayer) ||

@@ -27,7 +27,7 @@ export class LoginErrorDialogComponent {
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private loginService: LoginService,
+  constructor(public loginService: LoginService,
               public dialog: MatDialog) { }
 
   loginForm = new FormGroup({

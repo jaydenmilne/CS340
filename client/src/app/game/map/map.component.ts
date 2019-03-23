@@ -21,7 +21,7 @@ export class MapComponent implements OnInit {
       this.routeService.routeOwnershipChanged$.subscribe( route => this.onRouteOwnershipChange(route));
      }
 
-  @ViewChild("mapSvg") 
+  @ViewChild('mapSvg')
   mapSvg: ElementRef;
 
   ngOnInit() {
@@ -36,8 +36,8 @@ export class MapComponent implements OnInit {
     if (event.target) {
       // Walk up the path to try and find the group that contains the path, shield, and line
       for (let i = 0; i < event.path.length; ++i) {
-        let node = event.path[i];
-        if (node.id == 'mapSvg') {
+        const node = event.path[i];
+        if (node.id === 'mapSvg') {
           // Isn't a route
           return;
         }
@@ -49,22 +49,22 @@ export class MapComponent implements OnInit {
     }
   }
 
-  private onRouteOwnershipChange(route : Route) {
-    let player = this.playerService.playersById.get(route.ownerId);
+  private onRouteOwnershipChange(route: Route) {
+    const player = this.playerService.playersById.get(route.ownerId);
 
-    if (route.ownerId == -1) {
-      console.debug("Ownership of a route reverted back to no-one? MapComponent doesn't appreciate this");
+    if (route.ownerId === -1) {
+      console.debug('Ownership of a route reverted back to no-one? MapComponent doesn\'t appreciate this');
     }
 
     if (!player) {
-      this.errorNotifier.notifyHeading("MapComponent::onRouteOwnershipChange", "Got a player that doesn't exist! playerid = " + route.ownerId);
+      this.errorNotifier.notifyHeading('MapComponent::onRouteOwnershipChange', 'Got a player that doesn\'t exist! playerid = ' + route.ownerId);
     }
 
-    let color = '#' + StyleColor[player.color];
+    const color = '#' + StyleColor[player.color];
 
-    let routeLine = this.mapSvg.nativeElement.getElementById(route.routeName + '-fg');
+    const routeLine = this.mapSvg.nativeElement.getElementById(route.routeName + '-fg');
     if (!routeLine) {
-      this.errorNotifier.notifyHeading("MapComponent::onRouteOwnershipChange", "Unable to find the -fg line for route " + route.routeName);
+      this.errorNotifier.notifyHeading('MapComponent::onRouteOwnershipChange', 'Unable to find the -fg line for route ' + route.routeName);
       return;
     }
     routeLine.style.stroke = color;
