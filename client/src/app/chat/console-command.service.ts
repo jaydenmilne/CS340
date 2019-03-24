@@ -5,6 +5,7 @@ import { ShardCardDeck, ShardCard, DestinationCardDeck, DestinationCard } from '
 import { MaterialType } from "@core/model/material-type.enum";
 import { UserService } from '@core/user.service';
 import { RouteService } from '../game/route.service';
+
 import { RouteName } from "@core/model/route-name.enum";
 import { CommandRouterService } from '@core/command-router.service';
 import { DealCardsCommand } from '@core/game-commands';
@@ -88,6 +89,7 @@ export class ConsoleCommandService {
         if (value.username === player) {
           userId = value.userId;
         }
+
       });
       if (userId != null) {
       this.routeService.updateOwnership(route as RouteName, userId);

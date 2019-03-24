@@ -3,6 +3,15 @@ import { GamePlayer } from './model/game-player';
 import { DestinationCard, ShardCard } from './model/cards';
 
 // Server commands
+export class ClaimRouteCommand implements Command {
+    public command = 'claimRoute';
+    public routeId: string;
+    public shardsUsed: ShardCard[]
+
+    constructor(routeId: string, shardsUsed: ShardCard[]) {
+        this.routeId = routeId;
+        this.shardsUsed = shardsUsed;
+    }
 export class DrawShardCard implements Command {
     public command = 'drawShardCard';
 
@@ -100,3 +109,17 @@ export class DiscardDestinationsCommand implements Command {
     }
 }
 
+export class RouteClaimedCommand implements Command {
+    public command = 'routeClaimed';
+    public userId: number;
+    public routeId: string;
+
+    constructor(routeClaimedCommand: any) {
+        if (!('userId' in routeClaimedCommand && 'routeId' in routeClaimedCommand)) {
+            throw new TypeError('Unable to deserialize ClaimedRouteCommand object, ' + JSON.stringify(routeClaimedCommand));
+        }
+
+        this.userId = routeClaimedCommand.userId;
+        this.routeId = routeClaimedCommand.routeId;
+    }
+}

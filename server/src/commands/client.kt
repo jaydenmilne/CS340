@@ -56,3 +56,9 @@ class DealCardsCommand : INormalClientCommand {
     var shardCards = mutableListOf<ShardCard>()
     var minDestinations = 2
 }
+
+class RouteClaimedCommand : INormalClientCommand {
+    override val command = ROUTE_CLAIMED
+    var userId = 0
+    var routeId = ""
+}
