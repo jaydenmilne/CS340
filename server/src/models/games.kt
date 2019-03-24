@@ -1,5 +1,6 @@
 package models
 
+import commands.ChangeTurnCommand
 import commands.CommandException
 import commands.INormalClientCommand
 import java.lang.RuntimeException
@@ -51,7 +52,7 @@ class Game(var name: String) {
 
     @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
 
-    var whoseTurn: User? = null
+    var whoseTurn: Int = -1
 
     var chatMessages = mutableListOf<Message>()
 
@@ -156,5 +157,34 @@ class Game(var name: String) {
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
 
         route.ownerId = userId
+    }
+
+    fun advanceTurn(){
+        if(this.whoseTurn == -1){   // check if we're done with setup
+            // Check if all players have completed setup
+            if (this.players.filter { p -> !p.setupComplete }.isEmpty()){
+                this.incPlayerTurn()
+                this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+            }
+        } else {
+            // advance to the next player
+            this.incPlayerTurn()
+            this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+        }
+    }
+
+    fun incPlayerTurn() {
+        if (this.whoseTurn == -1 || this.whoseTurn == this.players.size -1){
+            this.whoseTurn = 0
+        } else {
+            this.whoseTurn++
+        }
+    }
+
+    fun getTurningPlayer(): User? {
+        if (this.whoseTurn == -1){
+            return null
+        }
+        return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
     }
 }

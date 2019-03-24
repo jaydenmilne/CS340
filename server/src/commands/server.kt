@@ -282,6 +282,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         discardedDestinations.forEach { discarded -> game.destinationCardDeck.push(discarded) }
         // Remove the discarded cards from the player's hand
         user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
+        user.setupComplete = true   //
 
         // Broadcast the updated player to everyone else
         var updatedPlayer = UpdatePlayerCommand()
@@ -290,6 +291,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         game.broadcast(updatedPlayer)
 
         updatebank(game)
+        game.advanceTurn()
     }
 }
 
@@ -317,6 +319,13 @@ class ClaimRouteCommand : INormalServerCommand {
             routeClaimed.routeId = this.routeId
             routeClaimed.userId = user.userId
             game.broadcast(routeClaimed)
+
+            user.queue.push(UpdateHandCommand(user.destinationCards.destinationCards, user.shardCards.shardCards));
+            val updatePlayer = UpdatePlayerCommand();
+            updatePlayer.gamePlayer = user.toGamePlayer()
+            game.broadcast(updatePlayer)
+
+            game.advanceTurn()
         }
         else {
             throw CommandException("ClaimRouteCommand: Route cannot be claimed")
@@ -335,7 +344,7 @@ class DrawShardCardCommand : INormalServerCommand{
             throw RuntimeException("User not in a game")
         }
 
-        if(game.whoseTurn != user){
+        if(game.getTurningPlayer() != user){
             throw RuntimeException("Not Your Turn")
         }
         if(card == "deck"){
@@ -357,6 +366,7 @@ class DrawShardCardCommand : INormalServerCommand{
         }
 
         updatebank(game)
+        game.advanceTurn()
     }
 }
 

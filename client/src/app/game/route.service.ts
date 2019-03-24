@@ -6,7 +6,7 @@ import { RouteType } from "../core/model/route-type.enum";
 import { Subject, from } from 'rxjs';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { CommandRouterService } from '@core/command-router.service';
-import { RouteClaimedCommand } from '@core/game-commands';
+import { RouteClaimedCommand, ClaimRouteCommand } from '@core/game-commands';
 
 import { ShardCardDeck, ShardCard } from '@core/model/cards';
 import { TurnService } from '../game/turn/turn.service';
@@ -20,7 +20,7 @@ export class RouteService {
   public routes: Map<RouteName, Route> = new Map();
   public routeOwnershipChanged$ = new Subject<Route>();
 
-  constructor(private errorNotifier : ErrorNotifierService, private commandRouter : CommandRouterService, private turnService: TurnService) {
+  constructor(private errorNotifier : ErrorNotifierService, private commandRouter : CommandRouterService, private turnService: TurnService, private server: ServerProxyService) {
 
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_1,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_1,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_2,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_2,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
@@ -123,7 +123,7 @@ export class RouteService {
     this.routes.set(RouteName.SOKOVIA_WAKANDA_1,                    (new Route(RouteName.SOKOVIA_WAKANDA_1,                    [City.SOKOVIA, City.WAKANDA],                      2, RouteType.ANY, -1)));
     this.routes.set(RouteName.SOKOVIA_WAKANDA_2,                    (new Route(RouteName.SOKOVIA_WAKANDA_2,                    [City.SOKOVIA, City.WAKANDA],                      2, RouteType.ANY, -1)));
 
-    commandRouter.routeClaimed$.subscribe( cmd => this.onRouteClaimed(cmd));
+    this.commandRouter.routeClaimed$.subscribe( cmd => this.onRouteClaimed(cmd));
   }
 
   public updateOwnership(routeName: RouteName, ownerId: number) {
@@ -197,6 +197,6 @@ export class RouteService {
     * @param cards  ShardCards used to claim the route
     * */
    public claimRoute(route: Route, cards: ShardCardDeck) {
-    
+    this.server.executeCommand(new ClaimRouteCommand(route.routeName, cards.cards));
    }
 }
