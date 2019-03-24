@@ -6,6 +6,7 @@ import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
 import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand, UpdateHandCommand } from './game-commands';
+import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand, RouteClaimedCommand } from './game-commands';
 import { UpdateChatCommand } from './chat-commands';
 
 @Injectable({
@@ -31,6 +32,7 @@ export class CommandRouterService {
   public updateBank$                = new Subject<UpdateBankCommand>();
   public updateHand$                 = new Subject<UpdateHandCommand>();
   public dealCards$                 = new Subject<DealCardsCommand>();
+  public routeClaimed$              = new Subject<RouteClaimedCommand>();
 
   /**
    * Identifies each command, deserializes it, and signals the observables.
@@ -70,8 +72,9 @@ export class CommandRouterService {
         case 'updateHand':
           this.updateHand$.next(new UpdateHandCommand(cmd));
           break;
-          
-
+        case 'routeClaimed':
+          this.routeClaimed$.next(new RouteClaimedCommand(cmd));
+          break;
         default:
           const msg = new ErrorMessage(
             'Got an unknown command type from the server',

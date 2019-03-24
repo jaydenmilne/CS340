@@ -1,16 +1,6 @@
-import { City, RouteType, Route } from './route';
-
-export enum MaterialType {
-    REALITY_SHARD = 'reality_shard',
-    SOUL_SHARD = 'soul_shard',
-    SPACE_SHARD = 'space_shard',
-    MIND_SHARD = 'mind_shard',
-    POWER_SHARD = 'power_shard',
-    TIME_SHARD = 'time_shard',
-    VIBRANIUM = 'vibranium',
-    PALLADIUM = 'palladium',
-    INFINITY_GAUNTLET = 'infinity_gauntlet'
-}
+import { City } from "./city.enum";
+import { RouteType } from "./route-type.enum";
+import { MaterialType } from './material-type.enum';
 
 abstract class ICard {}
 
@@ -34,7 +24,6 @@ export class DestinationCard extends ICard {
 }
 
 export class ShardCard extends ICard {
-
     constructor(shardCard: any) {
         super();
         if (!('type' in shardCard)) {
@@ -123,5 +112,160 @@ export class ShardCardDeck extends ICardDeck<ShardCard> {
 
     public getCountOf(type: MaterialType): number {
         return this.cards.filter(card => card.type === type).length;
+    }
+}
+
+abstract class ICardSelectionPair<ICard> {
+    public card: ICard;
+    public selected: boolean;
+
+    constructor(card: ICard) {
+        this.card = card;
+        this.selected = false;
+    }
+}
+
+export class ShardCardSelectionPair extends ICardSelectionPair <ShardCard> {
+    constructor(card: ShardCard) {
+        super(card);
+    }
+}
+
+export class DestCardSelectionPair extends ICardSelectionPair <DestinationCard> {
+    constructor(card: DestinationCard) {
+        super(card);
+    }
+}
+
+abstract class ICardSelectionDeck<ICard> {
+    public cardPairs: ICardSelectionPair<ICard>[];
+    public numSelected;
+
+    constructor(cardPairs: ICardSelectionPair<ICard>[]) {
+        this.numSelected = 0;
+        this.cardPairs = cardPairs;
+    }
+
+    public size(): number {
+        return this.cardPairs.length;
+    }
+
+    public abstract fromCards(cards: ICard[]);
+
+    public abstract getSelected(): ICardSelectionDeck<ICard>;
+
+    public abstract toDeck();
+
+    public selectCard(cardPair: ICardSelectionPair<ICard>) {
+        cardPair.selected = !cardPair.selected;
+        if (cardPair.selected) {
+            this.numSelected++;
+        } else {
+            this.numSelected--;
+        }
+    }
+
+    public getCards(): ICard[] {
+        const cards: ICard[] = [];
+        this.cardPairs.forEach(cardPair => {
+            cards.push(cardPair.card);
+        });
+        return cards;
+    }
+}
+
+export class ShardCardSelectionDeck extends ICardSelectionDeck<ShardCard> {
+    private selectedType: MaterialType;
+    constructor(cardPairs: ICardSelectionPair<ShardCard>[]) {
+        super(cardPairs);
+        this.selectedType = MaterialType.ANY;
+    }
+
+    public fromCards(cards: ShardCard[]) {
+        const cardPairs: ShardCardSelectionPair[] = [];
+        cards.forEach(card => {
+            cardPairs.push(new ShardCardSelectionPair(card));
+        });
+        this.cardPairs = cardPairs;
+    }
+
+    public getSelected(): ICardSelectionDeck<ShardCard> {
+        return new ShardCardSelectionDeck(this.cardPairs.filter(cardPair => cardPair.selected));
+    }
+
+
+    public toDeck(): ShardCardDeck {
+        const cards: ShardCard[] = [];
+        this.cardPairs.forEach(cardPair => {
+            cards.push(cardPair.card);
+        });
+        return new ShardCardDeck(cards);
+    }
+
+    public filterOnType(types: MaterialType[]): ShardCardSelectionDeck {
+        return new ShardCardSelectionDeck(this.cardPairs.filter(cardPair => types.includes(cardPair.card.type)));
+    }
+
+    public getSelectedType(): MaterialType {
+        return this.selectedType;
+    }
+
+    public filterOnSelectedType(includeWild: boolean = true) {
+        if (includeWild) {
+            return this.filterOnType([this.selectedType, MaterialType.INFINITY_GAUNTLET]);
+        } else {
+            return this.filterOnType([this.selectedType]);
+        }
+      }
+
+    public selectCard(cardPair: ShardCardSelectionPair) {
+        super.selectCard(cardPair);
+        if (cardPair.selected) {
+            this.setSelectedType(cardPair.card.type);
+        } else {
+            this.unsetSelectedType(cardPair.card.type);
+        }
+    }
+
+    private setSelectedType(type: MaterialType) {
+        if (this.selectedType === MaterialType.ANY && type !== MaterialType.INFINITY_GAUNTLET) {
+          this.selectedType = type;
+        }
+      }
+
+      private unsetSelectedType(type: MaterialType) {
+        if (this.numSelected === 0) {
+          this.selectedType = MaterialType.ANY;
+        }
+      }
+}
+
+export class DestCardSelectionDeck extends ICardSelectionDeck<DestinationCard> {
+    constructor(cardPairs: ICardSelectionPair<DestinationCard>[]) {
+        super(cardPairs);
+    }
+
+    public fromCards(cards: DestinationCard[]) {
+        const cardPairs: DestCardSelectionPair[] = [];
+        cards.forEach(card => {
+            cardPairs.push(new DestCardSelectionPair(card));
+        });
+        this.cardPairs = cardPairs;
+    }
+
+    public getSelected(): ICardSelectionDeck<DestinationCard> {
+        return new DestCardSelectionDeck(this.cardPairs.filter(cardPair => cardPair.selected));
+    }
+
+    public getDiscarded(): ICardSelectionDeck<DestinationCard> {
+        return new DestCardSelectionDeck(this.cardPairs.filter(cardPair => !cardPair.selected));
+    }
+
+    public toDeck(): DestinationCardDeck {
+        const cards: DestinationCard[] = [];
+        this.cardPairs.forEach(cardPair => {
+            cards.push(cardPair.card);
+        });
+        return new DestinationCardDeck(cards);
     }
 }
