@@ -37,7 +37,7 @@ export class ClaimRoutesDialogComponent {
   onCardClick(card: ShardCardSelectionPair) {
     this.cards.selectCard(card);
     this.filterUsableCards();
-    this.claimValid = this.routeService.claimRouteValid(this.data.route, this.cards.toDeck());
+    this.claimValid = this.routeService.claimRouteValid(this.data.route, this.cards.getSelected().toDeck());
   }
 
   private filterUsableCards() {

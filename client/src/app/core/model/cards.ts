@@ -30,7 +30,7 @@ export class ShardCard extends ICard {
             throw new TypeError('Unable to deserialize ShardCard object, ' + JSON.stringify(shardCard));
         }
 
-        this.type = <MaterialType> MaterialType[shardCard.type];
+        this.type = <MaterialType> MaterialType[(shardCard.type as string).toUpperCase()];
     }
 
     private static readonly shardImageMap: {[material: string]: string} = {
