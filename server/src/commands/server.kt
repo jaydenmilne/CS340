@@ -365,4 +365,3 @@ class DrawShardCardCommand : INormalServerCommand{
         game.advanceTurn()
     }
 }
-
