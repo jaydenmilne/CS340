@@ -16,7 +16,9 @@ enum class MaterialType(val material: String) {
 
 interface ICard
 
-class ShardCard(val type: MaterialType) : ICard
+class ShardCard(val type: MaterialType) : ICard{
+    constructor() : this(MaterialType.INFINITY_GAUNTLET)
+}
 
 class DestinationCard(val cities: Set<String>, val points: Int) {
     override fun equals(other: Any?): Boolean {

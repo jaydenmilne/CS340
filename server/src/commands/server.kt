@@ -321,6 +321,7 @@ class ClaimRouteCommand : INormalServerCommand {
 class DrawShardCardCommand : INormalServerCommand{
     override val command = DRAW_SHARD_CARD
     val card= "";
+    var cardToSend = ShardCard();
   
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user)
@@ -333,20 +334,23 @@ class DrawShardCardCommand : INormalServerCommand{
             throw CommandException("DrawShardCard Command:Not Your Turn")
         }
         if(card == "deck"){
-            user.shardCards.push(game.shardCardDeck.getNext())
+            cardToSend = game.shardCardDeck.getNext()
+            user.shardCards.push(cardToSend)
         } else {
             val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }//this filter sees if stuff exists
             if(validCards.size > 0) {
                 game.faceUpShardCards.shardCards.remove(validCards[0])
-                user.shardCards.shardCards.add(validCards[0]);
                 game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
+                cardToSend = validCards[0];
             }
             else{
                 throw CommandException("DrawShardCard Command:Card Does Not Exist")
             }
 
         }
-        user.updateHand()
+        var dealCardsCmd = DealCardsCommand()
+        dealCardsCmd.shardCards.add(cardToSend);
+        user.queue.push(dealCardsCmd);
         game.updatebank()
         game.updatePlayer(user)
 
