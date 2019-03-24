@@ -112,8 +112,10 @@ class Game(var name: String) {
             }
         }
 
-        if (secondaryCards.filter { card -> card.type == secondaryCards[0].type }.size != secondaryCards.size) {
-            return false
+        if (secondaryCards.size > 0) {
+            if (secondaryCards.filter { card -> card.type == secondaryCards[0].type }.size != secondaryCards.size) {
+                return false
+            }
         }
 
         // Check user's hand
