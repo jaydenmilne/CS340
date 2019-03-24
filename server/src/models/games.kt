@@ -112,15 +112,16 @@ class Game(var name: String) {
             }
         }
 
+        var numUserSecondaryCards = 0
         if (secondaryCards.size > 0) {
             if (secondaryCards.filter { card -> card.type == secondaryCards[0].type }.size != secondaryCards.size) {
                 return false
             }
+            numUserSecondaryCards = user.shardCards.shardCards.filter{ s -> s.type == secondaryCards[0].type}.size
         }
 
         // Check user's hand
         val numUserInfinityGauntlets = user.shardCards.shardCards.filter { s -> s.type == MaterialType.INFINITY_GAUNTLET }.size
-        val numUserSecondaryCards = user.shardCards.shardCards.filter{ s -> s.type == secondaryCards[0].type}.size
 
         if (infinityGauntlets.size > numUserInfinityGauntlets || secondaryCards.size > numUserSecondaryCards) {
             return false
@@ -131,6 +132,12 @@ class Game(var name: String) {
             return false
         }
 
+        // If they are claiming a route with all infinity gauntlets...
+        if (infinityGauntlets.size == currentRoute.numCars) {
+            return true
+        }
+
+        // Else...
         when (currentRoute.type) {
             RouteType.ANY -> return true
             RouteType.REALITY -> return secondaryCards[0].type == MaterialType.REALITY_SHARD
