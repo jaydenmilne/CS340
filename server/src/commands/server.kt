@@ -270,7 +270,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         val game = Games.getGameForPlayer(user)
 
         if (game == null) {
-            throw RuntimeException("User not in a game")
+            throw CommandException("DiscardDestinationsCommand Command:User not in a game")
         }
 
         if (user.turnOrder == -1) {
@@ -295,28 +295,24 @@ class DrawShardCardCommand : INormalServerCommand{
         val game = Games.getGameForPlayer(user)
 
         if (game == null) {
-            throw RuntimeException("User not in a game")
+            throw CommandException("DrawShardCard Command:User not in a game")
         }
         if(game.whoseTurn != user){
-            throw RuntimeException("Not Your Turn")
+            throw CommandException("DrawShardCard Command:Not Your Turn")
         }
         if(card == "deck"){
             user.shardCards.push(game.shardCardDeck.getNext())
         } else {
-            if(game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }.size > 0){//this filter sees if stuff exists
-                var found = -1;
-                for(selectedCard in game.faceUpShardCards.shardCards){//this for loop finds the first card and takes it
-                    if(selectedCard.type.equals(MaterialType.valueOf(card)) && found == -1){
-                        user.shardCards.push(selectedCard)
-                        found = game.faceUpShardCards.shardCards.indexOf(selectedCard);
-                        break;
-                    }
-                }
-                game.faceUpShardCards.shardCards.removeAt(found)//card is replaced
-                game.faceUpShardCards.push(game.shardCardDeck.getNext())
-            }else{
-                throw RuntimeException("Card does not exist")
+            val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }//this filter sees if stuff exists
+            if(validCards.size > 0) {
+                game.faceUpShardCards.shardCards.remove(validCards[0])
+                user.shardCards.shardCards.add(validCards[0]);
+                game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
             }
+            else{
+                throw CommandException("DrawShardCard Command:Card Does Not Exist")
+            }
+
         }
         game.updatebank()
     }

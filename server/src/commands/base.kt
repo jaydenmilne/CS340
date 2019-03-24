@@ -24,6 +24,7 @@ const val POST_CHAT = "postChat"
 const val UPDATE_CHAT = "updateChat"
 const val DEAL_CARDS = "dealCards"
 const val DRAW_SHARD_CARD = "drawShardCard"
+const val UPDATE_HAND= "updateHand"
 
 interface ICommand {
     val command: String

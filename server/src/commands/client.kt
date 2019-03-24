@@ -56,3 +56,9 @@ class DealCardsCommand : INormalClientCommand {
     var shardCards = mutableListOf<ShardCard>()
     var minDestinations = 2
 }
+
+class UpdateHandCommand : INormalClientCommand{
+    override val command = UPDATE_HAND
+    var destinations = mutableListOf<DestinationCard>();
+    var shardCards = mutableListOf<ShardCard>();
+}

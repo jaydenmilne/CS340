@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
-import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand } from './game-commands';
+import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand, UpdateHandCommand } from './game-commands';
 import { UpdateChatCommand } from './chat-commands';
 
 @Injectable({
@@ -29,6 +29,7 @@ export class CommandRouterService {
   public updateChat$                = new Subject<UpdateChatCommand>();
   public changeTurn$                = new Subject<ChangeTurnCommand>();
   public updateBank$                = new Subject<UpdateBankCommand>();
+  public updateHand$                 = new Subject<UpdateHandCommand>();
   public dealCards$                 = new Subject<DealCardsCommand>();
 
   /**
@@ -66,6 +67,10 @@ export class CommandRouterService {
         case 'dealCards':
           this.dealCards$.next(new DealCardsCommand(cmd));
           break;
+        case 'updateHand':
+          this.updateHand$.next(new UpdateHandCommand(cmd));
+          break;
+          
 
         default:
           const msg = new ErrorMessage(

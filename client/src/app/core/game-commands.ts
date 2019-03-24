@@ -9,6 +9,14 @@ export class DrawShardCardCommand implements Command {
     constructor(public card: String) {}
 }
 
+export class DiscardDestinationsCommand implements Command {
+    public command = 'discardDestinations';
+    public discardedDestinations: DestinationCard[];
+
+    constructor(discardedDestinations: DestinationCard[]) {
+    }
+}
+
 // Client Commands
 export class UpdatePlayerCommand implements Command {
     public command = 'updatePlayer';
@@ -91,12 +99,25 @@ export class DealCardsCommand implements Command {
     }
 }
 
-export class DiscardDestinationsCommand implements Command {
-    public command = 'discardDestinations';
-    public discardedDestinations: DestinationCard[];
+export class UpdateHandCommand implements Command{
+    public command = 'updateHand';
+    public destinations: DestinationCard[];
+    public shardCards: ShardCard[];
 
-    constructor(discardedDestinations: DestinationCard[]) {
-        this.discardedDestinations = discardedDestinations;
+    constructor(updateHandCommand: any){
+        if (!('destinations' in UpdateHandCommand &&
+        'shardCards' in UpdateHandCommand)) {
+        throw new TypeError('Unable to deserialize UpdateBankCommand object, ' + JSON.stringify(UpdateHandCommand));
+        }
+        this.destinations = [];
+        updateHandCommand.destinations.forEach(card => {
+            this.destinations.push(new DestinationCard(card));
+        });
+
+        this.shardCards = [];
+        updateHandCommand.shardCards.forEach(card => {
+            this.shardCards.push(new ShardCard(card));
+        });
     }
 }
 

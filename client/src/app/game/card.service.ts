@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ShardCard, DestinationCard, ShardCardDeck, DestinationCardDeck } from '@core/model/cards';
 import { CommandRouterService } from '@core/command-router.service';
-import { DealCardsCommand, UpdateBankCommand, DiscardDestinationsCommand } from '@core/game-commands.ts';
+import { DealCardsCommand, UpdateBankCommand, DiscardDestinationsCommand, UpdateHandCommand } from '@core/game-commands.ts';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { RequestDestinationsCommand } from '@core/game-commands.ts';
 import { Subject } from 'rxjs';
@@ -18,6 +18,7 @@ export class CardService {
 
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
+    this.commandRouter.updateHand$.subscribe( cmd => this.onUpdateHand(cmd));
   }
 
   public faceUpShardCards: ShardCardDeck = new ShardCardDeck([]);
@@ -51,5 +52,10 @@ export class CardService {
 
   public requestDestinationCards() {
     this.serverProxy.executeCommand(new RequestDestinationsCommand());
+  }
+
+  private onUpdateHand(updateHandCmd: UpdateHandCommand){
+    this.playerDestCards = new DestinationCardDeck(updateHandCmd.destinations);
+    this.playerTrainCards = new ShardCardDeck(updateHandCmd.shardCards);
   }
 }
