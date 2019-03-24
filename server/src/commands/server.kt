@@ -314,7 +314,10 @@ class DrawShardCardCommand : INormalServerCommand{
             }
 
         }
+        user.updateHand()
         game.updatebank()
+        game.updatePlayer(user)
+
     }
 }
 
