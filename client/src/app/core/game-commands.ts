@@ -12,6 +12,8 @@ export class ClaimRouteCommand implements Command {
         this.routeId = routeId;
         this.shardsUsed = shardsUsed;
     }
+}
+
 export class DrawShardCard implements Command {
     public command = 'drawShardCard';
 

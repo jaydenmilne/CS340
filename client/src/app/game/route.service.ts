@@ -20,7 +20,7 @@ export class RouteService {
   public routes: Map<RouteName, Route> = new Map();
   public routeOwnershipChanged$ = new Subject<Route>();
 
-  constructor(private errorNotifier : ErrorNotifierService, private commandRouter : CommandRouterService) {
+  constructor(private errorNotifier : ErrorNotifierService, private commandRouter : CommandRouterService, private turnService: TurnService) {
 
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_1,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_1,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_2,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_2,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
@@ -139,7 +139,7 @@ export class RouteService {
   public onRouteClaimed(routeClaimedCommand : RouteClaimedCommand) {
     this.updateOwnership(routeClaimedCommand.routeId as RouteName, routeClaimedCommand.userId);
   }
-}
+
   /* Look up route by ID*/
   public getRouteById(routeName: RouteName): Route {
     return this.routes.get(routeName);
