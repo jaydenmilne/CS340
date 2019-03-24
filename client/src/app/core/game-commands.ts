@@ -6,10 +6,8 @@ import { DestinationCard, ShardCard } from './model/cards';
 
 export class ClaimRouteCommand implements Command {
     public command = 'claimRoute';
-    public routeId: string;
-    public shardsUsed: ShardCard[]
 
-    constructor(routeId: string, shardsUsed: ShardCard[]) {
+    constructor(public routeId: string, public shardsUsed: ShardCard[]) {
     }
 }
   
@@ -27,9 +25,8 @@ export class DebugHelpCommand implements Command {
 
 export class DiscardDestinationsCommand implements Command {
     public command = 'discardDestinations';
-    public discardedDestinations: DestinationCard[];
 
-    constructor(discardedDestinations: DestinationCard[]) {
+    constructor(public discardedDestinations: DestinationCard[]) {
     }
 }
 
@@ -121,9 +118,9 @@ export class UpdateHandCommand implements Command{
     public shardCards: ShardCard[];
 
     constructor(updateHandCommand: any){
-        if (!('destinations' in UpdateHandCommand &&
-        'shardCards' in UpdateHandCommand)) {
-        throw new TypeError('Unable to deserialize UpdateBankCommand object, ' + JSON.stringify(UpdateHandCommand));
+        if (!('destinations' in updateHandCommand &&
+        'shardCards' in updateHandCommand)) {
+        throw new TypeError('Unable to deserialize UpdateHandCommand object, ' + JSON.stringify(updateHandCommand));
         }
         this.destinations = [];
         updateHandCommand.destinations.forEach(card => {

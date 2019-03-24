@@ -279,7 +279,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
 
         discardedDestinations.forEach { discarded -> game.destinationCardDeck.push(discarded) }
         // Remove the discarded cards from the player's hand
-        user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
+        user.destinationCards.destinationCards.removeAll(discardedDestinations)
         user.setupComplete = true   //
 
         // Broadcast the updated player to everyone else
@@ -292,7 +292,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
 class ClaimRouteCommand : INormalServerCommand {
     override val command = CLAIM_ROUTE
     private val routeId = ""
-    private val shardsUsed = arrayOf<ShardCard>()
+    private val shardsUsed = listOf<ShardCard>()
 
   
       override fun execute(user: User) {
@@ -301,11 +301,9 @@ class ClaimRouteCommand : INormalServerCommand {
         if (game == null) {
             throw RuntimeException("User not in a game")
         }
-        if(game.canClaimRoute(user, routeId, shardsUsed)) {
-            for (s in shardsUsed) {
-                game.shardCardDiscardPile.push(s)
-                user.shardCards.shardCards.remove(s)
-            }
+        if(game.canClaimRoute(user, routeId, shardsUsed.toTypedArray())) {
+            user.shardCards.shardCards.removeAll(shardsUsed)
+            game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
 
             game.claimRoute(user.userId, routeId)
 
