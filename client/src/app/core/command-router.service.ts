@@ -6,7 +6,6 @@ import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
 import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand, UpdateHandCommand } from './game-commands';
-import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand, RouteClaimedCommand } from './game-commands';
 import { UpdateChatCommand } from './chat-commands';
 
 @Injectable({
