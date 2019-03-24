@@ -23,9 +23,7 @@ export class GameComponent implements OnInit {
     private snackBar: MatSnackBar,
     private userService: UserService,
     private router: Router) {
-
-    this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
-    this.notifierService.playerNotification.subscribe(message => this.displayNotification(message));
+      
   }
 
   ngOnInit() {
@@ -34,6 +32,9 @@ export class GameComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+
+    this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
+    this.notifierService.playerNotification.subscribe(message => this.displayNotification(message));
   
     // Change the game connection to server mode
     this.serverConnection.changeState(new GameState(this.serverConnection));
