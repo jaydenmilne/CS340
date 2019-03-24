@@ -346,7 +346,7 @@ class DrawShardCardCommand : INormalServerCommand{
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
         } else {
-            val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }//this filter sees if stuff exists
+            val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }//this filter sees if stuff exists
             if(validCards.size > 0) {
                 game.faceUpShardCards.shardCards.remove(validCards[0])
                 game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
