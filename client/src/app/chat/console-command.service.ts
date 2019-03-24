@@ -88,6 +88,7 @@ export class ConsoleCommandService {
         if (value.username === player) {
           userId = value.userId;
         }
+
       });
       if (userId != null) {
       this.routeService.updateOwnership(route as RouteName, userId);
