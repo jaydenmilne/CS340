@@ -118,7 +118,7 @@ class DebugHelpCommand : INormalServerCommand{
         }
         game.players.forEach {
             if(it != user) {
-                it.destinationCards = DestinationCardDeck(mutableListOf())
+                it.destinationCards = DestinationCardDeck(mutableListOf()).initializeDeck()
                 it.updateHand()
                 game.updatePlayer(it)
             }
