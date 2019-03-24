@@ -20,7 +20,11 @@ export class RouteService {
   public routes: Map<RouteName, Route> = new Map();
   public routeOwnershipChanged$ = new Subject<Route>();
 
-  constructor(private errorNotifier : ErrorNotifierService, private commandRouter : CommandRouterService, private turnService: TurnService, private server: ServerProxyService) {
+  constructor(
+    private errorNotifier : ErrorNotifierService, 
+    private commandRouter : CommandRouterService,
+    private turnService : TurnService,
+    private server: ServerProxyService) {
 
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_1,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_1,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_2,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_2,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
