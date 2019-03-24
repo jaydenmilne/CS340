@@ -27,6 +27,7 @@ const val CLAIM_ROUTE = "claimRoute"
 const val ROUTE_CLAIMED = "routeClaimed"
 
 const val DRAW_SHARD_CARD = "drawShardCard"
+const val UPDATE_HAND= "updateHand"
 
 interface ICommand {
     val command: String

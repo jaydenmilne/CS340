@@ -255,12 +255,10 @@ class RequestDestinationsCommand : INormalServerCommand {
         user.queue.push(dealCardsCommand)
 
         /* Send UpdateBankCommand to user's client */
-        updatebank(game)
+        game.updatebank()
 
         /* Send UpdatePlayerCommand to user's client */
-        var updatePlayerCommand = UpdatePlayerCommand()
-        updatePlayerCommand.gamePlayer = user.toGamePlayer()
-        game.broadcast(updatePlayerCommand)
+        game.updatePlayer(user)
     }
 }
 
@@ -272,7 +270,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         val game = Games.getGameForPlayer(user)
 
         if (game == null) {
-            throw RuntimeException("User not in a game")
+            throw CommandException("DiscardDestinationsCommand Command:User not in a game")
         }
 
         if (user.turnOrder == -1) {
@@ -284,12 +282,8 @@ class DiscardDestinationsCommand : INormalServerCommand {
         user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
 
         // Broadcast the updated player to everyone else
-        var updatedPlayer = UpdatePlayerCommand()
-        updatedPlayer.gamePlayer = user.toGamePlayer()
-
-        game.broadcast(updatedPlayer)
-
-        updatebank(game)
+        game.updatePlayer(user)
+        game.updatebank()
     }
 }
 
@@ -327,44 +321,39 @@ class ClaimRouteCommand : INormalServerCommand {
 class DrawShardCardCommand : INormalServerCommand{
     override val command = DRAW_SHARD_CARD
     val card= "";
+    var cardToSend = ShardCard();
   
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user)
 
         if (game == null) {
-            throw RuntimeException("User not in a game")
+            throw CommandException("DrawShardCard Command:User not in a game")
         }
 
         if(game.whoseTurn != user){
-            throw RuntimeException("Not Your Turn")
+            throw CommandException("DrawShardCard Command:Not Your Turn")
         }
         if(card == "deck"){
-        user.shardCards.push(game.shardCardDeck.getNext())
-        }else{
-            if(game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }.size > 0){
-                var found = -1;
-                for(cards in game.faceUpShardCards.shardCards){
-                    if(cards.type.equals(MaterialType.valueOf(card)) && found == -1){
-                        user.shardCards.push(cards)
-                        found = game.faceUpShardCards.shardCards.indexOf(cards);
-                    }
-                }
-                game.faceUpShardCards.shardCards.removeAt(found)
-                game.faceUpShardCards.push(game.shardCardDeck.getNext())
-            }else{
-                throw RuntimeException("Card does not exist")
+            cardToSend = game.shardCardDeck.getNext()
+            user.shardCards.push(cardToSend)
+        } else {
+            val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }//this filter sees if stuff exists
+            if(validCards.size > 0) {
+                game.faceUpShardCards.shardCards.remove(validCards[0])
+                game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
+                cardToSend = validCards[0];
             }
-        }
+            else{
+                throw CommandException("DrawShardCard Command:Card Does Not Exist")
+            }
 
-        updatebank(game)
+        }
+        var dealCardsCmd = DealCardsCommand()
+        dealCardsCmd.shardCards.add(cardToSend);
+        user.queue.push(dealCardsCmd);
+        game.updatebank()
+        game.updatePlayer(user)
+
     }
 }
 
-fun updatebank(game: Game){
-    var updatebankCommand = UpdateBankCommand()
-    updatebankCommand.faceUpCards = game.faceUpShardCards.cards
-    updatebankCommand.shardDrawPileSize = game.shardCardDeck.cards.size
-    updatebankCommand.shardDiscardPileSize = game.shardCardDiscardPile.cards.size
-    updatebankCommand.destinationPileSize = game.destinationCardDeck.cards.size
-    game.broadcast(updatebankCommand)
-}

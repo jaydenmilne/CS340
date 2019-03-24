@@ -3,19 +3,28 @@ import { GamePlayer } from './model/game-player';
 import { DestinationCard, ShardCard } from './model/cards';
 
 // Server commands
+
 export class ClaimRouteCommand implements Command {
     public command = 'claimRoute';
     public routeId: string;
     public shardsUsed: ShardCard[]
 
     constructor(routeId: string, shardsUsed: ShardCard[]) {
-        this.routeId = routeId;
-        this.shardsUsed = shardsUsed;
     }
+}
+  
 export class DrawShardCard implements Command {
     public command = 'drawShardCard';
+    constructor(public card: String) {
+    }
+}
 
-    constructor(public card: String) {}
+export class DiscardDestinationsCommand implements Command {
+    public command = 'discardDestinations';
+    public discardedDestinations: DestinationCard[];
+
+    constructor(discardedDestinations: DestinationCard[]) {
+    }
 }
 
 // Client Commands
@@ -100,12 +109,25 @@ export class DealCardsCommand implements Command {
     }
 }
 
-export class DiscardDestinationsCommand implements Command {
-    public command = 'discardDestinations';
-    public discardedDestinations: DestinationCard[];
+export class UpdateHandCommand implements Command{
+    public command = 'updateHand';
+    public destinations: DestinationCard[];
+    public shardCards: ShardCard[];
 
-    constructor(discardedDestinations: DestinationCard[]) {
-        this.discardedDestinations = discardedDestinations;
+    constructor(updateHandCommand: any){
+        if (!('destinations' in UpdateHandCommand &&
+        'shardCards' in UpdateHandCommand)) {
+        throw new TypeError('Unable to deserialize UpdateBankCommand object, ' + JSON.stringify(UpdateHandCommand));
+        }
+        this.destinations = [];
+        updateHandCommand.destinations.forEach(card => {
+            this.destinations.push(new DestinationCard(card));
+        });
+
+        this.shardCards = [];
+        updateHandCommand.shardCards.forEach(card => {
+            this.shardCards.push(new ShardCard(card));
+        });
     }
 }
 

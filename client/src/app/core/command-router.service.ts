@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { LoginResult } from './login-commands';
 import { ErrorNotifierService, ErrorMessage } from './error-notifier.service';
 import { GameCreatedCommand, StartGameCommand, RefreshGameListCommand } from './lobby-commands';
+import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand, UpdateHandCommand } from './game-commands';
 import { UpdatePlayerCommand, ChangeTurnCommand, UpdateBankCommand, DealCardsCommand, RouteClaimedCommand } from './game-commands';
 import { UpdateChatCommand } from './chat-commands';
 
@@ -29,6 +30,7 @@ export class CommandRouterService {
   public updateChat$                = new Subject<UpdateChatCommand>();
   public changeTurn$                = new Subject<ChangeTurnCommand>();
   public updateBank$                = new Subject<UpdateBankCommand>();
+  public updateHand$                 = new Subject<UpdateHandCommand>();
   public dealCards$                 = new Subject<DealCardsCommand>();
   public routeClaimed$              = new Subject<RouteClaimedCommand>();
 
@@ -66,6 +68,9 @@ export class CommandRouterService {
           break;
         case 'dealCards':
           this.dealCards$.next(new DealCardsCommand(cmd));
+          break;
+        case 'updateHand':
+          this.updateHand$.next(new UpdateHandCommand(cmd));
           break;
         case 'routeClaimed':
           this.routeClaimed$.next(new RouteClaimedCommand(cmd));

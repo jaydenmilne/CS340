@@ -2,6 +2,8 @@ package models
 
 import commands.CommandException
 import commands.INormalClientCommand
+import commands.UpdateBankCommand
+import commands.UpdatePlayerCommand
 import java.lang.RuntimeException
 
 private var nextGameId = -1
@@ -86,6 +88,24 @@ class Game(var name: String) {
         return players.indexOf(user)
     }
 
+
+    fun updatePlayer(user: User){
+        var updatePlayerCommand = UpdatePlayerCommand()
+        updatePlayerCommand.gamePlayer = user.toGamePlayer()
+        broadcast(updatePlayerCommand)
+    }
+  
+
+    fun updatebank(){
+        var updatebankCommand = UpdateBankCommand()
+        updatebankCommand.faceUpCards = faceUpShardCards.cards
+        updatebankCommand.shardDrawPileSize = shardCardDeck.cards.size
+        updatebankCommand.shardDiscardPileSize = shardCardDiscardPile.cards.size
+        updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
+        broadcast(updatebankCommand)
+    }
+  
+
     fun canClaimRoute(user: User, routeId: String, cards: Array<ShardCard>): Boolean {
 
         val currentRoute = routes.routesByRouteId[routeId]
@@ -156,5 +176,6 @@ class Game(var name: String) {
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
 
         route.ownerId = userId
+
     }
 }
