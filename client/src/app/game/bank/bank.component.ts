@@ -16,8 +16,20 @@ export class BankComponent implements OnInit {
   ngOnInit() {
   }
 
-  private getCardImage(type: MaterialType): string {
+  public getCardImage(type: MaterialType): string {
     return ShardCard.getImage(type);
+  }
+
+  public faceUpShardCardClick(card: ShardCard) {
+    this.cardService.faceUpShardCardClick(card);
+  }
+
+  public shardCardDeckClick() {
+    this.cardService.shardCardDeckClick();
+  }
+
+  public destCardDeckClick() {
+    this.cardService.destCardDeckClick();
   }
 
 }

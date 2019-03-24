@@ -43,27 +43,27 @@ export class TurnService {
   }
 
   onChangeTurn(cmd: ChangeTurnCommand) {
-    return this.state.onChangeTurn(cmd);
+    this.state.onChangeTurn(cmd);
   };
 
   onClaimRoute() {
-    return this.state.onClaimRoute();
+    this.state.onClaimRoute();
   };
 
   onDrawDeckShardCard() {
-    return this.state.onDrawDeckShardCard();
+    this.state.onDrawDeckShardCard();
   };
 
   onDrawDestCard() {
-    return this.state.onDrawDestCard();
+    this.state.onDrawDestCard();
   };
 
   onDrawFaceUpShardCard() {
-    return this.state.onDrawFaceUpShardCard();
+    this.state.onDrawFaceUpShardCard();
   };
 
   onDrawFaceUpWildCard() {
-    return this.state.onClaimRoute();
+    this.state.onClaimRoute();
   };
 
 }

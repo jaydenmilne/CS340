@@ -1,15 +1,30 @@
 <div class="bank-box full-width">
   <div class="shard-box">
-    <div class="shard-cell inline" *ngFor="let shard of cardService.faceUpShardCards.cards"><mat-card class="shard-card inline"><img class="shard-icon" src="assets/img/shards/{{getCardImage(shard.type)}}"></mat-card>
+    <div class="shard-cell inline" *ngFor="let shard of cardService.faceUpShardCards.cards">
+      <mat-card class="shard-card inline" (click)="faceUpShardCardClick(shard)">
+        <img class="shard-icon" src="assets/img/shards/{{getCardImage(shard.type)}}">
+      </mat-card>
     </div>
   </div>
   <div class="decks-box">
     <div class="shard-card-deck">
-        <div class="inline"><mat-card class="deck-card inline" matBadge="{{cardService.shardCardDeckSize}}"><img class="deck-icon" src="assets/img/shards/shard_circle.svg"></mat-card>
+        <div class="inline">
+          <mat-card 
+            class="deck-card inline" 
+            (click)="shardCardDeckClick()" 
+            matBadge="{{cardService.shardCardDeckSize}}">
+            <img class="deck-icon" src="assets/img/shards/shard_circle.svg">
+          </mat-card>
         </div>
     </div>
     <div class="destination-deck">
-        <div class="inline"><mat-card class="dest-card inline" matBadge="{{cardService.destCardDeckSize}}"><img class="deck-icon" src="assets/img/shards/route_map.svg"></mat-card>
+        <div class="inline">
+          <mat-card 
+            class="dest-card inline" 
+            matBadge="{{cardService.destCardDeckSize}}"
+            (click)="destCardDeckClick()">
+            <img class="deck-icon" src="assets/img/shards/route_map.svg">
+          </mat-card>
     </div>
   </div>
 </div>
