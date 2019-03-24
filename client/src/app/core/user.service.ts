@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class UserService {
 
+  public isLoggedIn = false;
   public user$ = new BehaviorSubject<User>(null);
 
   private onLoginResult(loginResult: LoginResult) {
@@ -23,6 +24,7 @@ export class UserService {
 
   private onUser(user: User) {
     if (user != null) {
+      this.isLoggedIn = true;
       this.router.navigate(['/lobby']);
     }
   }

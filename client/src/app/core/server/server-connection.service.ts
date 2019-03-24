@@ -4,7 +4,7 @@ import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { ServerConnectionState } from './server-connection-state';
+import { ServerConnectionState, LobbyState } from './server-connection-state';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,7 @@ export class ServerConnectionService {
 
   constructor(public http: HttpClient,
     public errorService: ErrorNotifierService) {
+      this.changeState(new LobbyState(this));
   }
 
   public changeState(newState: ServerConnectionState) {
