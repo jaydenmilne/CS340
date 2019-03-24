@@ -15,7 +15,7 @@ export class ClaimRouteCommand implements Command {
   
 export class DrawShardCard implements Command {
     public command = 'drawShardCard';
-    constructor(public card: String) {
+    constructor(public card: string) {
     }
 }
 

@@ -53,6 +53,7 @@ class User(var username: String) {
     var destinationCards = DestinationCardDeck(mutableListOf())
     var numRemainingTrains = STARTING_TRAINS;
     var hasLongestRoute = false
+    var setupComplete = false
 
     var turnOrder = -1
 
@@ -86,10 +87,7 @@ class User(var username: String) {
     }
 
     fun updateHand(){
-        var updateHandCommand = UpdateHandCommand()
-        updateHandCommand.destinations = destinationCards.destinationCards
-        updateHandCommand.shardCards = shardCards.shardCards
-        queue.push(updateHandCommand)
+        queue.push(UpdateHandCommand(destinationCards.destinationCards, shardCards.shardCards))
     }
 }
 
