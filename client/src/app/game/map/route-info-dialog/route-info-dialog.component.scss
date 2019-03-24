@@ -1,0 +1,56 @@
+@import "colors.scss";
+@import "~@angular/material/theming";
+
+.route-info-header{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 20px;    
+}
+
+.required-shard-card{
+    height: 60px;   // Subtract margin and padding
+    width:  60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.required-shard-icon{
+    height: 60px;
+}
+
+.rounded{
+    border-radius: 20px;
+}
+
+.owner-card{
+    height: 20px;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0px;
+}
+.points-card{
+    height: 20px;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0px;
+
+}
+.info-card{
+    background-color: mat-color($primaryPalette, 300);
+    color: mat-contrast($primaryPalette, 300);
+    text-align: center;
+}
+
+.claim-button{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.close-button{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.action-bar{
+    justify-content: flex-end;
+}

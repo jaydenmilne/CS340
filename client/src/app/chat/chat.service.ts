@@ -11,15 +11,15 @@ import { ConsoleCommandService } from './console-command.service';
 })
 export class ChatService {
 
-  constructor(private server: ServerProxyService, private commandRouter: CommandRouterService, private console: ConsoleCommandService) { 
-    this.commandRouter.updateChat$.subscribe(updateChat => this.handleUpdateChat(updateChat))
+  constructor(private server: ServerProxyService, private commandRouter: CommandRouterService, private console: ConsoleCommandService) {
+    this.commandRouter.updateChat$.subscribe(updateChat => this.handleUpdateChat(updateChat));
   }
 
   public chatHistory: ChatMessage[] = [];
 
   public sendChat(message: string) {
-    if(message.charAt(0) == '/'){
-      this.console.parseCommand(message)    
+    if (message.charAt(0) === '/') {
+      this.console.parseCommand(message);
     } else {
     const command: PostChatCommand = new PostChatCommand(message);
     this.server.executeCommand(command);

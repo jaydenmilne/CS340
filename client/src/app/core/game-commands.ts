@@ -12,15 +12,19 @@ export class ClaimRouteCommand implements Command {
         this.routeId = routeId;
         this.shardsUsed = shardsUsed;
     }
+export class DrawShardCard implements Command {
+    public command = 'drawShardCard';
+
+    constructor(public card: String) {}
 }
 
 // Client Commands
 export class UpdatePlayerCommand implements Command {
     public command = 'updatePlayer';
-    public gamePlayer : GamePlayer;
+    public gamePlayer: GamePlayer;
 
     constructor(updatePlayerCommand: any) {
-        if (!("gamePlayer" in updatePlayerCommand)) {
+        if (!('gamePlayer' in updatePlayerCommand)) {
             throw new TypeError('Unable to deserialize updatePlayerCommand object, ' + JSON.stringify(updatePlayerCommand));
         }
 
@@ -29,11 +33,11 @@ export class UpdatePlayerCommand implements Command {
 }
 
 export class ChangeTurnCommand implements Command {
-    public command = "changeTurn";
-    public userId : Number;
+    public command = 'changeTurn';
+    public userId: Number;
 
     constructor(changeTurnCommand: any) {
-        if (!("userId" in changeTurnCommand)) {
+        if (!('userId' in changeTurnCommand)) {
             throw new TypeError('Unable to deserialize changeTurnCommand object, ' + JSON.stringify(changeTurnCommand));
         }
 
