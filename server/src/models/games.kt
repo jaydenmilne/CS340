@@ -101,7 +101,6 @@ class Game(var name: String) {
         updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
         broadcast(updatebankCommand)
     }
-  
 
     fun canClaimRoute(user: User, routeId: String, cards: Array<ShardCard>): Boolean {
 
@@ -169,10 +168,15 @@ class Game(var name: String) {
     }
 
     fun claimRoute(userId: Int, routeId: String) {
-
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
 
         route.ownerId = userId
+    }
 
+    fun getRoutePointsForUser(userId: Int): Int {
+        return routes.routesByRouteId.map { entry -> when(entry.value.ownerId) {
+            userId -> entry.value.points
+            else -> 0
+        } }.reduce { totalPoints, points -> totalPoints + points}
     }
 }

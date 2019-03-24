@@ -1,5 +1,7 @@
 package models
 
+import commands.CommandException
+
 /* CITY NAMES */
 const val DARK_DIMENSION = "darkdimension"
 const val GIBBORIM = "gibborim"
@@ -262,5 +264,15 @@ enum class RouteType(val type: String) {
 }
 
 class Route(val routeId: String, val cities: Array<String>, val numCars: Int, val type: RouteType, var ownerId: Int?) {
-
+    val points: Int
+        get() {
+            return when(numCars) {
+                2 -> 1
+                3 -> 4
+                4 -> 7
+                5 -> 10
+                6 -> 15
+                else -> throw CommandException("Invalid number of cars required.")
+            }
+        }
 }

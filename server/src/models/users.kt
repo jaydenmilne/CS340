@@ -72,7 +72,6 @@ class User(var username: String) {
     }
 
     fun toGamePlayer(): GamePlayer {
-
         return GamePlayer(this.userId,
                 this.username,
                 this.color,
@@ -85,11 +84,32 @@ class User(var username: String) {
                 this.turnOrder)
     }
 
-    fun updateHand(){
+    fun updateHand() {
         var updateHandCommand = UpdateHandCommand()
         updateHandCommand.destinations = destinationCards.destinationCards
         updateHandCommand.shardCards = shardCards.shardCards
         queue.push(updateHandCommand)
+    }
+
+    fun toPlayerPoints(): PlayerPoints {
+        return PlayerPoints(this.userId,
+                this.username,
+                0,
+                getRoutePoints(),
+                0,
+                0,
+                0
+                )
+    }
+
+    fun getRoutePoints(): Int {
+        val game = Games.getGameForPlayer(this)
+
+        if (game == null) {
+            return 0
+        }
+
+        return game.getRoutePointsForUser(this.userId)
     }
 }
 
