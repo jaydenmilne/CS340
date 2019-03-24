@@ -17,6 +17,12 @@ export class DrawShardCard implements Command {
     }
 }
 
+export class DebugHelpCommand implements Command {
+    public command = 'debugHelp';
+    constructor(public action: string) {
+    }
+}
+
 export class DiscardDestinationsCommand implements Command {
     public command = 'discardDestinations';
 
