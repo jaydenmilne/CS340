@@ -119,22 +119,10 @@ class Game(var name: String) {
         }
 
         // Check user's hand
-        val userInfinityGauntlets = mutableListOf<ShardCard>()
-        val userSecondaryCards = mutableListOf<ShardCard>()
-
         val numUserInfinityGauntlets = user.shardCards.shardCards.filter { s -> s.type == MaterialType.INFINITY_GAUNTLET }.size
         val numUserSecondaryCards = user.shardCards.shardCards.filter{ s -> s.type == secondaryCards[0].type}.size
 
-        for (s in user.shardCards.shardCards) {
-            if (s.type == MaterialType.INFINITY_GAUNTLET) {
-                userInfinityGauntlets.add(s)
-            }
-            else if (s.type == secondaryCards[0].type) {
-                userSecondaryCards.add(s)
-            }
-        }
-
-        if (infinityGauntlets.size > userInfinityGauntlets.size || secondaryCards.size > userSecondaryCards.size) {
+        if (infinityGauntlets.size > numUserInfinityGauntlets || secondaryCards.size > numUserSecondaryCards) {
             return false
         }
 
