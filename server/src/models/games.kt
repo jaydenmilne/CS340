@@ -54,13 +54,10 @@ class Game(var name: String) {
     @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
 
     var whoseTurn: User? = null
-
     var chatMessages = mutableListOf<Message>()
-
     var destDiscardOrder = 0
 
-    @Transient private var routes = RouteList()
-
+    @Transient private var routes = RoutesList()
     @Transient private var nextMessageId = -1
 
     fun broadcast(command: INormalClientCommand) {
