@@ -342,12 +342,15 @@ class DrawShardCardCommand : INormalServerCommand{
         if(game.getTurningPlayer() != user){
             throw CommandException("DrawShardCard Command:Not Your Turn")
         }
+        /*This if statement checks if the use wants to draw from the deck or from the faceup deck*/
         if(card == "deck"){
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
         } else {
-            val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }//this filter sees if stuff exists
+            /*This filter checks for shardCards in the faceUp deck that match The Card Requested's material type*/
+            val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }
             if(validCards.size > 0) {
+                /*This Takes the first card that matches type and draws it for the user and if it is blank throws an error*/
                 game.faceUpShardCards.shardCards.remove(validCards[0])
                 game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
                 cardToSend = validCards[0];
@@ -360,6 +363,7 @@ class DrawShardCardCommand : INormalServerCommand{
         var dealCardsCmd = DealCardsCommand()
         dealCardsCmd.shardCards.add(cardToSend);
         user.queue.push(dealCardsCmd);
+        /*This sends the command to update clients on the user change and bank change*/
         game.updatebank()
         game.updatePlayer(user)
         game.advanceTurn()
