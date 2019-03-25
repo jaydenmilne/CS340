@@ -40,7 +40,7 @@ fun main(args: Array<String>) {
 
 fun handleOptions(httpExchange: HttpExchange) {
     httpExchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
-    httpExchange.responseHeaders.add("Access-Control-Allow-Headers", "*")
+    httpExchange.responseHeaders.add("Access-Control-Allow-Headers", "Authorization,authorization,content-type")
     httpExchange.sendResponseHeaders(HTTP_OK, 0)
     httpExchange.close()
 }
