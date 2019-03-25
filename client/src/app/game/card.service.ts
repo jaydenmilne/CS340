@@ -74,7 +74,7 @@ export class CardService {
     this.playerTrainCards = new ShardCardDeck(updateHandCmd.shardCards);
   }
 
-  public faceUpShardCardClick(card: ShardCard) {
+  public drawFaceUpShardCard(card: ShardCard) {
     if (card.type == MaterialType.INFINITY_GAUNTLET) {
       if (this.turnService.canDrawWild()) {
         this.turnService.onDrawFaceUpWildCard();
@@ -90,7 +90,7 @@ export class CardService {
     }
   }
 
-  public shardCardDeckClick() {
+  public drawShardCardFromDeck() {
     if (this.turnService.canDrawShards()) {
       this.turnService.onDrawDeckShardCard();
       
@@ -98,7 +98,7 @@ export class CardService {
     }
   }
 
-  public destCardDeckClick() {
+  public drawDestCardFromDeck() {
     if (this.turnService.canDrawDestinations()) {
       this.turnService.onDrawDestCard();
 

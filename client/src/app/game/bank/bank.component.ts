@@ -21,15 +21,15 @@ export class BankComponent implements OnInit {
   }
 
   public faceUpShardCardClick(card: ShardCard) {
-    this.cardService.faceUpShardCardClick(card);
+    this.cardService.drawFaceUpShardCard(card);
   }
 
   public shardCardDeckClick() {
-    this.cardService.shardCardDeckClick();
+    this.cardService.drawShardCardFromDeck();
   }
 
   public destCardDeckClick() {
-    this.cardService.destCardDeckClick();
+    this.cardService.drawDestCardFromDeck();
   }
 
 }
