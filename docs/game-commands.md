@@ -259,16 +259,16 @@ Allows the following list of actions to be run on the Server
 
 | Command                                | Result |    
 |---------------------------------|----------------------------------|
-|rainbowroad| Makes all five faceup cards infinitygauntlets|
-|allyourbasesaremine| Takes all routes owned by other players and gives them to user|
-|claim [player] [routeId]| Claims said route for said user|
-|givethemtrainsorgivemedeath| Makes everyones trains 100 except the user who is left with 10|
-|myturn| Advances whose turn it is|
-|heartinthecards| Gives user a full deck of shardcards in his hand an removes everyone elses cards|
-|finaldestination| Gives all other players a deck of destination cards|
-|newroad [city1] [city2] [points]| Makes a new destination card for the user with those cities & points|
-|whereto| Starts a draw on destination cards for a user|
-|makeitrain [type]| If the type is empty the user gets three of each type of card if it isn't the user gets three of that type of card|
+|/rainbowroad| Makes all five faceup cards infinitygauntlets|
+|/allyourbasesaremine| Takes all routes owned by other players and gives them to user|
+|/claim [player] [routeId]| Claims said route for said user|
+|/givethemtrainsorgivemedeath| Makes everyones trains 100 except the user who is left with 10|
+|/myturn| Advances whose turn it is|
+|/heartinthecards| Gives user a full deck of shardcards in his hand an removes everyone elses cards|
+|/finaldestination| Gives all other players a deck of destination cards|
+|/newroad [city1] [city2] [points]| Makes a new destination card for the user with those cities & points|
+|/whereto| Starts a draw on destination cards for a user|
+|/makeitrain [type]| If the type is empty the user gets three of each type of card if it isn't the user gets three of that type of card|
 
 #### Syntax
 ```json
