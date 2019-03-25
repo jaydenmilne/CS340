@@ -111,6 +111,11 @@ class Game(var name: String) {
 
         val currentRoute = routes.routesByRouteId[routeId]
 
+        // Check if route is disabled for 2 player mode
+        if (routeId[routeId.lastIndex] == '2' && players.size == 2) {
+            return false
+        }
+
         // Check if route is not owned
         if (currentRoute != null) {
             if (currentRoute.ownerId != null) {
@@ -121,6 +126,12 @@ class Game(var name: String) {
             throw RuntimeException("Invalid route ID")
         }
 
+        // Check user's energy
+        if (user.numRemainingTrains < currentRoute.numCars) {
+            return false
+        }
+
+        // Get lists of infinity gauntlets and secondary shard cards
         val infinityGauntlets = mutableListOf<ShardCard>()
         val secondaryCards = mutableListOf<ShardCard>()
 
@@ -172,12 +183,15 @@ class Game(var name: String) {
         }
     }
 
-    fun claimRoute(userId: Int, routeId: String) {
+    fun claimRoute(user: User, routeId: String) {
 
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
 
-        route.ownerId = userId
+        route.ownerId = user.userId
 
+        user.numRemainingTrains -= route.numCars
+
+        //TODO: increment user points
     }
 
     fun advanceTurn(){
