@@ -111,9 +111,20 @@ class Game(var name: String) {
 
         val currentRoute = routes.routesByRouteId[routeId]
 
-        // Check if route is disabled for 2 player mode
-        if (routeId[routeId.lastIndex] == '2' && players.size == 2) {
-            return false
+        // Check if route is disabled for 2 or 3 player mode
+        if (players.size == 2 || players.size == 3) {
+
+            var newRouteId = StringBuilder().append(routeId)
+            if (routeId[routeId.lastIndex] == '1') {
+                newRouteId.setCharAt(newRouteId.length - 1, '2')
+            }
+            else if (routeId[routeId.lastIndex] == '2') {
+                newRouteId.setCharAt(newRouteId.length - 1, '1')
+            }
+
+            if (routes.routesByRouteId[newRouteId.toString()]!!.ownerId != null) {
+                return false
+            }
         }
 
         // Check if route is not owned
