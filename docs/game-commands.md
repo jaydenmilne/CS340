@@ -86,7 +86,7 @@ Several commands transmit arrays of models, these are their descriptions.
 | [drawShardCard](#drawShardCard-command)         | Server                      | `dealCards`    |
 | [lastRound](#lastRound-command)         | Client                              |     |
 | [gameOver](#gameOver-command)         | Client                                |     |
-| [debugHelp](#debugHelp-command)       | Server                                |     |
+| [debugHelp](#debugHelp-command)       | Server                                |  `updateHand`, `updateBank`,`dealCards`,`updatePlayer`   |
 
 ### `updateBank` Command
 Client Command.
