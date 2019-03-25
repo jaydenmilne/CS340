@@ -8,7 +8,7 @@ import { DestCardSelectionDeck, DestinationCardDeck, DestCardSelectionPair } fro
   styleUrls: ['./select-destination-cards-dialog.component.scss']
 })
 export class SelectDestinationCardsDialogComponent {
-  private cards: DestCardSelectionDeck;
+  public cards: DestCardSelectionDeck;
   public minSelected = false;
   constructor(
     public dialogRef: MatDialogRef<SelectDestinationCardsDialogComponent>,

@@ -12,7 +12,7 @@ import { RouteService } from '../route.service';
 })
 export class ClaimRoutesDialogComponent {
   private cards: ShardCardSelectionDeck;
-  private useableCards: ShardCardSelectionDeck;
+  public useableCards: ShardCardSelectionDeck;
   public claimValid: boolean = false;
 
   constructor(private routeService: RouteService,
