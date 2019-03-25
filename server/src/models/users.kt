@@ -1,5 +1,6 @@
 package models
 
+import commands.CommandException
 import commands.UpdateHandCommand
 
 private var nextUserId = -1
@@ -94,12 +95,39 @@ class User(var username: String) {
     fun toPlayerPoints(): PlayerPoints {
         return PlayerPoints(this.userId,
                 this.username,
-                0,
+                getRoutePoints() + getCompletedDestPoints() + getIncompleteDestPoints(),
                 getRoutePoints(),
-                0,
-                0,
+                getCompletedDestPoints(),
+                getIncompleteDestPoints(),
                 0
                 )
+    }
+
+    fun getCompletedDestPoints(): Int {
+        val game = Games.getGameForPlayer(this) ?: throw CommandException("Bad game.")
+        var points = 0
+
+        this.destinationCards.destinationCards.forEach {
+            if (game.getRouteBetweenCitiesForPlayer(this.userId, it.cities.elementAt(0), it.cities.elementAt(1))) {
+                points += it.points
+            }
+        }
+
+        return points
+    }
+
+    fun getIncompleteDestPoints(): Int {
+        val game = Games.getGameForPlayer(this) ?: throw CommandException("Bad game.")
+
+        var points = 0
+
+        this.destinationCards.destinationCards.forEach {
+            if (!game.getRouteBetweenCitiesForPlayer(this.userId, it.cities.elementAt(0), it.cities.elementAt(1))) {
+                points -= it.points
+            }
+        }
+
+        return points
     }
 
     fun getRoutePoints(): Int {
@@ -109,7 +137,7 @@ class User(var username: String) {
             return 0
         }
 
-        return game.getRoutePointsForUser(this.userId)
+        return game.getRoutePointsForPlayer(this.userId)
     }
 }
 

@@ -292,7 +292,7 @@ class Route(val routeId: String, val cities: Set<String>, val numCars: Int, val 
                 4 -> 7
                 5 -> 10
                 6 -> 15
-                else -> throw CommandException("Invalid number of cars required.")
+                else -> throw CommandException("Invalid number of cars for route.")
             }
         }
 }

@@ -173,10 +173,14 @@ class Game(var name: String) {
         route.ownerId = userId
     }
 
-    fun getRoutePointsForUser(userId: Int): Int {
+    fun getRoutePointsForPlayer(userId: Int): Int {
         return routes.routesByRouteId.map { entry -> when(entry.value.ownerId) {
             userId -> entry.value.points
             else -> 0
         } }.reduce { totalPoints, points -> totalPoints + points}
+    }
+
+    fun getRouteBetweenCitiesForPlayer(userId: Int, city1: String, city2: String): Boolean {
+        return routes.pathBetweenCities(city1, city2, userId)
     }
 }
