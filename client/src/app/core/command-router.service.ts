@@ -29,7 +29,7 @@ export class CommandRouterService {
   public updateChat$                = new Subject<UpdateChatCommand>();
   public changeTurn$                = new Subject<ChangeTurnCommand>();
   public updateBank$                = new Subject<UpdateBankCommand>();
-  public updateHand$                 = new Subject<UpdateHandCommand>();
+  public updateHand$                = new Subject<UpdateHandCommand>();
   public dealCards$                 = new Subject<DealCardsCommand>();
   public routeClaimed$              = new Subject<RouteClaimedCommand>();
 
