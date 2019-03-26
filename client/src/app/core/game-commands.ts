@@ -1,6 +1,7 @@
 import { Command } from './command';
 import { GamePlayer } from './model/game-player';
 import { DestinationCard, ShardCard } from './model/cards';
+import { PlayerPoint } from './model/player-point';
 
 // Server commands
 
@@ -146,5 +147,21 @@ export class RouteClaimedCommand implements Command {
 
         this.userId = routeClaimedCommand.userId;
         this.routeId = routeClaimedCommand.routeId;
+    }
+}
+
+export class GameOverCommand implements Command {
+    public command = 'gameOver';
+    public players: PlayerPoint[];
+
+    constructor(gameOverCommand: any) {
+        if (!('players' in gameOverCommand)) {
+            throw new TypeError('Unable to deserialize GameOverCommand object, ' + JSON.stringify(gameOverCommand));
+        }
+
+        this.players = [];
+        gameOverCommand.destinations.forEach(playerPoint => {
+            this.players.push(new PlayerPoint(playerPoint));
+        });
     }
 }
