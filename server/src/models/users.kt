@@ -99,8 +99,8 @@ class User(var username: String) {
                 getRoutePoints(),
                 getCompletedDestPoints(),
                 getIncompleteDestPoints(),
-                0
-                )
+                if (this.hasLongestRoute) 10 else 0
+        )
     }
 
     fun getCompletedDestPoints(): Int {
