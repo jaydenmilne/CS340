@@ -110,6 +110,15 @@ class LoginCommand : IRegisterServerCommand {
         }
 
         if (user.verifyPassword(password)) {
+            if (user.setupComplete) {
+                // The user is in a game already. Set the game value on the response
+                for ((_, game) in Games.games) {
+                    if (user in game.players) {
+                        response.game = game.gameId
+                    }
+                }
+            }
+
             val authToken = AuthTokens.makeAuthTokenForUser(user)
             response.user = ClientUser(user.userId, user.username, authToken)
             return response
