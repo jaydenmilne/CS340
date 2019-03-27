@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Route } from '../core/model/route';
-import { RouteName } from "../core/model/route-name.enum";
-import { City } from "../core/model/city.enum";
-import { RouteType } from "../core/model/route-type.enum";
+import { RouteName } from '../core/model/route-name.enum';
+import { City } from '../core/model/city.enum';
+import { RouteType } from '../core/model/route-type.enum';
 import { Subject, from } from 'rxjs';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { CommandRouterService } from '@core/command-router.service';
@@ -22,9 +22,9 @@ export class RouteService {
   public routeOwnershipChanged$ = new Subject<Route>();
 
   constructor(
-    private errorNotifier : ErrorNotifierService, 
-    private commandRouter : CommandRouterService,
-    private turnService : TurnService,
+    private errorNotifier: ErrorNotifierService,
+    private commandRouter: CommandRouterService,
+    private turnService: TurnService,
     private server: ServerProxyService,
     private playerService: PlayerService) {
 
@@ -142,7 +142,7 @@ export class RouteService {
     this.routeOwnershipChanged$.next(route);
   }
 
-  public onRouteClaimed(routeClaimedCommand : RouteClaimedCommand) {
+  public onRouteClaimed(routeClaimedCommand: RouteClaimedCommand) {
     this.updateOwnership(routeClaimedCommand.routeId as RouteName, routeClaimedCommand.userId);
   }
 
@@ -167,14 +167,14 @@ export class RouteService {
     } else {
         validClaim = this.canClaimRouteType(route.type, hand, route.numCars);
     }
-    if(validClaim){
-      if(this.playerService.players.length > 2){  
+    if (validClaim) {
+      if (this.playerService.players.length > 2) {
         return true;
-        }else{
+        } else {
           return this.checkDoubleRoute(route);
         }
-    }else{
-      return false
+    } else {
+      return false;
     }
   }
 
@@ -216,17 +216,17 @@ export class RouteService {
     this.server.executeCommand(new ClaimRouteCommand(route.routeName, cards.cards));
    }
 
-   private checkDoubleRoute(route: Route): boolean{
-     let routeBrother = route.routeName.slice(0,-1); //Removes last letter from route
-     if(route.routeName.endsWith('1')){ //Checks for routes ending with 1 and sees if brother route of two is claimed
-      routeBrother = routeBrother.concat("2").toUpperCase();
-      console.log(routeBrother)
-      return(this.routes.get(RouteName[routeBrother]).ownerId === -1)  
-    } else if(route.routeName.endsWith('2')){//Checks for routes ending with 1 and sees if brother route of two is claimed
-      routeBrother = routeBrother.concat("1").toUpperCase();
-      return(this.routes.get(RouteName[routeBrother]).ownerId === -1)  
-    }else{ //Returns this is route isn't a duplicated route
+   private checkDoubleRoute(route: Route): boolean {
+     let routeBrother = route.routeName.slice(0, -1); // Removes last letter from route
+     if (route.routeName.endsWith('1')) { // Checks for routes ending with 1 and sees if brother route of two is claimed
+      routeBrother = routeBrother.concat('2').toUpperCase();
+      console.log(routeBrother);
+      return(this.routes.get(RouteName[routeBrother]).ownerId === -1);
+    } else if (route.routeName.endsWith('2')) {// Checks for routes ending with 1 and sees if brother route of two is claimed
+      routeBrother = routeBrother.concat('1').toUpperCase();
+      return(this.routes.get(RouteName[routeBrother]).ownerId === -1);
+    } else { // Returns this is route isn't a duplicated route
        return true;
-    } 
+    }
   }
 }

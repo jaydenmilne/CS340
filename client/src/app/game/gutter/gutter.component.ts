@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MaterialType } from "@core/model/material-type.enum";
+import { MaterialType } from '@core/model/material-type.enum';
 import { CardService } from '../card.service';
 import { PlayerService } from '../player.service';
 import { StyleColor } from '@core/model/color.enum';
