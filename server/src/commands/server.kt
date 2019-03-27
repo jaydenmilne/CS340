@@ -314,7 +314,7 @@ class ClaimRouteCommand : INormalServerCommand {
             user.shardCards.shardCards.removeAll(shardsUsed)
             game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
 
-            game.claimRoute(user.userId, routeId)
+            game.claimRoute(user, routeId)
 
             val routeClaimed = RouteClaimedCommand()
             routeClaimed.routeId = this.routeId
