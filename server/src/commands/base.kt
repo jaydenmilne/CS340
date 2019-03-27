@@ -28,6 +28,7 @@ const val ROUTE_CLAIMED = "routeClaimed"
 const val DEBUG_HELP = "debugHelp"
 const val DRAW_SHARD_CARD = "drawShardCard"
 const val UPDATE_HAND = "updateHand"
+const val LAST_ROUND = "lastRound"
 const val GAME_OVER = "gameOver"
 
 interface ICommand {

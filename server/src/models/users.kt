@@ -1,5 +1,6 @@
 package models
 
+import commands.CommandException
 import commands.UpdateHandCommand
 
 private var nextUserId = -1
@@ -59,6 +60,7 @@ class User(var username: String) {
 
     @Transient private var passwordHash = ""
     @Transient var queue = CommandQueue()
+    @Transient var isDrawingSecondCard = false
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)
@@ -73,7 +75,6 @@ class User(var username: String) {
     }
 
     fun toGamePlayer(): GamePlayer {
-
         return GamePlayer(this.userId,
                 this.username,
                 this.color,
@@ -88,6 +89,54 @@ class User(var username: String) {
 
     fun updateHand(){
         queue.push(UpdateHandCommand(destinationCards.destinationCards, shardCards.shardCards))
+    }
+
+    fun toPlayerPoints(): PlayerPoints {
+        return PlayerPoints(this.userId,
+                this.username,
+                getRoutePoints() + getCompletedDestPoints() + getIncompleteDestPoints(),
+                getRoutePoints(),
+                getCompletedDestPoints(),
+                getIncompleteDestPoints(),
+                if (this.hasLongestRoute) 10 else 0
+        )
+    }
+
+    fun getCompletedDestPoints(): Int {
+        val game = Games.getGameForPlayer(this) ?: throw CommandException("Bad game.")
+        var points = 0
+
+        this.destinationCards.destinationCards.forEach {
+            if (game.getRouteBetweenCitiesForPlayer(this.userId, it.cities.elementAt(0), it.cities.elementAt(1))) {
+                points += it.points
+            }
+        }
+
+        return points
+    }
+
+    fun getIncompleteDestPoints(): Int {
+        val game = Games.getGameForPlayer(this) ?: throw CommandException("Bad game.")
+
+        var points = 0
+
+        this.destinationCards.destinationCards.forEach {
+            if (!game.getRouteBetweenCitiesForPlayer(this.userId, it.cities.elementAt(0), it.cities.elementAt(1))) {
+                points -= it.points
+            }
+        }
+
+        return points
+    }
+
+    fun getRoutePoints(): Int {
+        val game = Games.getGameForPlayer(this)
+
+        if (game == null) {
+            return 0
+        }
+
+        return game.getRoutePointsForPlayer(this.userId)
     }
 }
 
