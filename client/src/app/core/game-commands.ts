@@ -4,13 +4,39 @@ import { DestinationCard, ShardCard } from './model/cards';
 
 // Server commands
 
+export class ClaimRouteCommand implements Command {
+    public command = 'claimRoute';
+
+    constructor(public routeId: string, public shardsUsed: ShardCard[]) {
+    }
+}
+  
+export class DrawShardCard implements Command {
+    public command = 'drawShardCard';
+    constructor(public card: string) {
+    }
+}
+
+export class DebugHelpCommand implements Command {
+    public command = 'debugHelp';
+    constructor(public action: string) {
+    }
+}
+
+export class DiscardDestinationsCommand implements Command {
+    public command = 'discardDestinations';
+
+    constructor(public discardedDestinations: DestinationCard[]) {
+    }
+}
+
 // Client Commands
 export class UpdatePlayerCommand implements Command {
     public command = 'updatePlayer';
-    public gamePlayer : GamePlayer;
+    public gamePlayer: GamePlayer;
 
     constructor(updatePlayerCommand: any) {
-        if (!("gamePlayer" in updatePlayerCommand)) {
+        if (!('gamePlayer' in updatePlayerCommand)) {
             throw new TypeError('Unable to deserialize updatePlayerCommand object, ' + JSON.stringify(updatePlayerCommand));
         }
 
@@ -19,11 +45,11 @@ export class UpdatePlayerCommand implements Command {
 }
 
 export class ChangeTurnCommand implements Command {
-    public command = "changeTurn";
-    public userId : Number;
+    public command = 'changeTurn';
+    public userId: Number;
 
     constructor(changeTurnCommand: any) {
-        if (!("userId" in changeTurnCommand)) {
+        if (!('userId' in changeTurnCommand)) {
             throw new TypeError('Unable to deserialize changeTurnCommand object, ' + JSON.stringify(changeTurnCommand));
         }
 
@@ -86,11 +112,39 @@ export class DealCardsCommand implements Command {
     }
 }
 
-export class DiscardDestinationsCommand implements Command {
-    public command = 'discardDestinations';
-    public discardedDestinations: DestinationCard[];
+export class UpdateHandCommand implements Command{
+    public command = 'updateHand';
+    public destinations: DestinationCard[];
+    public shardCards: ShardCard[];
 
-    constructor(discardedDestinations: DestinationCard[]) {
-        this.discardedDestinations = discardedDestinations;
+    constructor(updateHandCommand: any){
+        if (!('destinations' in updateHandCommand &&
+        'shardCards' in updateHandCommand)) {
+        throw new TypeError('Unable to deserialize UpdateHandCommand object, ' + JSON.stringify(updateHandCommand));
+        }
+        this.destinations = [];
+        updateHandCommand.destinations.forEach(card => {
+            this.destinations.push(new DestinationCard(card));
+        });
+
+        this.shardCards = [];
+        updateHandCommand.shardCards.forEach(card => {
+            this.shardCards.push(new ShardCard(card));
+        });
+    }
+}
+
+export class RouteClaimedCommand implements Command {
+    public command = 'routeClaimed';
+    public userId: number;
+    public routeId: string;
+
+    constructor(routeClaimedCommand: any) {
+        if (!('userId' in routeClaimedCommand && 'routeId' in routeClaimedCommand)) {
+            throw new TypeError('Unable to deserialize ClaimedRouteCommand object, ' + JSON.stringify(routeClaimedCommand));
+        }
+
+        this.userId = routeClaimedCommand.userId;
+        this.routeId = routeClaimedCommand.routeId;
     }
 }

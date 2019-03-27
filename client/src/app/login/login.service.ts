@@ -21,7 +21,7 @@ export class LoginService {
     this.commandRouter.loginResult$.subscribe(
       result => this.handleResult(result)
     );
-    
+
     // Change state to login state
     this.serverConnection.changeState(new LoginState(this.serverConnection));
   }

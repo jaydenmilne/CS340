@@ -1,10 +1,10 @@
 export class ChatMessage {
     private userId: number;
-    private username: string; 
-    private message: string; 
+    private username: string;
+    private message: string;
     private sequenceNum: number;
 
-    constructor(chatMessage : any) {
+    constructor(chatMessage: any) {
         if (!('message' in chatMessage &&
               'userId' in chatMessage &&
               'username' in chatMessage &&

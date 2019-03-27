@@ -13,7 +13,7 @@ import { PlayerNotifierService } from '@core/player-notifier.service';
 })
 export class GameComponent implements OnInit {
 
-  constructor(private serverConnection: ServerConnectionService, public dialog: MatDialog, private cardService: CardService, private notifierService: PlayerNotifierService, private snackBar: MatSnackBar) { 
+  constructor(private serverConnection: ServerConnectionService, public dialog: MatDialog, private cardService: CardService, private notifierService: PlayerNotifierService, private snackBar: MatSnackBar) {
     this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
     this.notifierService.playerNotification.subscribe(message => this.displayNotification(message));
   }
@@ -24,10 +24,10 @@ export class GameComponent implements OnInit {
     this.cardService.requestDestinationCards();
   }
 
-  public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData){
+  public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData) {
     const dialogRef = this.dialog.open(SelectDestinationCardsDialogComponent, {
       width: '60%',
-      data: newDestCardsData,  
+      data: newDestCardsData,
       disableClose: true
     });
     dialogRef.afterClosed().subscribe(selectDestCardsResult => {
@@ -36,7 +36,7 @@ export class GameComponent implements OnInit {
     });
   }
 
-  public displayNotification(message: string){
-    this.snackBar.open(message, '', {duration: 1000});
+  public displayNotification(message: string) {
+    this.snackBar.open(message, '', {duration: 2500});
   }
 }

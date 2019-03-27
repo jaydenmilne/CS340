@@ -1,5 +1,7 @@
 package models
 
+import commands.UpdateHandCommand
+
 private var nextUserId = -1
 private const val STARTING_TRAINS = 45
 
@@ -52,6 +54,7 @@ class User(var username: String) {
     var numRemainingTrains = STARTING_TRAINS
     var hasLongestRoute = false
     var longestRouteLength = 0
+    var setupComplete = false
 
     var turnOrder = -1
 
@@ -82,6 +85,10 @@ class User(var username: String) {
                 this.numRemainingTrains,
                 this.hasLongestRoute,
                 this.turnOrder)
+    }
+
+    fun updateHand(){
+        queue.push(UpdateHandCommand(destinationCards.destinationCards, shardCards.shardCards))
     }
 }
 

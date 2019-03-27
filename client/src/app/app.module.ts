@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatButtonModule } from '@angular/material';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { FatalErrorDialogComponent } from './app.component';
+import { WINDOW_PROVIDERS } from '@core/server/window-provider';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { FatalErrorDialogComponent } from './app.component';
     MatDialogModule,
     AppRoutingModule
   ],
-  providers: [ServerProxyService],
+  providers: [ServerProxyService, WINDOW_PROVIDERS],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

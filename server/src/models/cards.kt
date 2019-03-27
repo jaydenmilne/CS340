@@ -1,20 +1,40 @@
 package models
 
+import com.google.gson.annotations.SerializedName
+
 enum class MaterialType(val material: String) {
-    REALITY_SHARD("reality_shard"),
-    SOUL_SHARD("soul_shard"),
-    SPACE_SHARD("space_shard"),
-    MIND_SHARD("mind_shard"),
-    POWER_SHARD("power_shard"),
-    TIME_SHARD("time_shard"),
-    VIBRANIUM("vibranium"),
-    PALLADIUM("palladium"),
-    INFINITY_GAUNTLET("infinity_gauntlet")
+    @SerializedName("reality_shard") REALITY_SHARD("reality_shard"),
+    @SerializedName("soul_shard") SOUL_SHARD("soul_shard"),
+    @SerializedName("space_shard") SPACE_SHARD("space_shard"),
+    @SerializedName("mind_shard") MIND_SHARD("mind_shard"),
+    @SerializedName("power_shard") POWER_SHARD("power_shard"),
+    @SerializedName("time_shard") TIME_SHARD("time_shard"),
+    @SerializedName("vibranium") VIBRANIUM("vibranium"),
+    @SerializedName("palladium") PALLADIUM("palladium"),
+    @SerializedName("infinity_gauntlet") INFINITY_GAUNTLET("infinity_gauntlet")
 }
 
 interface ICard
 
-class ShardCard(val type: MaterialType) : ICard
+class ShardCard(val type: MaterialType) : ICard{
+    constructor() : this(MaterialType.INFINITY_GAUNTLET)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ShardCard
+
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return type.hashCode()
+    }
+
+}
 
 class DestinationCard(val cities: Set<String>, val points: Int) {
     override fun equals(other: Any?): Boolean {

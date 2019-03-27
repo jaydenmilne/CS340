@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DestinationCard, MaterialType, ShardCard} from '@core/model/cards';
-import { City } from '@core/model/route';
+import { MaterialType } from "@core/model/material-type.enum";
 import { CardService } from '../card.service';
-import { UserService } from '@core/user.service';
 import { PlayerService } from '../player.service';
-import { GamePlayer } from '@core/model/game-player';
 import { StyleColor } from '@core/model/color.enum';
+import { ShardCard } from '@core/model/cards';
 
 
 @Component({
@@ -15,11 +13,8 @@ import { StyleColor } from '@core/model/color.enum';
 })
 export class GutterComponent implements OnInit {
 
-  constructor(private cardService: CardService,  private playerService: PlayerService) {
+  constructor(public cardService: CardService, public playerService: PlayerService) {
    }
-
-  ngOnInit() {
-  }
 
   shardTypes: MaterialType[] = [
     MaterialType.REALITY_SHARD,
@@ -33,24 +28,27 @@ export class GutterComponent implements OnInit {
     MaterialType.INFINITY_GAUNTLET
   ];
 
-  private getCardImage(type: MaterialType): string{
+  ngOnInit() {
+  }
+
+  getCardImage(type: MaterialType): string {
     return ShardCard.getImage(type);
   }
-  
-  private getRemainingShards(): number{
-    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null){
+
+  getRemainingShards(): number {
+    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null) {
       return 0;
     }
 
     return this.playerService.myPlayer.numRemainingTrains;
   }
 
-  getPlayerColorStyle(){
-    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null){
-      return {"fill": "#"+ StyleColor.YELLOW};
+  getPlayerColorStyle() {
+    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null) {
+      return {'fill': '#' + StyleColor.YELLOW};
     }
 
-    return {"fill": "#"+ StyleColor[this.playerService.myPlayer.color]};
+    return {'fill': '#' + StyleColor[this.playerService.myPlayer.color]};
   }
 }
 

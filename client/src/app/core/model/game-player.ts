@@ -12,7 +12,7 @@ export class GamePlayer {
     public hasLongestRoute: boolean;
     public longestRouteLength: number;
     public turnOrder: number;
-    
+
     constructor(gamePlayer: any) {
         if (!('userId' in gamePlayer) ||
             !('ready' in gamePlayer) ||

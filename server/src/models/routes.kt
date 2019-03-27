@@ -263,4 +263,6 @@ enum class RouteType(val type: String) {
     PALLADIUM("palladium")
 }
 
-class Route(val routeId: String, val cities: Array<String>, val numCars: Int, val type: RouteType, val ownerId: Int?)
+class Route(val routeId: String, val cities: Array<String>, val numCars: Int, val type: RouteType, var ownerId: Int?) {
+
+}
