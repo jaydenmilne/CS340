@@ -12,18 +12,23 @@ export class UserService {
 
   public user$ = new BehaviorSubject<User>(null);
 
+  // Keeps track of the rejoining status. If -1 the user was in no game previously, else they are
+  // rejoining a game.
+  private gameid = -1;
+
   private onLoginResult(loginResult: LoginResult) {
     if (loginResult.error === '') {
-      // Login worked, signal next user
+      this.gameid = loginResult.game;
       this.user$.next(loginResult.user);
-      return;
     }
 
   }
 
   private onUser(user: User) {
-    if (user != null) {
+    if (user != null && this.gameid == -1) {
       this.router.navigate(['/lobby']);
+    } else {
+      this.router.navigate(['/game/' + this.gameid]);
     }
   }
 

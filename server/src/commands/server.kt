@@ -110,11 +110,13 @@ class LoginCommand : IRegisterServerCommand {
         }
 
         if (user.verifyPassword(password)) {
+            // TODO: what will happen if the user has started a game and reloads?
             if (user.setupComplete) {
                 // The user is in a game already. Set the game value on the response
                 for ((_, game) in Games.games) {
                     if (user in game.players) {
                         response.game = game.gameId
+                        break
                     }
                 }
             }
