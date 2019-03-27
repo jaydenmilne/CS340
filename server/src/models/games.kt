@@ -1,10 +1,6 @@
 package models
 
-import commands.ChangeTurnCommand
-import commands.CommandException
-import commands.INormalClientCommand
-import commands.UpdateBankCommand
-import commands.UpdatePlayerCommand
+import commands.*
 import java.lang.RuntimeException
 
 private var nextGameId = -1
@@ -104,6 +100,12 @@ class Game(var name: String) {
         updatebankCommand.shardDiscardPileSize = shardCardDiscardPile.cards.size
         updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
         broadcast(updatebankCommand)
+    }
+
+    fun endGame(){
+        var gameOverCommand = GameOverCommand()
+        //players.forEach { gameOverCommand.players.add(it.) }
+        broadcast(gameOverCommand)
     }
   
 

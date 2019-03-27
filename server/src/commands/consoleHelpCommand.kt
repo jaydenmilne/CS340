@@ -23,6 +23,7 @@ class DebugHelpCommand : INormalServerCommand{
             "/newroad" -> newRoad(user)
             "/whereto" -> whereTo(user)
             "/makeitrain" -> makeItRain(user)
+            "/ohsnap" -> endGame(user)
         }
     }
 
@@ -188,6 +189,10 @@ class DebugHelpCommand : INormalServerCommand{
         }
         user.shardCards.shardCards.addAll(dealCardsCmd.shardCards)
         user.queue.push(dealCardsCmd)
+
+    }
+
+    private fun endGame(user:User){
 
     }
 

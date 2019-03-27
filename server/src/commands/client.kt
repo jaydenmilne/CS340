@@ -66,3 +66,9 @@ class RouteClaimedCommand : INormalClientCommand {
     var userId = 0
     var routeId = ""
 }
+
+class GameOverCommand : INormalClientCommand{
+    override val command = GAME_OVER
+    var players = mutableListOf<PlayerPoints>()
+
+}
