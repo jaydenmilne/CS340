@@ -59,6 +59,7 @@ class User(var username: String) {
 
     @Transient private var passwordHash = ""
     @Transient var queue = CommandQueue()
+    @Transient var isDrawingSecondCard = false
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)

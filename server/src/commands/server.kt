@@ -325,13 +325,13 @@ class ClaimRouteCommand : INormalServerCommand {
     }
 }
 
-class DrawShardCardCommand : INormalServerCommand{
+class DrawShardCardCommand : INormalServerCommand {
     override val command = DRAW_SHARD_CARD
     var card = ""
     var cardToSend = ShardCard()
   
     override fun execute(user: User) {
-        val game = Games.getGameForPlayer(user) ?: throw CommandException("DrawShardCard Command:User not in a game")
+        val game = Games.getGameForPlayer(user) ?: throw CommandException("DrawShardCard Command: User not in a game")
 
         if (game.getTurningPlayer() != user) {
             throw CommandException("DrawShardCard Command: Not Your Turn")
@@ -341,6 +341,7 @@ class DrawShardCardCommand : INormalServerCommand{
         if (card == "deck") {
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
+
         } else {
             // Find how many shardCards in the faceUp deck match the requested card's material type
             val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }
@@ -348,19 +349,23 @@ class DrawShardCardCommand : INormalServerCommand{
                 // Takes the first card that matches type and draws it for the user and if it is blank throws an error
                 game.faceUpShardCards.shardCards.remove(validCards[0])
                 game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
-                cardToSend = validCards[0];
+                cardToSend = validCards[0]
+            } else{
+                throw CommandException("DrawShardCard Command: Card Does Not Exist")
             }
-            else{
-                throw CommandException("DrawShardCard Command:Card Does Not Exist")
-            }
-
         }
 
         val dealCardsCmd = DealCardsCommand()
-        dealCardsCmd.shardCards.add(cardToSend);
-        user.queue.push(dealCardsCmd);
+        dealCardsCmd.shardCards.add(cardToSend)
+        user.queue.push(dealCardsCmd)
         game.updatebank()
         game.updatePlayer(user)
-        game.advanceTurn()
+
+        if (user.isDrawingSecondCard || MaterialType.INFINITY_GAUNTLET.material == card) {
+            game.advanceTurn()
+            user.isDrawingSecondCard = false
+        } else {
+            user.isDrawingSecondCard = true
+        }
     }
 }
