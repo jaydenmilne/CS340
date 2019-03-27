@@ -113,7 +113,7 @@ class Game(var name: String) {
         val currentRoute = routes.routesByRouteId[routeId]
 
         // Check if route is disabled for 2 or 3 player mode
-        if (players.size == 2 || players.size == 3) {
+        if (players.size < 4) {
 
             var newRouteId = StringBuilder().append(routeId)
             if (routeId[routeId.lastIndex] == '1') {
@@ -123,14 +123,14 @@ class Game(var name: String) {
                 newRouteId.setCharAt(newRouteId.length - 1, '1')
             }
 
-            if (routes.routesByRouteId[newRouteId.toString()]!!.ownerId != null) {
+            if (routes.routesByRouteId[newRouteId.toString()]!!.ownerId != -1) {
                 return false
             }
         }
 
         // Check if route is not owned
         if (currentRoute != null) {
-            if (currentRoute.ownerId != null) {
+            if (currentRoute.ownerId != -1) {
                 return false
             }
         }
@@ -193,13 +193,6 @@ class Game(var name: String) {
             RouteType.VIBRANIUM -> return secondaryCards[0].type == MaterialType.VIBRANIUM
             RouteType.PALLADIUM -> return secondaryCards[0].type == MaterialType.PALLADIUM
         }
-    }
-
-
-    fun claimRoute(userId: Int, routeId: String) {
-        val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
-
-        route.ownerId = userId
     }
 
     fun getRoutePointsForPlayer(userId: Int): Int {
