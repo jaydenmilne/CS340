@@ -351,7 +351,7 @@ class ClaimRouteCommand : INormalServerCommand {
             throw RuntimeException("User not in a game")
         }
         if(game.canClaimRoute(user, routeId, shardsUsed.toTypedArray())) {
-            user.shardCards.shardCards.removeAll(shardsUsed)
+            shardsUsed.forEach{card -> user.shardCards.shardCards.remove(card)}
             game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
 
             game.claimRoute(user, routeId)
