@@ -19,7 +19,10 @@ export abstract class ITurnState {
   abstract canDrawDestinations(): boolean;
   abstract canClaimRoutes(): boolean;
 
-  onChangeTurn(cmd: ChangeTurnCommand) { };
+  onChangeTurn(cmd: ChangeTurnCommand) {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+  };
+
   onClaimRoute() { };
   onDrawDeckShardCard() { };
   onDrawDestCard() { };
@@ -134,8 +137,12 @@ export class DrawnFirstCardState extends ITurnState {
   }
 
   onDrawDeckShardCard() {
-    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService));
-  };
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+  }
+
+  onDrawFaceUpShardCard() {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+  }
 }
 
 export class GameOverState extends ITurnState {
