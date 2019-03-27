@@ -15,7 +15,7 @@ export class UserService {
 
   // Keeps track of the rejoining status. If -1 the user was in no game previously, else they are
   // rejoining a game.
-  private gameid = -1;
+  public gameid = -1;
 
   private onLoginResult(loginResult: LoginResult) {
     if (loginResult.error === '') {
@@ -26,11 +26,15 @@ export class UserService {
   }
 
   private onUser(user: User) {
-    if (user != null && this.gameid == -1) {
+    if (user != null) {
       this.isLoggedIn = true;
-      this.router.navigate(['/lobby']);
-    } else {
-      this.router.navigate(['/game/' + this.gameid]);
+      // Check if we are rejoining or going to the lobby
+      if (this.gameid == -1) {
+        this.router.navigate(['/lobby']);
+      } else {
+        // Rejoining
+        this.router.navigate(['/game/' + String(this.gameid)]);
+      }
     }
   }
 

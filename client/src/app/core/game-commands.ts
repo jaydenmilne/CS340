@@ -83,6 +83,10 @@ export class UpdateBankCommand implements Command {
     }
 }
 
+export class RejoinGameCommand implements Command {
+    public command = 'rejoinGame';
+}
+
 export class RequestDestinationsCommand implements Command {
     public command = 'requestDestinations';
 }

@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData, SelectDestinationCardsResult } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
+import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { CardService } from '../card.service';
 import { PlayerNotifierService } from '@core/player-notifier.service';
 import { UserService } from '@core/user.service';
 import { Router } from '@angular/router';
-import { routerNgProbeToken } from '@angular/router/src/router_module';
+import { ServerProxyService } from '@core/server/server-proxy.service';
+import { RejoinGameCommand } from '@core/game-commands';
 
 @Component({
   selector: 'app-game',
@@ -18,6 +19,7 @@ export class GameComponent implements OnInit {
 
   constructor(
     private serverConnection: ServerConnectionService, 
+    private serverProxy: ServerProxyService,
     public dialog: MatDialog, private cardService: CardService, 
     private notifierService: PlayerNotifierService, 
     private snackBar: MatSnackBar,
@@ -38,7 +40,15 @@ export class GameComponent implements OnInit {
   
     // Change the game connection to server mode
     this.serverConnection.changeState(new GameState(this.serverConnection));
-    this.cardService.requestDestinationCards();
+
+    if (this.userService.gameid != -1) {
+      // This was a rejoin. Send the rejoinGame command
+      this.serverProxy.executeCommand(new RejoinGameCommand());
+      // TODO: The server should respond immediately - do we need to block the UI meanwhile?
+    } else {
+      // New game. Request cards
+      this.cardService.requestDestinationCards();
+    }
   }
 
   public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData) {

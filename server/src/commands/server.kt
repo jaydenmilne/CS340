@@ -273,16 +273,54 @@ class RequestDestinationsCommand : INormalServerCommand {
     }
 }
 
+class RejoinGameCommand : INormalServerCommand {
+    override val command = REJOIN_GAME
+
+    override fun execute(user: User) {
+        // The client has no state, send everything that it will need.
+
+        // (note that a lot of these are broadcast (ie sent to every player)
+        //  getting a little extra state can't hurt, right?)
+        // 1. Send updatePlayers for every player
+        val game = Games.getGameForPlayer(user) ?: throw CommandException("RejoinGameCommand: User is not in a game")
+
+        game.players.forEach {player -> game.updatePlayer(player) }
+
+        // 2. Send the bank info to the client
+        game.updatebank()
+
+        // 3. Send route info to the client
+        game.routes.routesByRouteId.values.forEach {
+            val id = it.ownerId
+            if (id != null) {
+                val cmd = RouteClaimedCommand()
+                cmd.routeId = it.routeId
+                cmd.userId = id
+                user.queue.push(cmd)
+            }
+        }
+
+        // 4. Send information about the players hand
+        user.queue.push(UpdateHandCommand(user.destinationCards.cards, user.shardCards.cards))
+
+        // 5. If it is the players turn, inform them of that
+        if (user.userId == game.whoseTurn) {
+            val cmd = ChangeTurnCommand()
+            cmd.userId = user.userId
+            user.queue.push(cmd)
+        }
+
+        // TODO: send lastRound if appropriate?f
+
+    }
+}
+
 class DiscardDestinationsCommand : INormalServerCommand {
     override val command = DISCARD_DESTINATIONS
     private val discardedDestinations = listOf<DestinationCard>()
 
     override fun execute(user: User) {
-        val game = Games.getGameForPlayer(user)
-
-        if (game == null) {
-            throw CommandException("DiscardDestinationsCommand Command:User not in a game")
-        }
+        val game = Games.getGameForPlayer(user) ?: throw CommandException("DiscardDestinationsCommand Command:User not in a game")
 
         if (user.turnOrder == -1) {
             user.turnOrder = game.destDiscardOrder++
