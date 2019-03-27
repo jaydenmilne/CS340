@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CardService } from '../card.service';
 import { ShardCard } from '@core/model/cards';
-import { MaterialType } from "@core/model/material-type.enum";
+import { MaterialType } from '@core/model/material-type.enum';
 
 
 @Component({
@@ -16,8 +16,20 @@ export class BankComponent implements OnInit {
   ngOnInit() {
   }
 
-  private getCardImage(type: MaterialType): string {
+  public getCardImage(type: MaterialType): string {
     return ShardCard.getImage(type);
+  }
+
+  public faceUpShardCardClick(card: ShardCard) {
+    this.cardService.drawFaceUpShardCard(card);
+  }
+
+  public shardCardDeckClick() {
+    this.cardService.drawShardCardFromDeck();
+  }
+
+  public destCardDeckClick() {
+    this.cardService.drawDestCardFromDeck();
   }
 
 }

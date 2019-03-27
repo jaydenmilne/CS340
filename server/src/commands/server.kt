@@ -279,18 +279,20 @@ class DiscardDestinationsCommand : INormalServerCommand {
 
         discardedDestinations.forEach { discarded -> game.destinationCardDeck.push(discarded) }
         // Remove the discarded cards from the player's hand
-        user.destinationCards.destinationCards.removeAll { card -> card in discardedDestinations }
+        user.destinationCards.destinationCards.removeAll(discardedDestinations)
+        user.setupComplete = true   //
 
         // Broadcast the updated player to everyone else
         game.updatePlayer(user)
         game.updatebank()
+        game.advanceTurn()
     }
 }
 
 class ClaimRouteCommand : INormalServerCommand {
     override val command = CLAIM_ROUTE
     private val routeId = ""
-    private val shardsUsed = arrayOf<ShardCard>()
+    private val shardsUsed = listOf<ShardCard>()
 
   
       override fun execute(user: User) {
@@ -299,18 +301,23 @@ class ClaimRouteCommand : INormalServerCommand {
         if (game == null) {
             throw RuntimeException("User not in a game")
         }
-        if(game.canClaimRoute(user, routeId, shardsUsed)) {
-            for (s in shardsUsed) {
-                game.shardCardDiscardPile.push(s)
-                user.shardCards.shardCards.remove(s)
-            }
+        if(game.canClaimRoute(user, routeId, shardsUsed.toTypedArray())) {
+            shardsUsed.forEach{card -> user.shardCards.shardCards.remove(card)}
+            game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
 
-            game.claimRoute(user.userId, routeId)
+            game.claimRoute(user, routeId)
 
             val routeClaimed = RouteClaimedCommand()
             routeClaimed.routeId = this.routeId
             routeClaimed.userId = user.userId
             game.broadcast(routeClaimed)
+
+            user.updateHand()
+            val updatePlayer = UpdatePlayerCommand();
+            updatePlayer.gamePlayer = user.toGamePlayer()
+            game.broadcast(updatePlayer)
+
+            game.advanceTurn()
         }
         else {
             throw CommandException("ClaimRouteCommand: Route cannot be claimed")
@@ -318,42 +325,47 @@ class ClaimRouteCommand : INormalServerCommand {
     }
 }
 
-class DrawShardCardCommand : INormalServerCommand{
+class DrawShardCardCommand : INormalServerCommand {
     override val command = DRAW_SHARD_CARD
-    val card= "";
-    var cardToSend = ShardCard();
+    var card = ""
+    var cardToSend = ShardCard()
   
     override fun execute(user: User) {
-        val game = Games.getGameForPlayer(user)
+        val game = Games.getGameForPlayer(user) ?: throw CommandException("DrawShardCard Command: User not in a game")
 
-        if (game == null) {
-            throw CommandException("DrawShardCard Command:User not in a game")
+        if (game.getTurningPlayer() != user) {
+            throw CommandException("DrawShardCard Command: Not Your Turn")
         }
 
-        if(game.whoseTurn != user){
-            throw CommandException("DrawShardCard Command:Not Your Turn")
-        }
-        if(card == "deck"){
+        // Check if the user wants to draw from the deck or from the faceup deck
+        if (card == "deck") {
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
+
         } else {
-            val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type == MaterialType.valueOf(card) }//this filter sees if stuff exists
-            if(validCards.size > 0) {
+            // Find how many shardCards in the faceUp deck match the requested card's material type
+            val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }
+            if (validCards.isNotEmpty()) {
+                // Takes the first card that matches type and draws it for the user and if it is blank throws an error
                 game.faceUpShardCards.shardCards.remove(validCards[0])
                 game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
-                cardToSend = validCards[0];
+                cardToSend = validCards[0]
+            } else{
+                throw CommandException("DrawShardCard Command: Card Does Not Exist")
             }
-            else{
-                throw CommandException("DrawShardCard Command:Card Does Not Exist")
-            }
-
         }
-        var dealCardsCmd = DealCardsCommand()
-        dealCardsCmd.shardCards.add(cardToSend);
-        user.queue.push(dealCardsCmd);
+
+        val dealCardsCmd = DealCardsCommand()
+        dealCardsCmd.shardCards.add(cardToSend)
+        user.queue.push(dealCardsCmd)
         game.updatebank()
         game.updatePlayer(user)
 
+        if (user.isDrawingSecondCard || MaterialType.INFINITY_GAUNTLET.material == card) {
+            game.advanceTurn()
+            user.isDrawingSecondCard = false
+        } else {
+            user.isDrawingSecondCard = true
+        }
     }
 }
-

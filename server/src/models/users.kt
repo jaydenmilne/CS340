@@ -54,11 +54,13 @@ class User(var username: String) {
     var destinationCards = DestinationCardDeck(mutableListOf())
     var numRemainingTrains = STARTING_TRAINS;
     var hasLongestRoute = false
+    var setupComplete = false
 
     var turnOrder = -1
 
     @Transient private var passwordHash = ""
     @Transient var queue = CommandQueue()
+    @Transient var isDrawingSecondCard = false
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)
@@ -85,11 +87,8 @@ class User(var username: String) {
                 this.turnOrder)
     }
 
-    fun updateHand() {
-        var updateHandCommand = UpdateHandCommand()
-        updateHandCommand.destinations = destinationCards.destinationCards
-        updateHandCommand.shardCards = shardCards.shardCards
-        queue.push(updateHandCommand)
+    fun updateHand(){
+        queue.push(UpdateHandCommand(destinationCards.destinationCards, shardCards.shardCards))
     }
 
     fun toPlayerPoints(): PlayerPoints {

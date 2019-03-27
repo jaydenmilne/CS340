@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { Route, typeToMaterial } from '@core/model/route';
 import { ShardCard, ShardCardDeck, ShardCardSelectionDeck, ShardCardSelectionPair } from '@core/model/cards';
-import { MaterialType } from "@core/model/material-type.enum";
+import { MaterialType } from '@core/model/material-type.enum';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { RouteService } from '../route.service';
 
@@ -12,8 +12,8 @@ import { RouteService } from '../route.service';
 })
 export class ClaimRoutesDialogComponent {
   private cards: ShardCardSelectionDeck;
-  private useableCards: ShardCardSelectionDeck;
-  public claimValid: boolean = false;
+  public useableCards: ShardCardSelectionDeck;
+  public claimValid = false;
 
   constructor(private routeService: RouteService,
     public dialogRef: MatDialogRef<ClaimRoutesDialogComponent>,
@@ -37,7 +37,7 @@ export class ClaimRoutesDialogComponent {
   onCardClick(card: ShardCardSelectionPair) {
     this.cards.selectCard(card);
     this.filterUsableCards();
-    this.claimValid = this.routeService.claimRouteValid(this.data.route, this.cards.toDeck());
+    this.claimValid = this.routeService.claimRouteValid(this.data.route, this.cards.getSelected().toDeck());
   }
 
   private filterUsableCards() {

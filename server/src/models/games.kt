@@ -1,5 +1,6 @@
 package models
 
+import commands.ChangeTurnCommand
 import commands.CommandException
 import commands.INormalClientCommand
 import commands.UpdateBankCommand
@@ -53,11 +54,16 @@ class Game(var name: String) {
 
     @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
 
-    var whoseTurn: User? = null
+
+    var whoseTurn: Int = -1
+
     var chatMessages = mutableListOf<Message>()
     var destDiscardOrder = 0
 
-    @Transient private var routes = RoutesList()
+
+    @Transient public var routes = RouteList()
+
+
     @Transient private var nextMessageId = -1
 
     fun broadcast(command: INormalClientCommand) {
@@ -106,6 +112,22 @@ class Game(var name: String) {
 
         val currentRoute = routes.routesByRouteId[routeId]
 
+        // Check if route is disabled for 2 or 3 player mode
+        if (players.size == 2 || players.size == 3) {
+
+            var newRouteId = StringBuilder().append(routeId)
+            if (routeId[routeId.lastIndex] == '1') {
+                newRouteId.setCharAt(newRouteId.length - 1, '2')
+            }
+            else if (routeId[routeId.lastIndex] == '2') {
+                newRouteId.setCharAt(newRouteId.length - 1, '1')
+            }
+
+            if (routes.routesByRouteId[newRouteId.toString()]!!.ownerId != null) {
+                return false
+            }
+        }
+
         // Check if route is not owned
         if (currentRoute != null) {
             if (currentRoute.ownerId != null) {
@@ -116,6 +138,12 @@ class Game(var name: String) {
             throw RuntimeException("Invalid route ID")
         }
 
+        // Check user's energy
+        if (user.numRemainingTrains < currentRoute.numCars) {
+            return false
+        }
+
+        // Get lists of infinity gauntlets and secondary shard cards
         val infinityGauntlets = mutableListOf<ShardCard>()
         val secondaryCards = mutableListOf<ShardCard>()
 
@@ -167,6 +195,7 @@ class Game(var name: String) {
         }
     }
 
+
     fun claimRoute(userId: Int, routeId: String) {
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
 
@@ -182,5 +211,40 @@ class Game(var name: String) {
 
     fun getRouteBetweenCitiesForPlayer(userId: Int, city1: String, city2: String): Boolean {
         return routes.pathBetweenCities(city1, city2, userId)
+    }
+  
+    fun claimRoute(user: User, routeId: String) {
+        val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
+        route.ownerId = user.userId
+        user.numRemainingTrains -= route.numCars
+    }
+
+    fun advanceTurn(){
+        if(this.whoseTurn == -1){   // check if we're done with setup
+            // Check if all players have completed setup
+            if (this.players.filter { p -> !p.setupComplete }.isEmpty()){
+                this.incPlayerTurn()
+                this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+            }
+        } else {
+            // advance to the next player
+            this.incPlayerTurn()
+            this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+        }
+    }
+
+    fun incPlayerTurn() {
+        if (this.whoseTurn == -1 || this.whoseTurn == this.players.size -1){
+            this.whoseTurn = 0
+        } else {
+            this.whoseTurn++
+        }
+    }
+
+    fun getTurningPlayer(): User? {
+        if (this.whoseTurn == -1){
+            return null
+        }
+        return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
     }
 }

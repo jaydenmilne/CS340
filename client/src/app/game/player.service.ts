@@ -5,6 +5,8 @@ import { UpdatePlayerCommand, ChangeTurnCommand } from '@core/game-commands';
 import { GamePlayer } from '@core/model/game-player';
 import { notEqual } from 'assert';
 import { UserService } from '@core/user.service';
+import { GameOverViewData } from './game-over-dialog/game-over-dialog.component';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ export class PlayerService {
   public activePlayerId: Number = null;
   public myPlayerId = 0;
   public myPlayer: GamePlayer = null;
+  public playerPointTotals$ = new Subject<GameOverViewData>();
 
   private onUpdatePlayer(updatePlayerCommand: UpdatePlayerCommand) {
     const gamePlayer = updatePlayerCommand.gamePlayer;

@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Route } from '../core/model/route';
-import { RouteName } from "../core/model/route-name.enum";
-import { City } from "../core/model/city.enum";
-import { RouteType } from "../core/model/route-type.enum";
+import { RouteName } from '../core/model/route-name.enum';
+import { City } from '../core/model/city.enum';
+import { RouteType } from '../core/model/route-type.enum';
 import { Subject, from } from 'rxjs';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { CommandRouterService } from '@core/command-router.service';
-import { RouteClaimedCommand } from '@core/game-commands';
+import { RouteClaimedCommand, ClaimRouteCommand } from '@core/game-commands';
 
 import { ShardCardDeck, ShardCard } from '@core/model/cards';
 import { TurnService } from '../game/turn/turn.service';
+import { ServerProxyService } from '@core/server/server-proxy.service';
+import { PlayerService } from './player.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +22,11 @@ export class RouteService {
   public routeOwnershipChanged$ = new Subject<Route>();
 
   constructor(
-    private errorNotifier : ErrorNotifierService, 
-    private commandRouter : CommandRouterService,
-    private turnService : TurnService) {
+    private errorNotifier: ErrorNotifierService,
+    private commandRouter: CommandRouterService,
+    private turnService: TurnService,
+    private server: ServerProxyService,
+    private playerService: PlayerService) {
 
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_1,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_1,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
     this.routes.set(RouteName.DARKDIMENSION_GIBBORIM_2,             (new Route(RouteName.DARKDIMENSION_GIBBORIM_2,             [City.DARK_DIMENSION, City.GIBBORIM],              1, RouteType.ANY, -1)));
@@ -125,7 +129,7 @@ export class RouteService {
     this.routes.set(RouteName.SOKOVIA_WAKANDA_1,                    (new Route(RouteName.SOKOVIA_WAKANDA_1,                    [City.SOKOVIA, City.WAKANDA],                      2, RouteType.ANY, -1)));
     this.routes.set(RouteName.SOKOVIA_WAKANDA_2,                    (new Route(RouteName.SOKOVIA_WAKANDA_2,                    [City.SOKOVIA, City.WAKANDA],                      2, RouteType.ANY, -1)));
 
-    commandRouter.routeClaimed$.subscribe( cmd => this.onRouteClaimed(cmd));
+    this.commandRouter.routeClaimed$.subscribe( cmd => this.onRouteClaimed(cmd));
   }
 
   public updateOwnership(routeName: RouteName, ownerId: number) {
@@ -138,13 +142,12 @@ export class RouteService {
     this.routeOwnershipChanged$.next(route);
   }
 
-  public onRouteClaimed(routeClaimedCommand : RouteClaimedCommand) {
+  public onRouteClaimed(routeClaimedCommand: RouteClaimedCommand) {
     this.updateOwnership(routeClaimedCommand.routeId as RouteName, routeClaimedCommand.userId);
   }
 
   /* Look up route by ID*/
-  public getRouteById(routeId: string): Route {
-    const routeName: RouteName = RouteName[routeId];
+  public getRouteById(routeName: RouteName): Route {
     return this.routes.get(routeName);
   }
 
@@ -154,14 +157,24 @@ export class RouteService {
     * @param hand Users current hand
     * */
   public claimRoutePossible(route: Route, hand: ShardCardDeck): boolean {
-    if (!this.turnService.canClaimRoutes) {
+    if (!this.turnService.canClaimRoutes()) {
       return false;
     }
     let numGoodCards: number;
+    let validClaim = false;
     if (route.type === RouteType.ANY) {
-      return this.canClaimAnyRouteType(route.numCars, hand);
+      validClaim = this.canClaimAnyRouteType(route.numCars, hand);
     } else {
-        return this.canClaimRouteType(route.type, hand, route.numCars);
+        validClaim = this.canClaimRouteType(route.type, hand, route.numCars);
+    }
+    if (validClaim) {
+      if (this.playerService.players.length > 2) {
+        return true;
+        } else {
+          return this.checkDoubleRoute(route);
+        }
+    } else {
+      return false;
     }
   }
 
@@ -176,7 +189,7 @@ export class RouteService {
 }
 
   private canClaimRouteType(type: RouteType, hand: ShardCardDeck, cardsNeeded: number): boolean {
-    if (cardsNeeded >= hand.cards.filter(card => ShardCard.typeMap[card.type] === type || ShardCard.typeMap[card.type] === RouteType.ANY).length) {
+    if (cardsNeeded <= hand.cards.filter(card => ShardCard.typeMap[card.type] === type || ShardCard.typeMap[card.type] === RouteType.ANY).length) {
       return true;
     }
     return false;
@@ -188,8 +201,8 @@ export class RouteService {
     * @param cards  ShardCards we would like to use to claim the route
     * */
   public claimRouteValid(route: Route, cards: ShardCardDeck): boolean {
-    if (this.claimRoutePossible(route, cards) && cards.size.length === route.numCars) {
-        return true;
+    if (this.claimRoutePossible(route, cards) && cards.size() === route.numCars) {
+      return true;
     } else {
      return false;
     }
@@ -200,6 +213,20 @@ export class RouteService {
     * @param cards  ShardCards used to claim the route
     * */
    public claimRoute(route: Route, cards: ShardCardDeck) {
-
+    this.server.executeCommand(new ClaimRouteCommand(route.routeName, cards.cards));
    }
+
+   private checkDoubleRoute(route: Route): boolean {
+     let routeBrother = route.routeName.slice(0, -1); // Removes last letter from route
+     if (route.routeName.endsWith('1')) { // Checks for routes ending with 1 and sees if brother route of two is claimed
+      routeBrother = routeBrother.concat('2').toUpperCase();
+      console.log(routeBrother);
+      return(this.routes.get(RouteName[routeBrother]).ownerId === -1);
+    } else if (route.routeName.endsWith('2')) {// Checks for routes ending with 1 and sees if brother route of two is claimed
+      routeBrother = routeBrother.concat('1').toUpperCase();
+      return(this.routes.get(RouteName[routeBrother]).ownerId === -1);
+    } else { // Returns this is route isn't a duplicated route
+       return true;
+    }
+  }
 }

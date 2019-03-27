@@ -3,6 +3,7 @@ import { ITurnState, NotPlayersTurnState } from './turn-states';
 import { PlayerService } from '../player.service';
 import { ChangeTurnCommand } from '@core/game-commands';
 import { CommandRouterService } from '@core/command-router.service';
+import { PlayerNotifierService } from '@core/player-notifier.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,11 @@ export class TurnService {
   private state: ITurnState;
   private router: CommandRouterService;
 
-  constructor(playerService: PlayerService, router: CommandRouterService) {
-    this.state = new NotPlayersTurnState(playerService, this);
+  constructor(
+    playerService: PlayerService,
+    router: CommandRouterService,
+    private playerNotifier: PlayerNotifierService) {
+    this.state = new NotPlayersTurnState(playerService, this, playerNotifier);
     this.router = router;
 
     this.router.changeTurn$.subscribe(cmd => this.onChangeTurn(cmd));
@@ -39,31 +43,33 @@ export class TurnService {
   }
 
   setNextState(state: ITurnState) {
+    this.state.leave();
     this.state = state;
+    this.state.enter();
   }
 
   onChangeTurn(cmd: ChangeTurnCommand) {
-    return this.state.onChangeTurn(cmd);
-  };
+    this.state.onChangeTurn(cmd);
+  }
 
   onClaimRoute() {
-    return this.state.onClaimRoute();
-  };
+    this.state.onClaimRoute();
+  }
 
   onDrawDeckShardCard() {
-    return this.state.onDrawDeckShardCard();
-  };
+    this.state.onDrawDeckShardCard();
+  }
 
   onDrawDestCard() {
-    return this.state.onDrawDestCard();
-  };
+    this.state.onDrawDestCard();
+  }
 
   onDrawFaceUpShardCard() {
-    return this.state.onDrawFaceUpShardCard();
-  };
+    this.state.onDrawFaceUpShardCard();
+  }
 
   onDrawFaceUpWildCard() {
-    return this.state.onClaimRoute();
-  };
+    this.state.onClaimRoute();
+  }
 
 }
