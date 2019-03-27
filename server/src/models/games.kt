@@ -54,13 +54,15 @@ class Game(var name: String) {
 
     @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
 
+
     var whoseTurn: Int = -1
 
     var chatMessages = mutableListOf<Message>()
-
     var destDiscardOrder = 0
 
+
     @Transient public var routes = RouteList()
+
 
     @Transient private var nextMessageId = -1
 
@@ -105,7 +107,6 @@ class Game(var name: String) {
         updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
         broadcast(updatebankCommand)
     }
-  
 
     fun canClaimRoute(user: User, routeId: String, cards: Array<ShardCard>): Boolean {
 
@@ -194,15 +195,28 @@ class Game(var name: String) {
         }
     }
 
-    fun claimRoute(user: User, routeId: String) {
 
+    fun claimRoute(userId: Int, routeId: String) {
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
 
+        route.ownerId = userId
+    }
+
+    fun getRoutePointsForPlayer(userId: Int): Int {
+        return routes.routesByRouteId.map { entry -> when(entry.value.ownerId) {
+            userId -> entry.value.points
+            else -> 0
+        } }.reduce { totalPoints, points -> totalPoints + points}
+    }
+
+    fun getRouteBetweenCitiesForPlayer(userId: Int, city1: String, city2: String): Boolean {
+        return routes.pathBetweenCities(city1, city2, userId)
+    }
+  
+    fun claimRoute(user: User, routeId: String) {
+        val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
         route.ownerId = user.userId
-
         user.numRemainingTrains -= route.numCars
-
-        //TODO: increment user points
     }
 
     fun advanceTurn(){
