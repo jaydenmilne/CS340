@@ -193,7 +193,11 @@ class DebugHelpCommand : INormalServerCommand{
     }
 
     private fun endGame(user:User){
-
+        val game = Games.getGameForPlayer(user)
+        if(game == null){
+            return
+        }
+        game.endGame()
     }
 
 }
