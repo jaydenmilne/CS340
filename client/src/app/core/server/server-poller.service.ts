@@ -20,11 +20,11 @@ export class ServerPollerService {
   // Timer that triggers polls
   private pollingTrigger$ = interval(this.POLLING_INTERVAL_MS);
   private sub: Subscription;
-  
+
   /**
    * Preconditions: ServerConnectionService running
    * Postcontitions: State will be "NormalPollingState"
-   * @param connection 
+   * @param connection
    */
   constructor(public connection: ServerConnectionService) {
 
@@ -36,7 +36,7 @@ export class ServerPollerService {
   /**
    * Preconditions: None
    * Postconditions: State will be newState, old state will be properly exited
-   * @param newState 
+   * @param newState
    */
   public setState(newState) {
     if (this.state) {
@@ -52,14 +52,14 @@ export class ServerPollerService {
    * Postconditions: this.sub will be the new subscription to the timer
    *                 this.pollingTrigger$ will the new interval timer
    *                 this.poll() will be called when this.pollingTrigger$ emits event
-   * @param newInterval 
+   * @param newInterval
    */
   public changeInterval(newInterval: number) {
     if (this.sub) {
       this.sub.unsubscribe();
     }
 
-    if (newInterval == -1) {
+    if (newInterval === -1) {
       // Disable interval
       return;
     }
@@ -94,21 +94,21 @@ export class ServerPollerService {
    * Postconditions: if event.key is m and manually polling, NormalPollingState
    *                 if event.key is m and automatically polling, ManualPollingState
    *                 if event.key is p, a poll will be sent.
-   * @param event 
+   * @param event
    */
-  public handleKeypress(event : KeyboardEvent) {
-    if (event.key == "m") {
+  public handleKeypress(event: KeyboardEvent) {
+    if (event.key === 'm') {
       if (this.manualPolling) {
-        console.log("Automatically polling...");
+        console.log('Automatically polling...');
         this.setState(new NormalPollingState());
         this.manualPolling = false;
       } else {
-        console.log("Manually polling...");
+        console.log('Manually polling...');
         this.setState(new ManualPollingState());
         this.manualPolling = true;
       }
-    } else if (event.key == "p") {
-      console.log("Polling...");
+    } else if (event.key === 'p') {
+      console.log('Polling...');
       this.poll();
     }
   }

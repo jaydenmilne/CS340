@@ -14,7 +14,7 @@
     justify-content: space-between;    
 }
 .dest-card{
-    height: calc(100% - 20px - 10px);    // Allow for scroll bar and margin.
+    height: calc(100% - 20px);    // Allow for margin.
     margin: 10px 5px;
     display: inline-block;
 }
@@ -33,6 +33,9 @@
 .shard-icon{
     height: 35px;
 }
+.shard-count-icon{
+    width: 35px 
+}
 .shard-count{
     margin-left: 15px;
 }
@@ -42,14 +45,14 @@
     margin: 12px;
     flex-grow: 0;
 }
-.shard-count-cell mat-card{
-    box-shadow: none;
-}
 .shard-dummy-cell{
     flex-grow: 3;
 }
 .inline{
     display: inline-block;
+}
+.no-shadow{
+    box-shadow: none;
 }
 ::ng-deep .mat-tab-label{
     height: 40px;

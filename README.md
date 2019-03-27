@@ -1,4 +1,4 @@
-# Mary Lou - Ticket to Ride - CS340
+# Ticket to Ride: Infinity War Edition - CS340
 ## [client](./client)
 Angular based frontend for the client. Typescript/Angular based.
 

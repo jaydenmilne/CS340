@@ -30,7 +30,7 @@ export class ErrorPollingState extends ServerPollerState {
   private sub: Subscription;
 
   public enter(poller: ServerPollerService) {
-    poller.changeInterval(poller.DISCONNECTED_POLLING_INTERVAL_MS)
+    poller.changeInterval(poller.DISCONNECTED_POLLING_INTERVAL_MS);
     this.sub = poller.connection.transmissionOk$.subscribe( _ => this.onServerConnected(poller));
   }
 

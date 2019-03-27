@@ -1,5 +1,7 @@
 package models
 
+import commands.UpdateHandCommand
+
 private var nextUserId = -1
 private const val STARTING_TRAINS = 45
 
@@ -51,6 +53,7 @@ class User(var username: String) {
     var destinationCards = DestinationCardDeck(mutableListOf())
     var numRemainingTrains = STARTING_TRAINS;
     var hasLongestRoute = false
+    var setupComplete = false
 
     var turnOrder = -1
 
@@ -82,6 +85,10 @@ class User(var username: String) {
                 this.hasLongestRoute,
                 this.turnOrder)
     }
+
+    fun updateHand(){
+        queue.push(UpdateHandCommand(destinationCards.destinationCards, shardCards.shardCards))
+    }
 }
 
 class ClientUser(val userId: Int, var username: String, val authToken: String) {
@@ -107,3 +114,11 @@ enum class Color(val rgb: String) {
     RED("d32f2f"),
     ORANGE("ff5722");
 }
+
+class PlayerPoints(val userId: Int,
+                   val username: String,
+                   val totalPoints: Int,
+                   val claimedRoutePoints: Int,
+                   val completedDestinationPoints: Int,
+                   val incompleteDestinationPoints: Int,
+                   val longestRoutePoints: Int)

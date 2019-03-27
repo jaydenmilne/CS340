@@ -51,7 +51,7 @@ export class FatalErrorDialogComponent {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Mary Lou';
+  title = 'Ticket to Ride: End Game';
   constructor (public dialog: MatDialog,
                public errorService: ErrorNotifierService,
                public pollerService: ServerPollerService,
@@ -62,21 +62,21 @@ export class AppComponent implements OnInit {
   }
 
   @HostListener('document:keypress', ['$event'])
-  private handleKeypress(event : KeyboardEvent) {
-    if (event.srcElement.nodeName != "INPUT" && event.srcElement.nodeName != "TEXTAREA") {
-      switch(event.key) {
-        case "m":
-        case "p":
+  private handleKeypress(event: KeyboardEvent) {
+    if (event.srcElement.nodeName !== 'INPUT' && event.srcElement.nodeName != 'TEXTAREA') {
+      switch (event.key) {
+        case 'm':
+        case 'p':
         this.pollerService.handleKeypress(event);
         break;
-        case "u":
-        let url = prompt("Server URL:")
+        case 'u':
+        let url = prompt('Server URL:');
         if (!url) {
           return;
         }
 
-        if (!url.startsWith("http")) {
-          url = "http://" + url;
+        if (!url.startsWith('http')) {
+          url = 'http://' + url;
         }
         this.serverConnection.setServerUrl(url);
         break;

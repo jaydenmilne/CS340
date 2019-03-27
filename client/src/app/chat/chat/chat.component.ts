@@ -12,7 +12,7 @@ import { User } from '@core/model/user';
 })
 export class ChatComponent implements OnInit, AfterViewInit {
 
-  constructor(private chatService: ChatService, private userService: UserService) {
+  constructor(public chatService: ChatService, public userService: UserService) {
   }
   @ViewChild('chatBox') private chatBox: ElementRef;
 
@@ -30,12 +30,12 @@ export class ChatComponent implements OnInit, AfterViewInit {
   public onSend() {
     // Get message from form
     const message: string = this.chatForm.get('chatInput').value;
-    if (message != "") {
+    if (message !== '') {
       this.chatService.sendChat(message);
     }
 
     // Clear the message
-    this.chatForm.get("chatInput").setValue("");
+    this.chatForm.get('chatInput').setValue('');
   }
 
   public isCurrentUserPost(message: ChatMessage): boolean {
@@ -45,9 +45,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
     return this.userService.user$.value.getUserId() === message.getUserId();
   }
 
-  public onKeydown(event : KeyboardEvent) : boolean {
-    if (event.key == "Enter" && !event.shiftKey) {
-      this.onSend()
+  public onKeydown(event: KeyboardEvent): boolean {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      this.onSend();
       return false;
     }
     return true;

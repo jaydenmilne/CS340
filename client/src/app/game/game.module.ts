@@ -5,24 +5,27 @@ import { PlayerListComponent } from './player-list/player-list.component';
 import { GutterComponent} from './gutter/gutter.component';
 import { MapComponent } from './map/map.component';
 import { BankComponent } from './bank/bank.component';
-import { MatGridListModule, MatChipsModule, MatDialogModule, MatButtonModule, MatTabsModule } from '@angular/material';
+import { MatGridListModule, MatChipsModule, MatDialogModule, MatButtonModule, MatTabsModule, MatSnackBarModule } from '@angular/material';
 import { MatCardModule } from '@angular/material';
-import { PlayerInfoDialogComponent } from './player-list/player-list.component'
+import { PlayerInfoDialogComponent } from './player-list/player-list.component';
 import { ChatModule } from '../chat/chat.module';
 import { DestCardComponent } from './dest-card/dest-card.component';
 import {MatBadgeModule} from '@angular/material/badge';
 import { SelectDestinationCardsDialogComponent } from './select-destination-cards-dialog/select-destination-cards-dialog.component';
+import { ClaimRoutesDialogComponent } from './claim-routes-dialog/claim-routes-dialog.component';
+import { RouteInfoDialogComponent } from './map/route-info-dialog/route-info-dialog.component';
 
 
 @NgModule({
-  declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent],
-  entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent ],
+  declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent],
+  entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent ],
   imports: [
-    CommonModule, 
+    CommonModule,
     MatGridListModule,
     MatTabsModule,
     MatCardModule,
     MatChipsModule,
+    MatSnackBarModule,
     MatDialogModule,
     MatButtonModule,
     MatBadgeModule,

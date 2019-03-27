@@ -57,16 +57,36 @@ Several commands transmit arrays of models, these are their descriptions.
 }
 ```
 
+### `playerPoint` object
+```json
+{
+    "userId": "{id of player}",
+    "username": "{username}",
+    "totalPoints": 100, // Could be calculated on client
+    "claimedRoutePoints": 73,
+    "completedDestinationPoints": 50,
+    "incompleteDestinationPoints": -32,
+    "longestRoutePoints": 10,
+}
+```
+
 ## Commands
 
 | Command                                | [Type](protocol.md#terminology)  | Related Commands |    
 |----------------------------------------|----------------------------------|------------------|
-| [updateBank](#updateBank-command)          | Client                           | `drawCards`    |
-| [updatePlayer](#updatePlayer-command)     | Client                           | `changeTurn`    |
-| [requestDestinations](#requestDestinations-command)     | Server             | `discardDestinations`, `selectDestinations`    |
-| [dealCards](#dealCards-command)     | Client               | `discardDestinations`, `requestDestinations`    |
-| [discardDestinations](#discardDestinations-command)     | Server             | `requestDestinations`, `selectDestinations`    |
+| [updateBank](#updateBank-command)          | Client                           | `drawShardCard`    |
+| [updatePlayer](#updatePlayer-command)     | Client                            | `changeTurn`    |
+| [requestDestinations](#requestDestinations-command)     | Server              | `discardDestinations`, `selectDestinations`    |
+| [dealCards](#dealCards-command)     | Client                                  | `discardDestinations`, `requestDestinations`    |
+| [discardDestinations](#discardDestinations-command)     | Server              | `requestDestinations`, `selectDestinations`    |
+| [updateHand](#updateHand-command)         | Client                            | `claimRoute`  |
 | [changeTurn](#changeTurn-command)         | Client                            |     |
+| [claimRoute](#claimRoute-command)         | Server                            | `routeClaimed`, `updateHand` |
+| [routeClaimed](#routeClaimed-command)     | Client                            | `claimRoute`    |
+| [drawShardCard](#drawShardCard-command)         | Server                      | `dealCards`    |
+| [lastRound](#lastRound-command)         | Client                              |     |
+| [gameOver](#gameOver-command)         | Client                                |     |
+| [debugHelp](#debugHelp-command)       | Server                                |  `updateHand`, `updateBank`,`dealCards`,`updatePlayer`   |
 
 ### `updateBank` Command
 Client Command.
@@ -115,7 +135,7 @@ Requests destinationCards from the server. Step 1 of selecting destination cards
 ### `dealCards` Command
 Client Command.
 
-Sends destinationCards to the client, as well as the shardCards for that player. Step 2 of selecting destination cards.
+Sends DestinationCards and ShardCards to the player. These are new cards to be added to their hand. Step 2 of selecting destination cards.
 
 #### Syntax
 ```json
@@ -140,6 +160,20 @@ Sends discarded destinationCards back to the server. Step 3 of selecting destina
 }
 ```
 
+### `updateHand` Command
+Client Command.
+
+Sends DestinationCards and ShardCards to the server. This command contains the current state of their hand and replaces the current model. Used when claiming routes.
+
+#### Syntax
+```json
+{
+    "command": "updateHand",
+    "destinations": ["{array of DestinationCards}"],
+    "shardCards": ["{array of ShardCards}"],
+}
+```
+
 ### `changeTurn` Command
 Client Command.
 
@@ -150,5 +184,96 @@ Informs the client tha the turn has passed to the next player.
 {
     "command": "changeTurn",
     "userId": "{userId of player who's turn it is}"
+}
+```
+### `claimRoute` Command
+Server Command.
+
+Informs the server that a player has claimed a route with the specified shard cards.
+
+#### Syntax
+```json
+{
+    "command": "claimRoute",
+    "routeId": "{Id of the route being claimed}",
+    "shardsUsed": "[{Array of ShardCards from the users hand}]"
+}
+```
+
+### `routeClaimed` Command
+Client Command.
+
+Informs clients that a player has claimed a route.
+
+#### Syntax
+```json
+{
+    "command": "routeClaimed",
+    "userId": "{Id of player}",
+    "routeId": "{Id of the route claimed}",
+}
+```
+
+### `drawShardCard` Command
+Server Command.
+
+Informs the server that a player has drawn a card from the face up pile or from the deck.
+
+#### Syntax
+```json
+{
+    "command": "drawShardCard",
+    "card": "{MaterialType of card picked up or 'deck' if card was drawn from the pile. }",
+}
+```
+
+### `lastRound` Command
+Client Command.
+
+Informs the client that this is the last round.
+
+#### Syntax
+```json
+{
+    "command": "lastRound",
+}
+```
+
+### `gameOver` Command
+Client Command.
+
+Informs the client that the game is over.
+
+#### Syntax
+```json
+{
+    "command": "gameOver",
+    "players": "[{Array of PlayerPoint objects}]"
+}
+```
+
+### `debugHelp` Command
+Server Command.
+
+Allows the following list of actions to be run on the Server
+
+| Command                                | Result |    
+|---------------------------------|----------------------------------|
+|/rainbowroad| Makes all five faceup cards infinitygauntlets|
+|/allyourbasesaremine| Takes all routes owned by other players and gives them to user|
+|/claim [player] [routeId]| Claims said route for said user|
+|/givethemtrainsorgivemedeath| Makes everyones trains 100 except the user who is left with 10|
+|/myturn| Advances whose turn it is|
+|/heartinthecards| Gives user a full deck of shardcards in his hand an removes everyone elses cards|
+|/finaldestination| Gives all other players a deck of destination cards|
+|/newroad [city1] [city2] [points]| Makes a new destination card for the user with those cities & points|
+|/whereto| Starts a draw on destination cards for a user|
+|/makeitrain [type]| If the type is empty the user gets three of each type of card if it isn't the user gets three of that type of card|
+
+#### Syntax
+```json
+{
+    "command": "debugHelp",
+    "action": "/rainbowroad"
 }
 ```

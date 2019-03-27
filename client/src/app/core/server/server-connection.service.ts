@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Command, CommandArray, ICommandArray } from '@core/command';
 import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { ServerConnectionState } from './server-connection-state';
+import { WINDOW } from './window-provider';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerConnectionService {
   private previousState: ServerConnectionState;
-  private state : ServerConnectionState;
-  private serverUrlOverride: string = "";
-  
+  private state: ServerConnectionState;
+  private serverUrlOverride = '';
+
   // Queue of commands that are ready to be sent
   private outgoingQueue = new Array<Command>();
   // Command that has a pending request, or couldn't be send because of a transmission error.
@@ -31,7 +32,8 @@ export class ServerConnectionService {
   public transmissionOk$ = new Subject<null>();
 
   constructor(public http: HttpClient,
-    public errorService: ErrorNotifierService) {
+    public errorService: ErrorNotifierService,
+    @Inject(WINDOW) private window: Window) {
   }
 
   public changeState(newState: ServerConnectionState) {
@@ -43,7 +45,7 @@ export class ServerConnectionService {
     this.state = this.previousState;
   }
 
-  public registerAuthToken(token : string) {
+  public registerAuthToken(token: string) {
     this.authToken = token;
   }
 
@@ -55,10 +57,19 @@ export class ServerConnectionService {
    * Gets the correct url depending on development mode or not
    */
   public getServerUrl(): string {
-    if (this.serverUrlOverride != "") {
+    if (this.serverUrlOverride !== '') {
       return this.serverUrlOverride;
     }
-    if (isDevMode()) { return 'http://127.0.0.1:4300'; } else { return 'api.marylou.ga'; }
+
+    if (isDevMode()) { 
+      // If we are in dev mode, use whatever url the page was loaded from and port 4300
+      // This allows someone to run the dev server on their machine and others to connect
+      // without specifying an override
+      return 'http://' + window.location.hostname + ':4300'; 
+    } else { 
+      // In production, use the subdomain and https for the backend
+      return 'https://api.marylou.ga'; 
+    }
   }
 
   /**
@@ -83,7 +94,7 @@ export class ServerConnectionService {
     this.state.handleResponse(result);
 
     // If there are any pending commands, send them
-    if (this.outgoingQueue.length != 0) {
+    if (this.outgoingQueue.length !== 0) {
       this.transmitCommand(this.outgoingQueue.pop());
     }
   }
@@ -126,7 +137,7 @@ export class ServerConnectionService {
    * nothing happens, since we'll hear back from the server soon enough.
    */
   public poll() {
-    if (!this.pendingRequest) {
+    if (!this.pendingRequest && this.state !== undefined) {
       this.state.poll();
     }
   }

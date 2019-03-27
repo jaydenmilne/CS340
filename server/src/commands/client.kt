@@ -26,9 +26,8 @@ class UpdatePlayerCommand : INormalClientCommand {
     var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0 )
 }
 
-class ChangeTurnCommand : INormalClientCommand {
+class ChangeTurnCommand(var userId: Int = 0) : INormalClientCommand {
     override val command = CHANGE_TURN
-    var userId = 0
 }
 
 class SelectDestinationsCommand : INormalClientCommand {
@@ -55,4 +54,15 @@ class DealCardsCommand : INormalClientCommand {
     var destinations = mutableListOf<DestinationCard>()
     var shardCards = mutableListOf<ShardCard>()
     var minDestinations = 2
+}
+
+class UpdateHandCommand(var destinations: MutableList<DestinationCard>,
+                        var shardCards: MutableList<ShardCard>) : INormalClientCommand {
+    override val command = UPDATE_HAND
+}
+
+class RouteClaimedCommand : INormalClientCommand {
+    override val command = ROUTE_CLAIMED
+    var userId = 0
+    var routeId = ""
 }
