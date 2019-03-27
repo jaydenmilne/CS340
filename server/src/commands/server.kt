@@ -327,27 +327,24 @@ class ClaimRouteCommand : INormalServerCommand {
 
 class DrawShardCardCommand : INormalServerCommand{
     override val command = DRAW_SHARD_CARD
-    val card= "";
-    var cardToSend = ShardCard();
+    var card = ""
+    var cardToSend = ShardCard()
   
     override fun execute(user: User) {
-        val game = Games.getGameForPlayer(user)
+        val game = Games.getGameForPlayer(user) ?: throw CommandException("DrawShardCard Command:User not in a game")
 
-        if (game == null) {
-            throw CommandException("DrawShardCard Command:User not in a game")
+        if (game.getTurningPlayer() != user) {
+            throw CommandException("DrawShardCard Command: Not Your Turn")
         }
 
-        if(game.getTurningPlayer() != user){
-            throw CommandException("DrawShardCard Command:Not Your Turn")
-        }
         // Check if the user wants to draw from the deck or from the faceup deck
-        if(card == "deck"){
+        if (card == "deck") {
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
         } else {
             // Find how many shardCards in the faceUp deck match the requested card's material type
             val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }
-            if(validCards.size > 0) {
+            if (validCards.isNotEmpty()) {
                 // Takes the first card that matches type and draws it for the user and if it is blank throws an error
                 game.faceUpShardCards.shardCards.remove(validCards[0])
                 game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
@@ -358,10 +355,10 @@ class DrawShardCardCommand : INormalServerCommand{
             }
 
         }
-        var dealCardsCmd = DealCardsCommand()
+
+        val dealCardsCmd = DealCardsCommand()
         dealCardsCmd.shardCards.add(cardToSend);
         user.queue.push(dealCardsCmd);
-        /*This sends the command to update clients on the user change and bank change*/
         game.updatebank()
         game.updatePlayer(user)
         game.advanceTurn()
