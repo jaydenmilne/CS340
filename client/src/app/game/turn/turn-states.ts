@@ -5,8 +5,8 @@ import { PlayerNotifierService } from '@core/player-notifier.service';
 
 export abstract class ITurnState {
   constructor(
-    protected playerService: PlayerService, 
-    protected turnService: TurnService, 
+    protected playerService: PlayerService,
+    protected turnService: TurnService,
     protected notifierService: PlayerNotifierService) {
 
     this.playerService = playerService;
@@ -56,7 +56,7 @@ export class NotPlayersTurnState extends ITurnState {
       this.turnService.setNextState(new PlayersTurnState(this.playerService, this.turnService, this.notifierService))
     }
   }
-  
+
   enter() {
     this.notifierService.notifyPlayer("Your turn is over.");
   }
@@ -132,6 +132,10 @@ export class DrawnFirstCardState extends ITurnState {
   enter() {
     this.notifierService.notifyPlayer("You may draw one more non-wild shard card");
   }
+
+  onDrawDeckShardCard() {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService));
+  };
 }
 
 export class GameOverState extends ITurnState {
