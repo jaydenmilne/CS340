@@ -66,12 +66,6 @@ class RouteClaimedCommand : INormalClientCommand {
     var routeId = ""
 }
 
-<<<<<<< HEAD
-class GameOverCommand : INormalClientCommand{
-    override val command = GAME_OVER
-    var players = mutableListOf<PlayerPoints>()
-
-=======
 class LastRoundCommand : INormalClientCommand {
     override val command = LAST_ROUND
 }
@@ -79,5 +73,4 @@ class LastRoundCommand : INormalClientCommand {
 class GameOverCommand : INormalClientCommand {
     override val command = GAME_OVER
     var players = mutableListOf<PlayerPoints>()
->>>>>>> master
 }
