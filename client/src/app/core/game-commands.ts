@@ -10,7 +10,7 @@ export class ClaimRouteCommand implements Command {
     constructor(public routeId: string, public shardsUsed: ShardCard[]) {
     }
 }
-  
+
 export class DrawShardCard implements Command {
     public command = 'drawShardCard';
     constructor(public card: string) {
@@ -112,12 +112,12 @@ export class DealCardsCommand implements Command {
     }
 }
 
-export class UpdateHandCommand implements Command{
+export class UpdateHandCommand implements Command {
     public command = 'updateHand';
     public destinations: DestinationCard[];
     public shardCards: ShardCard[];
 
-    constructor(updateHandCommand: any){
+    constructor(updateHandCommand: any) {
         if (!('destinations' in updateHandCommand &&
         'shardCards' in updateHandCommand)) {
         throw new TypeError('Unable to deserialize UpdateHandCommand object, ' + JSON.stringify(updateHandCommand));
