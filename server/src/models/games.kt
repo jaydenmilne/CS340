@@ -38,7 +38,7 @@ object Games {
     }
 
     fun getGameIdForPlayer(user: User): Int? {
-        val gameUserIn = games.filter { p -> p.value.players.contains(user) }[0]
+        val gameUserIn = games.filter { p -> p.value.players.contains(user) }.values.firstOrNull()
         return gameUserIn?.gameId
     }
 }
