@@ -28,7 +28,7 @@ export class CardService {
   constructor(
     private commandRouter: CommandRouterService,
     private serverProxy: ServerProxyService,
-    private turnService : TurnService) {
+    private turnService: TurnService) {
 
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
@@ -45,7 +45,7 @@ export class CardService {
     if (dealCardsCmd.destinations.length > 0) {
       this.stagedDestinationCards$.next(
         new SelectDestinationCardsData(
-          new DestinationCardDeck(dealCardsCmd.destinations), 
+          new DestinationCardDeck(dealCardsCmd.destinations),
           dealCardsCmd.minDestinations));
     }
     // Add the new train cards to the bank
@@ -69,7 +69,7 @@ export class CardService {
     this.serverProxy.executeCommand(new RequestDestinationsCommand());
   }
 
-  private onUpdateHand(updateHandCmd: UpdateHandCommand){
+  private onUpdateHand(updateHandCmd: UpdateHandCommand) {
     this.playerDestCards = new DestinationCardDeck(updateHandCmd.destinations);
     this.playerTrainCards = new ShardCardDeck(updateHandCmd.shardCards);
   }
@@ -93,8 +93,8 @@ export class CardService {
   public drawShardCardFromDeck() {
     if (this.turnService.canDrawShards()) {
       this.turnService.onDrawDeckShardCard();
-      
-      this.serverProxy.executeCommand(new DrawShardCard("deck"));
+
+      this.serverProxy.executeCommand(new DrawShardCard('deck'));
     }
   }
 
