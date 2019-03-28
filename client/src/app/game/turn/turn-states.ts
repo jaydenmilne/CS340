@@ -19,12 +19,15 @@ export abstract class ITurnState {
   abstract canDrawDestinations(): boolean;
   abstract canClaimRoutes(): boolean;
 
-  onChangeTurn(cmd: ChangeTurnCommand) { }
-  onClaimRoute() { }
-  onDrawDeckShardCard() { }
-  onDrawDestCard() { }
-  onDrawFaceUpShardCard() { }
-  onDrawFaceUpWildCard() { }
+  onChangeTurn(cmd: ChangeTurnCommand) {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+  };
+
+  onClaimRoute() { };
+  onDrawDeckShardCard() { };
+  onDrawDestCard() { };
+  onDrawFaceUpShardCard() { };
+  onDrawFaceUpWildCard() { };
 
   enter() { }
   leave() { }
@@ -131,6 +134,14 @@ export class DrawnFirstCardState extends ITurnState {
 
   enter() {
     this.notifierService.notifyPlayer('You may draw one more non-wild shard card');
+  }
+
+  onDrawDeckShardCard() {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+  }
+
+  onDrawFaceUpShardCard() {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
   }
 }
 
