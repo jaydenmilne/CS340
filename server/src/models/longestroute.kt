@@ -1,8 +1,10 @@
 package models
 
-class LongestRoute(private val game : Game) {
+import commands.UpdatePlayerCommand
+
+class LongestRouteManager(private val game : Game) {
     var currentPlayerWithLongestRoute = -1
-    var longestRoute = -1
+    var longestRoute = 0
 
     // All of the cities in the game
     var cities = mutableSetOf<String>()
@@ -13,7 +15,7 @@ class LongestRoute(private val game : Game) {
     // Used to avoid loops when doing a DFS through the cities
     var markedRoutes = mutableMapOf<String, Boolean>()
 
-    init {
+    fun init() {
         // Create set of all cities
         for ((routeId, route) in game.routes.routesByRouteId) {
             cities.addAll(route.cities)
@@ -36,7 +38,7 @@ class LongestRoute(private val game : Game) {
     /**
      * Convenience function to find the other city in the array of cities on a route
      */
-    fun otherCity(route : Route, firstCity : String) : String {
+    private fun otherCity(route : Route, firstCity : String) : String {
         for (city in route.cities) {
             if (city == firstCity) continue
             return city
@@ -48,9 +50,9 @@ class LongestRoute(private val game : Game) {
     /**
      * Recursive function to compute the longest route possible from a given city
      */
-    fun longestPathFromCity(city : String, longestSoFar : Int, playerid: Int) : Int {
+    private fun longestPathFromCity(city : String, longestSoFar : Int, playerid: Int) : Int {
         val outgoingRoutes = adjacencyList[city]
-        var longest = longestRoute
+        var longestFromThisCity = longestSoFar
 
         // outgoingRoutes should never be empty but need to please the Kotlin gods
         for (route in outgoingRoutes.orEmpty()) {
@@ -66,14 +68,14 @@ class LongestRoute(private val game : Game) {
 
             // Recursively compute the longest possible route from this city taking
             // this route
-            val newLongest = longestPathFromCity(
+            val longestTakingThisRoute = longestPathFromCity(
                     otherCity(route, city),
-                    longest + route.numCars,
+                    longestFromThisCity + route.numCars,
                     playerid)
 
             // Check if this is longer than the current longest possible route
-            if (newLongest > longest) {
-                longest = newLongest
+            if (longestTakingThisRoute > longestFromThisCity) {
+                longestFromThisCity = longestTakingThisRoute
             }
 
             // At this point, the longest route possible by taking this route is
@@ -82,19 +84,23 @@ class LongestRoute(private val game : Game) {
 
         }
 
-        return longest
+        return if (longestFromThisCity > longestSoFar) {
+            longestFromThisCity
+        } else {
+            longestSoFar
+        }
     }
 
     /**
      * Called when a player claims a route. Recomputes who has the longest route
      */
-    fun onPlayerClaimedRoute(playerid : Int) {
+    fun playerClaimedRoute(playerid : Int) {
         // Need to re-calculate the longest route for this given player
         var playerLongest = 0
 
+        // Assuming that each city could be the start of the longest path, compute the
+        // longest path possible from each city
         for (city in cities) {
-            // Assuming that this city is the start of the longest path, compute the
-            // longest path possible from this city
             val longestFromCity = longestPathFromCity(city, playerLongest, playerid)
             if (longestFromCity > playerLongest) {
                 playerLongest = longestFromCity
@@ -124,9 +130,13 @@ class LongestRoute(private val game : Game) {
             if (player.userId == playerid) {
                 player.longestRouteLength = playerLongest
             }
+
+            // Schedule an update player
+            game.broadcast(UpdatePlayerCommand(player.toGamePlayer()))
         }
 
-        // TODO: Send updatePlayer? I think it will happen anyway after claiming a route
+        // TODO: Put notification in chat that this player now has the longest route
+
     }
 
 }

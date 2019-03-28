@@ -59,10 +59,15 @@ class Game(var name: String) {
     var chatMessages = mutableListOf<Message>()
 
     var destDiscardOrder = 0
+    @Transient var longestRouteManager = LongestRouteManager(this)
 
     @Transient public var routes = RouteList()
 
     @Transient private var nextMessageId = -1
+
+    init {
+        longestRouteManager.init()
+    }
 
     fun broadcast(command: INormalClientCommand) {
         for (player in players) {
@@ -200,6 +205,8 @@ class Game(var name: String) {
 
         route.ownerId = user.userId
 
+        // Recalculate if this player has the longest route
+        longestRouteManager.playerClaimedRoute(user.userId)
         user.numRemainingTrains -= route.numCars
 
         //TODO: increment user points

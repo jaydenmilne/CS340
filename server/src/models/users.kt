@@ -84,6 +84,7 @@ class User(var username: String) {
                 this.destinationCards.size,
                 this.numRemainingTrains,
                 this.hasLongestRoute,
+                this.longestRouteLength,
                 this.turnOrder)
     }
 
@@ -105,6 +106,7 @@ class GamePlayer(val userId: Int,
                  val numDestinationCards: Int,
                  val numRemainingTrains: Int,
                  val hasLongestRoute: Boolean,
+                 val longestRouteLength: Int,
                  val turnOrder: Int)
 
 enum class Color(val rgb: String) {
