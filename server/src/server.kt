@@ -154,7 +154,7 @@ fun handlePost(httpExchange: HttpExchange) {
             REQUEST_DESTINATIONS -> Gson().fromJson(requestBody, RequestDestinationsCommand::class.java)
             DISCARD_DESTINATIONS -> Gson().fromJson(requestBody, DiscardDestinationsCommand::class.java)
             CLAIM_ROUTE -> Gson().fromJson(requestBody, ClaimRouteCommand::class.java)
-            DRAW_SHARD_CARD -> Gson().fromJson(requestBody, DiscardDestinationsCommand::class.java)
+            DRAW_SHARD_CARD -> Gson().fromJson(requestBody, DrawShardCardCommand::class.java)
             DEBUG_HELP -> Gson().fromJson(requestBody, DebugHelpCommand::class.java)
 
             else -> null

@@ -45,8 +45,12 @@ class DebugHelpCommand : INormalServerCommand{
             return
         }
         game.routes.routesByRouteId.forEach{
-            if(it.value.ownerId != null){
+            if(it.value.ownerId != -1){
                 it.value.ownerId = user.userId
+                val routeClaimed = RouteClaimedCommand()
+                routeClaimed.routeId = it.key
+                routeClaimed.userId = user.userId
+                game.broadcast(routeClaimed)
             }
         }
 
@@ -63,7 +67,15 @@ class DebugHelpCommand : INormalServerCommand{
         if(game == null){
             return
         }
-        game.routes.routesByRouteId.get(route)!!.ownerId = gamePlayer.userId
+        val routeFound = game.routes.routesByRouteId.get(route)
+        if(routeFound == null){
+            return
+        }
+        routeFound.ownerId = gamePlayer.userId
+        val routeClaimed = RouteClaimedCommand()
+        routeClaimed.routeId = route
+        routeClaimed.userId = user.userId
+        game.broadcast(routeClaimed)
     }
 
     private fun changeTurn(user: User) {
@@ -149,6 +161,7 @@ class DebugHelpCommand : INormalServerCommand{
         dealCardsCmd.destinations.add(game.destinationCardDeck.getNext())
         dealCardsCmd.minDestinations = 2;
         user.queue.push(dealCardsCmd)
+        user.destinationCards.destinationCards.addAll(dealCardsCmd.destinations)
     }
 
     private fun makeItRain(user: User) {
@@ -173,6 +186,7 @@ class DebugHelpCommand : INormalServerCommand{
                 dealCardsCmd.shardCards.add(ShardCard(MaterialType.MIND_SHARD))
             }
         }
+        user.shardCards.shardCards.addAll(dealCardsCmd.shardCards)
         user.queue.push(dealCardsCmd)
 
     }

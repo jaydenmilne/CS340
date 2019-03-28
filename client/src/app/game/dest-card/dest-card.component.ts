@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DestinationCard } from '@core/model/cards';
 import { cityPrintNames } from '@core/model/route';
-import { City } from "@core/model/city.enum";
+import { City } from '@core/model/city.enum';
 
 @Component({
   selector: 'app-dest-card',
