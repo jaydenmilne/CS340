@@ -353,6 +353,7 @@ class DrawShardCardCommand : INormalServerCommand {
             } else{
                 throw CommandException("DrawShardCard Command: Card Does Not Exist")
             }
+            user.shardCards.push(cardToSend);
         }
 
         val dealCardsCmd = DealCardsCommand()

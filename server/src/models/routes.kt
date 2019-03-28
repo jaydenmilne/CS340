@@ -287,7 +287,8 @@ class Route(val routeId: String, val cities: Set<String>, val numCars: Int, val 
     val points: Int
         get() {
             return when(numCars) {
-                2 -> 1
+                1 -> 1
+                2 -> 2
                 3 -> 4
                 4 -> 7
                 5 -> 10

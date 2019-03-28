@@ -44,7 +44,8 @@ export let cityPrintNames: {[index: string]: string} = {
 };
 
 export let carsToPoints: {[index: number]: number} = {
-    2: 1,
+    1: 1,
+    2: 2,
     3: 4,
     4: 7,
     5: 10,
