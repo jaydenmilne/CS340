@@ -34,7 +34,7 @@ object Games {
     }
 
     fun getGameForPlayer(user: User): Game? {
-        return games.filter { p -> p.value.players.contains(user) }.values.toMutableList()[0]
+        return games.filter { p -> p.value.players.contains(user) }.values.firstOrNull()
     }
 
     fun getGameIdForPlayer(user: User): Int? {
