@@ -142,7 +142,7 @@ const val AVENGERSHQ_SOKOVIA_2 = "avengershq_sokovia_2"
 const val SOKOVIA_WAKANDA_1 = "sokovia_wakanda_1"
 const val SOKOVIA_WAKANDA_2 = "sokovia_wakanda_2"
 
-class RoutesList {
+class RouteList {
 
     var routesByRouteId = mutableMapOf<String, Route>()
 
