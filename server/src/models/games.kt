@@ -210,6 +210,7 @@ class Game(var name: String) {
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
         route.ownerId = user.userId
         user.numRemainingTrains -= route.numCars
+        user.points += route.points;
     }
 
     fun advanceTurn(){
