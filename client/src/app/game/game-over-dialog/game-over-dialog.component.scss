@@ -3,9 +3,22 @@
 
 .points-table{
     width: 100%;
-    background-color: mat-color($primaryPalette, 200);
-    color: mat-contrast($primaryPalette, 200);
+    // background-color: mat-color($primaryPalette, 50);
 }
+
+.points-table .mat-header-cell{
+    background-color: mat-color($primaryPalette, 200);
+    font-weight: bold;
+}
+
+.player-col{
+    max-width: initial;
+}
+.winner{
+    // font-weight: bold;
+    background-color: mat-color($accentPalette, 100);
+}
+
 .close-button{
     padding-left: 20px;
     padding-right: 20px;

@@ -1,47 +1,47 @@
-<h1 mat-dialog-title>Game Totals</h1>
+<h1 mat-dialog-title>Final Score</h1>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 points-table">
 
-  <!-- Place Column -->
-  <!-- <ng-container matColumnDef="place">
-      <th mat-header-cell *matHeaderCellDef> Place </th>
-      <td mat-cell *matCellDef="let element"> {{element.index}} </td>
-    </ng-container> -->
+  <!-- Rank Column -->
+  <ng-container matColumnDef="rank">
+      <th mat-header-cell *matHeaderCellDef> Rank </th>
+      <td mat-cell *matCellDef="let index = index; let first = first" [ngClass]="{'winner': first}"> {{index + 1}} </td>
+    </ng-container>
 
   <!-- Name Column -->
   <ng-container matColumnDef="player">
-    <th mat-header-cell *matHeaderCellDef> Player </th>
-    <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+    <th mat-header-cell *matHeaderCellDef class="player-col"> Player </th>
+    <td mat-cell *matCellDef="let element; let first = first" [ngClass]="{'winner': first}"> {{element.username}} </td>
   </ng-container>
 
   <!-- Route Points Column -->
   <ng-container matColumnDef="routes">
     <th mat-header-cell *matHeaderCellDef> Claimed Routes </th>
-    <td mat-cell *matCellDef="let element"> {{element.claimedRoutePoints}} </td>
+    <td mat-cell *matCellDef="let element; let first = first" [ngClass]="{'winner': first}"> {{element.claimedRoutePoints}} </td>
   </ng-container>
 
   <!-- Completed Destinations Column -->
   <ng-container matColumnDef="destinations">
     <th mat-header-cell *matHeaderCellDef> Completed Destinations </th>
-    <td mat-cell *matCellDef="let element"> {{element.completedDestinationPoints}} </td>
+    <td mat-cell *matCellDef="let element; let first = first" [ngClass]="{'winner': first}"> {{element.completedDestinationPoints}} </td>
   </ng-container>
 
   <!-- Completed Destinations Column -->
   <ng-container matColumnDef="penalties">
     <th mat-header-cell *matHeaderCellDef> Incomplete Destinations </th>
-    <td mat-cell *matCellDef="let element"> {{element.incompleteDestinationPoints}} </td>
+    <td mat-cell *matCellDef="let element; let first = first" [ngClass]="{'winner': first}"> {{element.incompleteDestinationPoints}} </td>
   </ng-container>
 
   <!-- Completed Destinations Column -->
   <ng-container matColumnDef="longestRoute">
     <th mat-header-cell *matHeaderCellDef> Longest Route </th>
-    <td mat-cell *matCellDef="let element"> {{element.longestRoutePoints}} </td>
+    <td mat-cell *matCellDef="let element; let first = first" [ngClass]="{'winner': first}"> {{element.longestRoutePoints}} </td>
   </ng-container>
 
   <!-- Completed Destinations Column -->
   <ng-container matColumnDef="total">
     <th mat-header-cell *matHeaderCellDef> Total </th>
-    <td mat-cell *matCellDef="let element"> {{element.totalPoints}} </td>
+    <td mat-cell *matCellDef="let element; let first = first" [ngClass]="{'winner': first}"> {{element.totalPoints}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -49,5 +49,5 @@
 </table>
 
 <div mat-dialog-actions class="action-bar">
-  <button mat-raised-button mat-dialog-close class="actionbutton close-button" >Close</button>
+  <button mat-raised-button mat-dialog-close class="actionbutton close-button" >Return to Lobby</button>
 </div>
