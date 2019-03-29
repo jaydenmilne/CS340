@@ -77,13 +77,13 @@ export class CardService {
   }
 
   public drawFaceUpShardCard(card: ShardCard) {
-    if (card.type == MaterialType.INFINITY_GAUNTLET) {
+    if (card.type === MaterialType.INFINITY_GAUNTLET) {
       if (this.turnService.canDrawWild()) {
         this.turnService.onDrawFaceUpWildCard();
 
         this.serverProxy.executeCommand(new DrawShardCard(card.type));
       } else if (this.turnService.canDrawShards()) {
-        this.playerNotifier.notifyPlayer("You may only draw an Infinity Gauntlet as your first card.");
+        this.playerNotifier.notifyPlayer('You may only draw an Infinity Gauntlet as your first card.');
       }
     } else {
       if (this.turnService.canDrawShards()) {

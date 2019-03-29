@@ -23,7 +23,7 @@ export class SelectDestinationCardsDialogComponent {
     // Call card service to discard cards
     const result = new SelectDestinationCardsResult(this.cards.getSelected().toDeck(), this.cards.getDiscarded().toDeck());
     this.dialogRef.close(result);
-    
+
     // If it isn't the initial dest card draw, alert the TurnService so that
     // the toast displays.
     if (this.turnService.isMyTurn()) {

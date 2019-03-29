@@ -29,7 +29,7 @@ export class UserService {
     if (user != null) {
       this.isLoggedIn = true;
       // Check if we are rejoining or going to the lobby
-      if (this.gameid == -1) {
+      if (this.gameid === -1) {
         this.router.navigate(['/lobby']);
       } else {
         // Rejoining

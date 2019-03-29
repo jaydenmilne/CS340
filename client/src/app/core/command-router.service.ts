@@ -80,7 +80,7 @@ export class CommandRouterService {
           this.lastRound$.next(new LastRoundCommand(cmd));
           break;
         case 'gameOver':
-          this.gameOver$.next(new GameOverCommand(cmd))
+          this.gameOver$.next(new GameOverCommand(cmd));
           break;
         default:
           const msg = new ErrorMessage(
