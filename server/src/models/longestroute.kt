@@ -52,11 +52,11 @@ class LongestRouteManager(private val game : Game) {
      */
     private fun longestPathFromCity(city : String, longestSoFar : Int, playerid: Int) : Int {
         val outgoingRoutes = adjacencyList[city]
-        var longestFromThisCity = longestSoFar
+        var longestFromThisCity = 0
 
         // outgoingRoutes should never be empty but need to please the Kotlin gods
         for (route in outgoingRoutes.orEmpty()) {
-            
+
             // If this route is not owned by this player or is marked (already used higher up in the stack),
             // skip it.
             if (route.ownerId != playerid || markedRoutes[route.routeId] == true)
@@ -70,7 +70,7 @@ class LongestRouteManager(private val game : Game) {
             // this route
             val longestTakingThisRoute = longestPathFromCity(
                     otherCity(route, city),
-                    longestFromThisCity + route.numCars,
+                    longestSoFar + route.numCars,
                     playerid)
 
             // Check if this is longer than the current longest possible route
@@ -84,11 +84,7 @@ class LongestRouteManager(private val game : Game) {
 
         }
 
-        return if (longestFromThisCity > longestSoFar) {
-            longestFromThisCity
-        } else {
-            longestSoFar
-        }
+        return longestFromThisCity
     }
 
     /**
