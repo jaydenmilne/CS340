@@ -70,7 +70,6 @@ class LastRoundCommand : INormalClientCommand {
     override val command = LAST_ROUND
 }
 
-class GameOverCommand : INormalClientCommand {
+class GameOverCommand(var players: MutableList<PlayerPoints>) : INormalClientCommand {
     override val command = GAME_OVER
-    var players = mutableListOf<PlayerPoints>()
 }

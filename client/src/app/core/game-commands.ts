@@ -2,8 +2,7 @@ import { Command } from './command';
 import { GamePlayer } from './model/game-player';
 import { DestinationCard, ShardCard } from './model/cards';
 import { PlayerPoint } from './model/player-point';
-import { TurnService } from '../game/turn/turn.service';
-import { GameOverState } from '../game/turn/turn-states';
+
 
 // Server commands
 
@@ -155,7 +154,6 @@ export class RouteClaimedCommand implements Command {
 export class GameOverCommand implements Command {
     public command = 'gameOver';
     public players: PlayerPoint[];
-    turnService: TurnService;
 
     constructor(gameOverCommand: any) {
         if (!('players' in gameOverCommand)) {
@@ -163,10 +161,9 @@ export class GameOverCommand implements Command {
         }
 
         this.players = [];
-        gameOverCommand.destinations.forEach(playerPoint => {
+        gameOverCommand.players.forEach(playerPoint => {
             this.players.push(new PlayerPoint(playerPoint));
         });
-        this.turnService.onGameOver;
     }
 }
 

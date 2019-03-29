@@ -1,6 +1,7 @@
 package models
 
 import commands.CommandException
+import java.lang.Exception
 
 /* CITY NAMES */
 const val DARK_DIMENSION = "darkdimension"
@@ -250,13 +251,19 @@ class RouteList {
     }
 
     fun pathBetweenCities(city1: String, city2: String, userId: Int): Boolean {
-        return routesByRouteId
-                .filter { entry -> entry.value.cities.contains(city1) }
-                .map { entry -> pathBetweenCities(city1,
-                        entry.value.cities.filter { c -> c != city1 }[0],
-                        userId,
-                        mapOf<Route, Boolean>(entry.value to true)) }
-                .reduceRight {a, b -> a || b}
+        try {
+            return routesByRouteId
+                    .filter { entry -> entry.value.cities.contains(city1) }
+                    .map { entry ->
+                        pathBetweenCities(city1,
+                                entry.value.cities.filter { c -> c != city1 }[0],
+                                userId,
+                                mapOf<Route, Boolean>(entry.value to true))
+                    }
+                    .reduceRight { a, b -> a || b }
+        }catch(e: Exception){
+            return false
+        }
     }
 
     fun pathBetweenCities(city1: String, city2: String, userId: Int, visited: Map<Route, Boolean>): Boolean {

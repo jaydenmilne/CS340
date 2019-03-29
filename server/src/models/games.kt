@@ -106,7 +106,7 @@ class Game(var name: String) {
     }
 
     fun endGame(){
-        var gameOverCommand = GameOverCommand()
+        var gameOverCommand = GameOverCommand(mutableListOf<PlayerPoints>())
         players.forEach { gameOverCommand.players.add(it.toPlayerPoints()) }
         broadcast(gameOverCommand)
     }
