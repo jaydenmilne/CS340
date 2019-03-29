@@ -7,8 +7,8 @@
 
   <mat-card-content class="chat-box" #chatBox>
     <mat-card class="chat-message-card" *ngFor="let message of chatService.chatHistory" [class.my-message]="isCurrentUserPost(message)"
-      [class.other-message]="!isCurrentUserPost(message)">
-      {{message.username}}: {{message.message}}
+      [class.other-message]="!isCurrentUserPost(message)" [class.event-message]="message.getIsEvent()">
+      {{message.username == "" ? "" : message.username + ": "}} {{message.message}}
     </mat-card>
   </mat-card-content>
 

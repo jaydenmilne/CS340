@@ -34,6 +34,19 @@ class ShardCard(val type: MaterialType) : ICard{
         return type.hashCode()
     }
 
+    fun getMaterialTypeString(): String {
+        when (type) {
+            MaterialType.REALITY_SHARD -> return "Reality Shard"
+            MaterialType.SOUL_SHARD -> return "Soul Shard"
+            MaterialType.SPACE_SHARD -> return "Space Shard"
+            MaterialType.MIND_SHARD -> return "Mind Shard"
+            MaterialType.POWER_SHARD -> return "Power Shard"
+            MaterialType.TIME_SHARD -> return "Time Shard"
+            MaterialType.VIBRANIUM -> return "Vibranium Shard"
+            MaterialType.PALLADIUM -> return "Palladium Shard"
+            MaterialType.INFINITY_GAUNTLET -> return "Infinity Gauntlet"
+        }
+    }
 }
 
 class DestinationCard(val cities: Set<String>, val points: Int) {

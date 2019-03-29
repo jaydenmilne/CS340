@@ -286,6 +286,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         game.updatePlayer(user)
         game.updatebank()
         game.advanceTurn()
+        game.broadcastEvent(user.username + " discarded " + discardedDestinations.size + " Destination cards")
     }
 }
 
@@ -327,8 +328,8 @@ class ClaimRouteCommand : INormalServerCommand {
 
 class DrawShardCardCommand : INormalServerCommand{
     override val command = DRAW_SHARD_CARD
-    val card= "";
-    var cardToSend = ShardCard();
+    val card= ""
+    var cardToSend = ShardCard()
   
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user)
@@ -344,6 +345,7 @@ class DrawShardCardCommand : INormalServerCommand{
         if(card == "deck"){
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
+            game.broadcastEvent(user.username + " drew a facedown Shard card")
         } else {
             // Find how many shardCards in the faceUp deck match the requested card's material type
             val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }
@@ -351,7 +353,8 @@ class DrawShardCardCommand : INormalServerCommand{
                 // Takes the first card that matches type and draws it for the user and if it is blank throws an error
                 game.faceUpShardCards.shardCards.remove(validCards[0])
                 game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
-                cardToSend = validCards[0];
+                cardToSend = validCards[0]
+                game.broadcastEvent(user.username + " drew a " + cardToSend.getMaterialTypeString() + " from the faceup cards")
             }
             else{
                 throw CommandException("DrawShardCard Command:Card Does Not Exist")
@@ -359,8 +362,8 @@ class DrawShardCardCommand : INormalServerCommand{
 
         }
         var dealCardsCmd = DealCardsCommand()
-        dealCardsCmd.shardCards.add(cardToSend);
-        user.queue.push(dealCardsCmd);
+        dealCardsCmd.shardCards.add(cardToSend)
+        user.queue.push(dealCardsCmd)
         /*This sends the command to update clients on the user change and bank change*/
         game.updatebank()
         game.updatePlayer(user)
