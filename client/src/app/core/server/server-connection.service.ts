@@ -4,7 +4,7 @@ import { isDevMode } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { ServerConnectionState } from './server-connection-state';
+import { ServerConnectionState, LobbyState  } from './server-connection-state';
 import { WINDOW } from './window-provider';
 
 @Injectable({
@@ -32,8 +32,8 @@ export class ServerConnectionService {
   public transmissionOk$ = new Subject<null>();
 
   constructor(public http: HttpClient,
-    public errorService: ErrorNotifierService,
-    @Inject(WINDOW) private window: Window) {
+    public errorService: ErrorNotifierService) {
+      this.changeState(new LobbyState(this));
   }
 
   public changeState(newState: ServerConnectionState) {

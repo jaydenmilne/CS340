@@ -101,7 +101,8 @@ export class CardService {
   public drawDestCardFromDeck() {
     if (this.turnService.canDrawDestinations() && this.destCardDeckSize > 0) {
       this.turnService.onDrawDestCard();
-
+      // SelectDestCardsDialog will call the turnService so that the toast appears after
+      // this dialog closes
       this.serverProxy.executeCommand(new RequestDestinationsCommand());
     }
   }
