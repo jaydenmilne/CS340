@@ -20,10 +20,12 @@ export abstract class ITurnState {
   abstract canClaimRoutes(): boolean;
 
   onChangeTurn(cmd: ChangeTurnCommand) {
-    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+    if (cmd.userId === this.playerService.myPlayerId) {
+      this.turnService.setNextState(new PlayersTurnState(this.playerService, this.turnService, this.notifierService));
+    } else {
+      this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+    }
   }
-
-
 
   onClaimRoute() { }
   onDrawDeckShardCard() { }
@@ -56,12 +58,6 @@ export class NotPlayersTurnState extends ITurnState {
 
   canClaimRoutes(): boolean {
     return false;
-  }
-
-  onChangeTurn(cmd: ChangeTurnCommand) {
-    if (cmd.userId === this.playerService.myPlayerId) {
-      this.turnService.setNextState(new PlayersTurnState(this.playerService, this.turnService, this.notifierService));
-    }
   }
 
   enter() {

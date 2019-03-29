@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
 import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { CardService } from '../card.service';
 import { PlayerNotifierService } from '@core/player-notifier.service';
@@ -11,6 +11,7 @@ import { ServerProxyService } from '@core/server/server-proxy.service';
 import { RejoinGameCommand } from '@core/game-commands';
 import { GameOverViewData, GameOverDialogComponent } from '../game-over-dialog/game-over-dialog.component';
 import { PlayerService } from '../player.service';
+import { ShardCard } from '@core/model/cards';
 
 @Component({
   selector: 'app-game',
@@ -40,6 +41,7 @@ export class GameComponent implements OnInit {
 
     this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
     this.notifierService.playerNotification.subscribe(message => this.displayNotification(message));
+    this.notifierService.drawnCard$.subscribe(card => this.displayShardCard(card));
     this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints));
 
     // Change the game connection to server mode
@@ -71,6 +73,13 @@ export class GameComponent implements OnInit {
     this.snackBar.open(message, '', {duration: 2500});
   }
 
+  public displayShardCard(card: ShardCard) {
+    this.snackBar.openFromComponent(ShardCardNotificationComponent, {
+      data: card,
+      duration: 2500
+    });
+  }
+
   public handleEndGame(gameOverData: GameOverViewData) {
     const dialogRef = this.dialog.open(GameOverDialogComponent, {
       width: '60%',
@@ -80,5 +89,38 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe(gameOverDialogResult => {
       this.router.navigate(['/lobby']);
     });
+  }
+}
+
+@Component({
+  selector: 'shard-card-notification',
+  template: `
+  <div class="shard-cell">
+    <mat-card class="shard-card">
+      <img class="shard-icon" src="assets/img/shards/{{card.getImage()}}">
+    </mat-card>
+    </div>
+  `,
+  styles: [`
+  .shard-cell{
+    height: 55px;
+    width: 60px;
+    margin: 12px;
+    flex-grow: 0;
+  }
+  .shard-card{
+    height: 40px;
+    width: 35px;
+    padding: 5px;
+  }
+  .shard-icon{
+    height: 35px;
+  }
+  `],
+})
+export class ShardCardNotificationComponent {
+  card: ShardCard;
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: ShardCard){
+    this.card = data;
   }
 }
