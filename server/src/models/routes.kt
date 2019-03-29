@@ -261,7 +261,8 @@ class RouteList {
                                 mapOf<Route, Boolean>(entry.value to true))
                     }
                     .reduceRight { a, b -> a || b }
-        }catch(e: Exception){
+        }
+        catch(e: Exception) {
             return false
         }
     }

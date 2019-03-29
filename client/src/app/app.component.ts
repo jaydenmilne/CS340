@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
 
   @HostListener('document:keypress', ['$event'])
   private handleKeypress(event: KeyboardEvent) {
-    if (event.srcElement.nodeName !== 'INPUT' && event.srcElement.nodeName != 'TEXTAREA') {
+    if (event.srcElement.nodeName !== 'INPUT' && event.srcElement.nodeName !== 'TEXTAREA') {
       switch (event.key) {
         case 'm':
         case 'p':

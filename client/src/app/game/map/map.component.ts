@@ -26,7 +26,7 @@ export class MapComponent implements OnInit {
   mapSvg: ElementRef;
 
   ngOnInit() {
-    if (this.mapSvg == undefined) {
+    if (this.mapSvg === undefined) {
       console.error('Map not found!');
     }
 

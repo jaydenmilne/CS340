@@ -20,15 +20,15 @@ import { PlayerService } from '../player.service';
 export class GameComponent implements OnInit {
 
   constructor(
-    private serverConnection: ServerConnectionService, 
+    private serverConnection: ServerConnectionService,
     private serverProxy: ServerProxyService,
-    public dialog: MatDialog, private cardService: CardService, 
-    private notifierService: PlayerNotifierService, 
+    public dialog: MatDialog, private cardService: CardService,
+    private notifierService: PlayerNotifierService,
     private snackBar: MatSnackBar,
     private userService: UserService,
     private playerService: PlayerService,
     private router: Router) {
-      
+
   }
 
   ngOnInit() {
@@ -40,12 +40,12 @@ export class GameComponent implements OnInit {
 
     this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
     this.notifierService.playerNotification.subscribe(message => this.displayNotification(message));
-    this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints))
-  
+    this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints));
+
     // Change the game connection to server mode
     this.serverConnection.changeState(new GameState(this.serverConnection));
 
-    if (this.userService.gameid != -1) {
+    if (this.userService.gameid !== -1) {
       // This was a rejoin. Send the rejoinGame command
       this.serverProxy.executeCommand(new RejoinGameCommand());
       // TODO: The server should respond immediately - do we need to block the UI meanwhile?
@@ -71,7 +71,7 @@ export class GameComponent implements OnInit {
     this.snackBar.open(message, '', {duration: 2500});
   }
 
-  public handleEndGame(gameOverData: GameOverViewData){
+  public handleEndGame(gameOverData: GameOverViewData) {
     const dialogRef = this.dialog.open(GameOverDialogComponent, {
       width: '60%',
       data: gameOverData,

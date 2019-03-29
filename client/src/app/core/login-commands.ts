@@ -25,7 +25,7 @@ export class LoginResult implements Command {
     public command = 'loginResult';
     public error: string;
     public user: User;
-    public game : number;
+    public game: number;
 
     constructor(loginResult: any) {
         if (!('error' in loginResult) ||
