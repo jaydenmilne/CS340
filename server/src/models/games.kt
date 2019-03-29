@@ -113,9 +113,20 @@ class Game(var name: String) {
         broadcast(updatebankCommand)
     }
 
-    fun canClaimRoute(user: User, routeId: String, cards: Array<ShardCard>): Boolean {
+    enum class CanClaimRouteResult {
+        CLAIM_OK,
+        ROUTE_DISABLED_LESS_THAN_THREE_PLAYERS,
+        ROUTE_IS_OWNED,
+        NOT_ENOUGH_ENERGY,
+        NOT_ENOUGH_SHARD_CARDS_USED,
+        USER_DOES_NOT_HAVE_ENOUGH_CARDS,
+        WRONG_TYPE_USED_TO_CLAIM_ROUTE,
+        INVALID_MIX_OF_CARDS
+    }
 
-        val currentRoute = routes.routesByRouteId[routeId]
+    fun canClaimRoute(user: User, routeId: String, cardsUsedToClaim: Array<ShardCard>): CanClaimRouteResult {
+
+        val routeToClaim = routes.routesByRouteId[routeId]
 
         // Check if route is disabled for 2 or 3 player mode
         if (players.size < 4) {
@@ -129,14 +140,14 @@ class Game(var name: String) {
             }
 
             if (routes.routesByRouteId[newRouteId.toString()]!!.ownerId != -1) {
-                return false
+                return CanClaimRouteResult.ROUTE_DISABLED_LESS_THAN_THREE_PLAYERS
             }
         }
 
         // Check if route is not owned
-        if (currentRoute != null) {
-            if (currentRoute.ownerId != -1) {
-                return false
+        if (routeToClaim != null) {
+            if (routeToClaim.ownerId != -1) {
+                return CanClaimRouteResult.ROUTE_IS_OWNED
             }
         }
         else {
@@ -144,60 +155,39 @@ class Game(var name: String) {
         }
 
         // Check user's energy
-        if (user.numRemainingTrains < currentRoute.numCars) {
-            return false
+        if (user.numRemainingTrains < routeToClaim.numCars) {
+            return CanClaimRouteResult.NOT_ENOUGH_ENERGY
         }
 
-        // Get lists of infinity gauntlets and secondary shard cards
-        val infinityGauntlets = mutableListOf<ShardCard>()
-        val secondaryCards = mutableListOf<ShardCard>()
+        // Check if they gave enough cards
+        if (cardsUsedToClaim.size != routeToClaim.numCars) {
+            return CanClaimRouteResult.NOT_ENOUGH_SHARD_CARDS_USED
+        }
 
-        for (s in cards) {
-            if (s.type == MaterialType.INFINITY_GAUNTLET) {
-                infinityGauntlets.add(s)
+        // Make sure they used a valid combination of cards
+
+        // The last type used to to claim a route. Could be INFINITY_GAUNTLET
+        var lastType = cardsUsedToClaim[0].type
+
+        for (card in cardsUsedToClaim) {
+            // Check if this card is different from another card they used (all non infinity cards should be the same)
+            if (lastType != MaterialType.INFINITY_GAUNTLET &&
+                    card.type != MaterialType.INFINITY_GAUNTLET && // if it is infinity gauntlet, is not an invalid card
+                    card.type != lastType) {
+                return CanClaimRouteResult.INVALID_MIX_OF_CARDS
+            } else if (lastType == MaterialType.INFINITY_GAUNTLET && card.type != MaterialType.INFINITY_GAUNTLET) {
+                // In the case that the first card in cardsUsedToClaim is wild, we've now found the first non-wild card,
+                // and we need to check the rest of non-wild cards to make sure they all match
+                lastType = card.type
             }
-            else {
-                secondaryCards.add(s)
+
+            // Make sure this card type matches the route type
+            if (!MaterialType.matchesRouteType(routeToClaim.type, card.type)) {
+                return CanClaimRouteResult.WRONG_TYPE_USED_TO_CLAIM_ROUTE
             }
         }
 
-        var numUserSecondaryCards = 0
-        if (secondaryCards.size > 0) {
-            if (secondaryCards.filter { card -> card.type == secondaryCards[0].type }.size != secondaryCards.size) {
-                return false
-            }
-            numUserSecondaryCards = user.shardCards.shardCards.filter{ s -> s.type == secondaryCards[0].type}.size
-        }
-
-        // Check user's hand
-        val numUserInfinityGauntlets = user.shardCards.shardCards.filter { s -> s.type == MaterialType.INFINITY_GAUNTLET }.size
-
-        if (infinityGauntlets.size > numUserInfinityGauntlets || secondaryCards.size > numUserSecondaryCards) {
-            return false
-        }
-
-        // Check route requirements
-        if (currentRoute.numCars != secondaryCards.size + infinityGauntlets.size) {
-            return false
-        }
-
-        // If they are claiming a route with all infinity gauntlets...
-        if (infinityGauntlets.size == currentRoute.numCars) {
-            return true
-        }
-
-        // Else...
-        when (currentRoute.type) {
-            RouteType.ANY -> return true
-            RouteType.REALITY -> return secondaryCards[0].type == MaterialType.REALITY_SHARD
-            RouteType.SOUL -> return secondaryCards[0].type == MaterialType.SOUL_SHARD
-            RouteType.SPACE -> return secondaryCards[0].type == MaterialType.SPACE_SHARD
-            RouteType.MIND -> return secondaryCards[0].type == MaterialType.MIND_SHARD
-            RouteType.POWER -> return secondaryCards[0].type == MaterialType.POWER_SHARD
-            RouteType.TIME -> return secondaryCards[0].type == MaterialType.TIME_SHARD
-            RouteType.VIBRANIUM -> return secondaryCards[0].type == MaterialType.VIBRANIUM
-            RouteType.PALLADIUM -> return secondaryCards[0].type == MaterialType.PALLADIUM
-        }
+        return CanClaimRouteResult.CLAIM_OK
     }
 
     fun getRoutePointsForPlayer(userId: Int): Int {

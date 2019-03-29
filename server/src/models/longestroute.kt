@@ -52,7 +52,7 @@ class LongestRouteManager(private val game : Game) {
      */
     private fun longestPathFromCity(city : String, longestSoFar : Int, playerid: Int) : Int {
         val outgoingRoutes = adjacencyList[city]
-        var longestFromThisCity = 0
+        var longestFromThisCity = longestSoFar
 
         // outgoingRoutes should never be empty but need to please the Kotlin gods
         for (route in outgoingRoutes.orEmpty()) {
@@ -97,19 +97,18 @@ class LongestRouteManager(private val game : Game) {
         // Assuming that each city could be the start of the longest path, compute the
         // longest path possible from each city
         for (city in cities) {
-            val longestFromCity = longestPathFromCity(city, playerLongest, playerid)
+            val longestFromCity = longestPathFromCity(city, 0, playerid)
             if (longestFromCity > playerLongest) {
                 playerLongest = longestFromCity
             }
         }
 
-        var playerWithLongestRoute = currentPlayerWithLongestRoute
         var previousPlayerWithLongestRoute = currentPlayerWithLongestRoute
 
         if (playerLongest > longestRoute) {
             // This player now has the longest route, they need the card
-            previousPlayerWithLongestRoute = playerWithLongestRoute
-            playerWithLongestRoute = playerid
+            previousPlayerWithLongestRoute = currentPlayerWithLongestRoute
+            currentPlayerWithLongestRoute = playerid
             longestRoute = playerLongest
         }
 
@@ -119,7 +118,7 @@ class LongestRouteManager(private val game : Game) {
                 player.hasLongestRoute = false
             }
 
-            if (playerWithLongestRoute != -1 && player.userId == playerWithLongestRoute) {
+            if (currentPlayerWithLongestRoute != -1 && player.userId == currentPlayerWithLongestRoute) {
                 player.hasLongestRoute = true
             }
 

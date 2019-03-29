@@ -296,12 +296,11 @@ class ClaimRouteCommand : INormalServerCommand {
 
   
       override fun execute(user: User) {
-        val game = Games.getGameForPlayer(user)
+        val game = Games.getGameForPlayer(user) ?: throw RuntimeException("User not in a game")
 
-        if (game == null) {
-            throw RuntimeException("User not in a game")
-        }
-        if(game.canClaimRoute(user, routeId, shardsUsed.toTypedArray())) {
+          val claimRouteResult = game.canClaimRoute(user, routeId, shardsUsed.toTypedArray())
+
+        if (claimRouteResult == Game.CanClaimRouteResult.CLAIM_OK) {
             shardsUsed.forEach{card -> user.shardCards.shardCards.remove(card)}
             game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
 
@@ -320,7 +319,7 @@ class ClaimRouteCommand : INormalServerCommand {
             game.advanceTurn()
         }
         else {
-            throw CommandException("ClaimRouteCommand: Route cannot be claimed")
+            throw CommandException("ClaimRouteCommand: Route cannot be claimed. " + claimRouteResult.name)
         }
     }
 }
