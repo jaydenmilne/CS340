@@ -40,7 +40,7 @@ export class GameComponent implements OnInit {
     }
 
     this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
-    this.notifierService.playerNotification.subscribe(message => this.displayNotification(message));
+    this.notifierService.playerNotification$.subscribe(message => this.displayNotification(message));
     this.notifierService.drawnCard$.subscribe(card => this.displayShardCard(card));
     this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints));
 
@@ -70,14 +70,17 @@ export class GameComponent implements OnInit {
   }
 
   public displayNotification(message: string) {
-    this.snackBar.open(message, '', {duration: 2500});
+    let snackBarRef = this.snackBar.open(message, '', {duration: 2500});
+    snackBarRef.afterDismissed().subscribe(result => this.notifierService.showNext());
   }
 
   public displayShardCard(card: ShardCard) {
-    this.snackBar.openFromComponent(ShardCardNotificationComponent, {
+    let snackBarRef = this.snackBar.openFromComponent(ShardCardNotificationComponent, {
       data: card,
-      duration: 2500
+      duration: 1500,
+      horizontalPosition: 'right'
     });
+    snackBarRef.afterDismissed().subscribe(result => this.notifierService.showNext());
   }
 
   public handleEndGame(gameOverData: GameOverViewData) {
@@ -105,7 +108,7 @@ export class GameComponent implements OnInit {
   .shard-cell{
     height: 55px;
     width: 60px;
-    margin: 12px;
+    margin: auto;
     flex-grow: 0;
   }
   .shard-card{

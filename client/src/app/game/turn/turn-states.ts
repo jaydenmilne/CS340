@@ -59,10 +59,6 @@ export class NotPlayersTurnState extends ITurnState {
   canClaimRoutes(): boolean {
     return false;
   }
-
-  enter() {
-    this.notifierService.notifyPlayer('Your turn is over.');
-  }
 }
 
 export class PlayersTurnState extends ITurnState {
@@ -108,6 +104,10 @@ export class PlayersTurnState extends ITurnState {
 
   enter() {
     this.notifierService.notifyPlayer('It is your turn!');
+  }
+
+  leave() {
+    this.notifierService.notifyPlayer('Your turn is over.');
   }
 }
 
