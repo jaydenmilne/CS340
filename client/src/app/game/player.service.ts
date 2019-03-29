@@ -105,13 +105,4 @@ export class PlayerService {
   this.activePlayerId = 0;
 
   }
-
-  // Dummy data
-  private _playerTotals = [
-      new PlayerPoint({'userId': 0, 'username': 'fred12345678945645464', 'totalPoints': 100, 'claimedRoutePoints': 50, 'completedDestinationPoints': 40, 'incompleteDestinationPoints': -10, 'longestRoutePoints': 20}),
-      new PlayerPoint({'userId': 1, 'username': 'steve', 'totalPoints': 120, 'claimedRoutePoints': 70, 'completedDestinationPoints': 60, 'incompleteDestinationPoints': -10, 'longestRoutePoints': 0}),
-      new PlayerPoint({'userId': 2, 'username': 'bob', 'totalPoints': 140, 'claimedRoutePoints': 90, 'completedDestinationPoints': 60, 'incompleteDestinationPoints': -10, 'longestRoutePoints': 0}),
-      new PlayerPoint({'userId': 3, 'username': 'joe', 'totalPoints': 120, 'claimedRoutePoints': 60, 'completedDestinationPoints': 50, 'incompleteDestinationPoints': -10, 'longestRoutePoints': 0}),
-    ]
-  
 }
