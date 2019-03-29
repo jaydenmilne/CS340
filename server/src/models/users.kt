@@ -170,4 +170,6 @@ class PlayerPoints(val userId: Int,
                    val claimedRoutePoints: Int,
                    val completedDestinationPoints: Int,
                    val incompleteDestinationPoints: Int,
-                   val longestRoutePoints: Int)
+                   val longestRoutePoints: Int){
+
+}

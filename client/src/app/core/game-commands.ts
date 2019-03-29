@@ -3,6 +3,7 @@ import { GamePlayer } from './model/game-player';
 import { DestinationCard, ShardCard } from './model/cards';
 import { PlayerPoint } from './model/player-point';
 
+
 // Server commands
 
 export class ClaimRouteCommand implements Command {
@@ -164,8 +165,16 @@ export class GameOverCommand implements Command {
         }
 
         this.players = [];
-        gameOverCommand.destinations.forEach(playerPoint => {
+        gameOverCommand.players.forEach(playerPoint => {
             this.players.push(new PlayerPoint(playerPoint));
         });
+    }
+}
+
+export class LastRoundCommand implements Command{
+    public command = 'lastRound';
+
+    constructor(lastRoundCommand: any){
+        
     }
 }

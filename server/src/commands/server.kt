@@ -367,6 +367,9 @@ class ClaimRouteCommand : INormalServerCommand {
             game.broadcast(updatePlayer)
 
             game.advanceTurn()
+            if(user.numRemainingTrains < 4){
+                game.startLastRound(user)
+            }
         }
         else {
             throw CommandException("ClaimRouteCommand: Route cannot be claimed")

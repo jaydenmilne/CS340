@@ -1,10 +1,6 @@
 package models
 
-import commands.ChangeTurnCommand
-import commands.CommandException
-import commands.INormalClientCommand
-import commands.UpdateBankCommand
-import commands.UpdatePlayerCommand
+import commands.*
 import java.lang.RuntimeException
 
 private var nextGameId = -1
@@ -62,7 +58,8 @@ class Game(var name: String) {
 
 
     @Transient public var routes = RouteList()
-
+    @Transient private var lastRoundInitiator = User("")
+    @Transient private var lastRoundStarted = false;
 
     @Transient private var nextMessageId = -1
 
@@ -107,6 +104,13 @@ class Game(var name: String) {
         updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
         broadcast(updatebankCommand)
     }
+
+    fun endGame(){
+        var gameOverCommand = GameOverCommand(mutableListOf<PlayerPoints>())
+        players.forEach { gameOverCommand.players.add(it.toPlayerPoints()) }
+        broadcast(gameOverCommand)
+    }
+
 
     fun canClaimRoute(user: User, routeId: String, cards: Array<ShardCard>): Boolean {
 
@@ -221,6 +225,10 @@ class Game(var name: String) {
                 this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
             }
         } else {
+            //Checks for Last Round to End
+            if(lastRoundInitiator == getTurningPlayer()){
+                this.endGame()
+            }
             // advance to the next player
             this.incPlayerTurn()
             this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
@@ -240,5 +248,13 @@ class Game(var name: String) {
             return null
         }
         return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
+    }
+
+    fun startLastRound(user:User){
+        if(!lastRoundStarted){ //Makes Sure Last Round Isn't Already Started
+            var lastRoundCommand = LastRoundCommand()
+            broadcast(lastRoundCommand)
+            lastRoundInitiator = user
+        }
     }
 }
