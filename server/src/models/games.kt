@@ -144,14 +144,13 @@ class Game(var name: String) {
             }
         }
 
-        // Check if route is not owned
-        if (routeToClaim != null) {
-            if (routeToClaim.ownerId != -1) {
-                return CanClaimRouteResult.ROUTE_IS_OWNED
-            }
-        }
-        else {
+        if (routeToClaim == null) {
             throw RuntimeException("Invalid route ID")
+        }
+        
+        // Check if route is not owned
+        if (routeToClaim.ownerId != -1) {
+            return CanClaimRouteResult.ROUTE_IS_OWNED
         }
 
         // Check user's energy
