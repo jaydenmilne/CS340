@@ -25,14 +25,17 @@ export class LoginResult implements Command {
     public command = 'loginResult';
     public error: string;
     public user: User;
+    public game : number;
 
     constructor(loginResult: any) {
         if (!('error' in loginResult) ||
-            !('user' in loginResult)) {
+            !('user' in loginResult) ||
+            !('game' in loginResult)) {
                 throw new TypeError('Unable to deserialize LoginResult object, ' + JSON.stringify(loginResult));
         }
 
         this.error = loginResult.error;
+        this.game = loginResult.game;
         if (this.error === '') {
             this.user = new User(loginResult.user);
         } else {

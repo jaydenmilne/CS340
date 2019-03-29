@@ -10,6 +10,7 @@ class LoginResultCommand : IRegisterClientCommand {
     override val command = LOGIN_RESULT
     var user = ClientUser()
     var error = ""
+    var game = -1
 }
 
 class RefreshGameListCommand : INormalClientCommand {
