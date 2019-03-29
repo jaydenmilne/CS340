@@ -279,7 +279,6 @@ class RouteList {
 }
 
 enum class RouteType(val type: String) {
-
     ANY("any"),
     REALITY("reality"),
     SOUL("soul"),

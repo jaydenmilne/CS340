@@ -24,7 +24,14 @@ class StartGameCommand(var gameId: String) : INormalClientCommand {
 
 class UpdatePlayerCommand : INormalClientCommand {
     override val command = UPDATE_PLAYER
-    var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0 )
+
+    constructor()
+
+    constructor (player: GamePlayer) {
+      gamePlayer = player
+    }
+
+    var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0, 0 )
 }
 
 class ChangeTurnCommand(var userId: Int = 0) : INormalClientCommand {

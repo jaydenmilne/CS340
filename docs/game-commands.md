@@ -53,6 +53,7 @@ Several commands transmit arrays of models, these are their descriptions.
     "numDestinationCards": 4,
     "numRemainingShards": 4,
     "hasLongestRoute": false,
+	"longestRouteLength": 12,
     "turnOrder": 2
 }
 ```

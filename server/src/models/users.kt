@@ -52,8 +52,9 @@ class User(var username: String) {
     var points = 0
     var shardCards = ShardCardDeck(mutableListOf())
     var destinationCards = DestinationCardDeck(mutableListOf())
-    var numRemainingTrains = STARTING_TRAINS;
+    var numRemainingTrains = STARTING_TRAINS
     var hasLongestRoute = false
+    var longestRouteLength = 0
     var setupComplete = false
 
     var turnOrder = -1
@@ -84,6 +85,7 @@ class User(var username: String) {
                 this.destinationCards.size,
                 this.numRemainingTrains,
                 this.hasLongestRoute,
+                this.longestRouteLength,
                 this.turnOrder)
     }
 
@@ -153,6 +155,7 @@ class GamePlayer(val userId: Int,
                  val numDestinationCards: Int,
                  val numRemainingTrains: Int,
                  val hasLongestRoute: Boolean,
+                 val longestRouteLength: Int,
                  val turnOrder: Int)
 
 enum class Color(val rgb: String) {

@@ -24,7 +24,13 @@ export class ServerConnectionState {
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
 
-      this.connection.errorService.notifyHttpError(error.status, error.message);
+        let message = error.message;
+        
+        if (error.error != null) {
+          message += '. ' + error
+        }
+
+      this.connection.errorService.notifyHttpError(error.status, message);
     }
   }
 
