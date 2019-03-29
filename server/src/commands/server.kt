@@ -245,7 +245,7 @@ class RequestDestinationsCommand : INormalServerCommand {
 
         }else{
             dealCardsCommand.minDestinations = 1
-            if(game.getTurningPlayer() != user){
+            if (game.getTurningPlayer() != user) {
                 throw CommandException("RequestDestinations: Not Your Turn")
             }
         }
@@ -253,7 +253,7 @@ class RequestDestinationsCommand : INormalServerCommand {
         /* Deal 3 destination cards to user */
         for (i in 0..2) {
             //Check for an empty destination card deck
-            if(game.destinationCardDeck.destinationCards.isEmpty()){
+            if (game.destinationCardDeck.destinationCards.isEmpty()) {
                 break
             }
             // Draw a card from the destination card deck and add it to the list
@@ -261,7 +261,7 @@ class RequestDestinationsCommand : INormalServerCommand {
             user.destinationCards.push(nextDestinationCard)
             dealtDestinationCards.add(nextDestinationCard)
         }
-        if(dealtDestinationCards.isEmpty()){
+        if (dealtDestinationCards.isEmpty()) {
             throw CommandException("RequestDestinations: Cannot Draw on an Empty Deck")
         }
         dealCardsCommand.shardCards = dealtShardCards
@@ -353,12 +353,12 @@ class DrawShardCardCommand : INormalServerCommand {
 
         // Check if the user wants to draw from the deck or from the faceup deck
         if (card == "deck") {
-            if(game.shardCardDeck.shardCards.isEmpty()){ //Check Empty Deck
+            if (game.shardCardDeck.shardCards.isEmpty()) { //Check Empty Deck
                 throw CommandException("DrawShardCard Command: Cannot Draw on Empy Deck")
             }
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
-            if(game.shardCardDeck.shardCards.isEmpty()){
+            if (game.shardCardDeck.shardCards.isEmpty()) {
                 game.shuffleShardCards()
             }
 
@@ -369,16 +369,16 @@ class DrawShardCardCommand : INormalServerCommand {
                 // Takes the first card that matches type and draws it for the user and if it is blank throws an error
                 game.faceUpShardCards.shardCards.remove(validCards[0])
                 //if deck is empty leave the loop
-                if(game.shardCardDeck.shardCards.isNotEmpty()){
+                if (game.shardCardDeck.shardCards.isNotEmpty()) {
                     game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
                 }
                 cardToSend = validCards[0]
                 //check if there are more then 2 infinity gauntlets in the deck
-                if((game.faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}).size > 2){
+                if ((game.faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}).size > 2) {
                     game.redrawFaceUpCards()
                 }
                 //check if deck is empty then shuffle discard
-                if(game.shardCardDeck.shardCards.isEmpty()){
+                if (game.shardCardDeck.shardCards.isEmpty()) {
                     game.shuffleShardCards()
                 }
             } else{
