@@ -19,7 +19,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
     chatInput: new FormControl('')
   });
 
-  private chatUpdated: boolean = false;
+  private chatUpdated = false;
 
   ngOnInit() {
   }
@@ -30,8 +30,8 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    if(this.chatUpdated){
-      this.scrollBottom()
+    if (this.chatUpdated) {
+      this.scrollBottom();
       this.chatUpdated = false;
     }
   }
@@ -47,7 +47,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.chatForm.get('chatInput').setValue('');
   }
 
-  public onChatUpdated(){
+  public onChatUpdated() {
     this.chatUpdated = true;
   }
 
@@ -66,7 +66,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
     return true;
   }
 
-  private scrollBottom(){
+  private scrollBottom() {
     this.chatBox.nativeElement.scrollTop = this.chatBox.nativeElement.scrollHeight;
   }
 }

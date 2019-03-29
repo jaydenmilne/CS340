@@ -22,7 +22,8 @@ object Games {
             if (user in game.players) {
                 if (game.started) {
                     throw CommandException("JoinGameCommand: User is in a started game but tried to join another!")
-                } else {
+                }
+                else {
                     game.players.remove(user)
                 }
             }
@@ -109,8 +110,8 @@ class Game(var name: String) {
         updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
         broadcast(updatebankCommand)
     }
-    
-    fun endGame(){
+
+    fun endGame() {
         var gameOverCommand = GameOverCommand(mutableListOf<PlayerPoints>())
         players.forEach { gameOverCommand.players.add(it.toPlayerPoints()) }
         broadcast(gameOverCommand)
@@ -220,9 +221,10 @@ class Game(var name: String) {
                 this.incPlayerTurn()
                 this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
             }
-        } else {
+        }
+        else {
             //Checks for Last Round to End
-            if(lastRoundInitiator == getTurningPlayer()){
+            if (lastRoundInitiator == getTurningPlayer()) {
                 this.endGame()
             }
             // advance to the next player
@@ -234,7 +236,8 @@ class Game(var name: String) {
     fun incPlayerTurn() {
         if (this.whoseTurn == -1 || this.whoseTurn == this.players.size -1) {
             this.whoseTurn = 0
-        } else {
+        }
+        else {
             this.whoseTurn++
         }
     }
@@ -267,21 +270,25 @@ class Game(var name: String) {
             faceUpShardCards.shardCards.add(shardCardDeck.getNext())//Set faceup cards
         }
         //check for more than 3 infinity_gauntlets again
-        var gauntletCards = faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}
+
+        var gauntletCards = faceUpShardCards.shardCards.filter { s -> s.type.material == "infinity_gauntlet" }
         if (gauntletCards.size > 2) {
             var allCards = mutableListOf<ShardCard>()
             allCards.addAll(shardCardDiscardPile.shardCards)
             allCards.addAll(faceUpShardCards.shardCards)
             allCards.addAll(shardCardDeck.shardCards)
-            gauntletCards = allCards.filter{s -> s.type.material == "infinity_gauntlet"}
+
+            gauntletCards = allCards.filter { s -> s.type.material == "infinity_gauntlet" }
             //make sure the amount of infinity gauntlets still leaves enough room for other cards(if this number is smaller too many permutations exist)
             if ((allCards.size - gauntletCards.size) >= gauntletCards.size) {
                 redrawFaceUpCards()
             }
+        }
     }
       
-    fun startLastRound(user:User){
-        if(!lastRoundStarted){ //Makes Sure Last Round Isn't Already Started
+    fun startLastRound(user:User) {
+        if (!lastRoundStarted) { //Makes Sure Last Round Isn't Already Started
+
             var lastRoundCommand = LastRoundCommand()
             broadcast(lastRoundCommand)
             lastRoundInitiator = user
