@@ -26,8 +26,8 @@ export class ServerConnectionState {
 
         let message = error.message;
         
-        if ("message" in error.error) {
-          message += '. ' + error.error['message']
+        if (error.error != null) {
+          message += '. ' + error
         }
 
       this.connection.errorService.notifyHttpError(error.status, message);
