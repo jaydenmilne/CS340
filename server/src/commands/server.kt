@@ -368,7 +368,14 @@ class DrawShardCardCommand : INormalServerCommand {
             if (validCards.isNotEmpty()) {
                 // Takes the first card that matches type and draws it for the user and if it is blank throws an error
                 game.faceUpShardCards.shardCards.remove(validCards[0])
-                game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
+                //check if deck is empty then shuffle discard
+                if(game.shardCardDeck.shardCards.isEmpty()){
+                    game.shuffleShardCards()
+
+                }//if deck is still empty leave the loop
+                if(game.shardCardDeck.shardCards.isNotEmpty()){
+                    game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
+                }
                 cardToSend = validCards[0]
                 //check if there are more then 2 infinity gauntlets in the deck
                 if((game.faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}).size > 2){

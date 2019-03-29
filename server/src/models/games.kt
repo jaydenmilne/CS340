@@ -248,12 +248,10 @@ class Game(var name: String) {
     }
 
     fun redrawFaceUpCards(){
-        faceUpShardCards.shardCards.forEach(){
-            shardCardDiscardPile.push(it)
-        }
+        shardCardDiscardPile.shardCards.addAll(faceUpShardCards.shardCards)
         faceUpShardCards = ShardCardDeck(mutableListOf())
         for(i in 0..4){
-            //check if deck is empty then shuffle discards
+            //check if deck is empty then shuffle discard
             if(shardCardDeck.shardCards.isEmpty()){
                 shuffleShardCards()
                 //if deck is still empty leave the loop
