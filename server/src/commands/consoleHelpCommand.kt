@@ -46,7 +46,7 @@ class DebugHelpCommand : INormalServerCommand{
             return
         }
         game.routes.routesByRouteId.forEach{
-            if(it.value.ownerId != null){
+            if(it.value.ownerId != -1){
                 it.value.ownerId = user.userId
                 val routeClaimed = RouteClaimedCommand()
                 routeClaimed.routeId = it.key
