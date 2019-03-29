@@ -10,6 +10,7 @@ class LoginResultCommand : IRegisterClientCommand {
     override val command = LOGIN_RESULT
     var user = ClientUser()
     var error = ""
+    var game = -1
 }
 
 class RefreshGameListCommand : INormalClientCommand {
@@ -23,7 +24,14 @@ class StartGameCommand(var gameId: String) : INormalClientCommand {
 
 class UpdatePlayerCommand : INormalClientCommand {
     override val command = UPDATE_PLAYER
-    var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0 )
+
+    constructor()
+
+    constructor (player: GamePlayer) {
+      gamePlayer = player
+    }
+
+    var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0, 0 )
 }
 
 class ChangeTurnCommand(var userId: Int = 0) : INormalClientCommand {
@@ -48,7 +56,6 @@ class UpdateChatCommand(val message: Message) : INormalClientCommand {
     override val command = UPDATE_CHAT
 }
 
-
 class DealCardsCommand : INormalClientCommand {
     override val command = DEAL_CARDS
     var destinations = mutableListOf<DestinationCard>()
@@ -65,4 +72,12 @@ class RouteClaimedCommand : INormalClientCommand {
     override val command = ROUTE_CLAIMED
     var userId = 0
     var routeId = ""
+}
+
+class LastRoundCommand : INormalClientCommand {
+    override val command = LAST_ROUND
+}
+
+class GameOverCommand(var players: MutableList<PlayerPoints>) : INormalClientCommand {
+    override val command = GAME_OVER
 }

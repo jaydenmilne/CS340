@@ -17,6 +17,7 @@ const val CHANGE_COLOR = "changeColor"
 const val UPDATE_PLAYER = "updatePlayer"
 const val UPDATE_BANK = "updateBank"
 const val REQUEST_DESTINATIONS = "requestDestinations"
+const val REJOIN_GAME = "rejoinGame"
 const val CHANGE_TURN = "changeTurn"
 const val DISCARD_DESTINATIONS = "discardDestinations"
 const val SELECT_DESTINATIONS = "selectDestinations"
@@ -27,7 +28,9 @@ const val CLAIM_ROUTE = "claimRoute"
 const val ROUTE_CLAIMED = "routeClaimed"
 const val DEBUG_HELP = "debugHelp"
 const val DRAW_SHARD_CARD = "drawShardCard"
-const val UPDATE_HAND= "updateHand"
+const val UPDATE_HAND = "updateHand"
+const val LAST_ROUND = "lastRound"
+const val GAME_OVER = "gameOver"
 
 interface ICommand {
     val command: String

@@ -1,5 +1,5 @@
-import { City } from "./city.enum";
-import { RouteType } from "./route-type.enum";
+import { City } from './city.enum';
+import { RouteType } from './route-type.enum';
 import { MaterialType } from './material-type.enum';
 
 abstract class ICard {}

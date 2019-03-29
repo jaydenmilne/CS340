@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CommandRouterService } from '@core/command-router.service';
 import { Color } from '@core/model/color.enum';
-import { UpdatePlayerCommand, ChangeTurnCommand } from '@core/game-commands';
+import { UpdatePlayerCommand, ChangeTurnCommand, GameOverCommand } from '@core/game-commands';
 import { GamePlayer } from '@core/model/game-player';
 import { notEqual } from 'assert';
 import { UserService } from '@core/user.service';
+import { GameOverViewData } from './game-over-dialog/game-over-dialog.component';
+import { Subject } from 'rxjs';
+import { PlayerPoint } from '@core/model/player-point';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +20,7 @@ export class PlayerService {
   public activePlayerId: Number = null;
   public myPlayerId = 0;
   public myPlayer: GamePlayer = null;
+  public playerPointTotals$ = new Subject<GameOverViewData>();
 
   private onUpdatePlayer(updatePlayerCommand: UpdatePlayerCommand) {
     const gamePlayer = updatePlayerCommand.gamePlayer;
@@ -57,6 +61,10 @@ export class PlayerService {
     this.activePlayerId = changeTurnCommand.userId;
   }
 
+  private onGameOver(gameOverCommand: GameOverCommand) {
+    this.playerPointTotals$.next(new GameOverViewData(gameOverCommand.players));
+  }
+
   constructor(private commandRouter: CommandRouterService, userService: UserService) {
     userService.user$.subscribe(user => {
       this.myPlayerId = (user === null || user === undefined) ? 0 : user.getUserId();
@@ -64,6 +72,7 @@ export class PlayerService {
 
     commandRouter.updatePlayer$.subscribe(updatePlayerCommand => this.onUpdatePlayer(updatePlayerCommand));
     commandRouter.changeTurn$.subscribe(changeTurnCommand => this.onTurnChange(changeTurnCommand));
+    commandRouter.gameOver$.subscribe(gameOverCommand => this.onGameOver(gameOverCommand));
 
     // DUMMY DATA
 

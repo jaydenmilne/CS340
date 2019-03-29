@@ -1,5 +1,6 @@
 package models
 
+import commands.CommandException
 import commands.UpdateHandCommand
 
 private var nextUserId = -1
@@ -51,14 +52,16 @@ class User(var username: String) {
     var points = 0
     var shardCards = ShardCardDeck(mutableListOf())
     var destinationCards = DestinationCardDeck(mutableListOf())
-    var numRemainingTrains = STARTING_TRAINS;
+    var numRemainingTrains = STARTING_TRAINS
     var hasLongestRoute = false
+    var longestRouteLength = 0
     var setupComplete = false
 
     var turnOrder = -1
 
     @Transient private var passwordHash = ""
     @Transient var queue = CommandQueue()
+    @Transient var isDrawingSecondCard = false
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)
@@ -73,7 +76,6 @@ class User(var username: String) {
     }
 
     fun toGamePlayer(): GamePlayer {
-
         return GamePlayer(this.userId,
                 this.username,
                 this.color,
@@ -83,11 +85,60 @@ class User(var username: String) {
                 this.destinationCards.size,
                 this.numRemainingTrains,
                 this.hasLongestRoute,
+                this.longestRouteLength,
                 this.turnOrder)
     }
 
     fun updateHand(){
         queue.push(UpdateHandCommand(destinationCards.destinationCards, shardCards.shardCards))
+    }
+
+    fun toPlayerPoints(): PlayerPoints {
+        return PlayerPoints(this.userId,
+                this.username,
+                getRoutePoints() + getCompletedDestPoints() + getIncompleteDestPoints(),
+                getRoutePoints(),
+                getCompletedDestPoints(),
+                getIncompleteDestPoints(),
+                if (this.hasLongestRoute) 10 else 0
+        )
+    }
+
+    fun getCompletedDestPoints(): Int {
+        val game = Games.getGameForPlayer(this) ?: throw CommandException("Bad game.")
+        var points = 0
+
+        this.destinationCards.destinationCards.forEach {
+            if (game.getRouteBetweenCitiesForPlayer(this.userId, it.cities.elementAt(0), it.cities.elementAt(1))) {
+                points += it.points
+            }
+        }
+
+        return points
+    }
+
+    fun getIncompleteDestPoints(): Int {
+        val game = Games.getGameForPlayer(this) ?: throw CommandException("Bad game.")
+
+        var points = 0
+
+        this.destinationCards.destinationCards.forEach {
+            if (!game.getRouteBetweenCitiesForPlayer(this.userId, it.cities.elementAt(0), it.cities.elementAt(1))) {
+                points -= it.points
+            }
+        }
+
+        return points
+    }
+
+    fun getRoutePoints(): Int {
+        val game = Games.getGameForPlayer(this)
+
+        if (game == null) {
+            return 0
+        }
+
+        return game.getRoutePointsForPlayer(this.userId)
     }
 }
 
@@ -104,6 +155,7 @@ class GamePlayer(val userId: Int,
                  val numDestinationCards: Int,
                  val numRemainingTrains: Int,
                  val hasLongestRoute: Boolean,
+                 val longestRouteLength: Int,
                  val turnOrder: Int)
 
 enum class Color(val rgb: String) {
@@ -121,4 +173,6 @@ class PlayerPoints(val userId: Int,
                    val claimedRoutePoints: Int,
                    val completedDestinationPoints: Int,
                    val incompleteDestinationPoints: Int,
-                   val longestRoutePoints: Int)
+                   val longestRoutePoints: Int){
+
+}

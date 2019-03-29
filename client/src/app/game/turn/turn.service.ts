@@ -13,13 +13,14 @@ export class TurnService {
   private router: CommandRouterService;
 
   constructor(
-    playerService: PlayerService, 
+    playerService: PlayerService,
     router: CommandRouterService,
     private playerNotifier: PlayerNotifierService) {
     this.state = new NotPlayersTurnState(playerService, this, playerNotifier);
     this.router = router;
 
     this.router.changeTurn$.subscribe(cmd => this.onChangeTurn(cmd));
+    this.router.gameOver$.subscribe(cmd => this.onGameOver());
   }
 
   isMyTurn(): boolean {
@@ -50,26 +51,30 @@ export class TurnService {
 
   onChangeTurn(cmd: ChangeTurnCommand) {
     this.state.onChangeTurn(cmd);
-  };
+  }
 
   onClaimRoute() {
     this.state.onClaimRoute();
-  };
+  }
 
   onDrawDeckShardCard() {
     this.state.onDrawDeckShardCard();
-  };
+  }
 
   onDrawDestCard() {
     this.state.onDrawDestCard();
-  };
+  }
 
   onDrawFaceUpShardCard() {
     this.state.onDrawFaceUpShardCard();
-  };
+  }
 
   onDrawFaceUpWildCard() {
     this.state.onClaimRoute();
-  };
+  }
+
+  onGameOver() {
+    this.state.onGameOver();
+  }
 
 }

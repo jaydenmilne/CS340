@@ -1,5 +1,5 @@
 import { DestinationCard } from './cards';
-import { MaterialType } from "./material-type.enum";
+import { MaterialType } from './material-type.enum';
 import { RouteType } from './route-type.enum';
 import { City } from './city.enum';
 import { RouteName } from './route-name.enum';
@@ -44,7 +44,8 @@ export let cityPrintNames: {[index: string]: string} = {
 };
 
 export let carsToPoints: {[index: number]: number} = {
-    2: 1,
+    1: 1,
+    2: 2,
     3: 4,
     4: 7,
     5: 10,

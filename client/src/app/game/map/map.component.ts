@@ -1,7 +1,7 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { RouteService } from '../route.service';
 import { Route } from '@core/model/route';
-import { RouteName } from "@core/model/route-name.enum";
+import { RouteName } from '@core/model/route-name.enum';
 import { PlayerService } from '../player.service';
 import { ErrorNotifierService } from '@core/error-notifier.service';
 import { StyleColor } from '@core/model/color.enum';
@@ -26,7 +26,7 @@ export class MapComponent implements OnInit {
   mapSvg: ElementRef;
 
   ngOnInit() {
-    if (this.mapSvg == undefined) {
+    if (this.mapSvg === undefined) {
       console.error('Map not found!');
     }
 

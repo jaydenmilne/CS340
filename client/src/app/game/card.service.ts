@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { SelectDestinationCardsResult, SelectDestinationCardsData } from './select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { TurnService } from './turn/turn.service';
 import { MaterialType } from '@core/model/material-type.enum';
+import { PlayerNotifierService } from '@core/player-notifier.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,8 @@ export class CardService {
   constructor(
     private commandRouter: CommandRouterService,
     private serverProxy: ServerProxyService,
-    private turnService : TurnService) {
+    private turnService: TurnService,
+    private playerNotifier: PlayerNotifierService) {
 
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
@@ -45,7 +47,7 @@ export class CardService {
     if (dealCardsCmd.destinations.length > 0) {
       this.stagedDestinationCards$.next(
         new SelectDestinationCardsData(
-          new DestinationCardDeck(dealCardsCmd.destinations), 
+          new DestinationCardDeck(dealCardsCmd.destinations),
           dealCardsCmd.minDestinations));
     }
     // Add the new train cards to the bank
@@ -69,17 +71,19 @@ export class CardService {
     this.serverProxy.executeCommand(new RequestDestinationsCommand());
   }
 
-  private onUpdateHand(updateHandCmd: UpdateHandCommand){
+  private onUpdateHand(updateHandCmd: UpdateHandCommand) {
     this.playerDestCards = new DestinationCardDeck(updateHandCmd.destinations);
     this.playerTrainCards = new ShardCardDeck(updateHandCmd.shardCards);
   }
 
   public drawFaceUpShardCard(card: ShardCard) {
-    if (card.type == MaterialType.INFINITY_GAUNTLET) {
+    if (card.type === MaterialType.INFINITY_GAUNTLET) {
       if (this.turnService.canDrawWild()) {
         this.turnService.onDrawFaceUpWildCard();
 
         this.serverProxy.executeCommand(new DrawShardCard(card.type));
+      } else if (this.turnService.canDrawShards()) {
+        this.playerNotifier.notifyPlayer('You may only draw an Infinity Gauntlet as your first card.');
       }
     } else {
       if (this.turnService.canDrawShards()) {
@@ -91,17 +95,18 @@ export class CardService {
   }
 
   public drawShardCardFromDeck() {
-    if (this.turnService.canDrawShards()) {
+    if (this.turnService.canDrawShards() && this.shardCardDeckSize > 0) {
       this.turnService.onDrawDeckShardCard();
-      
-      this.serverProxy.executeCommand(new DrawShardCard("deck"));
+
+      this.serverProxy.executeCommand(new DrawShardCard('deck'));
     }
   }
 
   public drawDestCardFromDeck() {
-    if (this.turnService.canDrawDestinations()) {
+    if (this.turnService.canDrawDestinations() && this.destCardDeckSize > 0) {
       this.turnService.onDrawDestCard();
-
+      // SelectDestCardsDialog will call the turnService so that the toast appears after
+      // this dialog closes
       this.serverProxy.executeCommand(new RequestDestinationsCommand());
     }
   }

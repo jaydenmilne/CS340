@@ -10,6 +10,7 @@ export class GamePlayer {
     public numDestinationCards: number;
     public numRemainingTrains: number;
     public hasLongestRoute: boolean;
+    public longestRouteLength: number;
     public turnOrder: number;
 
     constructor(gamePlayer: any) {
@@ -22,6 +23,7 @@ export class GamePlayer {
             !('numDestinationCards' in gamePlayer) ||
             !('numRemainingTrains' in gamePlayer) ||
             !('hasLongestRoute' in gamePlayer) ||
+            !('longestRouteLength' in gamePlayer) ||
             !('turnOrder' in gamePlayer)) {
             throw new TypeError('Unable to deserialize GamegamePlayer object, ' + JSON.stringify(gamePlayer));
         }
@@ -35,6 +37,7 @@ export class GamePlayer {
         this.numDestinationCards = gamePlayer.numDestinationCards;
         this.numRemainingTrains = gamePlayer.numRemainingTrains;
         this.hasLongestRoute = gamePlayer.hasLongestRoute;
+        this.longestRouteLength = gamePlayer.longestRouteLength;
         this.turnOrder = gamePlayer.turnOrder;
     }
 

@@ -10,20 +10,31 @@ import { Router } from '@angular/router';
 })
 export class UserService {
 
+  public isLoggedIn = false;
   public user$ = new BehaviorSubject<User>(null);
+
+  // Keeps track of the rejoining status. If -1 the user was in no game previously, else they are
+  // rejoining a game.
+  public gameid = -1;
 
   private onLoginResult(loginResult: LoginResult) {
     if (loginResult.error === '') {
-      // Login worked, signal next user
+      this.gameid = loginResult.game;
       this.user$.next(loginResult.user);
-      return;
     }
 
   }
 
   private onUser(user: User) {
     if (user != null) {
-      this.router.navigate(['/lobby']);
+      this.isLoggedIn = true;
+      // Check if we are rejoining or going to the lobby
+      if (this.gameid === -1) {
+        this.router.navigate(['/lobby']);
+      } else {
+        // Rejoining
+        this.router.navigate(['/game/' + String(this.gameid)]);
+      }
     }
   }
 
