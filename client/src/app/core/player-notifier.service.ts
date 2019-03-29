@@ -6,23 +6,22 @@ import { ShardCard } from './model/cards';
   providedIn: 'root'
 })
 export class PlayerNotifierService {
-  public playerNotification$: Subject<string> = new Subject<string>();
-  public drawnCard$: Subject<ShardCard> = new Subject<ShardCard>();
-  private notificationQueue: Array<string | ShardCard> = []
-  private lastMsgComplete;
+  public playerNotification$: Subject<IPlayerNotification> = new Subject<IPlayerNotification>();
+  private notificationQueue: Array<IPlayerNotification> = []
+  private lastMsgComplete = true;
 
   constructor() { }
 
-  public notifyPlayer(message: string) {
-    this.notificationQueue.push(message);
+  public notifyPlayer(message: string, displayTime: number = 2500) {
+    this.notificationQueue.push(new TextNotification(message, displayTime));
 
     if (this.lastMsgComplete){
       this.showNext();
     }
   }
 
-  public showCardDrawn(card: ShardCard) {
-    this.notificationQueue.push(card);
+  public showCardDrawn(card: ShardCard, displayTime: number = 1500) {
+    this.notificationQueue.push(new ShardNotification(card, displayTime));
 
     if (this.lastMsgComplete){
       this.showNext();
@@ -37,12 +36,19 @@ export class PlayerNotifierService {
     }
 
     this.lastMsgComplete = false;
-    let nextMsg = this.notificationQueue.shift();
-    if(nextMsg instanceof ShardCard){
-      this.drawnCard$.next(nextMsg);
-    } else if (typeof nextMsg === "string"){
-      this.playerNotification$.next(nextMsg);
-    }
-    // Some other type?
+    this.playerNotification$.next(this.notificationQueue.shift());
   }
+}
+
+export interface IPlayerNotification{
+  msg;
+  displayTime: number; 
+}
+
+export class ShardNotification implements IPlayerNotification{
+  constructor(public msg: ShardCard, public displayTime: number = 1500){}
+}
+
+export class TextNotification implements IPlayerNotification{
+  constructor(public msg: string, public displayTime: number = 2500){}
 }

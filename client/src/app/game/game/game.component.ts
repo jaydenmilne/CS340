@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
-import { MatDialog, MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { MatDialog, MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material';
 import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { CardService } from '../card.service';
-import { PlayerNotifierService } from '@core/player-notifier.service';
+import { PlayerNotifierService, IPlayerNotification, TextNotification, ShardNotification } from '@core/player-notifier.service';
 import { UserService } from '@core/user.service';
 import { Router } from '@angular/router';
 import { ServerProxyService } from '@core/server/server-proxy.service';
@@ -41,7 +41,6 @@ export class GameComponent implements OnInit {
 
     this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
     this.notifierService.playerNotification$.subscribe(message => this.displayNotification(message));
-    this.notifierService.drawnCard$.subscribe(card => this.displayShardCard(card));
     this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints));
 
     // Change the game connection to server mode
@@ -69,17 +68,19 @@ export class GameComponent implements OnInit {
     });
   }
 
-  public displayNotification(message: string) {
-    let snackBarRef = this.snackBar.open(message, '', {duration: 2500});
-    snackBarRef.afterDismissed().subscribe(result => this.notifierService.showNext());
-  }
+  public displayNotification(notification: IPlayerNotification) {
+    let snackBarRef: MatSnackBarRef<any>;
+    
+    if(notification instanceof TextNotification){   // Show simple snack bar
+      snackBarRef = this.snackBar.open(notification.msg, '', {duration: notification.displayTime});
+    } else if (notification instanceof ShardNotification){  // Show Shard Card snack bar
+      snackBarRef = this.snackBar.openFromComponent(ShardCardNotificationComponent, {
+        data: notification.msg, duration: notification.displayTime, horizontalPosition: 'right'
+      });
+    } else {  // Some other type?
+      return;
+    }
 
-  public displayShardCard(card: ShardCard) {
-    let snackBarRef = this.snackBar.openFromComponent(ShardCardNotificationComponent, {
-      data: card,
-      duration: 1500,
-      horizontalPosition: 'right'
-    });
     snackBarRef.afterDismissed().subscribe(result => this.notifierService.showNext());
   }
 
