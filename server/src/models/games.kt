@@ -275,12 +275,14 @@ class Game(var name: String) {
             faceUpShardCards.shardCards.add(shardCardDeck.getNext())//Set faceup cards
         }
         //check for more than 3 infinity_gauntlets again
+
         var gauntletCards = faceUpShardCards.shardCards.filter { s -> s.type.material == "infinity_gauntlet" }
         if (gauntletCards.size > 2) {
             var allCards = mutableListOf<ShardCard>()
             allCards.addAll(shardCardDiscardPile.shardCards)
             allCards.addAll(faceUpShardCards.shardCards)
             allCards.addAll(shardCardDeck.shardCards)
+
             gauntletCards = allCards.filter { s -> s.type.material == "infinity_gauntlet" }
             //make sure the amount of infinity gauntlets still leaves enough room for other cards(if this number is smaller too many permutations exist)
             if ((allCards.size - gauntletCards.size) >= gauntletCards.size) {
@@ -291,6 +293,7 @@ class Game(var name: String) {
       
     fun startLastRound(user:User) {
         if (!lastRoundStarted) { //Makes Sure Last Round Isn't Already Started
+
             var lastRoundCommand = LastRoundCommand()
             broadcast(lastRoundCommand)
             lastRoundInitiator = user

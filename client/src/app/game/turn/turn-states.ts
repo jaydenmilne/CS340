@@ -24,12 +24,14 @@ export abstract class ITurnState {
   }
 
 
+
   onClaimRoute() { }
   onDrawDeckShardCard() { }
   onDrawDestCard() { }
   onDrawFaceUpShardCard() { }
   onDrawFaceUpWildCard() { }
   onGameOver() {this.turnService.setNextState(new GameOverState(this.playerService, this.turnService, this.notifierService)); }
+
 
   enter() { }
   leave() { }
