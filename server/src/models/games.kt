@@ -59,6 +59,7 @@ class Game(var name: String) {
 
     @Transient public var routes = RouteList()
     @Transient private var lastRoundInitiator = User("")
+    @Transient private var lastRoundStarted = false;
 
     @Transient private var nextMessageId = -1
 
@@ -249,7 +250,7 @@ class Game(var name: String) {
     }
 
     fun startLastRound(user:User){
-        if(lastRoundInitiator != null){ //Makes Sure Last Round Isn't Already Started
+        if(!lastRoundStarted){ //Makes Sure Last Round Isn't Already Started
             var lastRoundCommand = LastRoundCommand()
             broadcast(lastRoundCommand)
             lastRoundInitiator = user

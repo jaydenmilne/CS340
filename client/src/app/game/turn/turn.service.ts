@@ -72,4 +72,8 @@ export class TurnService {
     this.state.onClaimRoute();
   }
 
+  onGameOver(){
+    this.state.onGameOver();
+  }
+
 }
