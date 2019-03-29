@@ -1,8 +1,10 @@
 package models
 
 import commands.UpdatePlayerCommand
+import kotlin.system.measureTimeMillis
 
 class LongestRouteManager(private val game : Game) {
+    // Player id of the player who last got the longest route
     var currentPlayerWithLongestRoute = -1
     var longestRoute = 0
 
@@ -96,37 +98,43 @@ class LongestRouteManager(private val game : Game) {
 
         // Assuming that each city could be the start of the longest path, compute the
         // longest path possible from each city
-        for (city in cities) {
-            val longestFromCity = longestPathFromCity(city, 0, playerid)
-            if (longestFromCity > playerLongest) {
-                playerLongest = longestFromCity
+        val time = measureTimeMillis {
+            for (city in cities) {
+                val longestFromCity = longestPathFromCity(city, 0, playerid)
+                if (longestFromCity > playerLongest) {
+                    playerLongest = longestFromCity
+                }
             }
         }
 
-        var previousPlayerWithLongestRoute = currentPlayerWithLongestRoute
+        // Ensure that this computation isn't taking too long (it is an N! algorithm after all)
+        if (time > 100) {
+            System.err.printf("!!! DANGER !!! COMPUTING LONGEST ROUTE TOOK %d MS", time)
+        }
 
         if (playerLongest > longestRoute) {
-            // This player now has the longest route, they need the card
-            previousPlayerWithLongestRoute = currentPlayerWithLongestRoute
+            // This player now has the longest route
             currentPlayerWithLongestRoute = playerid
             longestRoute = playerLongest
         }
 
         // Update the longest path value on the player
         for (player in game.players) {
-            if (previousPlayerWithLongestRoute != -1 && player.userId == previousPlayerWithLongestRoute) {
-                player.hasLongestRoute = false
-            }
 
-            if (currentPlayerWithLongestRoute != -1 && player.userId == currentPlayerWithLongestRoute) {
-                player.hasLongestRoute = true
-            }
+            // Clear the longest route flag by default
+            player.hasLongestRoute = false
 
+            // The player that we just calculated the longest route needs to be updated
             if (player.userId == playerid) {
                 player.longestRouteLength = playerLongest
             }
 
-            // Schedule an update player
+            // Allows for ties in having the longest route
+            if (player.longestRouteLength == longestRoute) {
+                player.hasLongestRoute = true
+            }
+
+            // Schedule an update player for everyone (we may have modified each player)
             game.broadcast(UpdatePlayerCommand(player.toGamePlayer()))
         }
 
