@@ -306,7 +306,7 @@ class RejoinGameCommand : INormalServerCommand {
         // 3. Send route info to the client
         game.routes.routesByRouteId.values.forEach {
             val id = it.ownerId
-            if (id != null) {
+            if (id != -1) {
                 val cmd = RouteClaimedCommand()
                 cmd.routeId = it.routeId
                 cmd.userId = id
