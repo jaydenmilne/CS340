@@ -23,11 +23,13 @@ export abstract class ITurnState {
     this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
   }
 
-  onClaimRoute() { }
-  onDrawDeckShardCard() { }
-  onDrawDestCard() { }
-  onDrawFaceUpShardCard() { }
-  onDrawFaceUpWildCard() { }
+
+  onClaimRoute() { };
+  onDrawDeckShardCard() { };
+  onDrawDestCard() { };
+  onDrawFaceUpShardCard() { };
+  onDrawFaceUpWildCard() { };
+  onGameOver(){this.turnService.setNextState(new GameOverState(this.playerService, this.turnService, this.notifierService)); };
 
   enter() { }
   leave() { }

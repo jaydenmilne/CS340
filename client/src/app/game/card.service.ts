@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { SelectDestinationCardsResult, SelectDestinationCardsData } from './select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { TurnService } from './turn/turn.service';
 import { MaterialType } from '@core/model/material-type.enum';
+import { PlayerNotifierService } from '@core/player-notifier.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,8 @@ export class CardService {
   constructor(
     private commandRouter: CommandRouterService,
     private serverProxy: ServerProxyService,
-    private turnService: TurnService) {
+    private turnService: TurnService,
+    private playerNotifier: PlayerNotifierService) {
 
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
@@ -80,6 +82,8 @@ export class CardService {
         this.turnService.onDrawFaceUpWildCard();
 
         this.serverProxy.executeCommand(new DrawShardCard(card.type));
+      } else if (this.turnService.canDrawShards()) {
+        this.playerNotifier.notifyPlayer("You may only draw an Infinity Gauntlet as your first card.");
       }
     } else {
       if (this.turnService.canDrawShards()) {

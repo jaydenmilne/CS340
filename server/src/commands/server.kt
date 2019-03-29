@@ -381,6 +381,9 @@ class ClaimRouteCommand : INormalServerCommand {
             game.broadcast(updatePlayer)
 
             game.advanceTurn()
+            if(user.numRemainingTrains < 4){
+                game.startLastRound(user)
+            }
         }
         else {
             throw CommandException("ClaimRouteCommand: Route cannot be claimed")
@@ -433,6 +436,7 @@ class DrawShardCardCommand : INormalServerCommand {
             } else{
                 throw CommandException("DrawShardCard Command: Card Does Not Exist")
             }
+            user.shardCards.push(cardToSend);
         }
 
         val dealCardsCmd = DealCardsCommand()

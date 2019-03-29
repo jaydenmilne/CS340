@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { ChatMessage } from '@core/model/chat-message';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { PostChatCommand, UpdateChatCommand } from '@core/chat-commands';
@@ -16,6 +16,7 @@ export class ChatService {
   }
 
   public chatHistory: ChatMessage[] = [];
+  public chatUpdated$: EventEmitter<any> = new EventEmitter();
 
   public sendChat(message: string) {
     if (message.charAt(0) === '/') {
@@ -29,7 +30,7 @@ export class ChatService {
 
   public handleUpdateChat(command: UpdateChatCommand) {
     this.chatHistory.push(command.message);
+    this.chatUpdated$.emit(null);
   }
-
 
 }

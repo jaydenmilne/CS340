@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { UserService } from '@core/user.service';
 import { ChatMessage } from '@core/model/chat-message';
@@ -10,8 +10,7 @@ import { User } from '@core/model/user';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit, AfterViewInit {
-
+export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
   constructor(public chatService: ChatService, public userService: UserService) {
   }
   @ViewChild('chatBox') private chatBox: ElementRef;
@@ -20,11 +19,21 @@ export class ChatComponent implements OnInit, AfterViewInit {
     chatInput: new FormControl('')
   });
 
+  private chatUpdated: boolean = false;
+
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    this.chatBox.nativeElement.scrollTop = this.chatBox.nativeElement.scrollHeight;
+    this.scrollBottom();
+    this.chatService.chatUpdated$.subscribe(event => this.onChatUpdated());
+  }
+
+  ngAfterViewChecked(): void {
+    if(this.chatUpdated){
+      this.scrollBottom()
+      this.chatUpdated = false;
+    }
   }
 
   public onSend() {
@@ -36,6 +45,10 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
     // Clear the message
     this.chatForm.get('chatInput').setValue('');
+  }
+
+  public onChatUpdated(){
+    this.chatUpdated = true;
   }
 
   public isCurrentUserPost(message: ChatMessage): boolean {
@@ -51,5 +64,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
       return false;
     }
     return true;
+  }
+
+  private scrollBottom(){
+    this.chatBox.nativeElement.scrollTop = this.chatBox.nativeElement.scrollHeight;
   }
 }
