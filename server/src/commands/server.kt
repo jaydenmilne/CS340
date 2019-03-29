@@ -310,7 +310,7 @@ class RejoinGameCommand : INormalServerCommand {
             user.queue.push(cmd)
         }
 
-        // TODO: send lastRound if appropriate?f
+        // TODO: send lastRound if appropriate
 
     }
 }
