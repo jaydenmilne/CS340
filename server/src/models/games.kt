@@ -54,14 +54,16 @@ class Game(var name: String) {
 
     @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
 
+
     var whoseTurn: Int = -1
 
     var chatMessages = mutableListOf<Message>()
-
     var destDiscardOrder = 0
     @Transient var longestRouteManager = LongestRouteManager(this)
 
+
     @Transient public var routes = RouteList()
+
 
     @Transient private var nextMessageId = -1
 
@@ -110,14 +112,13 @@ class Game(var name: String) {
         updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
         broadcast(updatebankCommand)
     }
-  
 
     fun canClaimRoute(user: User, routeId: String, cards: Array<ShardCard>): Boolean {
 
         val currentRoute = routes.routesByRouteId[routeId]
 
         // Check if route is disabled for 2 or 3 player mode
-        if (players.size == 2 || players.size == 3) {
+        if (players.size < 4) {
 
             var newRouteId = StringBuilder().append(routeId)
             if (routeId[routeId.lastIndex] == '1') {
@@ -127,14 +128,14 @@ class Game(var name: String) {
                 newRouteId.setCharAt(newRouteId.length - 1, '1')
             }
 
-            if (routes.routesByRouteId[newRouteId.toString()]!!.ownerId != null) {
+            if (routes.routesByRouteId[newRouteId.toString()]!!.ownerId != -1) {
                 return false
             }
         }
 
         // Check if route is not owned
         if (currentRoute != null) {
-            if (currentRoute.ownerId != null) {
+            if (currentRoute.ownerId != -1) {
                 return false
             }
         }
@@ -199,17 +200,24 @@ class Game(var name: String) {
         }
     }
 
+    fun getRoutePointsForPlayer(userId: Int): Int {
+        return routes.routesByRouteId.map { entry -> when(entry.value.ownerId) {
+            userId -> entry.value.points
+            else -> 0
+        } }.reduce { totalPoints, points -> totalPoints + points}
+    }
+
+    fun getRouteBetweenCitiesForPlayer(userId: Int, city1: String, city2: String): Boolean {
+        return routes.pathBetweenCities(city1, city2, userId)
+    }
+  
     fun claimRoute(user: User, routeId: String) {
-
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
-
         route.ownerId = user.userId
 
         // Recalculate if this player has the longest route
         longestRouteManager.playerClaimedRoute(user.userId)
         user.numRemainingTrains -= route.numCars
-
-        //TODO: increment user points
     }
 
     fun advanceTurn(){

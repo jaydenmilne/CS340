@@ -13,4 +13,4 @@ const windowProvider: FactoryProvider = {
 
 export const WINDOW_PROVIDERS = [
     windowProvider
-]
+];
