@@ -58,7 +58,7 @@ class Game(var name: String) {
 
 
     @Transient public var routes = RouteList()
-
+    @Transient private var roundsRemaining = -1
 
     @Transient private var nextMessageId = -1
 
@@ -227,6 +227,12 @@ class Game(var name: String) {
             this.incPlayerTurn()
             this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
         }
+        //Checks for Last Round to End
+        if(roundsRemaining == 0){
+            this.endGame()
+        }else{
+            roundsRemaining --
+        }
     }
 
     fun incPlayerTurn() {
@@ -242,5 +248,13 @@ class Game(var name: String) {
             return null
         }
         return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
+    }
+
+    fun startLastRound(){
+        if(roundsRemaining < 0){ //Makes Sure Last Round Isn't Already Started
+            var lastRoundCommand = LastRoundCommand()
+            broadcast(lastRoundCommand)
+            roundsRemaining = players.size
+        }
     }
 }

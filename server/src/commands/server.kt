@@ -312,7 +312,7 @@ class ClaimRouteCommand : INormalServerCommand {
             routeClaimed.userId = user.userId
             game.broadcast(routeClaimed)
             if(user.numRemainingTrains < 4){
-                game.endGame()
+                game.startLastRound()
             }
 
             user.updateHand()
