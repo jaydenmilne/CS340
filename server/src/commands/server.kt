@@ -311,9 +311,6 @@ class ClaimRouteCommand : INormalServerCommand {
             routeClaimed.routeId = this.routeId
             routeClaimed.userId = user.userId
             game.broadcast(routeClaimed)
-            if(user.numRemainingTrains < 4){
-                game.startLastRound()
-            }
 
             user.updateHand()
             val updatePlayer = UpdatePlayerCommand();
@@ -321,6 +318,9 @@ class ClaimRouteCommand : INormalServerCommand {
             game.broadcast(updatePlayer)
 
             game.advanceTurn()
+            if(user.numRemainingTrains < 4){
+                game.startLastRound(user)
+            }
         }
         else {
             throw CommandException("ClaimRouteCommand: Route cannot be claimed")
