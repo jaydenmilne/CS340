@@ -169,9 +169,12 @@ class DebugHelpCommand : INormalServerCommand{
         var dealCardsCmd = DealCardsCommand()
         if(args.size > 1){
             val cardType = args[1].toUpperCase();
-            if (MaterialType.valueOf(cardType) === null) { return; }
-            for(i in 0..2) {
-                dealCardsCmd.shardCards.add(ShardCard(MaterialType.valueOf(cardType)))
+            try {
+                for (i in 0..2) {
+                    dealCardsCmd.shardCards.add(ShardCard(MaterialType.valueOf(cardType)))
+                }
+            }catch(e: Exception){
+                throw CommandException("Type Not Found")
             }
         }else{
             for(i in 0..2) {

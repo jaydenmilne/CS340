@@ -229,28 +229,42 @@ class RequestDestinationsCommand : INormalServerCommand {
         if (game == null) {
             throw RuntimeException("User not in a game")
         }
-
-        var dealtShardCards = mutableListOf<ShardCard>()
-        var dealtDestinationCards = mutableListOf<DestinationCard>()
-
-        /* Deal 4 train cards to user */
-        for (i in 0..3) {
-            // Draw a card from the train card deck and add it to the list
-            var nextShardCard = game.shardCardDeck.getNext()
-            user.shardCards.push(nextShardCard)
-            dealtShardCards.add(nextShardCard)
-        }
-
         var dealCardsCommand = DealCardsCommand()
-        dealCardsCommand.shardCards = dealtShardCards
+        var dealtDestinationCards = mutableListOf<DestinationCard>()
+        var dealtShardCards = mutableListOf<ShardCard>()
+
+        if(game.whoseTurn == -1) {
+
+            /* Deal 4 train cards to user */
+            for (i in 0..3) {
+                // Draw a card from the train card deck and add it to the list
+                var nextShardCard = game.shardCardDeck.getNext()
+                user.shardCards.push(nextShardCard)
+                dealtShardCards.add(nextShardCard)
+            }
+
+        }else{
+            dealCardsCommand.minDestinations = 1
+            if(game.getTurningPlayer() != user){
+                throw CommandException("RequestDestinations: Not Your Turn")
+            }
+        }
 
         /* Deal 3 destination cards to user */
         for (i in 0..2) {
+            //Check for an empty destination card deck
+            if(game.destinationCardDeck.destinationCards.isEmpty()){
+                break
+            }
             // Draw a card from the destination card deck and add it to the list
             var nextDestinationCard = game.destinationCardDeck.getNext()
             user.destinationCards.push(nextDestinationCard)
             dealtDestinationCards.add(nextDestinationCard)
         }
+        if(dealtDestinationCards.isEmpty()){
+            throw CommandException("RequestDestinations: Cannot Draw on an Empty Deck")
+        }
+        dealCardsCommand.shardCards = dealtShardCards
         dealCardsCommand.destinations = dealtDestinationCards
         user.queue.push(dealCardsCommand)
 
@@ -339,8 +353,14 @@ class DrawShardCardCommand : INormalServerCommand {
 
         // Check if the user wants to draw from the deck or from the faceup deck
         if (card == "deck") {
+            if(game.shardCardDeck.shardCards.isEmpty()){ //Check Empty Deck
+                throw CommandException("DrawShardCard Command: Cannot Draw on Empy Deck")
+            }
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
+            if(game.shardCardDeck.shardCards.isEmpty()){
+                game.shuffleShardCards()
+            }
 
         } else {
             // Find how many shardCards in the faceUp deck match the requested card's material type
@@ -350,6 +370,10 @@ class DrawShardCardCommand : INormalServerCommand {
                 game.faceUpShardCards.shardCards.remove(validCards[0])
                 game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
                 cardToSend = validCards[0]
+                //check if there are more then 2 infinity gauntlets in the deck
+                if((game.faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}).size > 2){
+                    game.redrawFaceUpCards()
+                }
             } else{
                 throw CommandException("DrawShardCard Command: Card Does Not Exist")
             }

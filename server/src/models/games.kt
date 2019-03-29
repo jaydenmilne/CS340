@@ -240,4 +240,40 @@ class Game(var name: String) {
         }
         return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
     }
+
+    fun shuffleShardCards(){
+        shardCardDeck.shardCards.addAll(shardCardDiscardPile.shardCards)
+        shardCardDiscardPile = ShardCardDeck(mutableListOf())
+        shardCardDeck.shuffle()
+    }
+
+    fun redrawFaceUpCards(){
+        faceUpShardCards.shardCards.forEach(){
+            shardCardDiscardPile.push(it)
+        }
+        faceUpShardCards = ShardCardDeck(mutableListOf())
+        for(i in 0..4){
+            //check if deck is empty then shuffle discards
+            if(shardCardDeck.shardCards.isEmpty()){
+                shuffleShardCards()
+                //if deck is still empty leave the loop
+                if(shardCardDeck.shardCards.isEmpty()){
+                    break
+                }
+            }
+            faceUpShardCards.shardCards.add(shardCardDeck.getNext())//Set faceup cards
+        }
+        //check for more than 3 infinity_gauntlets again
+        var gauntletCards = faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}
+        if(gauntletCards.size > 2){
+            var allCards = mutableListOf<ShardCard>()
+            allCards.addAll(shardCardDiscardPile.shardCards)
+            allCards.addAll(faceUpShardCards.shardCards)
+            allCards.addAll(shardCardDeck.shardCards)
+            //make sure the amount of infinity gauntlets still leaves enough room for other cards
+            if((allCards.size - gauntletCards.size) >= 5){
+                redrawFaceUpCards()
+            }
+        }
+    }
 }
