@@ -175,6 +175,5 @@ export class LastRoundCommand implements Command {
     public command = 'lastRound';
 
     constructor(lastRoundCommand: any) {
-
     }
 }
