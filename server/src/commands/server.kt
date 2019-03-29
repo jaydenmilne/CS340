@@ -406,7 +406,7 @@ class DrawShardCardCommand : INormalServerCommand {
         // Check if the user wants to draw from the deck or from the faceup deck
         if (card == "deck") {
             if (game.shardCardDeck.shardCards.isEmpty()) { //Check Empty Deck
-                throw CommandException("DrawShardCard Command: Cannot Draw on Empy Deck")
+                throw CommandException("DrawShardCard Command: Cannot Draw on Empty Deck")
             }
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
@@ -417,6 +417,8 @@ class DrawShardCardCommand : INormalServerCommand {
             }
 
         } else {
+            // Is a face up shard card
+
             // Find how many shardCards in the faceUp deck match the requested card's material type
             val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }
             if (validCards.isNotEmpty()) {
@@ -427,14 +429,17 @@ class DrawShardCardCommand : INormalServerCommand {
                     game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
                 }
                 cardToSend = validCards[0]
-                //check if there are more then 2 infinity gauntlets in the deck
+
+                // check if there are more then 2 infinity gauntlets in the deck
                 if ((game.faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}).size > 2) {
                     game.redrawFaceUpCards()
                 }
-                //check if deck is empty then shuffle discard
+                // check if deck is empty then shuffle discard
                 if (game.shardCardDeck.shardCards.isEmpty()) {
                     game.shuffleShardCards()
                 }
+
+                game.broadcastEvent(user.username + " drew a " + cardToSend.getMaterialTypeString())
 
             } else{
                 throw CommandException("DrawShardCard Command: Card Does Not Exist")
@@ -447,7 +452,6 @@ class DrawShardCardCommand : INormalServerCommand {
         dealCardsCmd.shardCards.add(cardToSend)
         user.queue.push(dealCardsCmd)
         
-        game.broadcastEvent(user.username + " drew a " + cardToSend.getMaterialTypeString() + " from the faceup cards")        
         game.updatebank()
         game.updatePlayer(user)
 
