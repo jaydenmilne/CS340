@@ -20,6 +20,7 @@ export class TurnService {
     this.router = router;
 
     this.router.changeTurn$.subscribe(cmd => this.onChangeTurn(cmd));
+    this.router.gameOver$.subscribe(cmd => this.onGameOver());
   }
 
   isMyTurn(): boolean {
@@ -70,6 +71,10 @@ export class TurnService {
 
   onDrawFaceUpWildCard() {
     this.state.onClaimRoute();
+  }
+
+  onGameOver(){
+    this.state.onGameOver();
   }
 
 }

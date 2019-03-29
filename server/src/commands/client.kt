@@ -10,6 +10,7 @@ class LoginResultCommand : IRegisterClientCommand {
     override val command = LOGIN_RESULT
     var user = ClientUser()
     var error = ""
+    var game = -1
 }
 
 class RefreshGameListCommand : INormalClientCommand {
@@ -77,7 +78,6 @@ class LastRoundCommand : INormalClientCommand {
     override val command = LAST_ROUND
 }
 
-class GameOverCommand : INormalClientCommand {
+class GameOverCommand(var players: MutableList<PlayerPoints>) : INormalClientCommand {
     override val command = GAME_OVER
-    var players = mutableListOf<PlayerPoints>()
 }

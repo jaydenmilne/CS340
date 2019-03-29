@@ -1,10 +1,6 @@
 package models
 
-import commands.ChangeTurnCommand
-import commands.CommandException
-import commands.INormalClientCommand
-import commands.UpdateBankCommand
-import commands.UpdatePlayerCommand
+import commands.*
 import java.lang.RuntimeException
 
 private var nextGameId = -1
@@ -34,11 +30,11 @@ object Games {
     }
 
     fun getGameForPlayer(user: User): Game? {
-        return games.filter { p -> p.value.players.contains(user) }.values.toMutableList()[0]
+        return games.filter { p -> p.value.players.contains(user) }.values.firstOrNull()
     }
 
     fun getGameIdForPlayer(user: User): Int? {
-        val gameUserIn = games.filter { p -> p.value.players.contains(user) }[0]
+        val gameUserIn = games.filter { p -> p.value.players.contains(user) }.values.firstOrNull()
         return gameUserIn?.gameId
     }
 }
@@ -63,7 +59,8 @@ class Game(var name: String) {
 
 
     @Transient public var routes = RouteList()
-
+    @Transient private var lastRoundInitiator = User("")
+    @Transient private var lastRoundStarted = false;
 
     @Transient private var nextMessageId = -1
 
@@ -97,20 +94,26 @@ class Game(var name: String) {
     }
 
 
-    fun updatePlayer(user: User){
+    fun updatePlayer(user: User) {
         var updatePlayerCommand = UpdatePlayerCommand()
         updatePlayerCommand.gamePlayer = user.toGamePlayer()
         broadcast(updatePlayerCommand)
     }
   
 
-    fun updatebank(){
+    fun updatebank() {
         var updatebankCommand = UpdateBankCommand()
         updatebankCommand.faceUpCards = faceUpShardCards.cards
         updatebankCommand.shardDrawPileSize = shardCardDeck.cards.size
         updatebankCommand.shardDiscardPileSize = shardCardDiscardPile.cards.size
         updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
         broadcast(updatebankCommand)
+    }
+    
+    fun endGame(){
+        var gameOverCommand = GameOverCommand(mutableListOf<PlayerPoints>())
+        players.forEach { gameOverCommand.players.add(it.toPlayerPoints()) }
+        broadcast(gameOverCommand)
     }
 
     enum class CanClaimRouteResult {
@@ -207,16 +210,21 @@ class Game(var name: String) {
         // Recalculate if this player has the longest route
         longestRouteManager.playerClaimedRoute(user.userId)
         user.numRemainingTrains -= route.numCars
+        user.points += route.points;
     }
 
-    fun advanceTurn(){
-        if(this.whoseTurn == -1){   // check if we're done with setup
+    fun advanceTurn() {
+        if (this.whoseTurn == -1) {   // check if we're done with setup
             // Check if all players have completed setup
-            if (this.players.filter { p -> !p.setupComplete }.isEmpty()){
+            if (this.players.filter { p -> !p.setupComplete }.isEmpty()) {
                 this.incPlayerTurn()
                 this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
             }
         } else {
+            //Checks for Last Round to End
+            if(lastRoundInitiator == getTurningPlayer()){
+                this.endGame()
+            }
             // advance to the next player
             this.incPlayerTurn()
             this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
@@ -224,7 +232,7 @@ class Game(var name: String) {
     }
 
     fun incPlayerTurn() {
-        if (this.whoseTurn == -1 || this.whoseTurn == this.players.size -1){
+        if (this.whoseTurn == -1 || this.whoseTurn == this.players.size -1) {
             this.whoseTurn = 0
         } else {
             this.whoseTurn++
@@ -232,9 +240,51 @@ class Game(var name: String) {
     }
 
     fun getTurningPlayer(): User? {
-        if (this.whoseTurn == -1){
+        if (this.whoseTurn == -1) {
             return null
         }
         return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
+    }
+
+    fun shuffleShardCards() {
+        shardCardDeck.shardCards.addAll(shardCardDiscardPile.shardCards)
+        shardCardDiscardPile = ShardCardDeck(mutableListOf())
+        shardCardDeck.shuffle()
+    }
+
+    fun redrawFaceUpCards() {
+        shardCardDiscardPile.shardCards.addAll(faceUpShardCards.shardCards)
+        faceUpShardCards = ShardCardDeck(mutableListOf())
+        for (i in 0..4) {
+            //check if deck is empty then shuffle discard
+            if (shardCardDeck.shardCards.isEmpty()) {
+                shuffleShardCards()
+                //if deck is still empty leave the loop
+                if (shardCardDeck.shardCards.isEmpty()) {
+                    break
+                }
+            }
+            faceUpShardCards.shardCards.add(shardCardDeck.getNext())//Set faceup cards
+        }
+        //check for more than 3 infinity_gauntlets again
+        var gauntletCards = faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}
+        if (gauntletCards.size > 2) {
+            var allCards = mutableListOf<ShardCard>()
+            allCards.addAll(shardCardDiscardPile.shardCards)
+            allCards.addAll(faceUpShardCards.shardCards)
+            allCards.addAll(shardCardDeck.shardCards)
+            gauntletCards = allCards.filter{s -> s.type.material == "infinity_gauntlet"}
+            //make sure the amount of infinity gauntlets still leaves enough room for other cards(if this number is smaller too many permutations exist)
+            if ((allCards.size - gauntletCards.size) >= gauntletCards.size) {
+                redrawFaceUpCards()
+            }
+    }
+      
+    fun startLastRound(user:User){
+        if(!lastRoundStarted){ //Makes Sure Last Round Isn't Already Started
+            var lastRoundCommand = LastRoundCommand()
+            broadcast(lastRoundCommand)
+            lastRoundInitiator = user
+        }
     }
 }

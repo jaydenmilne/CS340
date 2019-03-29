@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { SelectDestinationCardsResult, SelectDestinationCardsData } from './select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { TurnService } from './turn/turn.service';
 import { MaterialType } from '@core/model/material-type.enum';
+import { PlayerNotifierService } from '@core/player-notifier.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,8 @@ export class CardService {
   constructor(
     private commandRouter: CommandRouterService,
     private serverProxy: ServerProxyService,
-    private turnService: TurnService) {
+    private turnService: TurnService,
+    private playerNotifier: PlayerNotifierService) {
 
     this.commandRouter.dealCards$.subscribe( cmd => this.onDealCards(cmd));
     this.commandRouter.updateBank$.subscribe( cmd => this.onUpdateBank(cmd));
@@ -80,6 +82,8 @@ export class CardService {
         this.turnService.onDrawFaceUpWildCard();
 
         this.serverProxy.executeCommand(new DrawShardCard(card.type));
+      } else if (this.turnService.canDrawShards()) {
+        this.playerNotifier.notifyPlayer("You may only draw an Infinity Gauntlet as your first card.");
       }
     } else {
       if (this.turnService.canDrawShards()) {
@@ -91,7 +95,7 @@ export class CardService {
   }
 
   public drawShardCardFromDeck() {
-    if (this.turnService.canDrawShards()) {
+    if (this.turnService.canDrawShards() && this.shardCardDeckSize > 0) {
       this.turnService.onDrawDeckShardCard();
 
       this.serverProxy.executeCommand(new DrawShardCard('deck'));
@@ -99,9 +103,10 @@ export class CardService {
   }
 
   public drawDestCardFromDeck() {
-    if (this.turnService.canDrawDestinations()) {
+    if (this.turnService.canDrawDestinations() && this.destCardDeckSize > 0) {
       this.turnService.onDrawDestCard();
-
+      // SelectDestCardsDialog will call the turnService so that the toast appears after
+      // this dialog closes
       this.serverProxy.executeCommand(new RequestDestinationsCommand());
     }
   }
