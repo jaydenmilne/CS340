@@ -5,8 +5,8 @@ import { PlayerNotifierService } from '@core/player-notifier.service';
 
 export abstract class ITurnState {
   constructor(
-    protected playerService: PlayerService, 
-    protected turnService: TurnService, 
+    protected playerService: PlayerService,
+    protected turnService: TurnService,
     protected notifierService: PlayerNotifierService) {
 
     this.playerService = playerService;
@@ -19,7 +19,10 @@ export abstract class ITurnState {
   abstract canDrawDestinations(): boolean;
   abstract canClaimRoutes(): boolean;
 
-  onChangeTurn(cmd: ChangeTurnCommand) { };
+  onChangeTurn(cmd: ChangeTurnCommand) {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+  };
+
   onClaimRoute() { };
   onDrawDeckShardCard() { };
   onDrawDestCard() { };
@@ -53,12 +56,12 @@ export class NotPlayersTurnState extends ITurnState {
 
   onChangeTurn(cmd: ChangeTurnCommand) {
     if (cmd.userId === this.playerService.myPlayerId) {
-      this.turnService.setNextState(new PlayersTurnState(this.playerService, this.turnService, this.notifierService))
+      this.turnService.setNextState(new PlayersTurnState(this.playerService, this.turnService, this.notifierService));
     }
   }
-  
+
   enter() {
-    this.notifierService.notifyPlayer("Your turn is over.");
+    this.notifierService.notifyPlayer('Your turn is over.');
   }
 }
 
@@ -85,26 +88,26 @@ export class PlayersTurnState extends ITurnState {
 
   onClaimRoute() {
     this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
-  };
+  }
 
   onDrawDeckShardCard() {
     this.turnService.setNextState(new DrawnFirstCardState(this.playerService, this.turnService, this.notifierService));
-  };
+  }
 
   onDrawDestCard() {
     this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
-  };
+  }
 
   onDrawFaceUpShardCard() {
     this.turnService.setNextState(new DrawnFirstCardState(this.playerService, this.turnService, this.notifierService));
-  };
+  }
 
   onDrawFaceUpWildCard() {
     this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
-  };
+  }
 
   enter() {
-    this.notifierService.notifyPlayer("It is your turn!");
+    this.notifierService.notifyPlayer('It is your turn!');
   }
 }
 
@@ -130,7 +133,15 @@ export class DrawnFirstCardState extends ITurnState {
   }
 
   enter() {
-    this.notifierService.notifyPlayer("You may draw one more non-wild shard card");
+    this.notifierService.notifyPlayer('You may draw one more non-wild shard card');
+  }
+
+  onDrawDeckShardCard() {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
+  }
+
+  onDrawFaceUpShardCard() {
+    this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
   }
 }
 
@@ -156,7 +167,7 @@ export class GameOverState extends ITurnState {
   }
 
   enter() {
-    this.notifierService.notifyPlayer("The game is over");
+    this.notifierService.notifyPlayer('The game is over');
   }
 
 }

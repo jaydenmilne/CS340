@@ -61,14 +61,14 @@ export class ServerConnectionService {
       return this.serverUrlOverride;
     }
 
-    if (isDevMode()) { 
+    if (isDevMode()) {
       // If we are in dev mode, use whatever url the page was loaded from and port 4300
       // This allows someone to run the dev server on their machine and others to connect
       // without specifying an override
-      return 'http://' + window.location.hostname + ':4300'; 
-    } else { 
+      return 'http://' + window.location.hostname + ':4300';
+    } else {
       // In production, use the subdomain and https for the backend
-      return 'https://api.marylou.ga'; 
+      return 'https://api.marylou.ga';
     }
   }
 

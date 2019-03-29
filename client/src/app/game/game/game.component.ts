@@ -9,6 +9,8 @@ import { UserService } from '@core/user.service';
 import { Router } from '@angular/router';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { RejoinGameCommand } from '@core/game-commands';
+import { GameOverViewData, GameOverDialogComponent } from '../game-over-dialog/game-over-dialog.component';
+import { PlayerService } from '../player.service';
 
 @Component({
   selector: 'app-game',
@@ -24,6 +26,7 @@ export class GameComponent implements OnInit {
     private notifierService: PlayerNotifierService, 
     private snackBar: MatSnackBar,
     private userService: UserService,
+    private playerService: PlayerService,
     private router: Router) {
       
   }
@@ -37,6 +40,7 @@ export class GameComponent implements OnInit {
 
     this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
     this.notifierService.playerNotification.subscribe(message => this.displayNotification(message));
+    this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints))
   
     // Change the game connection to server mode
     this.serverConnection.changeState(new GameState(this.serverConnection));
@@ -65,5 +69,16 @@ export class GameComponent implements OnInit {
 
   public displayNotification(message: string) {
     this.snackBar.open(message, '', {duration: 2500});
+  }
+
+  public handleEndGame(gameOverData: GameOverViewData){
+    const dialogRef = this.dialog.open(GameOverDialogComponent, {
+      width: '60%',
+      data: gameOverData,
+      disableClose: false
+    });
+    dialogRef.afterClosed().subscribe(gameOverDialogResult => {
+      this.router.navigate(['/lobby']);
+    });
   }
 }

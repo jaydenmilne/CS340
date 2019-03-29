@@ -1,5 +1,5 @@
 import { DestinationCard } from './cards';
-import { MaterialType } from "./material-type.enum";
+import { MaterialType } from './material-type.enum';
 import { RouteType } from './route-type.enum';
 import { City } from './city.enum';
 import { RouteName } from './route-name.enum';
