@@ -268,8 +268,9 @@ class Game(var name: String) {
             allCards.addAll(shardCardDiscardPile.shardCards)
             allCards.addAll(faceUpShardCards.shardCards)
             allCards.addAll(shardCardDeck.shardCards)
-            //make sure the amount of infinity gauntlets still leaves enough room for other cards
-            if((allCards.size - gauntletCards.size) >= 5){
+            gauntletCards = allCards.filter{s -> s.type.material == "infinity_gauntlet"}
+            //make sure the amount of infinity gauntlets still leaves enough room for other cards(if this number is smaller too many permutations exist)
+            if((allCards.size - gauntletCards.size) >= gauntletCards.size){
                 redrawFaceUpCards()
             }
         }
