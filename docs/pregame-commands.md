@@ -92,7 +92,9 @@ Logs in an existing user.
 ### `loginResult` Command
 Client Command (must be sent to client via a request to the `/register` endpoint.).
 
-Informs the client the result of a login. If there was no error, `error` should be an empty string. If there was an error, "user" should be empty
+Informs the client the result of a login. If there was no error, `error` should be an empty string. If there was an error, "user" should be empty.
+
+If `gameId` is not `-1`, then the client should skip the lobby and go directly to the game, and send a `rejoinGame` command.
 
 #### Syntax
 ```json
@@ -101,7 +103,8 @@ Informs the client the result of a login. If there was no error, `error` should 
     "error": "message",
     "user": {
         // user object
-    }
+    },
+	"gameid": 3
 }
 ```
 ### `listGames` Command

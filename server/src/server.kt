@@ -144,19 +144,19 @@ fun handlePost(httpExchange: HttpExchange) {
         println(requestBody)
 
         val command = when (initialCommand.command) {
-            CREATE_GAME -> Gson().fromJson(requestBody, CreateGameCommand::class.java)
-            JOIN_GAME -> Gson().fromJson(requestBody, JoinGameCommand::class.java)
-            LEAVE_GAME -> Gson().fromJson(requestBody, LeaveGameCommand::class.java)
-            LIST_GAMES -> Gson().fromJson(requestBody, ListGamesCommand::class.java)
-            PLAYER_READY -> Gson().fromJson(requestBody, PlayerReadyCommand::class.java)
-            CHANGE_COLOR -> Gson().fromJson(requestBody, ChangeColorCommand::class.java)
-            POST_CHAT -> Gson().fromJson(requestBody, PostChatCommand::class.java)
-            REQUEST_DESTINATIONS -> Gson().fromJson(requestBody, RequestDestinationsCommand::class.java)
-            DISCARD_DESTINATIONS -> Gson().fromJson(requestBody, DiscardDestinationsCommand::class.java)
-            CLAIM_ROUTE -> Gson().fromJson(requestBody, ClaimRouteCommand::class.java)
-            DRAW_SHARD_CARD -> Gson().fromJson(requestBody, DrawShardCardCommand::class.java)
-            DEBUG_HELP -> Gson().fromJson(requestBody, DebugHelpCommand::class.java)
-
+            CREATE_GAME             -> Gson().fromJson(requestBody, CreateGameCommand::class.java)
+            JOIN_GAME               -> Gson().fromJson(requestBody, JoinGameCommand::class.java)
+            LEAVE_GAME              -> Gson().fromJson(requestBody, LeaveGameCommand::class.java)
+            LIST_GAMES              -> Gson().fromJson(requestBody, ListGamesCommand::class.java)
+            PLAYER_READY            -> Gson().fromJson(requestBody, PlayerReadyCommand::class.java)
+            CHANGE_COLOR            -> Gson().fromJson(requestBody, ChangeColorCommand::class.java)
+            POST_CHAT               -> Gson().fromJson(requestBody, PostChatCommand::class.java)
+            REQUEST_DESTINATIONS    -> Gson().fromJson(requestBody, RequestDestinationsCommand::class.java)
+            DISCARD_DESTINATIONS    -> Gson().fromJson(requestBody, DiscardDestinationsCommand::class.java)
+            CLAIM_ROUTE             -> Gson().fromJson(requestBody, ClaimRouteCommand::class.java)
+            DRAW_SHARD_CARD         -> Gson().fromJson(requestBody, DrawShardCardCommand::class.java)
+            DEBUG_HELP              -> Gson().fromJson(requestBody, DebugHelpCommand::class.java)
+            REJOIN_GAME             -> Gson().fromJson(requestBody, RejoinGameCommand::class.java)
             else -> null
         }
 
