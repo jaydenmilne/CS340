@@ -95,7 +95,7 @@ export class CardService {
   }
 
   public drawShardCardFromDeck() {
-    if (this.turnService.canDrawShards()) {
+    if (this.turnService.canDrawShards() && this.shardCardDeckSize > 0) {
       this.turnService.onDrawDeckShardCard();
 
       this.serverProxy.executeCommand(new DrawShardCard('deck'));
@@ -103,7 +103,8 @@ export class CardService {
   }
 
   public drawDestCardFromDeck() {
-    if (this.turnService.canDrawDestinations()) {
+    if (this.turnService.canDrawDestinations() && this.destCardDeckSize > 0) {
+      this.turnService.onDrawDestCard();
       // SelectDestCardsDialog will call the turnService so that the toast appears after
       // this dialog closes
       this.serverProxy.executeCommand(new RequestDestinationsCommand());

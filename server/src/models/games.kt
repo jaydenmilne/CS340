@@ -89,14 +89,14 @@ class Game(var name: String) {
     }
 
 
-    fun updatePlayer(user: User){
+    fun updatePlayer(user: User) {
         var updatePlayerCommand = UpdatePlayerCommand()
         updatePlayerCommand.gamePlayer = user.toGamePlayer()
         broadcast(updatePlayerCommand)
     }
   
 
-    fun updatebank(){
+    fun updatebank() {
         var updatebankCommand = UpdateBankCommand()
         updatebankCommand.faceUpCards = faceUpShardCards.cards
         updatebankCommand.shardDrawPileSize = shardCardDeck.cards.size
@@ -217,10 +217,10 @@ class Game(var name: String) {
         user.points += route.points;
     }
 
-    fun advanceTurn(){
-        if(this.whoseTurn == -1){   // check if we're done with setup
+    fun advanceTurn() {
+        if (this.whoseTurn == -1) {   // check if we're done with setup
             // Check if all players have completed setup
-            if (this.players.filter { p -> !p.setupComplete }.isEmpty()){
+            if (this.players.filter { p -> !p.setupComplete }.isEmpty()) {
                 this.incPlayerTurn()
                 this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
             }
@@ -236,7 +236,7 @@ class Game(var name: String) {
     }
 
     fun incPlayerTurn() {
-        if (this.whoseTurn == -1 || this.whoseTurn == this.players.size -1){
+        if (this.whoseTurn == -1 || this.whoseTurn == this.players.size -1) {
             this.whoseTurn = 0
         } else {
             this.whoseTurn++
@@ -244,12 +244,47 @@ class Game(var name: String) {
     }
 
     fun getTurningPlayer(): User? {
-        if (this.whoseTurn == -1){
+        if (this.whoseTurn == -1) {
             return null
         }
         return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
     }
 
+
+    fun shuffleShardCards() {
+        shardCardDeck.shardCards.addAll(shardCardDiscardPile.shardCards)
+        shardCardDiscardPile = ShardCardDeck(mutableListOf())
+        shardCardDeck.shuffle()
+    }
+
+    fun redrawFaceUpCards() {
+        shardCardDiscardPile.shardCards.addAll(faceUpShardCards.shardCards)
+        faceUpShardCards = ShardCardDeck(mutableListOf())
+        for (i in 0..4) {
+            //check if deck is empty then shuffle discard
+            if (shardCardDeck.shardCards.isEmpty()) {
+                shuffleShardCards()
+                //if deck is still empty leave the loop
+                if (shardCardDeck.shardCards.isEmpty()) {
+                    break
+                }
+            }
+            faceUpShardCards.shardCards.add(shardCardDeck.getNext())//Set faceup cards
+        }
+        //check for more than 3 infinity_gauntlets again
+        var gauntletCards = faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}
+        if (gauntletCards.size > 2) {
+            var allCards = mutableListOf<ShardCard>()
+            allCards.addAll(shardCardDiscardPile.shardCards)
+            allCards.addAll(faceUpShardCards.shardCards)
+            allCards.addAll(shardCardDeck.shardCards)
+            gauntletCards = allCards.filter{s -> s.type.material == "infinity_gauntlet"}
+            //make sure the amount of infinity gauntlets still leaves enough room for other cards(if this number is smaller too many permutations exist)
+            if ((allCards.size - gauntletCards.size) >= gauntletCards.size) {
+                redrawFaceUpCards()
+            }
+    }
+      
     fun startLastRound(user:User){
         if(!lastRoundStarted){ //Makes Sure Last Round Isn't Already Started
             var lastRoundCommand = LastRoundCommand()

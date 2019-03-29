@@ -10,9 +10,9 @@ class DebugHelpCommand : INormalServerCommand{
         parseCommand(user)
     }
 
-    private fun parseCommand(user: User){
+    private fun parseCommand(user: User) {
         val first = action.split(' ')[0];
-        when (first){
+        when (first) {
             "/rainbowroad" -> rainbowCommand(user)
             "/allyourbasesaremine" -> allYourBasesCommand(user)
             "/claim" -> claimCommand(user)
@@ -29,11 +29,11 @@ class DebugHelpCommand : INormalServerCommand{
 
     private fun rainbowCommand(user: User) {
         val game = Games.getGameForPlayer(user)
-        if(game == null){
+        if (game == null) {
             return
         }
         game.faceUpShardCards = ShardCardDeck(mutableListOf())
-        for(i in 0..4){
+        for (i in 0..4) {
             game.faceUpShardCards.push(ShardCard(MaterialType.INFINITY_GAUNTLET))
         }
         game.updatebank()
@@ -42,11 +42,11 @@ class DebugHelpCommand : INormalServerCommand{
 
     private fun allYourBasesCommand(user: User) {
         val game = Games.getGameForPlayer(user)
-        if(game == null){
+        if (game == null) {
             return
         }
         game.routes.routesByRouteId.forEach{
-            if(it.value.ownerId != -1){
+            if (it.value.ownerId != -1) {
                 it.value.ownerId = user.userId
                 val routeClaimed = RouteClaimedCommand()
                 routeClaimed.routeId = it.key
@@ -61,15 +61,15 @@ class DebugHelpCommand : INormalServerCommand{
         val player = action.split(' ')[1];
         val route = action.split(' ')[2];
         val gamePlayer = Users.getUserByUsername(player)
-        if(gamePlayer == null){
+        if (gamePlayer == null) {
             return
         }
         val game = Games.getGameForPlayer(gamePlayer)
-        if(game == null){
+        if (game == null) {
             return
         }
         val routeFound = game.routes.routesByRouteId.get(route)
-        if(routeFound == null){
+        if (routeFound == null) {
             return
         }
         routeFound.ownerId = gamePlayer.userId
@@ -81,7 +81,7 @@ class DebugHelpCommand : INormalServerCommand{
 
     private fun changeTurn(user: User) {
         val game = Games.getGameForPlayer(user)
-        if(game == null){
+        if (game == null) {
             return
         }
         game.advanceTurn()
@@ -90,7 +90,7 @@ class DebugHelpCommand : INormalServerCommand{
 
     private fun giveThemTrains(user: User) {
         val game = Games.getGameForPlayer(user)
-        if(game == null){
+        if (game == null) {
             return
         }
         game.players.forEach {
@@ -105,7 +105,7 @@ class DebugHelpCommand : INormalServerCommand{
 
     private fun killDecks(user: User) {
         val game = Games.getGameForPlayer(user)
-        if(game == null){
+        if (game == null) {
             return
         }
         game.destinationCardDeck = DestinationCardDeck(mutableListOf())
@@ -126,7 +126,7 @@ class DebugHelpCommand : INormalServerCommand{
 
     private fun finalDestination(user: User) {
         val game = Games.getGameForPlayer(user)
-        if(game == null){
+        if (game == null) {
             return
         }
         game.players.forEach {
@@ -153,7 +153,7 @@ class DebugHelpCommand : INormalServerCommand{
 
     private fun whereTo(user: User) {
         val game = Games.getGameForPlayer(user)
-        if(game == null){
+        if (game == null) {
             return
         }
         var dealCardsCmd = DealCardsCommand()
@@ -168,11 +168,14 @@ class DebugHelpCommand : INormalServerCommand{
     private fun makeItRain(user: User) {
         val args = action.split(' ')
         var dealCardsCmd = DealCardsCommand()
-        if(args.size > 1){
+        if (args.size > 1) {
             val cardType = args[1].toUpperCase();
-            if (MaterialType.valueOf(cardType) === null) { return; }
-            for(i in 0..2) {
-                dealCardsCmd.shardCards.add(ShardCard(MaterialType.valueOf(cardType)))
+            try {
+                for (i in 0..2) {
+                    dealCardsCmd.shardCards.add(ShardCard(MaterialType.valueOf(cardType)))
+                }
+            } catch (e: Exception) {
+                throw CommandException("Type Not Found")
             }
         }else{
             for(i in 0..2) {

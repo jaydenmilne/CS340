@@ -23,5 +23,5 @@ export class GameOverDialogComponent implements OnInit {
 }
 
 export class GameOverViewData {
-  constructor(public pointTotals: PlayerPoint[]){}
+  constructor(public pointTotals: PlayerPoint[]) {}
 }

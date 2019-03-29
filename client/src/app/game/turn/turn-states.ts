@@ -21,7 +21,8 @@ export abstract class ITurnState {
 
   onChangeTurn(cmd: ChangeTurnCommand) {
     this.turnService.setNextState(new NotPlayersTurnState(this.playerService, this.turnService, this.notifierService));
-  };
+  }
+
 
   onClaimRoute() { };
   onDrawDeckShardCard() { };
