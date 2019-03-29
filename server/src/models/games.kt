@@ -211,6 +211,17 @@ class Game(var name: String) {
         // Recalculate if this player has the longest route
         longestRouteManager.playerClaimedRoute(user.userId)
         user.numRemainingTrains -= route.numCars
+
+        if (route.cities.size == 2) {
+            val citiesArray = route.cities.toTypedArray()
+
+            val message = user.username + " claimed a route between " + DisplayNameFormatter().getProperCityName(citiesArray[0]) + " and " + DisplayNameFormatter().getProperCityName(citiesArray[1]) + "!"
+
+            broadcastEvent(message)
+        }
+        else {
+            throw RuntimeException("Route does not have two cities listed")
+        }
         user.points += route.points;
     }
 
@@ -247,6 +258,10 @@ class Game(var name: String) {
             return null
         }
         return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
+    }
+
+    fun broadcastEvent(message: String) {
+        broadcast(UpdateChatCommand(Message(-1, "", message, nextMessageId, true)))
     }
 
     fun shuffleShardCards() {

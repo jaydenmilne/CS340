@@ -349,6 +349,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         game.updatePlayer(user)
         game.updatebank()
         game.advanceTurn()
+        game.broadcastEvent(user.username + " discarded " + discardedDestinations.size + " Destination cards")
     }
 }
 
@@ -409,6 +410,8 @@ class DrawShardCardCommand : INormalServerCommand {
             }
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
+            game.broadcastEvent(user.username + " drew a facedown Shard card")
+
             if (game.shardCardDeck.shardCards.isEmpty()) {
                 game.shuffleShardCards()
             }
@@ -432,6 +435,7 @@ class DrawShardCardCommand : INormalServerCommand {
                 if (game.shardCardDeck.shardCards.isEmpty()) {
                     game.shuffleShardCards()
                 }
+
             } else{
                 throw CommandException("DrawShardCard Command: Card Does Not Exist")
             }
@@ -442,6 +446,8 @@ class DrawShardCardCommand : INormalServerCommand {
         user.shardCards.shardCards.add(cardToSend)
         dealCardsCmd.shardCards.add(cardToSend)
         user.queue.push(dealCardsCmd)
+        
+        game.broadcastEvent(user.username + " drew a " + cardToSend.getMaterialTypeString() + " from the faceup cards")        
         game.updatebank()
         game.updatePlayer(user)
 

@@ -1,5 +1,6 @@
 package models
 
+import commands.CommandException
 import commands.UpdatePlayerCommand
 import kotlin.system.measureTimeMillis
 
@@ -116,6 +117,9 @@ class LongestRouteManager(private val game : Game) {
             // This player now has the longest route
             currentPlayerWithLongestRoute = playerid
             longestRoute = playerLongest
+            val user = Users.getUserById(playerid) ?: throw CommandException("REEE")
+
+            game.broadcastEvent(user.username + " now has the longest route with length " + longestRoute)
         }
 
         // Update the longest path value on the player
