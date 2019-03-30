@@ -35,6 +35,10 @@ export class RouteInfoDialogComponent {
       return ShardCard.getImageByType(typeToMaterial[this.data.route.type]);
     }
 
+    getTooltip(): string {
+      return ShardCard.getPrintName(typeToMaterial[this.data.route.type]);
+    }
+
 
   getRouteOwnerName(): string {
     if (this.data.route.ownerId === -1) {

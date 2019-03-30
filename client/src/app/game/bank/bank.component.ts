@@ -29,5 +29,9 @@ export class BankComponent implements OnInit {
     this.cardService.drawDestCardFromDeck();
   }
 
+  public getTooltip(shardCard : ShardCard) : string {
+    return ShardCard.getPrintName(shardCard.type);
+  }
+
 }
 

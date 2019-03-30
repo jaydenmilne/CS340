@@ -1,7 +1,7 @@
 <div class="bank-box full-width">
   <div class="shard-box">
     <div class="shard-cell inline" *ngFor="let shard of cardService.faceUpShardCards.cards">
-      <mat-card class="shard-card inline" (click)="faceUpShardCardClick(shard)">
+       <mat-card matTooltip="{{getTooltip(shard)}}" class="shard-card inline" (click)="faceUpShardCardClick(shard)">
         <img class="shard-icon" src="assets/img/shards/{{shard.getImage()}}">
       </mat-card>
     </div>

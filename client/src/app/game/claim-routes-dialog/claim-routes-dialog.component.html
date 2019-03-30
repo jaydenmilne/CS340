@@ -4,7 +4,7 @@
   <app-dest-card class="dest-card"  [route]="data.route.toDestCard()" [selected]="false"></app-dest-card>
   <div class="required-shard-indicator">
     <p class="required-shard-text">Requires</p>
-    <mat-card class="required-shard-card" matBadge="{{data.route.numCars}}">
+    <mat-card matTooltip="{{getTooltip()}}" class="required-shard-card" matBadge="{{data.route.numCars}}">
       <img class="required-shard-icon" src="assets/img/shards/{{getRouteTypeImage()}}">
     </mat-card>
   </div>
