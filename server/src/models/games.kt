@@ -115,6 +115,7 @@ class Game(var name: String) {
         var gameOverCommand = GameOverCommand(mutableListOf<PlayerPoints>())
         players.forEach { gameOverCommand.players.add(it.toPlayerPoints()) }
         broadcast(gameOverCommand)
+        Games.games.remove(this.gameId)
     }
 
     enum class CanClaimRouteResult {
