@@ -205,7 +205,7 @@ class Game(var name: String) {
         return routes.pathBetweenCities(city1, city2, userId)
     }
   
-    fun claimRoute(user: User, routeId: String) {
+    fun claimRoute(user: User, routeId: String, cardsUsedToClaim: List<ShardCard> = listOf() ) {
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
         route.ownerId = user.userId
 
@@ -214,16 +214,32 @@ class Game(var name: String) {
         user.numRemainingTrains -= route.numCars
 
         if (route.cities.size == 2) {
+
+            var uniqueCards = mutableSetOf<ShardCard>()
+            uniqueCards.addAll(cardsUsedToClaim)
+
+            var cardsUsed = ""
+
+            for (type in uniqueCards) {
+                cardsUsed += (cardsUsedToClaim.count { card -> card.type == type.type }).toString() + "x " + type.getMaterialTypeString() + ", "
+            }
+
+            cardsUsed = cardsUsed.removeRange(cardsUsed.length - 2, cardsUsed.length - 1)
+
             val citiesArray = route.cities.toTypedArray()
 
-            val message = user.username + " claimed a route between " + DisplayNameFormatter().getProperCityName(citiesArray[0]) + " and " + DisplayNameFormatter().getProperCityName(citiesArray[1]) + "!"
+            val message = java.lang.String.format("%s claimed %s ⇔ %s using %s",
+                    user.username,
+                    DisplayNameFormatter().getProperCityName(citiesArray[0]),
+                    DisplayNameFormatter().getProperCityName(citiesArray[1]),
+                    cardsUsed)
 
             broadcastEvent(message)
         }
         else {
             throw RuntimeException("Route does not have two cities listed")
         }
-        user.points += route.points;
+        user.points += route.points
     }
 
     fun advanceTurn() {

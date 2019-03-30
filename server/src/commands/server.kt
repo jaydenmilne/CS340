@@ -347,7 +347,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         game.updatePlayer(user)
         game.updatebank()
         game.advanceTurn()
-        game.broadcastEvent(user.username + " discarded " + discardedDestinations.size + " Destination cards")
+        game.broadcastEvent(user.username + " discarded " + discardedDestinations.size + " destination card(s)")
     }
 }
 
@@ -366,7 +366,7 @@ class ClaimRouteCommand : INormalServerCommand {
             shardsUsed.forEach{card -> user.shardCards.shardCards.remove(card)}
             game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
 
-            game.claimRoute(user, routeId)
+            game.claimRoute(user, routeId, shardsUsed)
 
             val routeClaimed = RouteClaimedCommand()
             routeClaimed.routeId = this.routeId
@@ -379,7 +379,8 @@ class ClaimRouteCommand : INormalServerCommand {
             game.broadcast(updatePlayer)
 
             game.advanceTurn()
-            if(user.numRemainingTrains < 4){
+
+            if  (user.numRemainingTrains < 4) {
                 game.startLastRound(user)
             }
         }
@@ -408,7 +409,7 @@ class DrawShardCardCommand : INormalServerCommand {
             }
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
-            game.broadcastEvent(user.username + " drew a facedown Shard card")
+            game.broadcastEvent(user.username + " drew a shard card")
 
             if (game.shardCardDeck.shardCards.isEmpty()) {
                 game.shuffleShardCards()
@@ -436,10 +437,9 @@ class DrawShardCardCommand : INormalServerCommand {
                 if (game.shardCardDeck.shardCards.isEmpty()) {
                     game.shuffleShardCards()
                 }
+                game.broadcastEvent(user.username + " took a " + cardToSend.getMaterialTypeString())
 
-                game.broadcastEvent(user.username + " drew a " + cardToSend.getMaterialTypeString())
-
-            } else{
+            } else {
                 throw CommandException("DrawShardCard Command: Card Does Not Exist")
             }
             user.shardCards.push(cardToSend);
