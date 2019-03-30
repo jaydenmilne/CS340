@@ -18,13 +18,8 @@ import { GameOverDialogComponent } from './game-over-dialog/game-over-dialog.com
 
 
 @NgModule({
-<<<<<<< HEAD
-  declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent, GameOverDialogComponent],
-  entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent, GameOverDialogComponent],
-=======
   declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent, GameOverDialogComponent, ShardCardNotificationComponent],
   entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent, GameOverDialogComponent , ShardCardNotificationComponent],
->>>>>>> master
   imports: [
     CommonModule,
     MatGridListModule,
