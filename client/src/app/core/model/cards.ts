@@ -47,15 +47,16 @@ export class ShardCard extends ICard {
     };
 
     private static readonly printNamesMap: {[material: string]: string} = {
-        'reality_shard' : 'Reality Stone',
-        'soul_shard' : 'Soul Stone',
-        'space_shard' : 'Space Stone',
-        'mind_shard' : 'Mind Stone',
-        'power_shard' : 'Power Stone',
-        'time_shard' : 'Time Stone',
-        'vibranium' : 'Vibranium',
-        'palladium' : 'Palladium',
-        'infinity_gauntlet' : 'Infinity Gauntlet',
+        'reality_shard' : 'Reality Stone Shard',
+        'soul_shard' : 'Soul Stone Shard',
+        'space_shard' : 'Space Stone Shard',
+        'mind_shard' : 'Mind Stone Shard',
+        'power_shard' : 'Power Stone Shard',
+        'time_shard' : 'Time Stone Shard',
+        'vibranium' : 'Vibranium Shard',
+        'palladium' : 'Palladium Shard',
+        'infinity_gauntlet' : 'Infinity Gauntlet Shard',
+        'any' : 'Any'
     };
 
     public static readonly typeMap: {[material: string]: RouteType} = {

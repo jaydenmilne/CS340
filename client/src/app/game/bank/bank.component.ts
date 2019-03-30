@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CardService } from '../card.service';
 import { ShardCard } from '@core/model/cards';
-import { MaterialType, getMaterialTypeDisplayName } from '@core/model/material-type.enum';
+import { MaterialType } from '@core/model/material-type.enum';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class BankComponent implements OnInit {
   }
 
   public getTooltip(shardCard : ShardCard) : string {
-    return getMaterialTypeDisplayName(shardCard.type);
+    return ShardCard.getPrintName(shardCard.type);
   }
 
 }

@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DestinationCard, ShardCard } from '@core/model/cards';
 import { typeToMaterial, Route } from '@core/model/route';
 import { PlayerService } from '../../player.service';
-import { getMaterialTypeDisplayName } from '@core/model/material-type.enum';
 
 @Component({
   selector: 'app-route-info-dialog',
@@ -41,7 +40,7 @@ export class RouteInfoDialogComponent {
     }
 
     getTooltip(): string {
-      return getMaterialTypeDisplayName(typeToMaterial[this.data.route.type]);
+      return ShardCard.getPrintName(typeToMaterial[this.data.route.type]);
     }
 
 

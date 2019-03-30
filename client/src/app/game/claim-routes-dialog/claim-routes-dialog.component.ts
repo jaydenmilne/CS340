@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { Route, typeToMaterial } from '@core/model/route';
 import { ShardCard, ShardCardDeck, ShardCardSelectionDeck, ShardCardSelectionPair } from '@core/model/cards';
-import { MaterialType, getMaterialTypeDisplayName } from '@core/model/material-type.enum';
+import { MaterialType } from '@core/model/material-type.enum';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { RouteService } from '../route.service';
 
@@ -49,7 +49,7 @@ export class ClaimRoutesDialogComponent {
   }
 
   getTooltip() : string {
-    return getMaterialTypeDisplayName(typeToMaterial[this.data.route.type]);
+    return ShardCard.getPrintName(typeToMaterial[this.data.route.type]);
   }
 
   getCardImage(card: ShardCard): string {
