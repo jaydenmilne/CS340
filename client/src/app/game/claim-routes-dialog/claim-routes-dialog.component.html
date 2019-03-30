@@ -13,7 +13,7 @@
 <div mat-dialog-content class="shard-box">
     <div class="shard-cell inline" *ngFor="let cardPair of useableCards.cardPairs">
       <mat-card class="shard-card inline" (click)="onCardClick(cardPair)">
-        <img class="shard-icon" src="assets/img/shards/{{getCardImage(cardPair.card)}}">
+        <img class="shard-icon" src="assets/img/shards/{{cardPair.card.getImage()}}">
         <i class="material-icons check-mark" *ngIf="cardPair.selected">check_circle</i>
       </mat-card>
   </div>

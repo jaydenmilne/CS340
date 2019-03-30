@@ -43,6 +43,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    max-height: 45vh;
+    overflow-y: scroll;
 } 
 .shard-card{
     height: 40px;

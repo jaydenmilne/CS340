@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameComponent } from './game/game.component';
+import { GameComponent, ShardCardNotificationComponent } from './game/game.component';
 import { PlayerListComponent } from './player-list/player-list.component';
 import { GutterComponent} from './gutter/gutter.component';
 import { MapComponent } from './map/map.component';
@@ -18,8 +18,8 @@ import { GameOverDialogComponent } from './game-over-dialog/game-over-dialog.com
 
 
 @NgModule({
-  declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent, GameOverDialogComponent],
-  entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent, GameOverDialogComponent ],
+  declarations: [GameComponent, PlayerListComponent, GutterComponent, MapComponent, BankComponent, PlayerInfoDialogComponent, DestCardComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent, GameOverDialogComponent, ShardCardNotificationComponent],
+  entryComponents: [ PlayerInfoDialogComponent, SelectDestinationCardsDialogComponent, ClaimRoutesDialogComponent, RouteInfoDialogComponent, GameOverDialogComponent , ShardCardNotificationComponent],
   imports: [
     CommonModule,
     MatGridListModule,

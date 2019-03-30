@@ -32,7 +32,7 @@ export class GutterComponent implements OnInit {
   }
 
   getCardImage(type: MaterialType): string {
-    return ShardCard.getImage(type);
+    return ShardCard.getImageByType(type);
   }
 
   getRemainingShards(): number {
