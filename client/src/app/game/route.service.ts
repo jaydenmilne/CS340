@@ -167,6 +167,9 @@ export class RouteService {
     } else {
         validClaim = this.canClaimRouteType(route.type, hand, route.numCars);
     }
+    if (route.numCars > this.playerService.myPlayer.numRemainingTrains) {
+      validClaim = false;
+    }
     if (validClaim) {
       if (this.playerService.players.length > 2) {
         return true;
