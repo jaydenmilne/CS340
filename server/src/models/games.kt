@@ -116,6 +116,7 @@ class Game(var name: String) {
         players.forEach { gameOverCommand.players.add(it.toPlayerPoints())
                         it.reset()}
         broadcast(gameOverCommand)
+        Games.games.remove(this.gameId)
     }
 
     enum class CanClaimRouteResult {

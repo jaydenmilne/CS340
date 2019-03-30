@@ -47,7 +47,7 @@ class User(var username: String) {
     var userId = getNextUserId()
     var ready = false
     var authToken = ""
-    var color = Color.YELLOW
+    var color = Color.BLUE
 
     var points = 0
     var shardCards = ShardCardDeck(mutableListOf())
