@@ -16,9 +16,6 @@ export class BankComponent implements OnInit {
   ngOnInit() {
   }
 
-  public getCardImage(type: MaterialType): string {
-    return ShardCard.getImage(type);
-  }
 
   public faceUpShardCardClick(card: ShardCard) {
     this.cardService.drawFaceUpShardCard(card);
@@ -30,6 +27,10 @@ export class BankComponent implements OnInit {
 
   public destCardDeckClick() {
     this.cardService.drawDestCardFromDeck();
+  }
+
+  public getTooltip(shardCard : ShardCard) : string {
+    return ShardCard.getPrintName(shardCard.type);
   }
 
 }

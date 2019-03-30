@@ -306,7 +306,7 @@ class RejoinGameCommand : INormalServerCommand {
         // 3. Send route info to the client
         game.routes.routesByRouteId.values.forEach {
             val id = it.ownerId
-            if (id != null) {
+            if (id != -1) {
                 val cmd = RouteClaimedCommand()
                 cmd.routeId = it.routeId
                 cmd.userId = id
@@ -317,11 +317,9 @@ class RejoinGameCommand : INormalServerCommand {
         // 4. Send information about the players hand
         user.queue.push(UpdateHandCommand(user.destinationCards.cards, user.shardCards.cards))
 
-        // 5. If it is the players turn, inform them of that
-        if (user.userId == game.whoseTurn) {
-            val cmd = ChangeTurnCommand()
-            cmd.userId = user.userId
-            user.queue.push(cmd)
+        // 5. Inform them of whose turn it is
+        if (game.whoseTurn != -1) {
+            user.queue.push(ChangeTurnCommand(game.getTurningPlayer()?.userId!!))   // If this is null, something bad happend
         }
 
         // TODO: send lastRound if appropriate
@@ -349,7 +347,7 @@ class DiscardDestinationsCommand : INormalServerCommand {
         game.updatePlayer(user)
         game.updatebank()
         game.advanceTurn()
-        game.broadcastEvent(user.username + " discarded " + discardedDestinations.size + " Destination cards")
+        game.broadcastEvent(user.username + " discarded " + discardedDestinations.size + " destination card(s)")
     }
 }
 
@@ -368,7 +366,7 @@ class ClaimRouteCommand : INormalServerCommand {
             shardsUsed.forEach{card -> user.shardCards.shardCards.remove(card)}
             game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
 
-            game.claimRoute(user, routeId)
+            game.claimRoute(user, routeId, shardsUsed)
 
             val routeClaimed = RouteClaimedCommand()
             routeClaimed.routeId = this.routeId
@@ -381,7 +379,8 @@ class ClaimRouteCommand : INormalServerCommand {
             game.broadcast(updatePlayer)
 
             game.advanceTurn()
-            if(user.numRemainingTrains < 4){
+
+            if  (user.numRemainingTrains < 4) {
                 game.startLastRound(user)
             }
         }
@@ -406,17 +405,19 @@ class DrawShardCardCommand : INormalServerCommand {
         // Check if the user wants to draw from the deck or from the faceup deck
         if (card == "deck") {
             if (game.shardCardDeck.shardCards.isEmpty()) { //Check Empty Deck
-                throw CommandException("DrawShardCard Command: Cannot Draw on Empy Deck")
+                throw CommandException("DrawShardCard Command: Cannot Draw on Empty Deck")
             }
             cardToSend = game.shardCardDeck.getNext()
             user.shardCards.push(cardToSend)
-            game.broadcastEvent(user.username + " drew a facedown Shard card")
+            game.broadcastEvent(user.username + " drew a shard card")
 
             if (game.shardCardDeck.shardCards.isEmpty()) {
                 game.shuffleShardCards()
             }
 
         } else {
+            // Is a face up shard card
+
             // Find how many shardCards in the faceUp deck match the requested card's material type
             val validCards = game.faceUpShardCards.shardCards.filter { s -> s.type.material == card }
             if (validCards.isNotEmpty()) {
@@ -427,16 +428,18 @@ class DrawShardCardCommand : INormalServerCommand {
                     game.faceUpShardCards.shardCards.add(game.shardCardDeck.getNext())
                 }
                 cardToSend = validCards[0]
-                //check if there are more then 2 infinity gauntlets in the deck
+
+                // check if there are more then 2 infinity gauntlets in the deck
                 if ((game.faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}).size > 2) {
                     game.redrawFaceUpCards()
                 }
-                //check if deck is empty then shuffle discard
+                // check if deck is empty then shuffle discard
                 if (game.shardCardDeck.shardCards.isEmpty()) {
                     game.shuffleShardCards()
                 }
+                game.broadcastEvent(user.username + " took a " + cardToSend.getMaterialTypeString())
 
-            } else{
+            } else {
                 throw CommandException("DrawShardCard Command: Card Does Not Exist")
             }
             user.shardCards.push(cardToSend);
@@ -447,7 +450,6 @@ class DrawShardCardCommand : INormalServerCommand {
         dealCardsCmd.shardCards.add(cardToSend)
         user.queue.push(dealCardsCmd)
         
-        game.broadcastEvent(user.username + " drew a " + cardToSend.getMaterialTypeString() + " from the faceup cards")        
         game.updatebank()
         game.updatePlayer(user)
 

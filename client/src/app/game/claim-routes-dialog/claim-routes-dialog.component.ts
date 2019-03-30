@@ -47,13 +47,13 @@ export class ClaimRoutesDialogComponent {
       this.useableCards = this.cards.filterOnSelectedType(true);
     }
   }
-
-  getCardImage(card: ShardCard): string {
-    return ShardCard.getImage(card.type);
+  
+  getTooltip() : string {
+    return ShardCard.getPrintName(typeToMaterial[this.data.route.type]);
   }
-
+  
   getRouteTypeImage(): string {
-    return ShardCard.getImage(typeToMaterial[this.data.route.type]);
+    return ShardCard.getImageByType(typeToMaterial[this.data.route.type]);
   }
 }
 

@@ -140,6 +140,19 @@ class User(var username: String) {
 
         return game.getRoutePointsForPlayer(this.userId)
     }
+
+    fun reset() {
+        ready = false
+        points = 0
+        shardCards.cards.clear()
+        destinationCards.cards.clear()
+        numRemainingTrains = STARTING_TRAINS
+        hasLongestRoute = false
+        longestRouteLength = 0
+        setupComplete = false
+        turnOrder = -1
+        isDrawingSecondCard = false
+    }
 }
 
 class ClientUser(val userId: Int, var username: String, val authToken: String) {
