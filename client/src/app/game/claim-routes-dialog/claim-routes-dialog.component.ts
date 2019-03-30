@@ -48,12 +48,8 @@ export class ClaimRoutesDialogComponent {
     }
   }
 
-  getCardImage(card: ShardCard): string {
-    return ShardCard.getImage(card.type);
-  }
-
   getRouteTypeImage(): string {
-    return ShardCard.getImage(typeToMaterial[this.data.route.type]);
+    return ShardCard.getImageByType(typeToMaterial[this.data.route.type]);
   }
 }
 

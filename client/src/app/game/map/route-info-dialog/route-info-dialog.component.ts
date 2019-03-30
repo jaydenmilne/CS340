@@ -31,12 +31,8 @@ export class RouteInfoDialogComponent {
       return new DestinationCard({'cities': this.data.route.cities, 'points': this.data.route.getPoints()});
     }
 
-    getCardImage(card: ShardCard): string {
-      return ShardCard.getImage(card.type);
-    }
-
     getRouteTypeImage(): string {
-      return ShardCard.getImage(typeToMaterial[this.data.route.type]);
+      return ShardCard.getImageByType(typeToMaterial[this.data.route.type]);
     }
 
 

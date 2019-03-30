@@ -317,11 +317,9 @@ class RejoinGameCommand : INormalServerCommand {
         // 4. Send information about the players hand
         user.queue.push(UpdateHandCommand(user.destinationCards.cards, user.shardCards.cards))
 
-        // 5. If it is the players turn, inform them of that
-        if (user.userId == game.whoseTurn) {
-            val cmd = ChangeTurnCommand()
-            cmd.userId = user.userId
-            user.queue.push(cmd)
+        // 5. Inform them of whose turn it is
+        if (game.whoseTurn != -1) {
+            user.queue.push(ChangeTurnCommand(game.getTurningPlayer()?.userId!!))   // If this is null, something bad happend
         }
 
         // TODO: send lastRound if appropriate
