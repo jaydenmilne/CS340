@@ -26,6 +26,9 @@ export class CardService {
   // Temp storage location, used with the SelectDestCard dialog
   public stagedDestinationCards$ = new Subject<SelectDestinationCardsData>();
 
+  // Set this flag to show the user what card they drew
+  private showDrawnCard: boolean = false;
+
   constructor(
     private commandRouter: CommandRouterService,
     private serverProxy: ServerProxyService,
@@ -50,8 +53,16 @@ export class CardService {
           new DestinationCardDeck(dealCardsCmd.destinations),
           dealCardsCmd.minDestinations));
     }
-    // Add the new train cards to the bank
-    this.playerTrainCards = new ShardCardDeck(this.playerTrainCards.cards.concat(dealCardsCmd.shardCards));
+    
+    if(dealCardsCmd.shardCards.length > 0){
+      // Add the new train cards to the bank
+      this.playerTrainCards = new ShardCardDeck(this.playerTrainCards.cards.concat(dealCardsCmd.shardCards));
+
+      if (this.showDrawnCard){  // Show user what card they drew
+        this.playerNotifier.showCardDrawn(dealCardsCmd.shardCards[0])
+        this.showDrawnCard = false;
+      }
+    }
   }
 
   private onUpdateBank(updateBankCmd: UpdateBankCommand) {
@@ -97,7 +108,7 @@ export class CardService {
   public drawShardCardFromDeck() {
     if (this.turnService.canDrawShards() && this.shardCardDeckSize > 0) {
       this.turnService.onDrawDeckShardCard();
-
+      this.showDrawnCard = true;
       this.serverProxy.executeCommand(new DrawShardCard('deck'));
     }
   }

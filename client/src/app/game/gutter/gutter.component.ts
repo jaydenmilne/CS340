@@ -32,7 +32,7 @@ export class GutterComponent implements OnInit {
   }
 
   getCardImage(type: MaterialType): string {
-    return ShardCard.getImage(type);
+    return ShardCard.getImageByType(type);
   }
 
   getRemainingShards(): number {
@@ -41,6 +41,10 @@ export class GutterComponent implements OnInit {
     }
 
     return this.playerService.myPlayer.numRemainingTrains;
+  }
+
+  public getTooltip(type : MaterialType) : string {
+    return ShardCard.getPrintName(type);
   }
 
   getPlayerColorStyle() {

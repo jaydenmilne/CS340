@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material';
 import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { CardService } from '../card.service';
-import { PlayerNotifierService } from '@core/player-notifier.service';
+import { PlayerNotifierService, IPlayerNotification, TextNotification, ShardNotification } from '@core/player-notifier.service';
 import { UserService } from '@core/user.service';
 import { Router } from '@angular/router';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { RejoinGameCommand } from '@core/game-commands';
 import { GameOverViewData, GameOverDialogComponent } from '../game-over-dialog/game-over-dialog.component';
 import { PlayerService } from '../player.service';
+import { ShardCard } from '@core/model/cards';
 
 @Component({
   selector: 'app-game',
@@ -39,7 +40,7 @@ export class GameComponent implements OnInit {
     }
 
     this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
-    this.notifierService.playerNotification.subscribe(message => this.displayNotification(message));
+    this.notifierService.playerNotification$.subscribe(message => this.displayNotification(message));
     this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints));
 
     // Change the game connection to server mode
@@ -67,8 +68,20 @@ export class GameComponent implements OnInit {
     });
   }
 
-  public displayNotification(message: string) {
-    this.snackBar.open(message, '', {duration: 2500});
+  public displayNotification(notification: IPlayerNotification) {
+    let snackBarRef: MatSnackBarRef<any>;
+    
+    if(notification instanceof TextNotification){   // Show simple snack bar
+      snackBarRef = this.snackBar.open(notification.msg, '', {duration: notification.displayTime});
+    } else if (notification instanceof ShardNotification){  // Show Shard Card snack bar
+      snackBarRef = this.snackBar.openFromComponent(ShardCardNotificationComponent, {
+        data: notification.msg, duration: notification.displayTime, horizontalPosition: 'right'
+      });
+    } else {  // Some other type?
+      return;
+    }
+
+    snackBarRef.afterDismissed().subscribe(result => this.notifierService.showNext());
   }
 
   public handleEndGame(gameOverData: GameOverViewData) {
@@ -80,5 +93,38 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe(gameOverDialogResult => {
       this.router.navigate(['/lobby']);
     });
+  }
+}
+
+@Component({
+  selector: 'shard-card-notification',
+  template: `
+  <div class="shard-cell">
+    <mat-card class="shard-card">
+      <img class="shard-icon" src="assets/img/shards/{{card.getImage()}}">
+    </mat-card>
+    </div>
+  `,
+  styles: [`
+  .shard-cell{
+    height: 55px;
+    width: 60px;
+    margin: auto;
+    flex-grow: 0;
+  }
+  .shard-card{
+    height: 40px;
+    width: 35px;
+    padding: 5px;
+  }
+  .shard-icon{
+    height: 35px;
+  }
+  `],
+})
+export class ShardCardNotificationComponent {
+  card: ShardCard;
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: ShardCard){
+    this.card = data;
   }
 }
