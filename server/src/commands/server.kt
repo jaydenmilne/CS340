@@ -461,3 +461,12 @@ class DrawShardCardCommand : INormalServerCommand {
         }
     }
 }
+
+class SkipTurnCommand : INormalServerCommand {
+    override val command = SKIP_TURN
+    override fun execute(user: User) {
+        val game = Games.getGameForPlayer(user) ?: throw CommandException("SkipTurn Command: User not in a game")
+
+        game.advanceTurn()
+    }
+}

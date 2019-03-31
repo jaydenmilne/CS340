@@ -32,6 +32,11 @@ export class DiscardDestinationsCommand implements Command {
     }
 }
 
+export class SkipTurnCommand implements Command {
+    public command = "skipTurn";
+    constructor() {};
+}
+
 // Client Commands
 export class UpdatePlayerCommand implements Command {
     public command = 'updatePlayer';

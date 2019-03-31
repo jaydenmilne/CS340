@@ -31,6 +31,7 @@ const val DRAW_SHARD_CARD = "drawShardCard"
 const val UPDATE_HAND = "updateHand"
 const val LAST_ROUND = "lastRound"
 const val GAME_OVER = "gameOver"
+const val SKIP_TURN = "skipTurn"
 
 interface ICommand {
     val command: String

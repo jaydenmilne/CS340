@@ -157,6 +157,7 @@ fun handlePost(httpExchange: HttpExchange) {
             DRAW_SHARD_CARD         -> Gson().fromJson(requestBody, DrawShardCardCommand::class.java)
             DEBUG_HELP              -> Gson().fromJson(requestBody, DebugHelpCommand::class.java)
             REJOIN_GAME             -> Gson().fromJson(requestBody, RejoinGameCommand::class.java)
+            SKIP_TURN               -> Gson().fromJson(requestBody, SkipTurnCommand::class.java)
             else -> null
         }
 

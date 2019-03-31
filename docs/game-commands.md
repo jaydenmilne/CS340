@@ -89,6 +89,7 @@ Several commands transmit arrays of models, these are their descriptions.
 | [lastRound](#lastRound-command)                       | Client                            |                                                           |
 | [gameOver](#gameOver-command)                         | Client                            |                                                           |
 | [debugHelp](#debugHelp-command)                       | Server                            |  `updateHand`, `updateBank`,`dealCards`,`updatePlayer`    |
+| [skipTurn](#skipTurn-command)                         | Server                            | `changeTurn`                                              |
 
 ### `updateBank` Command
 Client Command.
@@ -290,5 +291,17 @@ Allows the following list of actions to be run on the Server
 {
     "command": "debugHelp",
     "action": "/rainbowroad"
+}
+```
+
+### `skipTurn` Command
+Server Command.
+
+Tells the server the client wants to skip its turn
+
+#### Syntax
+```json
+{
+    "command": "skipTurn"
 }
 ```

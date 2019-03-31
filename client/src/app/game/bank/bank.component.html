@@ -30,3 +30,10 @@
     </div>
   </div>
 </div>
+<div class="skip-div">
+  <button mat-raised-button
+    *ngIf="showSkipButton()" 
+    (click)="onSkipClick()" 
+    matTooltip="Since there are so few shard cards, you may be unable to make a legal move. Press to end your turn" 
+    color="warn">Skip Turn</button>
+</div>
