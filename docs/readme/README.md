@@ -29,7 +29,7 @@ Go!
 
 ## Playing the Game
 ![](game.png)
-A brief explaination of how to use the game screen.
+A brief explanation of how to use the game screen.
 
 ### Terminology
 
@@ -44,7 +44,7 @@ A brief explaination of how to use the game screen.
 | Coal Car            | Vibrainium                    |
 | Caboose Car         | Palladium                     |
 | Locomotive Car      | Infinity Gauntlet             |
-| Route               | Jump (Gaurdians)              |
+| Route               | Jump (Guardians)              |
 | Train Car (pieces)  | Jump Claiming Energy          |
 
 
@@ -55,13 +55,13 @@ A brief explaination of how to use the game screen.
 The player who is colored in
 
 #### What is the order?
-The players are listed in turn order. The order that players choose their desination cards at the beginning of the game determines the turn order.
+The players are listed in turn order. The order that players choose their destination cards at the beginning of the game determines the turn order.
 
 #### Who is winning?
 See the badges
 
 #### How do I see player stats?
-Click on the palyer
+Click on the player in the player list
 
 ### Player's Hand
 ![](playerhand.png)
