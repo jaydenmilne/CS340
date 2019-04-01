@@ -3,6 +3,8 @@
 ## Accessing the Site
 Open [marylou.ga](marylou.ga) on computer running Chrome. That should be it, unless something goes wrong. See [Troubleshooting](#troubleshooting) below.
 
+The frontend (`marylou.ga`) is written in Angular, so it is served as a static site. The backend (`api.marylou.ga`) is written in Kotlin.
+
 ## Troubleshooting
 If the following instructions don't work, call the number given in contact.txt in the zip file
 
@@ -96,3 +98,6 @@ A red "Skip Turn" button should appear underneath the decks.
 
 - If you press 'm', the client will switch to manual polling mode. 'p' sends a poll
 - You can rejoin a game if you reload the client. Since this isn't required and is implemented as a debugging aid, it isn't implemented very robustly, so don't file bugs
+- If you get an "Oh Snap" error, please include the complete text of the error in the bug. You should never see that screen in normal gameplay
+  ![](ohsnap.png)
+- If it seems the UI is not responding, open the Debug Console (Ctrl+Shift+I) and see if there are any errors you could give in the bug report
