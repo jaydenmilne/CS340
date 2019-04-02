@@ -25,12 +25,6 @@ export class GameInfoComponent implements OnInit {
     this.serverConnection.changeState(new LobbyState(this.serverConnection));
   }
 
-  public getPlayerColorStyle(player: Player) {
-    const style = {
-      'background-color': '#' + StyleColor[player.color]
-    };
-    return style;
-  }
 
   public getColorStyle(color: Color) {
     const style = {

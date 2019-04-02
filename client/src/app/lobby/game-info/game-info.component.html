@@ -20,13 +20,13 @@
       </mat-card-subtitle>
 
       <mat-card *ngFor="let player of lobbyService.gameList.getSelectedGame().getPlayers()" class="player-card"
-        [ngStyle]="getPlayerColorStyle(player)">
+        [ngStyle]="player.getCSSColor('background-color')">
         <table class="player-card-info">
           <tr class="player-card-row">
-            <td class="player-handle player-list-text"> {{player.getName()}} </td>
+            <td class="player-handle player-list-text"> {{player.username}} </td>
             <td class="player-status">
-              <i class="material-icons" *ngIf="player.isReady()">check_circle</i>
-              <i class="material-icons" *ngIf="!player.isReady()">radio_button_unchecked</i>
+              <i class="material-icons" *ngIf="player.ready">check_circle</i>
+              <i class="material-icons" *ngIf="!player.ready">radio_button_unchecked</i>
             </td>
           </tr>
         </table>

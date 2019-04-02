@@ -4,7 +4,6 @@ import { Route } from '@core/model/route';
 import { RouteName } from '@core/model/route-name.enum';
 import { PlayerService } from '../player.service';
 import { ErrorNotifierService } from '@core/error-notifier.service';
-import { StyleColor } from '@core/model/color.enum';
 import { ShardCardDeck } from '@core/model/cards';
 import { CardService } from '../card.service';
 import { RouteInfoDialogComponent, RouteInfoData } from './route-info-dialog/route-info-dialog.component';
@@ -61,14 +60,12 @@ export class MapComponent implements OnInit {
       this.errorNotifier.notifyHeading('MapComponent::onRouteOwnershipChange', 'Got a player that doesn\'t exist! playerid = ' + route.ownerId);
     }
 
-    const color = '#' + StyleColor[player.color];
-
     const routeLine = this.mapSvg.nativeElement.getElementById(route.routeName + '-fg');
     if (!routeLine) {
       this.errorNotifier.notifyHeading('MapComponent::onRouteOwnershipChange', 'Unable to find the -fg line for route ' + route.routeName);
       return;
     }
-    routeLine.style.stroke = color;
+    routeLine.style.stroke = player.getStyleColor();
   }
 
   private openRouteInfo(routeName: RouteName) {

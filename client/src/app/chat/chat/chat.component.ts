@@ -4,6 +4,7 @@ import { UserService } from '@core/user.service';
 import { ChatMessage } from '@core/model/chat-message';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { User } from '@core/model/user';
+import { PlayerService } from 'src/app/game/player.service';
 
 @Component({
   selector: 'app-chat',
@@ -11,7 +12,7 @@ import { User } from '@core/model/user';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  constructor(public chatService: ChatService, public userService: UserService) {
+  constructor(public chatService: ChatService, public userService: UserService, private playerService: PlayerService) {
   }
   @ViewChild('chatBox') private chatBox: ElementRef;
 
@@ -68,5 +69,9 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   private scrollBottom() {
     this.chatBox.nativeElement.scrollTop = this.chatBox.nativeElement.scrollHeight;
+  }
+
+  public getMessageTextStyle(message: ChatMessage){
+    return message.getIsEvent() ? this.playerService.getMyPlayerCSSColor('color') : {};
   }
 }

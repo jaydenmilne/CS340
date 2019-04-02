@@ -1,4 +1,4 @@
-import { Color } from './color.enum';
+import { Color, StyleColor } from './color.enum';
 
 export class GamePlayer {
     public color: Color;
@@ -45,4 +45,11 @@ export class GamePlayer {
         this.color = Color[color.toUpperCase()];
     }
 
+    public getStyleColor(): StyleColor{
+        return  StyleColor[this.color];
+    }
+
+    public getCSSColor(attribute: string){
+        return { [attribute]: '#' + StyleColor[this.color]};
+    }
 }
