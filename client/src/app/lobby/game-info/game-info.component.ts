@@ -27,7 +27,7 @@ export class GameInfoComponent implements OnInit {
 
   public getPlayerColorStyle(player: Player) {
     const style = {
-      'background-color': '#' + StyleColor[player.getColor()]
+      'background-color': '#' + StyleColor[player.color]
     };
     return style;
   }

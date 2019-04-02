@@ -1,10 +1,10 @@
 import { Color } from './color.enum';
 
 export class Player {
-    private color: Color;
-    private userId: number;
-    private ready: boolean;
-    private username: string;
+    public color: Color;
+    public userId: number;
+    public ready: boolean;
+    public username: string;
 
     constructor(player: any) {
         if (!('userId' in player &&
@@ -20,36 +20,5 @@ export class Player {
         this.username = player.username;
     }
 
-    public setColor(color: string) {
-        this.color = Color[color.toUpperCase()];
-    }
-
-    public getColor(): Color {
-        return this.color;
-    }
-
-    public getuserId(): number {
-        return this.userId;
-    }
-
-    public setuserId(userId: number) {
-        this.userId = userId;
-    }
-
-    public isReady(): boolean {
-        return this.ready;
-    }
-
-    public setReady(ready: boolean) {
-        this.ready = ready;
-    }
-
-    public getName(): string {
-        return this.username;
-    }
-
-    public setHandle(handle: string) {
-        this.username = handle;
-    }
 }
 
