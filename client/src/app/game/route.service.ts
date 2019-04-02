@@ -232,4 +232,10 @@ export class RouteService {
        return true;
     }
   }
+
+  public clearData(){
+    this.routes.forEach(route => {
+      route.ownerId = -1;
+    });
+  }
 }

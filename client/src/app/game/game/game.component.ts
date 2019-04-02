@@ -12,6 +12,9 @@ import { RejoinGameCommand } from '@core/game-commands';
 import { GameOverViewData, GameOverDialogComponent } from '../game-over-dialog/game-over-dialog.component';
 import { PlayerService } from '../player.service';
 import { ShardCard } from '@core/model/cards';
+import { ChatService } from 'src/app/chat/chat.service';
+import { RouteService } from '../route.service';
+import { TurnService } from '../turn/turn.service';
 
 @Component({
   selector: 'app-game',
@@ -24,10 +27,13 @@ export class GameComponent implements OnInit {
     private serverConnection: ServerConnectionService,
     private serverProxy: ServerProxyService,
     public dialog: MatDialog, private cardService: CardService,
-    private notifierService: PlayerNotifierService,
     private snackBar: MatSnackBar,
+    private notifierService: PlayerNotifierService,
     private userService: UserService,
     private playerService: PlayerService,
+    private chatService: ChatService,
+    private routeService: RouteService,
+    private turnService: TurnService,
     private router: Router) {
 
   }
@@ -91,8 +97,18 @@ export class GameComponent implements OnInit {
       disableClose: false
     });
     dialogRef.afterClosed().subscribe(gameOverDialogResult => {
+      this.resetGame();// Clear Data
       this.router.navigate(['/lobby']);
     });
+  }
+
+  private resetGame(){  // Reset all game state data
+    this.playerService.clearData();
+    this.cardService.clearData();
+    this.notifierService.clearData();
+    this.chatService.clearData();
+    this.routeService.clearData();
+    this.turnService.clearData();
   }
 }
 

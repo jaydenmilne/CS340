@@ -33,4 +33,7 @@ export class ChatService {
     this.chatUpdated$.emit(null);
   }
 
+  public clearData(){
+    this.chatHistory = [];
+  }
 }

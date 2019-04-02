@@ -38,6 +38,11 @@ export class PlayerNotifierService {
     this.lastMsgComplete = false;
     this.playerNotification$.next(this.notificationQueue.shift());
   }
+
+  public clearData(){
+    this.notificationQueue = [];
+    this.lastMsgComplete = true;
+  }
 }
 
 export interface IPlayerNotification{
