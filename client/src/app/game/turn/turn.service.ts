@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ITurnState, NotPlayersTurnState } from './turn-states';
 import { PlayerService } from '../player.service';
-import { ChangeTurnCommand } from '@core/game-commands';
+import { ChangeTurnCommand, SkipTurnCommand } from '@core/game-commands';
 import { CommandRouterService } from '@core/command-router.service';
 import { PlayerNotifierService } from '@core/player-notifier.service';
+import { ServerProxyService } from '@core/server/server-proxy.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class TurnService {
   private router: CommandRouterService;
 
   constructor(
-    playerService: PlayerService,
+    private serverProxy: ServerProxyService,
+    private playerService: PlayerService,
     router: CommandRouterService,
     private playerNotifier: PlayerNotifierService) {
     this.state = new NotPlayersTurnState(playerService, this, playerNotifier);
@@ -21,6 +23,10 @@ export class TurnService {
 
     this.router.changeTurn$.subscribe(cmd => this.onChangeTurn(cmd));
     this.router.gameOver$.subscribe(cmd => this.onGameOver());
+  }
+
+  public skipTurn() {
+    this.serverProxy.executeCommand(new SkipTurnCommand());
   }
 
   isMyTurn(): boolean {

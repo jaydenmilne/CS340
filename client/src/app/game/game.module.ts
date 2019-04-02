@@ -5,7 +5,7 @@ import { PlayerListComponent } from './player-list/player-list.component';
 import { GutterComponent} from './gutter/gutter.component';
 import { MapComponent } from './map/map.component';
 import { BankComponent } from './bank/bank.component';
-import { MatGridListModule, MatChipsModule, MatDialogModule, MatButtonModule, MatTabsModule, MatSnackBarModule, MatTableModule } from '@angular/material';
+import { MatGridListModule, MatChipsModule, MatDialogModule, MatButtonModule, MatTabsModule, MatSnackBarModule, MatTableModule, MatTooltipModule } from '@angular/material';
 import { MatCardModule } from '@angular/material';
 import { PlayerInfoDialogComponent } from './player-list/player-list.component';
 import { ChatModule } from '../chat/chat.module';
@@ -31,6 +31,7 @@ import { GameOverDialogComponent } from './game-over-dialog/game-over-dialog.com
     MatButtonModule,
     MatBadgeModule,
     MatTableModule,
+    MatTooltipModule,
     ChatModule
   ]
 })

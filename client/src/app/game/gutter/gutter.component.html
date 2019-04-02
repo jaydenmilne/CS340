@@ -1,10 +1,17 @@
 <mat-tab-group headerPosition="below" class="full-height">
   <mat-tab label="Shard Cards" class="cards-gutter">
     <div class="shard-box full-height">
-    <div class="shard-cell inline" *ngFor="let shardType of cardService.playerTrainCards.types"><mat-card class="shard-card inline" matBadge="{{cardService.playerTrainCards.getCountOf(shardType)}}"><img class="shard-icon" src="assets/img/shards/{{getCardImage(shardType)}}"></mat-card>
+    <div class="shard-cell inline" *ngFor="let shardType of cardService.playerTrainCards.types">
+      <mat-card 
+        class="shard-card inline" 
+        matTooltip="{{getTooltip(shardType)}}"        
+        matBadge="{{cardService.playerTrainCards.getCountOf(shardType)}}">
+        <img class="shard-icon" src="assets/img/shards/{{getCardImage(shardType)}}"></mat-card>
     </div>
     <div class="shard-dummy-cell"></div>
-    <div class="shard-cell inline"><mat-card class="shard-card no-shadow inline" matBadge="{{getRemainingShards()}}">
+    <div class="shard-cell inline">
+      <!-- https://marvelcinematicuniverse.fandom.com/wiki/Universal_Neural_Teleportation_Network -->
+      <mat-card matTooltip="Jump Claiming Energy" class="shard-card no-shadow inline" matBadge="{{getRemainingShards()}}">
       <svg
    viewBox="0 0 51.906666 72.639999"
   class="shard-icon shard-count-icon"

@@ -1,7 +1,6 @@
 package models
 
 import commands.CommandException
-import java.lang.Exception
 
 /* CITY NAMES */
 const val DARK_DIMENSION = "darkdimension"
@@ -251,30 +250,28 @@ class RouteList {
     }
 
     fun pathBetweenCities(city1: String, city2: String, userId: Int): Boolean {
-        try {
-            return routesByRouteId
-                    .filter { entry -> entry.value.cities.contains(city1) }
-                    .map { entry ->
-                        pathBetweenCities(city1,
-                                entry.value.cities.filter { c -> c != city1 }[0],
-                                userId,
-                                mapOf<Route, Boolean>(entry.value to true))
-                    }
-                    .reduceRight { a, b -> a || b }
-        }
-        catch(e: Exception) {
-            return false
-        }
-    }
+        var queue = mutableListOf<String>(city1)
+        var visited = mutableMapOf<String, Boolean>()
 
-    fun pathBetweenCities(city1: String, city2: String, userId: Int, visited: Map<Route, Boolean>): Boolean {
-        return routesByRouteId
-                .filter { entry -> entry.value.cities.contains(city1) && !(visited[entry.value]!!) }
-                .map { entry -> pathBetweenCities(city1,
-                        entry.value.cities.filter { c -> c != city1 }[0],
-                        userId,
-                        visited.plus(entry.value to true)) }
-                .reduceRight {a, b -> a || b}
+        while (queue.isNotEmpty()) {
+            var node = queue.removeAt(0)
+            visited[node] = true
+
+            if (node == city2) {
+                return true
+            }
+
+            var discoveredNodes = routesByRouteId.map { e -> e.value }
+                    .filter { r -> r.cities.contains(node) && r.ownerId == userId}
+                    .map { r -> r.cities.minus(node).elementAt(0)}
+
+            discoveredNodes = discoveredNodes.filter { c -> !(visited[c] ?: false) }
+
+            queue.addAll(discoveredNodes)
+        }
+
+        return false
+
     }
 }
 

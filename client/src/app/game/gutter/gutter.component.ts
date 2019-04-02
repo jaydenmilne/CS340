@@ -43,6 +43,10 @@ export class GutterComponent implements OnInit {
     return this.playerService.myPlayer.numRemainingTrains;
   }
 
+  public getTooltip(type : MaterialType) : string {
+    return ShardCard.getPrintName(type);
+  }
+
   getPlayerColorStyle() {
     if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null) {
       return {'fill': '#' + StyleColor.YELLOW};
