@@ -1,4 +1,4 @@
-import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
+import { ViewChild, ElementRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { RouteService } from '../route.service';
 import { Route } from '@core/model/route';
 import { RouteName } from '@core/model/route-name.enum';
@@ -10,16 +10,18 @@ import { CardService } from '../card.service';
 import { RouteInfoDialogComponent, RouteInfoData } from './route-info-dialog/route-info-dialog.component';
 import { MatDialog } from '@angular/material';
 import { ClaimRoutesDialogComponent, ClaimRouteData } from '../claim-routes-dialog/claim-routes-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
 
   constructor(public routeService: RouteService, private cardService: CardService , private playerService: PlayerService, private errorNotifier: ErrorNotifierService,  public dialog: MatDialog) {
-      this.routeService.routeOwnershipChanged$.subscribe( route => this.onRouteOwnershipChange(route));
+      this.subscriptions.push(this.routeService.routeOwnershipChanged$.subscribe( route => this.onRouteOwnershipChange(route)));
      }
 
   @ViewChild('mapSvg')
@@ -31,6 +33,10 @@ export class MapComponent implements OnInit {
     }
 
     this.mapSvg.nativeElement.addEventListener('click', this.onSvgClick.bind(this));
+  }
+
+  ngOnDestroy(){
+    this.subscriptions.forEach(sub => { sub.unsubscribe() });
   }
 
   private onSvgClick(event: any) {

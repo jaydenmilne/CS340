@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
 import { MatDialog, MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material';
@@ -15,13 +15,15 @@ import { ShardCard } from '@core/model/cards';
 import { ChatService } from 'src/app/chat/chat.service';
 import { RouteService } from '../route.service';
 import { TurnService } from '../turn/turn.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private serverConnection: ServerConnectionService,
@@ -35,19 +37,19 @@ export class GameComponent implements OnInit {
     private routeService: RouteService,
     private turnService: TurnService,
     private router: Router) {
-
+      // If we haven't been logged in, go to the login page
+   
   }
 
   ngOnInit() {
-    // If we haven't been logged in, go to the login page
     if (!this.userService.isLoggedIn) {
       this.router.navigate(['/login']);
       return;
     }
 
-    this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
-    this.notifierService.playerNotification$.subscribe(message => this.displayNotification(message));
-    this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints));
+    this.subscriptions.push(this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result)));
+    this.subscriptions.push(this.notifierService.playerNotification$.subscribe(message => this.displayNotification(message)));
+    this.subscriptions.push(this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints)));
 
     // Change the game connection to server mode
     this.serverConnection.changeState(new GameState(this.serverConnection));
@@ -60,6 +62,10 @@ export class GameComponent implements OnInit {
       // New game. Request cards
       this.cardService.requestDestinationCards();
     }
+  }
+
+  ngOnDestroy(){
+    this.subscriptions.forEach(sub => { sub.unsubscribe() });
   }
 
   public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData) {
