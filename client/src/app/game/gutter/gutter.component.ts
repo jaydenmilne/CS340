@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MaterialType } from '@core/model/material-type.enum';
 import { CardService } from '../card.service';
 import { PlayerService } from '../player.service';
-import { StyleColor } from '@core/model/color.enum';
 import { ShardCard } from '@core/model/cards';
 
 
@@ -47,12 +46,5 @@ export class GutterComponent implements OnInit {
     return ShardCard.getPrintName(type);
   }
 
-  getPlayerColorStyle() {
-    if (this.playerService.myPlayer === undefined || this.playerService.myPlayer === null) {
-      return {'fill': '#' + StyleColor.YELLOW};
-    }
-
-    return {'fill': '#' + StyleColor[this.playerService.myPlayer.color]};
-  }
 }
 

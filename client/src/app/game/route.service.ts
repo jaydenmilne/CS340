@@ -160,25 +160,25 @@ export class RouteService {
     if (!this.turnService.canClaimRoutes()) {
       return false;
     }
-    let numGoodCards: number;
-    let validClaim = false;
-    if (route.type === RouteType.ANY) {
-      validClaim = this.canClaimAnyRouteType(route.numCars, hand);
-    } else {
-        validClaim = this.canClaimRouteType(route.type, hand, route.numCars);
-    }
-    if (route.numCars > this.playerService.myPlayer.numRemainingTrains) {
-      validClaim = false;
-    }
-    if (validClaim) {
-      if (this.playerService.players.length > 2) {
-        return true;
-        } else {
-          return this.checkDoubleRoute(route);
-        }
-    } else {
+
+    if (route.ownerId != -1) {
       return false;
     }
+
+    if ((route.type === RouteType.ANY && !this.canClaimAnyRouteType(route.numCars, hand)) ||
+        (route.type !== RouteType.ANY && !this.canClaimRouteType(route.type, hand, route.numCars))) {
+      return false;
+    }
+
+    if (route.numCars > this.playerService.myPlayer.numRemainingTrains) {
+      return false;
+    }
+
+    if (this.playerService.players.length < 4 && this.isDoubleRoute(route) && this.otherDoubleRouteClaimed(route)) {
+      return false;
+    }
+
+    return true;
   }
 
   private canClaimAnyRouteType(cardsNeeded: number, hand: ShardCardDeck): boolean {
@@ -219,17 +219,32 @@ export class RouteService {
     this.server.executeCommand(new ClaimRouteCommand(route.routeName, cards.cards));
    }
 
-   private checkDoubleRoute(route: Route): boolean {
-     let routeBrother = route.routeName.slice(0, -1); // Removes last letter from route
-     if (route.routeName.endsWith('1')) { // Checks for routes ending with 1 and sees if brother route of two is claimed
+   /**
+    * Deterimes if the given route has a double
+    * @param route Route to check to see if it has a double
+    * @returns true or false
+    */
+   private isDoubleRoute(route: Route) : boolean {
+    return route.routeName.endsWith('1') || route.routeName.endsWith('2');
+   }
+
+   /**
+    * Determines if the given route's twin is claimed
+    * @param route a double route
+    * @returns true if the brother route is claimed
+    */
+   private otherDoubleRouteClaimed(route: Route): boolean {
+    // Removes last letter from route
+    let routeBrother = route.routeName.slice(0, -1); 
+
+    // Checks for routes ending with 1 and sees if brother route of two is claimed
+    if (route.routeName.endsWith('1')) { 
       routeBrother = routeBrother.concat('2').toUpperCase();
-      console.log(routeBrother);
-      return(this.routes.get(RouteName[routeBrother]).ownerId === -1);
-    } else if (route.routeName.endsWith('2')) {// Checks for routes ending with 1 and sees if brother route of two is claimed
+      return this.routes.get(RouteName[routeBrother]).ownerId !== -1;
+    } else {
+      // Route ends with 2, check route that ends with 1
       routeBrother = routeBrother.concat('1').toUpperCase();
-      return(this.routes.get(RouteName[routeBrother]).ownerId === -1);
-    } else { // Returns this is route isn't a duplicated route
-       return true;
+      return this.routes.get(RouteName[routeBrother]).ownerId !== -1;
     }
   }
 

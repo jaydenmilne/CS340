@@ -10,7 +10,7 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
 import java.net.InetSocketAddress
 
-const val MAX_CONNECTIONS = 10
+const val MAX_CONNECTIONS = 1
 const val REGISTRATION_ENDPOINT = "/register"
 const val COMMAND_ENDPOINT = "/command"
 const val PORT = 4300
@@ -181,7 +181,7 @@ fun handlePost(httpExchange: HttpExchange) {
         }
 
     } catch (e: Exception) {
-        println(e)
+        e.printStackTrace()
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
 

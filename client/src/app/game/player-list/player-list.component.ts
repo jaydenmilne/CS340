@@ -33,7 +33,7 @@ export class PlayerListComponent implements OnInit {
 
   public getPlayerColorStyle(player: GamePlayer) {
     const style = {
-      'border-color': '#' + StyleColor[player.color],
+      'border-color': '#' + player.getStyleColor(),
       'border-width': '4px',
       'border-style': 'solid',
       'background-color': 'transparent'
@@ -41,7 +41,7 @@ export class PlayerListComponent implements OnInit {
 
     if (this.playerService.activePlayerId === player.userId) {
       // Highlight this player
-      style['background-color'] = '#' + StyleColor[player.color];
+      style['background-color'] = '#' + player.getStyleColor();
     }
 
     return style;

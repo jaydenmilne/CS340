@@ -127,12 +127,22 @@ class Game(var name: String) {
         NOT_ENOUGH_SHARD_CARDS_USED,
         USER_DOES_NOT_HAVE_ENOUGH_CARDS,
         WRONG_TYPE_USED_TO_CLAIM_ROUTE,
-        INVALID_MIX_OF_CARDS
+        INVALID_MIX_OF_CARDS,
+        NO_CARDS_USED_TO_CLAIM
     }
 
     fun canClaimRoute(user: User, routeId: String, cardsUsedToClaim: Array<ShardCard>): CanClaimRouteResult {
 
-        val routeToClaim = routes.routesByRouteId[routeId]
+        if (cardsUsedToClaim.size == 0) {
+            return CanClaimRouteResult.NO_CARDS_USED_TO_CLAIM
+        }
+
+        val routeToClaim = routes.routesByRouteId[routeId] ?: throw RuntimeException("Invalid route ID")
+
+        // Check if route is not owned
+        if (routeToClaim.ownerId != -1) {
+            return CanClaimRouteResult.ROUTE_IS_OWNED
+        }
 
         // Check if route is disabled for 2 or 3 player mode
         if (players.size < 4) {
@@ -148,15 +158,6 @@ class Game(var name: String) {
             if (routes.routesByRouteId[newRouteId.toString()]!!.ownerId != -1) {
                 return CanClaimRouteResult.ROUTE_DISABLED_LESS_THAN_THREE_PLAYERS
             }
-        }
-
-        if (routeToClaim == null) {
-            throw RuntimeException("Invalid route ID")
-        }
-        
-        // Check if route is not owned
-        if (routeToClaim.ownerId != -1) {
-            return CanClaimRouteResult.ROUTE_IS_OWNED
         }
 
         // Check user's energy
@@ -212,6 +213,7 @@ class Game(var name: String) {
 
         // Recalculate if this player has the longest route
         longestRouteManager.playerClaimedRoute(user.userId)
+
         user.numRemainingTrains -= route.numCars
 
         if (route.cities.size == 2) {
@@ -256,9 +258,11 @@ class Game(var name: String) {
             if (lastRoundInitiator == getTurningPlayer()) {
                 this.endGame()
             }
-            // advance to the next player
-            this.incPlayerTurn()
-            this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+            else {
+                // advance to the next player
+                this.incPlayerTurn()
+                this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+            }
         }
     }
 

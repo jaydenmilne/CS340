@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CommandRouterService } from '@core/command-router.service';
-import { Color } from '@core/model/color.enum';
+import { Color, StyleColor } from '@core/model/color.enum';
 import { UpdatePlayerCommand, ChangeTurnCommand, GameOverCommand, LastRoundCommand } from '@core/game-commands';
 import { GamePlayer } from '@core/model/game-player';
 import { notEqual } from 'assert';
@@ -69,6 +69,31 @@ export class PlayerService {
 
   private onLastRound(){
     this.playerNotifier.notifyPlayer("Last Round Has Begun!")
+  }
+
+  getMyPlayerColor(): StyleColor{
+    if (this.myPlayer === undefined || this.myPlayer === null) {
+      return StyleColor.YELLOW;
+    }
+
+    return this.myPlayer.getStyleColor();
+  }
+
+  getPlayerCSSColor(playerId: number, attribute: string) {
+    let player: GamePlayer = this.playersById.get(playerId)
+    if (player === undefined || player === null) {
+      return {[attribute]: '#' + StyleColor.YELLOW};
+    }
+
+    return player.getCSSColor(attribute);
+  }
+
+  getMyPlayerCSSColor(attribute: string) {
+    if (this.myPlayer === undefined || this.myPlayer === null) {
+      return {[attribute]: '#' + StyleColor.YELLOW};
+    }
+
+    return this.myPlayer.getCSSColor(attribute);
   }
 
   constructor(private commandRouter: CommandRouterService, private userService: UserService,

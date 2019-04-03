@@ -1,3 +1,6 @@
+@import "colors.scss";
+@import "~@angular/material/theming";
+
 .chat-message-card{
     max-width: 100%;
     word-wrap: break-word;
@@ -17,8 +20,6 @@
 }
 .event-message{
     box-shadow: none;
-    color: red;
-    text-align: left;    
     margin: 5px 0 0 0;
     padding: 0;
     background-color: transparent;
