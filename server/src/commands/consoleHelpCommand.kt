@@ -1,9 +1,8 @@
 package commands
 
 import models.*
-import java.lang.RuntimeException
 
-class DebugHelpCommand : INormalServerCommand{
+class DebugHelpCommand : INormalServerCommand {
     override val command = DEBUG_HELP
     val action = ""
     override fun execute(user: User) {
@@ -45,7 +44,7 @@ class DebugHelpCommand : INormalServerCommand{
         if (game == null) {
             return
         }
-        game.routes.routesByRouteId.forEach{
+        game.routes.routesByRouteId.forEach {
             if (it.value.ownerId != -1) {
                 it.value.ownerId = user.userId
                 val routeClaimed = RouteClaimedCommand()
@@ -94,7 +93,7 @@ class DebugHelpCommand : INormalServerCommand{
             return
         }
         game.players.forEach {
-            if(it != user) {
+            if (it != user) {
                 it.numRemainingTrains = 100
                 it.updateHand()
             }
@@ -110,7 +109,7 @@ class DebugHelpCommand : INormalServerCommand{
         }
         game.destinationCardDeck = DestinationCardDeck(mutableListOf())
         game.players.forEach {
-            if(it != user) {
+            if (it != user) {
                 it.destinationCards = DestinationCardDeck(mutableListOf()).initializeDeck()
                 it.shardCards = ShardCardDeck(mutableListOf())
                 it.updateHand()
@@ -130,7 +129,7 @@ class DebugHelpCommand : INormalServerCommand{
             return
         }
         game.players.forEach {
-            if(it != user) {
+            if (it != user) {
                 it.destinationCards = DestinationCardDeck(mutableListOf()).initializeDeck()
                 it.updateHand()
                 game.updatePlayer(it)
@@ -177,8 +176,8 @@ class DebugHelpCommand : INormalServerCommand{
             } catch (e: Exception) {
                 throw CommandException("Type Not Found")
             }
-        }else{
-            for(i in 0..2) {
+        } else {
+            for (i in 0..2) {
                 dealCardsCmd.shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
                 dealCardsCmd.shardCards.add(ShardCard(MaterialType.SPACE_SHARD))
                 dealCardsCmd.shardCards.add(ShardCard(MaterialType.SOUL_SHARD))
@@ -195,7 +194,7 @@ class DebugHelpCommand : INormalServerCommand{
 
     }
 
-    private fun endGame(user:User) {
+    private fun endGame(user: User) {
         val game = Games.getGameForPlayer(user)
         if (game == null) {
             return

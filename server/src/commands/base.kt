@@ -63,4 +63,4 @@ interface INormalClientCommand : INormalCommand {
     override val command: String
 }
 
-class CommandException(message:String): Exception(message)
+class CommandException(message: String) : Exception(message)

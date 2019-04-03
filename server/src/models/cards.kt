@@ -3,18 +3,27 @@ package models
 import com.google.gson.annotations.SerializedName
 
 enum class MaterialType(val material: String) {
-    @SerializedName("reality_shard") REALITY_SHARD("reality_shard"),
-    @SerializedName("soul_shard") SOUL_SHARD("soul_shard"),
-    @SerializedName("space_shard") SPACE_SHARD("space_shard"),
-    @SerializedName("mind_shard") MIND_SHARD("mind_shard"),
-    @SerializedName("power_shard") POWER_SHARD("power_shard"),
-    @SerializedName("time_shard") TIME_SHARD("time_shard"),
-    @SerializedName("vibranium") VIBRANIUM("vibranium"),
-    @SerializedName("palladium") PALLADIUM("palladium"),
-    @SerializedName("infinity_gauntlet") INFINITY_GAUNTLET("infinity_gauntlet");
+    @SerializedName("reality_shard")
+    REALITY_SHARD("reality_shard"),
+    @SerializedName("soul_shard")
+    SOUL_SHARD("soul_shard"),
+    @SerializedName("space_shard")
+    SPACE_SHARD("space_shard"),
+    @SerializedName("mind_shard")
+    MIND_SHARD("mind_shard"),
+    @SerializedName("power_shard")
+    POWER_SHARD("power_shard"),
+    @SerializedName("time_shard")
+    TIME_SHARD("time_shard"),
+    @SerializedName("vibranium")
+    VIBRANIUM("vibranium"),
+    @SerializedName("palladium")
+    PALLADIUM("palladium"),
+    @SerializedName("infinity_gauntlet")
+    INFINITY_GAUNTLET("infinity_gauntlet");
 
     companion object {
-        fun matchesRouteType(routeType: RouteType, materialType: MaterialType) : Boolean {
+        fun matchesRouteType(routeType: RouteType, materialType: MaterialType): Boolean {
 
             // Infinity Gauntlet matches any route type
             if (materialType == INFINITY_GAUNTLET) {
@@ -40,7 +49,7 @@ enum class MaterialType(val material: String) {
 
 interface ICard
 
-class ShardCard(val type: MaterialType) : ICard{
+class ShardCard(val type: MaterialType) : ICard {
     constructor() : this(MaterialType.INFINITY_GAUNTLET)
 
     override fun equals(other: Any?): Boolean {
@@ -113,9 +122,9 @@ abstract class IDeck<T>(var cards: MutableList<T>) {
 
 }
 
-class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards){
-    fun initializeDeck(): ShardCardDeck{
-        for(i in 0..11){
+class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards) {
+    fun initializeDeck(): ShardCardDeck {
+        for (i in 0..11) {
             shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
             shardCards.add(ShardCard(MaterialType.MIND_SHARD))
             shardCards.add(ShardCard(MaterialType.PALLADIUM))
@@ -125,15 +134,16 @@ class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(s
             shardCards.add(ShardCard(MaterialType.SOUL_SHARD))
             shardCards.add(ShardCard(MaterialType.SPACE_SHARD))
             shardCards.add(ShardCard(MaterialType.TIME_SHARD))
-            if( i < 2){
+            if (i < 2) {
                 shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
             }
         }
         return this
     }
 }
-class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards){
-    fun initializeDeck(): DestinationCardDeck{
+
+class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards) {
+    fun initializeDeck(): DestinationCardDeck {
         destinationCards.add(DestinationCard(setOf("titan", "kunlun"), 4))
         destinationCards.add(DestinationCard(setOf("caveofages", "svartlheim"), 5))
         destinationCards.add(DestinationCard(setOf("avengershq", "yotunheim"), 6))

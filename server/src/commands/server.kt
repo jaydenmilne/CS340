@@ -1,7 +1,6 @@
 package commands
 
 import models.*
-import java.lang.RuntimeException
 
 
 /**
@@ -244,7 +243,7 @@ class RequestDestinationsCommand : INormalServerCommand {
         var dealtDestinationCards = mutableListOf<DestinationCard>()
         var dealtShardCards = mutableListOf<ShardCard>()
 
-        if(game.whoseTurn == -1) {
+        if (game.whoseTurn == -1) {
 
             /* Deal 4 train cards to user */
             for (i in 0..3) {
@@ -254,7 +253,7 @@ class RequestDestinationsCommand : INormalServerCommand {
                 dealtShardCards.add(nextShardCard)
             }
 
-        }else{
+        } else {
             dealCardsCommand.minDestinations = 1
             if (game.getTurningPlayer() != user) {
                 throw CommandException("RequestDestinations: Not Your Turn")
@@ -298,7 +297,7 @@ class RejoinGameCommand : INormalServerCommand {
         // 1. Send updatePlayers for every player
         val game = Games.getGameForPlayer(user) ?: throw CommandException("RejoinGameCommand: User is not in a game")
 
-        game.players.forEach {player -> game.updatePlayer(player) }
+        game.players.forEach { player -> game.updatePlayer(player) }
 
         // 2. Send the bank info to the client
         game.updatebank()
@@ -332,7 +331,8 @@ class DiscardDestinationsCommand : INormalServerCommand {
     private val discardedDestinations = listOf<DestinationCard>()
 
     override fun execute(user: User) {
-        val game = Games.getGameForPlayer(user) ?: throw CommandException("DiscardDestinationsCommand Command:User not in a game")
+        val game = Games.getGameForPlayer(user)
+                ?: throw CommandException("DiscardDestinationsCommand Command:User not in a game")
 
         if (user.turnOrder == -1) {
             user.turnOrder = game.destDiscardOrder++
@@ -356,14 +356,14 @@ class ClaimRouteCommand : INormalServerCommand {
     private val routeId = ""
     private val shardsUsed = listOf<ShardCard>()
 
-  
-      override fun execute(user: User) {
+
+    override fun execute(user: User) {
         val game = Games.getGameForPlayer(user) ?: throw RuntimeException("User not in a game")
 
-          val claimRouteResult = game.canClaimRoute(user, routeId, shardsUsed.toTypedArray())
+        val claimRouteResult = game.canClaimRoute(user, routeId, shardsUsed.toTypedArray())
 
         if (claimRouteResult == Game.CanClaimRouteResult.CLAIM_OK) {
-            shardsUsed.forEach{card -> user.shardCards.shardCards.remove(card)}
+            shardsUsed.forEach { card -> user.shardCards.shardCards.remove(card) }
             game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
 
             game.claimRoute(user, routeId, shardsUsed)
@@ -380,11 +380,10 @@ class ClaimRouteCommand : INormalServerCommand {
 
             game.advanceTurn()
 
-            if  (user.numRemainingTrains < 4) {
+            if (user.numRemainingTrains < 4) {
                 game.startLastRound(user)
             }
-        }
-        else {
+        } else {
             throw CommandException("ClaimRouteCommand: Route cannot be claimed. " + claimRouteResult.name)
         }
     }
@@ -394,7 +393,7 @@ class DrawShardCardCommand : INormalServerCommand {
     override val command = DRAW_SHARD_CARD
     var card = ""
     var cardToSend = ShardCard()
-  
+
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user) ?: throw CommandException("DrawShardCard Command: User not in a game")
 
@@ -430,7 +429,7 @@ class DrawShardCardCommand : INormalServerCommand {
                 cardToSend = validCards[0]
 
                 // check if there are more then 2 infinity gauntlets in the deck
-                if ((game.faceUpShardCards.shardCards.filter{s -> s.type.material == "infinity_gauntlet"}).size > 2) {
+                if ((game.faceUpShardCards.shardCards.filter { s -> s.type.material == "infinity_gauntlet" }).size > 2) {
                     game.redrawFaceUpCards()
                 }
                 // check if deck is empty then shuffle discard
@@ -448,7 +447,7 @@ class DrawShardCardCommand : INormalServerCommand {
         user.shardCards.shardCards.add(cardToSend)
         dealCardsCmd.shardCards.add(cardToSend)
         user.queue.push(dealCardsCmd)
-        
+
         game.updatebank()
         game.updatePlayer(user)
 

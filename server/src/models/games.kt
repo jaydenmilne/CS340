@@ -1,7 +1,6 @@
 package models
 
 import commands.*
-import java.lang.RuntimeException
 
 private var nextGameId = -1
 
@@ -22,8 +21,7 @@ object Games {
             if (user in game.players) {
                 if (game.started) {
                     throw CommandException("JoinGameCommand: User is in a started game but tried to join another!")
-                }
-                else {
+                } else {
                     game.players.remove(user)
                 }
             }
@@ -49,21 +47,27 @@ class Game(var name: String) {
     var faceUpShardCards = ShardCardDeck(mutableListOf())
     var shardCardDiscardPile = ShardCardDeck(mutableListOf())
 
-    @Transient var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
+    @Transient
+    var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
 
 
     var whoseTurn: Int = -1
 
     var chatMessages = mutableListOf<Message>()
     var destDiscardOrder = 0
-    @Transient var longestRouteManager = LongestRouteManager(this)
+    @Transient
+    var longestRouteManager = LongestRouteManager(this)
 
 
-    @Transient public var routes = RouteList()
-    @Transient private var lastRoundInitiator = User("")
-    @Transient private var lastRoundStarted = false;
+    @Transient
+    public var routes = RouteList()
+    @Transient
+    private var lastRoundInitiator = User("")
+    @Transient
+    private var lastRoundStarted = false;
 
-    @Transient private var nextMessageId = -1
+    @Transient
+    private var nextMessageId = -1
 
     init {
         longestRouteManager.init()
@@ -100,7 +104,7 @@ class Game(var name: String) {
         updatePlayerCommand.gamePlayer = user.toGamePlayer()
         broadcast(updatePlayerCommand)
     }
-  
+
 
     fun updatebank() {
         var updatebankCommand = UpdateBankCommand()
@@ -113,8 +117,10 @@ class Game(var name: String) {
 
     fun endGame() {
         var gameOverCommand = GameOverCommand(mutableListOf<PlayerPoints>())
-        players.forEach { gameOverCommand.players.add(it.toPlayerPoints())
-                        it.reset()}
+        players.forEach {
+            gameOverCommand.players.add(it.toPlayerPoints())
+            it.reset()
+        }
         broadcast(gameOverCommand)
         Games.games.remove(this.gameId)
     }
@@ -145,8 +151,7 @@ class Game(var name: String) {
             var newRouteId = StringBuilder().append(routeId)
             if (routeId[routeId.lastIndex] == '1') {
                 newRouteId.setCharAt(newRouteId.length - 1, '2')
-            }
-            else if (routeId[routeId.lastIndex] == '2') {
+            } else if (routeId[routeId.lastIndex] == '2') {
                 newRouteId.setCharAt(newRouteId.length - 1, '1')
             }
 
@@ -154,7 +159,6 @@ class Game(var name: String) {
                 return CanClaimRouteResult.ROUTE_DISABLED_LESS_THAN_THREE_PLAYERS
             }
         }
-
 
 
         // Check user's energy
@@ -194,17 +198,19 @@ class Game(var name: String) {
     }
 
     fun getRoutePointsForPlayer(userId: Int): Int {
-        return routes.routesByRouteId.map { entry -> when(entry.value.ownerId) {
-            userId -> entry.value.points
-            else -> 0
-        } }.reduce { totalPoints, points -> totalPoints + points}
+        return routes.routesByRouteId.map { entry ->
+            when (entry.value.ownerId) {
+                userId -> entry.value.points
+                else -> 0
+            }
+        }.reduce { totalPoints, points -> totalPoints + points }
     }
 
     fun getRouteBetweenCitiesForPlayer(userId: Int, city1: String, city2: String): Boolean {
         return routes.pathBetweenCities(city1, city2, userId)
     }
-  
-    fun claimRoute(user: User, routeId: String, cardsUsedToClaim: List<ShardCard> = listOf() ) {
+
+    fun claimRoute(user: User, routeId: String, cardsUsedToClaim: List<ShardCard> = listOf()) {
         val route = routes.routesByRouteId[routeId] ?: throw CommandException("Invalid Route ID")
         route.ownerId = user.userId
 
@@ -235,8 +241,7 @@ class Game(var name: String) {
                     cardsUsed)
 
             broadcastEvent(message)
-        }
-        else {
+        } else {
             throw RuntimeException("Route does not have two cities listed")
         }
         user.points += route.points
@@ -249,8 +254,7 @@ class Game(var name: String) {
                 this.incPlayerTurn()
                 this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
             }
-        }
-        else {
+        } else {
             //Checks for Last Round to End
             if (lastRoundInitiator == getTurningPlayer()) {
                 this.endGame()
@@ -262,10 +266,9 @@ class Game(var name: String) {
     }
 
     fun incPlayerTurn() {
-        if (this.whoseTurn == -1 || this.whoseTurn == this.players.size -1) {
+        if (this.whoseTurn == -1 || this.whoseTurn == this.players.size - 1) {
             this.whoseTurn = 0
-        }
-        else {
+        } else {
             this.whoseTurn++
         }
     }
@@ -317,8 +320,8 @@ class Game(var name: String) {
             }
         }
     }
-      
-    fun startLastRound(user:User) {
+
+    fun startLastRound(user: User) {
         if (!lastRoundStarted) { //Makes Sure Last Round Isn't Already Started
 
             var lastRoundCommand = LastRoundCommand()

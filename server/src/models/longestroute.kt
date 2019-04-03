@@ -4,7 +4,7 @@ import commands.CommandException
 import commands.UpdatePlayerCommand
 import kotlin.system.measureTimeMillis
 
-class LongestRouteManager(private val game : Game) {
+class LongestRouteManager(private val game: Game) {
     // Player id of the player who last got the longest route
     var currentPlayerWithLongestRoute = -1
     var longestRoute = 0
@@ -41,7 +41,7 @@ class LongestRouteManager(private val game : Game) {
     /**
      * Convenience function to find the other city in the array of cities on a route
      */
-    private fun otherCity(route : Route, firstCity : String) : String {
+    private fun otherCity(route: Route, firstCity: String): String {
         for (city in route.cities) {
             if (city == firstCity) continue
             return city
@@ -53,7 +53,7 @@ class LongestRouteManager(private val game : Game) {
     /**
      * Recursive function to compute the longest route possible from a given city
      */
-    private fun longestPathFromCity(city : String, longestSoFar : Int, playerid: Int) : Int {
+    private fun longestPathFromCity(city: String, longestSoFar: Int, playerid: Int): Int {
         val outgoingRoutes = adjacencyList[city]
         var longestFromThisCity = longestSoFar
 
@@ -93,7 +93,7 @@ class LongestRouteManager(private val game : Game) {
     /**
      * Called when a player claims a route. Recomputes who has the longest route
      */
-    fun playerClaimedRoute(playerid : Int) {
+    fun playerClaimedRoute(playerid: Int) {
         // Need to re-calculate the longest route for this given player
         var playerLongest = 0
 

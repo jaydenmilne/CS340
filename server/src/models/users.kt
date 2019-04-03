@@ -59,9 +59,12 @@ class User(var username: String) {
 
     var turnOrder = -1
 
-    @Transient private var passwordHash = ""
-    @Transient var queue = CommandQueue()
-    @Transient var isDrawingSecondCard = false
+    @Transient
+    private var passwordHash = ""
+    @Transient
+    var queue = CommandQueue()
+    @Transient
+    var isDrawingSecondCard = false
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)
@@ -89,7 +92,7 @@ class User(var username: String) {
                 this.turnOrder)
     }
 
-    fun updateHand(){
+    fun updateHand() {
         queue.push(UpdateHandCommand(destinationCards.destinationCards, shardCards.shardCards))
     }
 
@@ -186,6 +189,6 @@ class PlayerPoints(val userId: Int,
                    val claimedRoutePoints: Int,
                    val completedDestinationPoints: Int,
                    val incompleteDestinationPoints: Int,
-                   val longestRoutePoints: Int){
+                   val longestRoutePoints: Int) {
 
 }
