@@ -75,7 +75,8 @@ export class GameComponent implements OnInit {
       snackBarRef = this.snackBar.open(notification.msg, '', {duration: notification.displayTime});
     } else if (notification instanceof ShardNotification){  // Show Shard Card snack bar
       snackBarRef = this.snackBar.openFromComponent(ShardCardNotificationComponent, {
-        data: notification.msg, duration: notification.displayTime, horizontalPosition: 'right'
+        data: notification.msg, duration: notification.displayTime, 
+        panelClass: 'shard-snack-bar'
       });
     } else {  // Some other type?
       return;
@@ -116,6 +117,7 @@ export class GameComponent implements OnInit {
     height: 40px;
     width: 35px;
     padding: 5px;
+    margin: auto;
   }
   .shard-icon{
     height: 35px;
