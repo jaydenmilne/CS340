@@ -61,7 +61,10 @@ export class NotPlayersTurnState extends ITurnState {
   }
 
   enter() {
-    this.notifierService.notifyPlayer('Your turn is over.');
+    if (this.turnService.wasPlayersTurn) {
+      this.notifierService.notifyPlayer('Your turn is over.');
+      this.turnService.wasPlayersTurn = false;
+    }
   }
 
 }
@@ -109,6 +112,7 @@ export class PlayersTurnState extends ITurnState {
 
   enter() {
     this.notifierService.notifyPlayer('It is your turn!');
+    this.turnService.wasPlayersTurn = true;
   }
 }
 

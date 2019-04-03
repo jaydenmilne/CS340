@@ -12,6 +12,7 @@ import { ServerProxyService } from '@core/server/server-proxy.service';
 export class TurnService {
   private state: ITurnState;
   private router: CommandRouterService;
+  public wasPlayersTurn: Boolean = false;
 
   constructor(
     private serverProxy: ServerProxyService,
