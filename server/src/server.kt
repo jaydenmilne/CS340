@@ -181,7 +181,7 @@ fun handlePost(httpExchange: HttpExchange) {
         }
 
     } catch (e: Exception) {
-        println(e)
+        e.printStackTrace()
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
     }
 
