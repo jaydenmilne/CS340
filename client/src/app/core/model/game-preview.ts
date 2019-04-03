@@ -65,7 +65,7 @@ export class GamePreview {
         const takenColors: Color[] = [];
 
         this.players.forEach(player => {
-            takenColors.push(player.getColor());
+            takenColors.push(player.color);
         });
 
         const avaiableColors = [];
@@ -80,8 +80,8 @@ export class GamePreview {
     }
 
     public isPlayerReady(userId: number): boolean {
-        const player: Player = this.players.find(p => p.getuserId() === userId);
-        return (player !== undefined && player.isReady());
+        const player: Player = this.players.find(p => p.userId === userId);
+        return (player !== undefined && player.ready);
     }
 }
 
