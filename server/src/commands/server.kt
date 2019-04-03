@@ -380,7 +380,7 @@ class ClaimRouteCommand : INormalServerCommand {
 
             game.advanceTurn()
 
-            if  (user.numRemainingTrains < 4) {
+            if  (user.numRemainingTrains < 3) {
                 game.startLastRound(user)
             }
         }
