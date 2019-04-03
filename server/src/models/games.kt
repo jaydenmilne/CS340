@@ -132,6 +132,10 @@ class Game(var name: String) {
 
     fun canClaimRoute(user: User, routeId: String, cardsUsedToClaim: Array<ShardCard>): CanClaimRouteResult {
 
+        if (cardsUsedToClaim.size == 0) {
+            throw CommandException("canClaimRoute: Shard Card array is empty")
+        }
+
         val routeToClaim = routes.routesByRouteId[routeId] ?: throw RuntimeException("Invalid route ID")
 
         // Check if route is not owned
@@ -154,8 +158,6 @@ class Game(var name: String) {
                 return CanClaimRouteResult.ROUTE_DISABLED_LESS_THAN_THREE_PLAYERS
             }
         }
-
-
 
         // Check user's energy
         if (user.numRemainingTrains < routeToClaim.numCars) {
