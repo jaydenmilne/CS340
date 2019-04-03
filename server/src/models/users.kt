@@ -59,18 +59,15 @@ class User(var username: String) {
 
     var turnOrder = -1
 
-    @Transient
-    private var passwordHash = ""
-    @Transient
-    var queue = CommandQueue()
-    @Transient
-    var isDrawingSecondCard = false
+    @Transient private var passwordHash = ""
+    @Transient var queue = CommandQueue()
+    @Transient var isDrawingSecondCard = false
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)
     }
 
-    fun updatePassword(password: String) {
+    private fun updatePassword(password: String) {
         this.passwordHash = PasswordStorage.createHash(password)
     }
 
@@ -107,7 +104,7 @@ class User(var username: String) {
         )
     }
 
-    fun getCompletedDestPoints(): Int {
+    private fun getCompletedDestPoints(): Int {
         val game = Games.getGameForPlayer(this) ?: throw CommandException("Bad game.")
         var points = 0
 
@@ -120,7 +117,7 @@ class User(var username: String) {
         return points
     }
 
-    fun getIncompleteDestPoints(): Int {
+    private fun getIncompleteDestPoints(): Int {
         val game = Games.getGameForPlayer(this) ?: throw CommandException("Bad game.")
 
         var points = 0
@@ -134,12 +131,8 @@ class User(var username: String) {
         return points
     }
 
-    fun getRoutePoints(): Int {
-        val game = Games.getGameForPlayer(this)
-
-        if (game == null) {
-            return 0
-        }
+    private fun getRoutePoints(): Int {
+        val game = Games.getGameForPlayer(this) ?: return 0
 
         return game.getRoutePointsForPlayer(this.userId)
     }
@@ -189,6 +182,4 @@ class PlayerPoints(val userId: Int,
                    val claimedRoutePoints: Int,
                    val completedDestinationPoints: Int,
                    val incompleteDestinationPoints: Int,
-                   val longestRoutePoints: Int) {
-
-}
+                   val longestRoutePoints: Int)

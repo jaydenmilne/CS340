@@ -47,27 +47,19 @@ class Game(var name: String) {
     var faceUpShardCards = ShardCardDeck(mutableListOf())
     var shardCardDiscardPile = ShardCardDeck(mutableListOf())
 
-    @Transient
-    var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
+    @Transient  var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
 
 
     var whoseTurn: Int = -1
 
     var chatMessages = mutableListOf<Message>()
     var destDiscardOrder = 0
-    @Transient
-    var longestRouteManager = LongestRouteManager(this)
 
-
-    @Transient
-    public var routes = RouteList()
-    @Transient
-    private var lastRoundInitiator = User("")
-    @Transient
-    private var lastRoundStarted = false;
-
-    @Transient
-    private var nextMessageId = -1
+    @Transient var longestRouteManager = LongestRouteManager(this)
+    @Transient var routes = RouteList()
+    @Transient private var lastRoundInitiator = User("")
+    @Transient private var lastRoundStarted = false
+    @Transient private var nextMessageId = -1
 
     init {
         longestRouteManager.init()
@@ -80,7 +72,7 @@ class Game(var name: String) {
     }
 
     fun getUsedColors(): Set<Color> {
-        var usedColors = mutableSetOf<Color>()
+        val usedColors = mutableSetOf<Color>()
 
         for (player in players) {
             usedColors.add(player.color)
@@ -100,14 +92,14 @@ class Game(var name: String) {
 
 
     fun updatePlayer(user: User) {
-        var updatePlayerCommand = UpdatePlayerCommand()
+        val updatePlayerCommand = UpdatePlayerCommand()
         updatePlayerCommand.gamePlayer = user.toGamePlayer()
         broadcast(updatePlayerCommand)
     }
 
 
     fun updatebank() {
-        var updatebankCommand = UpdateBankCommand()
+        val updatebankCommand = UpdateBankCommand()
         updatebankCommand.faceUpCards = faceUpShardCards.cards
         updatebankCommand.shardDrawPileSize = shardCardDeck.cards.size
         updatebankCommand.shardDiscardPileSize = shardCardDiscardPile.cards.size
@@ -116,7 +108,7 @@ class Game(var name: String) {
     }
 
     fun endGame() {
-        var gameOverCommand = GameOverCommand(mutableListOf<PlayerPoints>())
+        val gameOverCommand = GameOverCommand(mutableListOf())
         players.forEach {
             gameOverCommand.players.add(it.toPlayerPoints())
             it.reset()
@@ -148,7 +140,7 @@ class Game(var name: String) {
         // Check if route is disabled for 2 or 3 player mode
         if (players.size < 4) {
 
-            var newRouteId = StringBuilder().append(routeId)
+            val newRouteId = StringBuilder().append(routeId)
             if (routeId[routeId.lastIndex] == '1') {
                 newRouteId.setCharAt(newRouteId.length - 1, '2')
             } else if (routeId[routeId.lastIndex] == '2') {
@@ -221,7 +213,7 @@ class Game(var name: String) {
 
         if (route.cities.size == 2) {
 
-            var uniqueCards = mutableSetOf<ShardCard>()
+            val uniqueCards = mutableSetOf<ShardCard>()
             uniqueCards.addAll(cardsUsedToClaim)
 
             var cardsUsed = ""
@@ -250,7 +242,7 @@ class Game(var name: String) {
     fun advanceTurn() {
         if (this.whoseTurn == -1) {   // check if we're done with setup
             // Check if all players have completed setup
-            if (this.players.filter { p -> !p.setupComplete }.isEmpty()) {
+            if (this.players.none { p -> !p.setupComplete }) {
                 this.incPlayerTurn()
                 this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
             }
@@ -265,7 +257,7 @@ class Game(var name: String) {
         }
     }
 
-    fun incPlayerTurn() {
+    private fun incPlayerTurn() {
         if (this.whoseTurn == -1 || this.whoseTurn == this.players.size - 1) {
             this.whoseTurn = 0
         } else {
@@ -308,7 +300,7 @@ class Game(var name: String) {
 
         var gauntletCards = faceUpShardCards.shardCards.filter { s -> s.type.material == "infinity_gauntlet" }
         if (gauntletCards.size > 2) {
-            var allCards = mutableListOf<ShardCard>()
+            val allCards = mutableListOf<ShardCard>()
             allCards.addAll(shardCardDiscardPile.shardCards)
             allCards.addAll(faceUpShardCards.shardCards)
             allCards.addAll(shardCardDeck.shardCards)
@@ -324,7 +316,7 @@ class Game(var name: String) {
     fun startLastRound(user: User) {
         if (!lastRoundStarted) { //Makes Sure Last Round Isn't Already Started
 
-            var lastRoundCommand = LastRoundCommand()
+            val lastRoundCommand = LastRoundCommand()
             broadcast(lastRoundCommand)
             lastRoundInitiator = user
         }

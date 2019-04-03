@@ -3,24 +3,15 @@ package models
 import com.google.gson.annotations.SerializedName
 
 enum class MaterialType(val material: String) {
-    @SerializedName("reality_shard")
-    REALITY_SHARD("reality_shard"),
-    @SerializedName("soul_shard")
-    SOUL_SHARD("soul_shard"),
-    @SerializedName("space_shard")
-    SPACE_SHARD("space_shard"),
-    @SerializedName("mind_shard")
-    MIND_SHARD("mind_shard"),
-    @SerializedName("power_shard")
-    POWER_SHARD("power_shard"),
-    @SerializedName("time_shard")
-    TIME_SHARD("time_shard"),
-    @SerializedName("vibranium")
-    VIBRANIUM("vibranium"),
-    @SerializedName("palladium")
-    PALLADIUM("palladium"),
-    @SerializedName("infinity_gauntlet")
-    INFINITY_GAUNTLET("infinity_gauntlet");
+    @SerializedName("reality_shard") REALITY_SHARD("reality_shard"),
+    @SerializedName("soul_shard") SOUL_SHARD("soul_shard"),
+    @SerializedName("space_shard") SPACE_SHARD("space_shard"),
+    @SerializedName("mind_shard") MIND_SHARD("mind_shard"),
+    @SerializedName("power_shard") POWER_SHARD("power_shard"),
+    @SerializedName("time_shard") TIME_SHARD("time_shard"),
+    @SerializedName("vibranium") VIBRANIUM("vibranium"),
+    @SerializedName("palladium") PALLADIUM("palladium"),
+    @SerializedName("infinity_gauntlet") INFINITY_GAUNTLET("infinity_gauntlet");
 
     companion object {
         fun matchesRouteType(routeType: RouteType, materialType: MaterialType): Boolean {
@@ -68,16 +59,16 @@ class ShardCard(val type: MaterialType) : ICard {
     }
 
     fun getMaterialTypeString(): String {
-        when (type) {
-            MaterialType.REALITY_SHARD -> return "Reality Shard"
-            MaterialType.SOUL_SHARD -> return "Soul Shard"
-            MaterialType.SPACE_SHARD -> return "Space Shard"
-            MaterialType.MIND_SHARD -> return "Mind Shard"
-            MaterialType.POWER_SHARD -> return "Power Shard"
-            MaterialType.TIME_SHARD -> return "Time Shard"
-            MaterialType.VIBRANIUM -> return "Vibranium Shard"
-            MaterialType.PALLADIUM -> return "Palladium Shard"
-            MaterialType.INFINITY_GAUNTLET -> return "Infinity Gauntlet"
+        return when (type) {
+            MaterialType.REALITY_SHARD -> "Reality Shard"
+            MaterialType.SOUL_SHARD -> "Soul Shard"
+            MaterialType.SPACE_SHARD -> "Space Shard"
+            MaterialType.MIND_SHARD -> "Mind Shard"
+            MaterialType.POWER_SHARD -> "Power Shard"
+            MaterialType.TIME_SHARD -> "Time Shard"
+            MaterialType.VIBRANIUM -> "Vibranium Shard"
+            MaterialType.PALLADIUM -> "Palladium Shard"
+            MaterialType.INFINITY_GAUNTLET -> "Infinity Gauntlet"
         }
     }
 }

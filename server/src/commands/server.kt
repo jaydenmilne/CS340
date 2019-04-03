@@ -11,7 +11,7 @@ class CreateGameCommand : INormalServerCommand {
     private var name = ""
 
     override fun execute(user: User) {
-        var newGame = Game(name)
+        val newGame = Game(name)
         Games.games[newGame.gameId] = newGame
 
         // If the user is in another game, take them out.
@@ -37,11 +37,7 @@ class JoinGameCommand : INormalServerCommand {
         // Ensure that the user is only in one game
         Games.removeUserFromGames(user)
 
-        val game = Games.games[gameId.toInt()]
-
-        if (game == null) {
-            throw CommandException("JoinGameCommand: Game does not exist")
-        }
+        val game = Games.games[gameId.toInt()] ?: throw CommandException("JoinGameCommand: Game does not exist")
 
         if (game.players.size < 5) {
             game.players.add(user)
@@ -63,11 +59,7 @@ class LeaveGameCommand : INormalServerCommand {
     private val gameId = ""
 
     override fun execute(user: User) {
-        val game = Games.games[gameId.toInt()]
-
-        if (game == null) {
-            throw CommandException("LeaveGameCommand: Game does not exist")
-        }
+        val game = Games.games[gameId.toInt()] ?: throw CommandException("LeaveGameCommand: Game does not exist")
 
         game.players.remove(user)
         user.ready = false
@@ -85,7 +77,7 @@ class ListGamesCommand : INormalServerCommand {
     override val command = LIST_GAMES
 
     override fun execute(user: User) {
-        var newCommand = RefreshGameListCommand()
+        val newCommand = RefreshGameListCommand()
         user.queue.push(newCommand)
     }
 }
@@ -99,9 +91,9 @@ class LoginCommand : IRegisterServerCommand {
     private val password = ""
 
     override fun execute(): IRegisterClientCommand {
-        var response = LoginResultCommand()
+        val response = LoginResultCommand()
 
-        var user = Users.getUserByUsername(username)
+        val user = Users.getUserByUsername(username)
 
         if (user == null) {
             response.error = "Authentication error."
@@ -141,11 +133,7 @@ class PlayerReadyCommand : INormalServerCommand {
     override fun execute(user: User) {
         user.ready = playerIsReady
 
-        val game = Games.games[gameId.toInt()]
-
-        if (game == null) {
-            throw CommandException("That game doesn't exist.")
-        }
+        val game = Games.games[gameId.toInt()] ?: throw CommandException("That game doesn't exist.")
 
         val notReadyPlayers = game.players.filter { u -> !u.ready }
 
@@ -154,7 +142,7 @@ class PlayerReadyCommand : INormalServerCommand {
             game.shardCardDeck.shuffle()
             game.destinationCardDeck.shuffle()
             for (i in 0..4) {
-                var nextFaceUpShardCard = game.shardCardDeck.getNext()
+                val nextFaceUpShardCard = game.shardCardDeck.getNext()
                 game.faceUpShardCards.push(nextFaceUpShardCard)
             }
             game.broadcast(StartGameCommand(game.gameId.toString()))
@@ -171,17 +159,17 @@ class RegisterCommand : IRegisterServerCommand {
     private val password = ""
 
     override fun execute(): IRegisterClientCommand {
-        var response = LoginResultCommand()
+        val response = LoginResultCommand()
 
         if (Users.isUsernameTaken(username)) {
             response.error = "Username already taken."
             return response
         }
 
-        var newUser = User(username, password)
+        val newUser = User(username, password)
         Users.addUser(newUser)
 
-        var token = AuthTokens.makeAuthTokenForUser(newUser)
+        val token = AuthTokens.makeAuthTokenForUser(newUser)
         newUser.authToken = token
 
         response.user = ClientUser(newUser.userId, newUser.username, newUser.authToken)
@@ -199,12 +187,9 @@ class ChangeColorCommand : INormalServerCommand {
     private var newColor = ""
 
     override fun execute(user: User) {
-        val game = Games.games[gameId.toInt()]
+        val game = Games.games[gameId.toInt()] ?: throw CommandException("ChangeColorCommand: Game does not exist")
 
         // Verify that the game exists
-        if (game == null) {
-            throw CommandException("ChangeColorCommand: Game does not exist")
-        }
 
         // Verify that the user is in the game
         if (!game.players.contains(user)) {
@@ -234,21 +219,18 @@ class RequestDestinationsCommand : INormalServerCommand {
     override val command = REQUEST_DESTINATIONS
 
     override fun execute(user: User) {
-        var game = Games.getGameForPlayer(user)
+        val game: Game? = Games.getGameForPlayer(user) ?: throw RuntimeException("User not in a game")
 
-        if (game == null) {
-            throw RuntimeException("User not in a game")
-        }
-        var dealCardsCommand = DealCardsCommand()
-        var dealtDestinationCards = mutableListOf<DestinationCard>()
-        var dealtShardCards = mutableListOf<ShardCard>()
+        val dealCardsCommand = DealCardsCommand()
+        val dealtDestinationCards = mutableListOf<DestinationCard>()
+        val dealtShardCards = mutableListOf<ShardCard>()
 
         if (game.whoseTurn == -1) {
 
             /* Deal 4 train cards to user */
             for (i in 0..3) {
                 // Draw a card from the train card deck and add it to the list
-                var nextShardCard = game.shardCardDeck.getNext()
+                val nextShardCard = game.shardCardDeck.getNext()
                 user.shardCards.push(nextShardCard)
                 dealtShardCards.add(nextShardCard)
             }
@@ -267,7 +249,7 @@ class RequestDestinationsCommand : INormalServerCommand {
                 break
             }
             // Draw a card from the destination card deck and add it to the list
-            var nextDestinationCard = game.destinationCardDeck.getNext()
+            val nextDestinationCard = game.destinationCardDeck.getNext()
             user.destinationCards.push(nextDestinationCard)
             dealtDestinationCards.add(nextDestinationCard)
         }
@@ -374,7 +356,7 @@ class ClaimRouteCommand : INormalServerCommand {
             game.broadcast(routeClaimed)
 
             user.updateHand()
-            val updatePlayer = UpdatePlayerCommand();
+            val updatePlayer = UpdatePlayerCommand()
             updatePlayer.gamePlayer = user.toGamePlayer()
             game.broadcast(updatePlayer)
 
@@ -391,8 +373,8 @@ class ClaimRouteCommand : INormalServerCommand {
 
 class DrawShardCardCommand : INormalServerCommand {
     override val command = DRAW_SHARD_CARD
-    var card = ""
-    var cardToSend = ShardCard()
+    private var card = ""
+    private var cardToSend = ShardCard()
 
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user) ?: throw CommandException("DrawShardCard Command: User not in a game")

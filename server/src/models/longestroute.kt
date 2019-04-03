@@ -6,23 +6,23 @@ import kotlin.system.measureTimeMillis
 
 class LongestRouteManager(private val game: Game) {
     // Player id of the player who last got the longest route
-    var currentPlayerWithLongestRoute = -1
-    var longestRoute = 0
+    private var currentPlayerWithLongestRoute = -1
+    private var longestRoute = 0
 
     // All of the cities in the game
-    var cities = mutableSetOf<String>()
+    private var cities = mutableSetOf<String>()
 
     // All of the outgoing edges associated with a particular city
-    var adjacencyList = mutableMapOf<String, MutableSet<Route>>()
+    private var adjacencyList = mutableMapOf<String, MutableSet<Route>>()
 
     // Used to avoid loops when doing a DFS through the cities
-    var markedRoutes = mutableMapOf<String, Boolean>()
+    private var markedRoutes = mutableMapOf<String, Boolean>()
 
     fun init() {
         // Create set of all cities
         for ((routeId, route) in game.routes.routesByRouteId) {
             cities.addAll(route.cities)
-            markedRoutes.set(routeId, false)
+            markedRoutes[routeId] = false
         }
 
         // Create adjacency list representation of the map

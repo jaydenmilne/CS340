@@ -3,7 +3,7 @@ package test
 import models.*
 
 fun main(args: Array<String>) {
-    var list = RouteList()
+    val list = RouteList()
     list.routesByRouteId[DARKDIMENSION_GIBBORIM_1]!!.ownerId = 1
 
     assert(list.pathBetweenCities(DARK_DIMENSION, GIBBORIM, 1))
