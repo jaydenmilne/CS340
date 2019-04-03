@@ -257,9 +257,11 @@ class Game(var name: String) {
             if (lastRoundInitiator == getTurningPlayer()) {
                 this.endGame()
             }
-            // advance to the next player
-            this.incPlayerTurn()
-            this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+            else {
+                // advance to the next player
+                this.incPlayerTurn()
+                this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+            }
         }
     }
 
