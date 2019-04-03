@@ -219,7 +219,7 @@ class RequestDestinationsCommand : INormalServerCommand {
     override val command = REQUEST_DESTINATIONS
 
     override fun execute(user: User) {
-        val game: Game? = Games.getGameForPlayer(user) ?: throw RuntimeException("User not in a game")
+        val game = Games.getGameForPlayer(user) ?: throw RuntimeException("User not in a game")
 
         val dealCardsCommand = DealCardsCommand()
         val dealtDestinationCards = mutableListOf<DestinationCard>()
