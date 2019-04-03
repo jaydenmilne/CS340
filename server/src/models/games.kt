@@ -132,7 +132,12 @@ class Game(var name: String) {
 
     fun canClaimRoute(user: User, routeId: String, cardsUsedToClaim: Array<ShardCard>): CanClaimRouteResult {
 
-        val routeToClaim = routes.routesByRouteId[routeId]
+        val routeToClaim = routes.routesByRouteId[routeId] ?: throw RuntimeException("Invalid route ID")
+
+        // Check if route is not owned
+        if (routeToClaim.ownerId != -1) {
+            return CanClaimRouteResult.ROUTE_IS_OWNED
+        }
 
         // Check if route is disabled for 2 or 3 player mode
         if (players.size < 4) {
@@ -150,14 +155,7 @@ class Game(var name: String) {
             }
         }
 
-        if (routeToClaim == null) {
-            throw RuntimeException("Invalid route ID")
-        }
-        
-        // Check if route is not owned
-        if (routeToClaim.ownerId != -1) {
-            return CanClaimRouteResult.ROUTE_IS_OWNED
-        }
+
 
         // Check user's energy
         if (user.numRemainingTrains < routeToClaim.numCars) {
@@ -212,6 +210,7 @@ class Game(var name: String) {
 
         // Recalculate if this player has the longest route
         longestRouteManager.playerClaimedRoute(user.userId)
+
         user.numRemainingTrains -= route.numCars
 
         if (route.cities.size == 2) {
