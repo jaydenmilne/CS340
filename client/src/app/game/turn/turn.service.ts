@@ -25,6 +25,10 @@ export class TurnService {
     this.router.gameOver$.subscribe(cmd => this.onGameOver());
   }
 
+  public clearData(){
+    this.setNextState(new NotPlayersTurnState(this.playerService, this, this.playerNotifier));
+  }
+
   public skipTurn() {
     this.serverProxy.executeCommand(new SkipTurnCommand());
   }

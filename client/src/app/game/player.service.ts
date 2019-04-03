@@ -106,36 +106,14 @@ export class PlayerService {
     commandRouter.changeTurn$.subscribe(changeTurnCommand => this.onTurnChange(changeTurnCommand));
     commandRouter.gameOver$.subscribe(gameOverCommand => this.onGameOver(gameOverCommand));
     commandRouter.lastRound$.subscribe(lastRoundCommand => this.onLastRound());
-
-    // DUMMY DATA
-
-    const p1 = {
-      'color': <Color> Color['RED'],
-      'userId': 1,
-      'ready': true,
-      'username': 'hotstuff32',
-      'points': 4,
-      'numTrainCards': 1,
-      'numDestinationCards': 2,
-      'numRemainingTrains': 3,
-      'hasLongestRoute': false,
-      'turnOrder': 1
-    };
-
-  const p2 = {
-    'color': <Color> Color['BLUE'],
-    'userId': 2,
-    'ready': true,
-    'username': '2dangerous',
-    'points': 588,
-    'numTrainCards': 2,
-    'numDestinationCards': 2,
-    'numRemainingTrains': 3,
-    'hasLongestRoute': false,
-    'turnOrder': 2
-  };
-
-  this.activePlayerId = 0;
-
   }
+  
+  public clearData(){
+    this.players = [];
+    this.playersById = new Map();
+    this.activePlayerId = null;
+    // this.myPlayerId = 0;
+    this.myPlayer = null;
+  }
+
 }
