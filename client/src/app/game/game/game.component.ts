@@ -37,11 +37,11 @@ export class GameComponent implements OnInit, OnDestroy {
     private routeService: RouteService,
     private turnService: TurnService,
     private router: Router) {
-      // If we haven't been logged in, go to the login page
-   
+
   }
 
   ngOnInit() {
+    // If we haven't been logged in, go to the login page
     if (!this.userService.isLoggedIn) {
       this.router.navigate(['/login']);
       return;
