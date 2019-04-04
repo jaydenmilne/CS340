@@ -1,19 +1,29 @@
 @import "colors.scss";
-.destination-card{
+
+.card-container {
+    display: flex;
+    flex-direction: column;
     height: inherit;
-    box-sizing: border-box;
 }
-.map-wrapper{
-    margin-bottom: 0px;
-    height: calc(100% - 1.5vh);
+
+.scaling-svg {
+left:0;
+top:0;
+height: inherit;
+display:block;
+margin: auto;
 }
- .scaling-svg {
+
+.map-box{
+    max-height: 65%;
     height: 100%;
-    left:0;
-    top:0;
-    display:block;
-    margin: auto;
-   }
+    text-align: center;
+}
+.text-box{
+    max-height: 25%;
+    width: 150px;
+    margin: 0 auto;
+}
 
 .shield, .city-name{
     visibility: hidden;
@@ -31,11 +41,10 @@
 .dest-card-route-name{
     display: block;
     text-align: center;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    font-size: 1vw;
-    max-width: 14vw;
     margin: 5px auto;
+    font-size: 10pt;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .city-spot{

@@ -1,6 +1,6 @@
-<mat-card class="destination-card">
+<mat-card class="destination-card card-container">
    <i class="material-icons check-mark" *ngIf="selected">check_circle</i>
-   <mat-card-content class="map-wrapper" matBadge="{{route.points}}" matBadgePosition="before">
+   <div class="map-box" matBadge="{{route.points}}" matBadgePosition="before">
 
       <!-- README: To add logic for turning off other City Markers some HTML need to be 
          injected to the SVG. This is best done using a find an replace with regular expressions
@@ -2833,9 +2833,9 @@
                <tspan style="stroke-width:0.26458332" y="504.00674" x="122.61468" id="tspan11554" /></text>
          </g>
       </svg>
-   </mat-card-content>
-   <mat-card-footer>
+   </div>
+   <div class="text-box">
       <p class="dest-card-route-name">{{getPrintName(route.cities[0])}} to {{getPrintName(route.cities[1])}}</p>
 
-   </mat-card-footer>
+   </div>
 </mat-card>
