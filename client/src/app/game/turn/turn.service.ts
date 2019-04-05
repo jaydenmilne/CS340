@@ -57,6 +57,10 @@ export class TurnService {
   }
 
   onChangeTurn(cmd: ChangeTurnCommand) {
+    if (this.wasPlayersTurn) {
+      this.playerNotifier.notifyPlayer('Your turn is over.');
+      this.wasPlayersTurn = false;
+    }
     this.state.onChangeTurn(cmd);
   }
 
