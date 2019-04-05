@@ -1,7 +1,7 @@
 <mat-card class="game-list-card" color="P-light">
   <mat-card-header>
     <mat-card-title>
-      Available Games
+      All Games
     </mat-card-title>
   </mat-card-header>
 
@@ -9,7 +9,7 @@
     <mat-chip *ngFor="let game of lobbyService.gameList.getGames()" [disabled]="game.getNumPlayers() >= 5" class="game-list-game-card mat-primary"
       [selected]="lobbyService.gameList.isSelectedGame(game.getID())" [disableRipple]="true" (click)="onGameSelect(game)">
       <div class="game-name">{{game.getName()}}</div>
-      <div class="game-player-num">{{game.getNumPlayers()}}</div>
+      <div class="game-player-num">{{game.getNumPlayers()}} {{game.isStarted() ? "(started)" : ""}}</div>
     </mat-chip>
   </mat-chip-list>
 
