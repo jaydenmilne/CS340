@@ -107,8 +107,6 @@ export class PlayersTurnState extends ITurnState {
   }
 
   enter() {
-    this.notifierService.notifyPlayer('It is your turn!');
-    this.turnService.wasPlayersTurn = true;
   }
 }
 

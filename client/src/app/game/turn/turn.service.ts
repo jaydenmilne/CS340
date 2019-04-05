@@ -61,6 +61,10 @@ export class TurnService {
       this.playerNotifier.notifyPlayer('Your turn is over.');
       this.wasPlayersTurn = false;
     }
+    else if (this.playerService.myPlayerId == this.playerService.activePlayerId) {
+      this.playerNotifier.notifyPlayer('It is your turn!');
+      this.wasPlayersTurn = true;
+    }
     this.state.onChangeTurn(cmd);
   }
 
