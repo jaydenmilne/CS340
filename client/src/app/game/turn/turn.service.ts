@@ -12,6 +12,7 @@ import { ServerProxyService } from '@core/server/server-proxy.service';
 export class TurnService {
   private state: ITurnState;
   private router: CommandRouterService;
+  public wasPlayersTurn: Boolean = false;
 
   constructor(
     private serverProxy: ServerProxyService,
@@ -60,6 +61,14 @@ export class TurnService {
   }
 
   onChangeTurn(cmd: ChangeTurnCommand) {
+    if (this.wasPlayersTurn) {
+      this.playerNotifier.notifyPlayer('Your turn is over.');
+      this.wasPlayersTurn = false;
+    }
+    else if (this.playerService.myPlayerId == this.playerService.activePlayerId) {
+      this.playerNotifier.notifyPlayer('It is your turn!');
+      this.wasPlayersTurn = true;
+    }
     this.state.onChangeTurn(cmd);
   }
 
