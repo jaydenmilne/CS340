@@ -125,10 +125,15 @@ class Game(var name: String) {
         NOT_ENOUGH_SHARD_CARDS_USED,
         USER_DOES_NOT_HAVE_ENOUGH_CARDS,
         WRONG_TYPE_USED_TO_CLAIM_ROUTE,
-        INVALID_MIX_OF_CARDS
+        INVALID_MIX_OF_CARDS,
+        NO_CARDS_USED_TO_CLAIM
     }
 
     fun canClaimRoute(user: User, routeId: String, cardsUsedToClaim: Array<ShardCard>): CanClaimRouteResult {
+
+        if (cardsUsedToClaim.size == 0) {
+            return CanClaimRouteResult.NO_CARDS_USED_TO_CLAIM
+        }
 
         val routeToClaim = routes.routesByRouteId[routeId] ?: throw RuntimeException("Invalid route ID")
 
@@ -151,7 +156,6 @@ class Game(var name: String) {
                 return CanClaimRouteResult.ROUTE_DISABLED_LESS_THAN_THREE_PLAYERS
             }
         }
-
 
         // Check user's energy
         if (user.numRemainingTrains < routeToClaim.numCars) {
@@ -251,9 +255,11 @@ class Game(var name: String) {
             if (lastRoundInitiator == getTurningPlayer()) {
                 this.endGame()
             }
-            // advance to the next player
-            this.incPlayerTurn()
-            this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+            else {
+                // advance to the next player
+                this.incPlayerTurn()
+                this.broadcast(ChangeTurnCommand(this.getTurningPlayer()?.userId!!))
+            }
         }
     }
 

@@ -121,4 +121,14 @@ export class CardService {
       this.serverProxy.executeCommand(new RequestDestinationsCommand());
     }
   }
+
+  public clearData(){
+    this.destCardDeckSize = 0;
+    this.shardCardDeckSize = 0;
+    this.shardCardDiscardSize = 0;
+    this.faceUpShardCards = new ShardCardDeck([]);
+    this.playerTrainCards = new ShardCardDeck([]);
+    this.playerDestCards = new DestinationCardDeck([]);
+    this.showDrawnCard = false;
+  }
 }

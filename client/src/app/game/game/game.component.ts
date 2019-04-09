@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
 import { MatDialog, MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material';
@@ -12,22 +12,30 @@ import { RejoinGameCommand } from '@core/game-commands';
 import { GameOverViewData, GameOverDialogComponent } from '../game-over-dialog/game-over-dialog.component';
 import { PlayerService } from '../player.service';
 import { ShardCard } from '@core/model/cards';
+import { ChatService } from 'src/app/chat/chat.service';
+import { RouteService } from '../route.service';
+import { TurnService } from '../turn/turn.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private serverConnection: ServerConnectionService,
     private serverProxy: ServerProxyService,
     public dialog: MatDialog, private cardService: CardService,
-    private notifierService: PlayerNotifierService,
     private snackBar: MatSnackBar,
+    private notifierService: PlayerNotifierService,
     private userService: UserService,
     private playerService: PlayerService,
+    private chatService: ChatService,
+    private routeService: RouteService,
+    private turnService: TurnService,
     private router: Router) {
 
   }
@@ -39,9 +47,9 @@ export class GameComponent implements OnInit {
       return;
     }
 
-    this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result));
-    this.notifierService.playerNotification$.subscribe(message => this.displayNotification(message));
-    this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints));
+    this.subscriptions.push(this.cardService.stagedDestinationCards$.subscribe(result => this.handleNewDestinationCards(result)));
+    this.subscriptions.push(this.notifierService.playerNotification$.subscribe(message => this.displayNotification(message)));
+    this.subscriptions.push(this.playerService.playerPointTotals$.subscribe(playerPoints => this.handleEndGame(playerPoints)));
 
     // Change the game connection to server mode
     this.serverConnection.changeState(new GameState(this.serverConnection));
@@ -54,6 +62,10 @@ export class GameComponent implements OnInit {
       // New game. Request cards
       this.cardService.requestDestinationCards();
     }
+  }
+
+  ngOnDestroy(){
+    this.subscriptions.forEach(sub => { sub.unsubscribe() });
   }
 
   public handleNewDestinationCards(newDestCardsData: SelectDestinationCardsData) {
@@ -92,8 +104,18 @@ export class GameComponent implements OnInit {
       disableClose: false
     });
     dialogRef.afterClosed().subscribe(gameOverDialogResult => {
+      this.resetGame();// Clear Data
       this.router.navigate(['/lobby']);
     });
+  }
+
+  private resetGame(){  // Reset all game state data
+    this.playerService.clearData();
+    this.cardService.clearData();
+    this.notifierService.clearData();
+    this.chatService.clearData();
+    this.routeService.clearData();
+    this.turnService.clearData();
   }
 }
 
