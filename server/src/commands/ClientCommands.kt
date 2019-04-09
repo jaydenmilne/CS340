@@ -28,10 +28,10 @@ class UpdatePlayerCommand : INormalClientCommand {
     constructor()
 
     constructor (player: GamePlayer) {
-      gamePlayer = player
+        gamePlayer = player
     }
 
-    var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0, 0 )
+    var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0, 0)
 }
 
 class ChangeTurnCommand(var userId: Int = 0) : INormalClientCommand {

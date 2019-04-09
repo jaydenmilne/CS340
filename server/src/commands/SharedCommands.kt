@@ -15,11 +15,7 @@ class PostChatCommand : INormalServerCommand {
     override fun execute(user: User) {
         val gameId = Games.getGameIdForPlayer(user)
 
-        val game = Games.games[gameId]
-
-        if (game == null) {
-            throw CommandException("The game you're posting a chat message to doesn't exist.")
-        }
+        val game = Games.games[gameId] ?: throw CommandException("The game you're posting a chat message to doesn't exist.")
 
         val messageObject = Message(user.userId, user.username, message, game.getNextMessageId(), false)
         val updateChatCommand = UpdateChatCommand(messageObject)

@@ -14,7 +14,7 @@ enum class MaterialType(val material: String) {
     @SerializedName("infinity_gauntlet") INFINITY_GAUNTLET("infinity_gauntlet");
 
     companion object {
-        fun matchesRouteType(routeType: RouteType, materialType: MaterialType) : Boolean {
+        fun matchesRouteType(routeType: RouteType, materialType: MaterialType): Boolean {
 
             // Infinity Gauntlet matches any route type
             if (materialType == INFINITY_GAUNTLET) {
@@ -40,7 +40,7 @@ enum class MaterialType(val material: String) {
 
 interface ICard
 
-class ShardCard(val type: MaterialType) : ICard{
+class ShardCard(val type: MaterialType) : ICard {
     constructor() : this(MaterialType.INFINITY_GAUNTLET)
 
     override fun equals(other: Any?): Boolean {
@@ -59,16 +59,16 @@ class ShardCard(val type: MaterialType) : ICard{
     }
 
     fun getMaterialTypeString(): String {
-        when (type) {
-            MaterialType.REALITY_SHARD -> return "Reality Shard"
-            MaterialType.SOUL_SHARD -> return "Soul Shard"
-            MaterialType.SPACE_SHARD -> return "Space Shard"
-            MaterialType.MIND_SHARD -> return "Mind Shard"
-            MaterialType.POWER_SHARD -> return "Power Shard"
-            MaterialType.TIME_SHARD -> return "Time Shard"
-            MaterialType.VIBRANIUM -> return "Vibranium Shard"
-            MaterialType.PALLADIUM -> return "Palladium Shard"
-            MaterialType.INFINITY_GAUNTLET -> return "Infinity Gauntlet"
+        return when (type) {
+            MaterialType.REALITY_SHARD -> "Reality Shard"
+            MaterialType.SOUL_SHARD -> "Soul Shard"
+            MaterialType.SPACE_SHARD -> "Space Shard"
+            MaterialType.MIND_SHARD -> "Mind Shard"
+            MaterialType.POWER_SHARD -> "Power Shard"
+            MaterialType.TIME_SHARD -> "Time Shard"
+            MaterialType.VIBRANIUM -> "Vibranium Shard"
+            MaterialType.PALLADIUM -> "Palladium Shard"
+            MaterialType.INFINITY_GAUNTLET -> "Infinity Gauntlet"
         }
     }
 }
@@ -113,9 +113,9 @@ abstract class IDeck<T>(var cards: MutableList<T>) {
 
 }
 
-class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards){
-    fun initializeDeck(): ShardCardDeck{
-        for(i in 0..11){
+class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(shardCards) {
+    fun initializeDeck(): ShardCardDeck {
+        for (i in 0..11) {
             shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
             shardCards.add(ShardCard(MaterialType.MIND_SHARD))
             shardCards.add(ShardCard(MaterialType.PALLADIUM))
@@ -125,15 +125,16 @@ class ShardCardDeck(var shardCards: MutableList<ShardCard>) : IDeck<ShardCard>(s
             shardCards.add(ShardCard(MaterialType.SOUL_SHARD))
             shardCards.add(ShardCard(MaterialType.SPACE_SHARD))
             shardCards.add(ShardCard(MaterialType.TIME_SHARD))
-            if( i < 2){
+            if (i < 2) {
                 shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
             }
         }
         return this
     }
 }
-class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards){
-    fun initializeDeck(): DestinationCardDeck{
+
+class DestinationCardDeck(var destinationCards: MutableList<DestinationCard>) : IDeck<DestinationCard>(destinationCards) {
+    fun initializeDeck(): DestinationCardDeck {
         destinationCards.add(DestinationCard(setOf("titan", "kunlun"), 4))
         destinationCards.add(DestinationCard(setOf("caveofages", "svartlheim"), 5))
         destinationCards.add(DestinationCard(setOf("avengershq", "yotunheim"), 6))

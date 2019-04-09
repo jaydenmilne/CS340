@@ -1,17 +1,16 @@
 package commands
 
 import models.*
-import java.lang.RuntimeException
 
-class DebugHelpCommand : INormalServerCommand{
+class DebugHelpCommand : INormalServerCommand {
     override val command = DEBUG_HELP
-    val action = ""
+    private val action = ""
     override fun execute(user: User) {
         parseCommand(user)
     }
 
     private fun parseCommand(user: User) {
-        val first = action.split(' ')[0];
+        val first = action.split(' ')[0]
         when (first) {
             "/rainbowroad" -> rainbowCommand(user)
             "/allyourbasesaremine" -> allYourBasesCommand(user)
@@ -28,10 +27,7 @@ class DebugHelpCommand : INormalServerCommand{
     }
 
     private fun rainbowCommand(user: User) {
-        val game = Games.getGameForPlayer(user)
-        if (game == null) {
-            return
-        }
+        val game = Games.getGameForPlayer(user) ?: return
         game.faceUpShardCards = ShardCardDeck(mutableListOf())
         for (i in 0..4) {
             game.faceUpShardCards.push(ShardCard(MaterialType.INFINITY_GAUNTLET))
@@ -41,11 +37,8 @@ class DebugHelpCommand : INormalServerCommand{
     }
 
     private fun allYourBasesCommand(user: User) {
-        val game = Games.getGameForPlayer(user)
-        if (game == null) {
-            return
-        }
-        game.routes.routesByRouteId.forEach{
+        val game = Games.getGameForPlayer(user) ?: return
+        game.routes.routesByRouteId.forEach {
             if (it.value.ownerId != -1) {
                 it.value.ownerId = user.userId
                 val routeClaimed = RouteClaimedCommand()
@@ -58,20 +51,11 @@ class DebugHelpCommand : INormalServerCommand{
     }
 
     private fun claimCommand(user: User) {
-        val player = action.split(' ')[1];
-        val route = action.split(' ')[2];
-        val gamePlayer = Users.getUserByUsername(player)
-        if (gamePlayer == null) {
-            return
-        }
-        val game = Games.getGameForPlayer(gamePlayer)
-        if (game == null) {
-            return
-        }
-        val routeFound = game.routes.routesByRouteId.get(route)
-        if (routeFound == null) {
-            return
-        }
+        val player = action.split(' ')[1]
+        val route = action.split(' ')[2]
+        val gamePlayer = Users.getUserByUsername(player) ?: return
+        val game = Games.getGameForPlayer(gamePlayer) ?: return
+        val routeFound = game.routes.routesByRouteId[route] ?: return
         routeFound.ownerId = gamePlayer.userId
         val routeClaimed = RouteClaimedCommand()
         routeClaimed.routeId = route
@@ -80,21 +64,15 @@ class DebugHelpCommand : INormalServerCommand{
     }
 
     private fun changeTurn(user: User) {
-        val game = Games.getGameForPlayer(user)
-        if (game == null) {
-            return
-        }
+        val game = Games.getGameForPlayer(user) ?: return
         game.advanceTurn()
 
     }
 
     private fun giveThemTrains(user: User) {
-        val game = Games.getGameForPlayer(user)
-        if (game == null) {
-            return
-        }
+        val game = Games.getGameForPlayer(user) ?: return
         game.players.forEach {
-            if(it != user) {
+            if (it != user) {
                 it.numRemainingTrains = 100
                 it.updateHand()
             }
@@ -104,13 +82,10 @@ class DebugHelpCommand : INormalServerCommand{
     }
 
     private fun killDecks(user: User) {
-        val game = Games.getGameForPlayer(user)
-        if (game == null) {
-            return
-        }
+        val game = Games.getGameForPlayer(user) ?: return
         game.destinationCardDeck = DestinationCardDeck(mutableListOf())
         game.players.forEach {
-            if(it != user) {
+            if (it != user) {
                 it.destinationCards = DestinationCardDeck(mutableListOf()).initializeDeck()
                 it.shardCards = ShardCardDeck(mutableListOf())
                 it.updateHand()
@@ -125,12 +100,9 @@ class DebugHelpCommand : INormalServerCommand{
     }
 
     private fun finalDestination(user: User) {
-        val game = Games.getGameForPlayer(user)
-        if (game == null) {
-            return
-        }
+        val game = Games.getGameForPlayer(user) ?: return
         game.players.forEach {
-            if(it != user) {
+            if (it != user) {
                 it.destinationCards = DestinationCardDeck(mutableListOf()).initializeDeck()
                 it.updateHand()
                 game.updatePlayer(it)
@@ -143,33 +115,30 @@ class DebugHelpCommand : INormalServerCommand{
     }
 
     private fun newRoad(user: User) {
-        val cityOne = action.split(' ')[1];
-        val cityTwo = action.split(' ')[2];
-        val points = action.split(' ')[3];
+        val cityOne = action.split(' ')[1]
+        val cityTwo = action.split(' ')[2]
+        val points = action.split(' ')[3]
         val newDestination = DestinationCard(setOf(cityOne, cityTwo), points.toInt())
-        user.destinationCards.push(newDestination);
+        user.destinationCards.push(newDestination)
         user.updateHand()
     }
 
     private fun whereTo(user: User) {
-        val game = Games.getGameForPlayer(user)
-        if (game == null) {
-            return
-        }
-        var dealCardsCmd = DealCardsCommand()
+        val game = Games.getGameForPlayer(user) ?: return
+        val dealCardsCmd = DealCardsCommand()
         dealCardsCmd.destinations.add(game.destinationCardDeck.getNext())
         dealCardsCmd.destinations.add(game.destinationCardDeck.getNext())
         dealCardsCmd.destinations.add(game.destinationCardDeck.getNext())
-        dealCardsCmd.minDestinations = 2;
+        dealCardsCmd.minDestinations = 2
         user.queue.push(dealCardsCmd)
         user.destinationCards.destinationCards.addAll(dealCardsCmd.destinations)
     }
 
     private fun makeItRain(user: User) {
         val args = action.split(' ')
-        var dealCardsCmd = DealCardsCommand()
+        val dealCardsCmd = DealCardsCommand()
         if (args.size > 1) {
-            val cardType = args[1].toUpperCase();
+            val cardType = args[1].toUpperCase()
             try {
                 for (i in 0..2) {
                     dealCardsCmd.shardCards.add(ShardCard(MaterialType.valueOf(cardType)))
@@ -177,8 +146,8 @@ class DebugHelpCommand : INormalServerCommand{
             } catch (e: Exception) {
                 throw CommandException("Type Not Found")
             }
-        }else{
-            for(i in 0..2) {
+        } else {
+            for (i in 0..2) {
                 dealCardsCmd.shardCards.add(ShardCard(MaterialType.INFINITY_GAUNTLET))
                 dealCardsCmd.shardCards.add(ShardCard(MaterialType.SPACE_SHARD))
                 dealCardsCmd.shardCards.add(ShardCard(MaterialType.SOUL_SHARD))
@@ -195,11 +164,8 @@ class DebugHelpCommand : INormalServerCommand{
 
     }
 
-    private fun endGame(user:User) {
-        val game = Games.getGameForPlayer(user)
-        if (game == null) {
-            return
-        }
+    private fun endGame(user: User) {
+        val game = Games.getGameForPlayer(user) ?: return
         game.endGame()
     }
 
