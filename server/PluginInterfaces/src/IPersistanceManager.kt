@@ -1,0 +1,3 @@
+interface IPersistanceManager {
+    fun speak()
+}
