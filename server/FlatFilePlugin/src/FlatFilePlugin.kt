@@ -1,17 +1,12 @@
-/**
- * Created by Jordan Gassaway on 4/9/2019.
- * FlatFilePersistenceManager: Persistence plugin for Flat File (tar) database
- */
 import jdk.nashorn.internal.runtime.JSType.toLong
-import org.kamranzafar.jtar.TarOutputStream
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarHeader
 import org.kamranzafar.jtar.TarInputStream
+import org.kamranzafar.jtar.TarOutputStream
 import java.io.*
 import java.util.*
 
-
-class FlatFilePersistenceManager {
+class FlatFilePlugin : IPersistanceManager {
     private val filePerms = 508     // chmod 774
     private val currentDir: String = File(".").canonicalPath
     private val databaseFile: File = File("$currentDir/resources/database/flatfileDB.tar")
@@ -19,7 +14,7 @@ class FlatFilePersistenceManager {
     private var tarStreamIn: TarInputStream? = null
 
 
-    fun init(){
+    override fun initialize(){
         if(!databaseFile.exists()){
             databaseFile.createNewFile()
         }

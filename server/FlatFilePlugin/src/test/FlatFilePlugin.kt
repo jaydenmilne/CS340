@@ -1,14 +1,14 @@
 package test
 
-import FlatFilePersistenceManager
+import FlatFilePlugin
 import kotlin.test.assertEquals
 
 
 fun testReadWrite() {
-    val db = FlatFilePersistenceManager()
-    db.init()
+    val db = FlatFilePlugin()
+    db.initialize()
     db.openWrite()
-    val s: String = "hello world"
+    val s = "hello world"
     db.writeToTar("newFile.txt", s)
 
     db.openRead()

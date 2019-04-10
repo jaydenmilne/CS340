@@ -1,3 +1,3 @@
 interface IPersistanceManager {
-    fun speak()
+    fun initialize()
 }

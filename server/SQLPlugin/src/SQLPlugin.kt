@@ -1,8 +1,7 @@
 import IPersistanceManager
 
 class SQLPlugin : IPersistanceManager {
-
-    override fun speak() {
+    override fun initialize() {
         System.out.println("Duck says quack")
     }
 
