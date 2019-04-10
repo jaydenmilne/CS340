@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/FlatFilePlugin/FlatFilePlugin.iml" filepath="$PROJECT_DIR$/FlatFilePlugin/FlatFilePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PluginInterfaces/PluginInterfaces.iml" filepath="$PROJECT_DIR$/PluginInterfaces/PluginInterfaces.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SQLPlugin/SQLPlugin.iml" filepath="$PROJECT_DIR$/SQLPlugin/SQLPlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/server.iml" filepath="$PROJECT_DIR$/server.iml" />
     </modules>
   </component>
