@@ -8,8 +8,8 @@
 *.ctxt
 
 .vscode
-server/.idea
-server/.idea/
+#server/.idea
+#server/.idea/
 server/.idea/workspace.xml
 server/.idea/misc.xml
 
