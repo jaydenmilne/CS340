@@ -1,4 +1,3 @@
-package FlatFilePlugin
 import IPersistanceManager
 
 class FlatFilePlugin : IPersistanceManager {

@@ -5,6 +5,7 @@ import commands.*
 import models.AuthTokens
 import models.RegisterCommandQueue
 import org.apache.commons.io.IOUtils
+import plugin.PluginManager
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
@@ -16,6 +17,11 @@ const val COMMAND_ENDPOINT = "/command"
 const val PORT = 4300
 
 fun main(args: Array<String>) {
+
+    val pluginManager = PluginManager()
+    val manager = pluginManager.loadPlugin("FlatFilePlugin")
+    manager.speak()
+
     val server = HttpServer.create(InetSocketAddress(PORT), MAX_CONNECTIONS)
 
     server.createContext(COMMAND_ENDPOINT) { httpExchange ->
