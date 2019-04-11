@@ -1,6 +1,6 @@
-package plugin
+package persistence
 
-import IPersistanceManager
+import IPersistenceManager
 import java.io.File
 import java.net.URLClassLoader
 import java.net.URL
@@ -9,7 +9,7 @@ import java.net.URL
 class PluginManager {
     private val debugMode = true
 
-    private fun findClassInDirectory(directory: String, className: String) : IPersistanceManager {
+    private fun findClassInDirectory(directory: String, className: String) : IPersistenceManager {
         // Search the intellij output instead of the /plugins directory
         val dir = File(directory)
         dir.walk().forEach {
@@ -20,8 +20,8 @@ class PluginManager {
                     val loader = URLClassLoader(arrayOf<URL>(pluginURL))
 
                     // Load the jar file's plugin class, create and return an instance
-                    val managerClass = loader.loadClass(className) as Class<IPersistanceManager>
-                    return managerClass.getDeclaredConstructor(null).newInstance()
+                    val managerClass = loader.loadClass(className) as Class<IPersistenceManager>
+                    return managerClass.constructors[0].newInstance() as IPersistenceManager
 
                 } catch (e : ClassNotFoundException) {
                     // must not have been inside of this one
@@ -32,15 +32,19 @@ class PluginManager {
             }
         }
 
-        return NullPersistenceManager()
+        return DummyPersistenceManager()
     }
 
-    fun loadPlugin(className: String) : IPersistanceManager {
+    fun loadPlugin(className: String) {
+        val manager: IPersistenceManager
+
         if (debugMode) {
-            return findClassInDirectory("otu", className)
+            manager = findClassInDirectory("otu", className)
         } else {
             // Enumerate each jar in the /plugins directory
-            return findClassInDirectory("plugins", className)
+            manager =  findClassInDirectory("plugins", className)
         }
+
+        PersistenceManager.loadPersistanceManager(manager)
     }
 }

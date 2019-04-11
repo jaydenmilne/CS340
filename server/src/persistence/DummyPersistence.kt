@@ -1,8 +1,12 @@
 package persistence
 
-import commands.ICommand
+import ICommand
 import models.Game
 import models.User
+import IPersistenceManager
+import ICommandDAO
+import IUserDAO
+import IGameDAO
 
 class DummyPersistenceManager: IPersistenceManager {
     override fun openTransaction() {}
@@ -25,6 +29,7 @@ class DummyCommandDAO: ICommandDAO {
         return listOf()
     }
 }
+
 class DummyUserDAO: IUserDAO {
     override fun persistUser(user: User) {}
 
