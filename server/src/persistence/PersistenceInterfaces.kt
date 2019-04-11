@@ -1,10 +1,12 @@
-package persistance
+package persistence
 
 import commands.ICommand
 import models.Game
 import models.User
 
-interface PersistanceManager {
+var manager: IPersistenceManager = DummyPersistenceManager()
+
+interface IPersistenceManager {
     fun openTransaction()
     fun closeTransaction(commit: Boolean)
     fun getCommandDAO(): ICommandDAO
@@ -12,7 +14,6 @@ interface PersistanceManager {
     fun getGameDAO(): IGameDAO
     fun initialize(): Boolean
 }
-
 
 interface ICommandDAO {
     fun persistCommand(command: ICommand, gameID: Int)
