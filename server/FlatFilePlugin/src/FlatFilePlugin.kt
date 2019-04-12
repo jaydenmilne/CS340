@@ -1,4 +1,3 @@
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream
 import jdk.nashorn.internal.runtime.JSType.toLong
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarHeader
@@ -7,29 +6,85 @@ import org.kamranzafar.jtar.TarOutputStream
 import java.io.*
 import java.util.*
 
-class TarFlatFile(public val entry: TarEntry, public val data: ByteArray){
+class TarFlatFile {
+    private val filePerms = 508     // chmod 774
+    public var entry: TarEntry
+    public var data: ByteArray
+
+    constructor(fileName: String, data: ByteArray) {
+        entry = TarEntry(TarHeader.createHeader(fileName, toLong(data.size), Date().time / 1000, false, filePerms))
+        this.data = data
+    }
+
+    constructor(entry: TarEntry, data: ByteArray) {
+        this.entry = entry
+        this.data = data
+    }
+
     fun getFileName(): String { return entry.header.name.toString()}
+}
+
+class Serializer(){
+    companion object {
+        fun serialize(obj: Serializable): ByteArray {
+            val bytes = ByteArrayOutputStream()
+            val objStream = ObjectOutputStream(bytes)
+
+            objStream.writeObject(obj)
+            return bytes.toByteArray()
+        }
+
+        fun deserialize(data: ByteArray): Serializable {
+            val objStream = ObjectInputStream(ByteArrayInputStream(data))
+            return objStream.readObject() as Serializable
+        }
+    }
+}
+
+class TarWriter(private val tarFile: File){
+    fun writeFiles(files: List<TarFlatFile>){
+        val tarStreamOut = TarOutputStream(tarFile)
+
+        files.forEach {
+            tarStreamOut.putNextEntry(it.entry)
+            tarStreamOut.write(it.data)
+        }
+        tarStreamOut.close()
+    }
+
+    fun readFiles(): MutableMap<String, TarFlatFile>{
+        val files = mutableMapOf<String, TarFlatFile>()
+        val tarStreamIn = TarInputStream(BufferedInputStream(FileInputStream(tarFile)))
+
+        var tarFile: TarEntry? = tarStreamIn.nextEntry
+
+        while (tarFile != null){
+            val data = ByteArray(tarFile.size.toInt())
+            tarStreamIn.read(data)
+            files[tarFile.header.name.toString()] = TarFlatFile(tarFile, data)
+
+            tarFile = tarStreamIn.nextEntry
+        }
+        tarStreamIn.close()
+        return files
+    }
+
+    fun clean(){
+        tarFile.delete()
+        tarFile.createNewFile()
+    }
 }
 
 class FlatFileStatement(){
     private var filesChanged: MutableList<TarFlatFile> = mutableListOf<TarFlatFile>()
     private var filesDeleted: MutableList<String> = mutableListOf<String>()
-    private val filePerms = 508     // chmod 774
 
     fun getFilesChanged(): List<TarFlatFile>{ return filesChanged.toList() }
     fun getFilesDeleted(): List<String>{ return filesDeleted.toList() }
 
     fun addFile(fileName: String, obj: Serializable){
-        val bytes = ByteArrayOutputStream()
-        val objStream = ObjectOutputStream(bytes)
-
-        // Serialize object
-        objStream.writeObject(obj)
-
-        val time = Date().time / 1000
-        val entry = TarEntry(TarHeader.createHeader(fileName, toLong(bytes.size()), time, false, filePerms))
-        val data = bytes.toByteArray()
-        this.filesChanged.add( TarFlatFile(entry, data))
+        val data = Serializer.serialize(obj)
+        this.filesChanged.add( TarFlatFile(fileName, data))
     }
 
     fun removeFile(fileName: String){
@@ -42,38 +97,20 @@ class FlatFileStatement(){
     }
 }
 
-class FlatFileDatabase(private val databaseFile: File){
-    var files = mutableMapOf<String, TarFlatFile>()
+class FlatFileDatabase {
+    private var files = mutableMapOf<String, TarFlatFile>()
 
-    fun load(){
-        val tarStreamIn = TarInputStream(BufferedInputStream(FileInputStream(databaseFile)))
-
-        var tarFile: TarEntry? = tarStreamIn.nextEntry
-
-        while (tarFile != null){
-            val data = ByteArray(tarFile.size.toInt())
-            tarStreamIn.read(data)
-            files[tarFile.header.name.toString()] = TarFlatFile(tarFile, data)
-
-            tarFile = tarStreamIn.nextEntry
-        }
-        tarStreamIn.close()
+    fun import(importedFiles: MutableMap<String, TarFlatFile>){
+        this.files = importedFiles
     }
 
-    fun save() {
-        val tarStreamOut = TarOutputStream(databaseFile)
-
-        files.values.forEach {
-            tarStreamOut.putNextEntry(it.entry)
-            tarStreamOut.write(it.data)
-        }
-        tarStreamOut.close()
+    fun export(): List<TarFlatFile> {
+        return this.files.values.toList()
     }
 
     fun commit(statement: FlatFileStatement){
         statement.getFilesChanged().forEach{ files[it.getFileName()] = it }
         statement.getFilesDeleted().forEach{ files.remove(it) }
-        save()
     }
 
     fun clean(){
@@ -89,11 +126,11 @@ class FlatFilePlugin : IPersistanceManager {
     private val currentDir: String = File(".").canonicalPath
     private val databaseFile: File = File("$currentDir/resources/database/flatfileDB.tar")
     private var statement: FlatFileStatement = FlatFileStatement()
-    private var database: FlatFileDatabase = FlatFileDatabase(databaseFile)
+    private var database: FlatFileDatabase = FlatFileDatabase()
+    private var tarWriter: TarWriter = TarWriter(databaseFile)
 
     override fun openTransaction() {
         statement = FlatFileStatement() // Create new statement
-        return
     }
 
     override fun closeTransaction(commit: Boolean) {
@@ -102,6 +139,7 @@ class FlatFilePlugin : IPersistanceManager {
         }
         else {
             database.commit(statement)
+            tarWriter.writeFiles(database.export())
         }
         statement = FlatFileStatement()
     }
@@ -115,25 +153,21 @@ class FlatFilePlugin : IPersistanceManager {
             databaseFile.createNewFile()
         }
 
-        database.load()
+        database.import(tarWriter.readFiles())
         return true
     }
 
     fun close(){
         this.closeTransaction(false)
-        this.database.save()
+        tarWriter.writeFiles(database.export())
     }
 
     fun clean(){
         this.database.clean()
-        this.databaseFile.delete()
-        this.databaseFile.createNewFile()
+        tarWriter.clean()
     }
 
     fun getFolder(path: String): List<Serializable>{
-        val files = this.database.getFolder(path)
-
-        // Deserialize objects
-        return files.map { it -> ObjectInputStream(ByteArrayInputStream(it.data)).readObject() as Serializable }
+        return database.getFolder(path).map { it -> Serializer.deserialize(it.data) }       // deserialize files
     }
 }
