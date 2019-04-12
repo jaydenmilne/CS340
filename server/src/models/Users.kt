@@ -2,6 +2,7 @@ package models
 
 import commands.CommandException
 import commands.UpdateHandCommand
+import IUser
 
 private var nextUserId = -1
 private const val STARTING_TRAINS = 45
@@ -42,9 +43,7 @@ object Users {
 
 }
 
-class User(var username: String) {
-
-    var userId = getNextUserId()
+class User(var username: String): IUser(getNextUserId()) {
     var ready = false
     var authToken = ""
     var color = Color.BLUE
