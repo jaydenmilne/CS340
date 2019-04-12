@@ -8,8 +8,8 @@ import java.util.*
 
 class TarFlatFile {
     private val filePerms = 508     // chmod 774
-    public var entry: TarEntry
-    public var data: ByteArray
+    var entry: TarEntry
+    var data: ByteArray
 
     constructor(fileName: String, data: ByteArray) {
         entry = TarEntry(TarHeader.createHeader(fileName, toLong(data.size), Date().time / 1000, false, filePerms))
@@ -21,10 +21,10 @@ class TarFlatFile {
         this.data = data
     }
 
-    fun getFileName(): String { return entry.header.name.toString()}
+    fun getFileName(): String { return entry.header.name.toString() }
 }
 
-class Serializer(){
+class Serializer {
     companion object {
         fun serialize(obj: Serializable): ByteArray {
             val bytes = ByteArrayOutputStream()
@@ -41,8 +41,8 @@ class Serializer(){
     }
 }
 
-class TarWriter(private val tarFile: File){
-    fun writeFiles(files: List<TarFlatFile>){
+class TarWriter(private val tarFile: File) {
+    fun writeFiles(files: List<TarFlatFile>) {
         val tarStreamOut = TarOutputStream(tarFile)
 
         files.forEach {
@@ -52,13 +52,13 @@ class TarWriter(private val tarFile: File){
         tarStreamOut.close()
     }
 
-    fun readFiles(): MutableMap<String, TarFlatFile>{
+    fun readFiles(): MutableMap<String, TarFlatFile> {
         val files = mutableMapOf<String, TarFlatFile>()
         val tarStreamIn = TarInputStream(BufferedInputStream(FileInputStream(tarFile)))
 
         var tarFile: TarEntry? = tarStreamIn.nextEntry
 
-        while (tarFile != null){
+        while (tarFile != null) {
             val data = ByteArray(tarFile.size.toInt())
             tarStreamIn.read(data)
             files[tarFile.header.name.toString()] = TarFlatFile(tarFile, data)
@@ -69,29 +69,29 @@ class TarWriter(private val tarFile: File){
         return files
     }
 
-    fun clean(){
+    fun clean() {
         tarFile.delete()
         tarFile.createNewFile()
     }
 }
 
-class FlatFileStatement(){
+class FlatFileStatement {
     private var filesChanged: MutableList<TarFlatFile> = mutableListOf<TarFlatFile>()
     private var filesDeleted: MutableList<String> = mutableListOf<String>()
 
     fun getFilesChanged(): List<TarFlatFile>{ return filesChanged.toList() }
     fun getFilesDeleted(): List<String>{ return filesDeleted.toList() }
 
-    fun addFile(fileName: String, obj: Serializable){
+    fun addFile(fileName: String, obj: Serializable) {
         val data = Serializer.serialize(obj)
-        this.filesChanged.add( TarFlatFile(fileName, data))
+        this.filesChanged.add(TarFlatFile(fileName, data))
     }
 
-    fun removeFile(fileName: String){
+    fun removeFile(fileName: String) {
         filesDeleted.add(fileName)
     }
 
-    fun rollback(){
+    fun rollback() {
         this.filesChanged.clear()
         this.filesDeleted.clear()
     }
@@ -100,7 +100,7 @@ class FlatFileStatement(){
 class FlatFileDatabase {
     private var files = mutableMapOf<String, TarFlatFile>()
 
-    fun import(importedFiles: MutableMap<String, TarFlatFile>){
+    fun import(importedFiles: MutableMap<String, TarFlatFile>) {
         this.files = importedFiles
     }
 
@@ -108,16 +108,16 @@ class FlatFileDatabase {
         return this.files.values.toList()
     }
 
-    fun commit(statement: FlatFileStatement){
-        statement.getFilesChanged().forEach{ files[it.getFileName()] = it }
-        statement.getFilesDeleted().forEach{ files.remove(it) }
+    fun commit(statement: FlatFileStatement) {
+        statement.getFilesChanged().forEach { files[it.getFileName()] = it }
+        statement.getFilesDeleted().forEach { files.remove(it) }
     }
 
-    fun clean(){
+    fun clean() {
         this.files.clear()
     }
 
-    fun getFolder(path: String): List<TarFlatFile>{
+    fun getFolder(path: String): List<TarFlatFile> {
         return files.values.filter { it.getFileName().startsWith(path) }
     }
 }
@@ -134,10 +134,9 @@ class FlatFilePlugin : IPersistanceManager {
     }
 
     override fun closeTransaction(commit: Boolean) {
-        if(!commit){
+        if (!commit) {
             statement.rollback()
-        }
-        else {
+        } else {
             database.commit(statement)
             tarWriter.writeFiles(database.export())
         }
@@ -149,7 +148,7 @@ class FlatFilePlugin : IPersistanceManager {
     override fun getGameDAO(): IGameDAO { return FlatFileGameDAO(statement) }
 
     override fun initialize(): Boolean {
-        if(!databaseFile.exists()){
+        if (!databaseFile.exists()) {
             databaseFile.createNewFile()
         }
 
@@ -157,17 +156,17 @@ class FlatFilePlugin : IPersistanceManager {
         return true
     }
 
-    fun close(){
+    fun close() {
         this.closeTransaction(false)
         tarWriter.writeFiles(database.export())
     }
 
-    fun clean(){
+    fun clean() {
         this.database.clean()
         tarWriter.clean()
     }
 
-    fun getFolder(path: String): List<Serializable>{
+    fun getFolder(path: String): List<Serializable> {
         return database.getFolder(path).map { it -> Serializer.deserialize(it.data) }       // deserialize files
     }
 }
