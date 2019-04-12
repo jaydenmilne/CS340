@@ -1,8 +1,3 @@
-
-/* Parent Classes that models will inherit from */
-open class IGame(val gameId:Int){ }
-open class IUser(val userId:Int){ }
-
 interface ICommandDAO {
     fun persistCommand(command: ICommand, gameID: Int)
     fun loadCommands(): List<ICommand>

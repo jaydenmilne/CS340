@@ -43,7 +43,8 @@ object Users {
 
 }
 
-class User(var username: String): IUser(getNextUserId()) {
+class User(var username: String): IUser {
+    override var userId = getNextUserId()
     var ready = false
     var authToken = ""
     var color = Color.BLUE

@@ -39,7 +39,8 @@ object Games {
     }
 }
 
-class Game(var name: String): IGame(getNextGameID()) {
+class Game(var name: String): IGame {
+    override val gameId = getNextGameID()
     var players = mutableSetOf<User>()
     var started = false
 
