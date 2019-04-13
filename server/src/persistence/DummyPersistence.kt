@@ -9,13 +9,13 @@ class DummyPersistenceManager: IPersistenceManager {
 
     override fun closeTransaction(commit: Boolean) {}
 
-    override fun getCommandDAO(): ICommandDAO {return DummyCommandDAO()}
+    override fun getCommandDAO(): ICommandDAO {}
 
-    override fun getUserDAO(): IUserDAO {return DummyUserDAO()}
+    override fun getUserDAO(): IUserDAO {}
 
-    override fun getGameDAO(): IGameDAO {return DummyGameDAO()}
+    override fun getGameDAO(): IGameDAO {}
 
-    override fun initialize(): Boolean {return true}
+    override fun initialize(): Boolean {}
 }
 
 class DummyCommandDAO: ICommandDAO {
