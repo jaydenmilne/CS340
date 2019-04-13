@@ -5,34 +5,34 @@ import IUserDAO
 import IGameDAO
 
 object PersistenceManager : IPersistenceManager {
-    private var persistanceManager : IPersistenceManager = DummyPersistenceManager()
+    private var persistenceManager : IPersistenceManager = DummyPersistenceManager()
 
-    fun loadPersistanceManager(manager : IPersistenceManager) {
-        persistanceManager = manager
+    fun loadPersistenceManager(manager : IPersistenceManager) {
+        persistenceManager = manager
     }
 
     override fun openTransaction() {
-        persistanceManager.openTransaction()
+        persistenceManager.openTransaction()
     }
 
     override fun closeTransaction(commit: Boolean) {
-        persistanceManager.closeTransaction(commit)
+        persistenceManager.closeTransaction(commit)
     }
 
     override fun getCommandDAO(): ICommandDAO {
-        return persistanceManager.getCommandDAO()
+        return persistenceManager.getCommandDAO()
     }
 
     override fun getUserDAO(): IUserDAO {
-        return persistanceManager.getUserDAO()
+        return persistenceManager.getUserDAO()
     }
 
     override fun getGameDAO(): IGameDAO {
-        return persistanceManager.getGameDAO()
+        return persistenceManager.getGameDAO()
     }
 
     override fun initialize(): Boolean {
-        return persistanceManager.initialize()
+        return persistenceManager.initialize()
     }
 
 }

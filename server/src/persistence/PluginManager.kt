@@ -45,6 +45,6 @@ class PluginManager {
             manager =  findClassInDirectory("plugins", className)
         }
 
-        PersistenceManager.loadPersistanceManager(manager)
+        PersistenceManager.loadPersistenceManager(manager)
     }
 }
