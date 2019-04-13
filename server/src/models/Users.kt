@@ -89,7 +89,7 @@ class User(var username: String) {
                 this.turnOrder)
     }
 
-    fun toLoginUserDTO(): LoginUserDTO{
+    fun toLoginUserDTO(): LoginUserDTO {
         return LoginUserDTO(this.username,
                             this.userId,
                             this.color,
