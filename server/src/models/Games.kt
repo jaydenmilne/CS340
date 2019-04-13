@@ -1,6 +1,7 @@
 package models
 
 import commands.*
+import IGame
 
 private var nextGameId = -1
 
@@ -46,8 +47,8 @@ object Games {
     }
 }
 
-class Game(var name: String) {
-    val gameId = getNextGameID()
+class Game(var name: String): IGame {
+    override val gameId = getNextGameID()
     var players = mutableSetOf<User>()
     var started = false
 

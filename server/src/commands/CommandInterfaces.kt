@@ -1,6 +1,7 @@
 package commands
 
 import models.User
+import ICommand
 
 const val CREATE_GAME = "createGame"
 const val GAME_CREATED = "gameCreated"
@@ -32,10 +33,6 @@ const val UPDATE_HAND = "updateHand"
 const val LAST_ROUND = "lastRound"
 const val GAME_OVER = "gameOver"
 const val SKIP_TURN = "skipTurn"
-
-interface ICommand {
-    val command: String
-}
 
 interface INormalCommand : ICommand {
     override val command: String

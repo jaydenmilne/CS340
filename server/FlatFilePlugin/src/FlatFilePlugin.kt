@@ -1,7 +1,6 @@
 import IPersistenceManager
 
-class SQLPlugin : IPersistenceManager {
-
+class FlatFilePlugin : IPersistenceManager {
     override fun openTransaction() {
         TODO("not implemented")
     }
