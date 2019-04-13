@@ -14,8 +14,13 @@ class LoginResultCommand : IRegisterClientCommand {
 }
 
 class RefreshGameListCommand : INormalClientCommand {
-    var games = Games.games.values
     override val command = REFRESH_GAME_LIST
+    var games = mutableListOf<LobbyGameDTO>()
+    constructor(){
+        Games.games.values.forEach{
+            games.add(it.toDTO())
+        }
+    }
 }
 
 class StartGameCommand(var gameId: String) : INormalClientCommand {
@@ -27,11 +32,11 @@ class UpdatePlayerCommand : INormalClientCommand {
 
     constructor()
 
-    constructor (player: GamePlayer) {
+    constructor (player: GamePlayerDTO) {
         gamePlayer = player
     }
 
-    var gamePlayer = GamePlayer(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0, 0)
+    var gamePlayer = GamePlayerDTO(0, "", Color.YELLOW, false, 0, 0, 0, 0, false, 0, 0)
 }
 
 class ChangeTurnCommand(var userId: Int = 0) : INormalClientCommand {

@@ -59,9 +59,9 @@ class User(var username: String) {
 
     var turnOrder = -1
 
-    @Transient private var passwordHash = ""
-    @Transient var queue = CommandQueue()
-    @Transient var isDrawingSecondCard = false
+    private var passwordHash = ""
+    var queue = CommandQueue()
+    var isDrawingSecondCard = false
 
     constructor(username: String, password: String) : this(username) {
         updatePassword(password)
@@ -75,8 +75,8 @@ class User(var username: String) {
         return PasswordStorage.verifyPassword(password, passwordHash)
     }
 
-    fun toGamePlayer(): GamePlayer {
-        return GamePlayer(this.userId,
+    fun toGamePlayer(): GamePlayerDTO {
+        return GamePlayerDTO(this.userId,
                 this.username,
                 this.color,
                 this.ready,
@@ -87,6 +87,13 @@ class User(var username: String) {
                 this.hasLongestRoute,
                 this.longestRouteLength,
                 this.turnOrder)
+    }
+
+    fun toLoginUserDTO(): LoginUserDTO{
+        return LoginUserDTO(this.username,
+                            this.userId,
+                            this.color,
+                            this.ready)
     }
 
     fun updateHand() {
@@ -154,18 +161,6 @@ class User(var username: String) {
 class ClientUser(val userId: Int, var username: String, val authToken: String) {
     constructor() : this(0, "", "")
 }
-
-class GamePlayer(val userId: Int,
-                 val username: String,
-                 val color: Color,
-                 val ready: Boolean,
-                 val points: Int,
-                 val numTrainCards: Int,
-                 val numDestinationCards: Int,
-                 val numRemainingTrains: Int,
-                 val hasLongestRoute: Boolean,
-                 val longestRouteLength: Int,
-                 val turnOrder: Int)
 
 enum class Color(val rgb: String) {
     YELLOW("fdd835"),
