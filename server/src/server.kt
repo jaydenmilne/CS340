@@ -5,7 +5,7 @@ import commands.*
 import models.AuthTokens
 import models.RegisterCommandQueue
 import org.apache.commons.io.IOUtils
-import persistence.IPersistanceManager
+import persistence.IPersistenceManager
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
