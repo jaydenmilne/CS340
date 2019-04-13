@@ -37,6 +37,14 @@ object Games {
         val gameUserIn = games.filter { p -> p.value.players.contains(user) }.values.firstOrNull()
         return gameUserIn?.gameId
     }
+
+    fun toDTO(): List<LobbyGameDTO> {
+        var lobbyGameDTOs = mutableListOf<LobbyGameDTO>()
+
+        games.values.forEach{ lobbyGameDTOs.add(it.toDTO()) }
+
+        return lobbyGameDTOs
+    }
 }
 
 class Game(var name: String): IGame {
@@ -48,7 +56,7 @@ class Game(var name: String): IGame {
     var faceUpShardCards = ShardCardDeck(mutableListOf())
     var shardCardDiscardPile = ShardCardDeck(mutableListOf())
 
-    @Transient  var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
+    var destinationCardDeck = DestinationCardDeck(mutableListOf()).initializeDeck()
 
 
     var whoseTurn: Int = -1
@@ -56,11 +64,11 @@ class Game(var name: String): IGame {
     var chatMessages = mutableListOf<Message>()
     var destDiscardOrder = 0
 
-    @Transient var longestRouteManager = LongestRouteManager(this)
-    @Transient var routes = RouteList()
-    @Transient private var lastRoundInitiator = User("")
-    @Transient private var lastRoundStarted = false
-    @Transient private var nextMessageId = -1
+    var longestRouteManager = LongestRouteManager(this)
+    var routes = RouteList()
+    private var lastRoundInitiator = User("")
+    private var lastRoundStarted = false
+    private var nextMessageId = -1
 
     init {
         longestRouteManager.init()
@@ -327,5 +335,13 @@ class Game(var name: String): IGame {
             broadcast(lastRoundCommand)
             lastRoundInitiator = user
         }
+    }
+
+    fun toDTO(): LobbyGameDTO {
+        var players = mutableSetOf<GamePlayerDTO>()
+        this.players.forEach {
+            players.add(it.toGamePlayer())
+        }
+        return LobbyGameDTO(this.gameId, this.name, this.started, players)
     }
 }
