@@ -35,4 +35,8 @@ object PersistenceManager : IPersistenceManager {
         return persistenceManager.initialize()
     }
 
+    override fun clear(): Boolean {
+        return persistenceManager.clear()
+    }
+
 }

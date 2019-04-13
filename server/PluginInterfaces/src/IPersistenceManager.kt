@@ -5,4 +5,5 @@ interface IPersistenceManager {
     fun getUserDAO(): IUserDAO
     fun getGameDAO(): IGameDAO
     fun initialize(): Boolean
+    fun clear(): Boolean
 }
