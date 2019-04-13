@@ -328,7 +328,7 @@ class Game(var name: String) {
         }
     }
 
-    fun toDTO():LobbyGameDTO {
+    fun toDTO(): LobbyGameDTO {
         var players = mutableSetOf<GamePlayerDTO>()
         this.players.forEach {
             players.add(it.toGamePlayer())
