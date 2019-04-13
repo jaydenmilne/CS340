@@ -15,12 +15,7 @@ class LoginResultCommand : IRegisterClientCommand {
 
 class RefreshGameListCommand : INormalClientCommand {
     override val command = REFRESH_GAME_LIST
-    var games = mutableListOf<LobbyGameDTO>()
-    constructor(){
-        Games.games.values.forEach{
-            games.add(it.toDTO())
-        }
-    }
+    var games = Games.toDTO()
 }
 
 class StartGameCommand(var gameId: String) : INormalClientCommand {

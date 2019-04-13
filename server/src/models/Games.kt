@@ -36,6 +36,14 @@ object Games {
         val gameUserIn = games.filter { p -> p.value.players.contains(user) }.values.firstOrNull()
         return gameUserIn?.gameId
     }
+
+    fun toDTO(): List<LobbyGameDTO> {
+        var lobbyGameDTOs = mutableListOf<LobbyGameDTO>()
+
+        games.values.forEach{ lobbyGameDTOs.add(it.toDTO()) }
+
+        return lobbyGameDTOs
+    }
 }
 
 class Game(var name: String) {
