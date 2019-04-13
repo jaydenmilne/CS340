@@ -5,7 +5,7 @@ import commands.*
 import models.AuthTokens
 import models.RegisterCommandQueue
 import org.apache.commons.io.IOUtils
-import persistence.IPersistanceManager
+import persistence.PluginManager
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection.*
@@ -15,8 +15,18 @@ const val MAX_CONNECTIONS = 1
 const val REGISTRATION_ENDPOINT = "/register"
 const val COMMAND_ENDPOINT = "/command"
 const val PORT = 4300
+var commandsBetweenCheckpoints = 10
 
 fun main(args: Array<String>) {
+    if (args.size > 2) {
+        val pluginManager = PluginManager()
+        pluginManager.loadPlugin(args[2])
+        if (args.size > 3) {
+            commandsBetweenCheckpoints = Integer.parseInt(args[3])
+        }
+    }
+
+
     val server = HttpServer.create(InetSocketAddress(PORT), MAX_CONNECTIONS)
 
     server.createContext(COMMAND_ENDPOINT) { httpExchange ->

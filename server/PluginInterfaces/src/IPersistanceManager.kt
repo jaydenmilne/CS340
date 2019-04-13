@@ -1,3 +1,0 @@
-interface IPersistanceManager {
-    fun initialize()
-}
