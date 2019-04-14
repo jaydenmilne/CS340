@@ -71,6 +71,7 @@ object PersistenceManager : IPersistenceManager {
 
         if ((commandsPersistedCounter % commandsBetweenCheckpoints) == 0) {
             saveCheckpoint()
+            commandsPersistedCounter = 0
         } else {
             openTransaction()
             getCommandDAO().persistCommand(command, gameId)
