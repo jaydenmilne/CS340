@@ -5,7 +5,7 @@ import java.io.Serializable
  * FlatFileCommandDAO Used to access commands in a Flat File Tar database
  */
 class FlatFileCommandDAO(private val statement: FlatFileStatement) : ICommandDAO{
-    override fun persistCommand(command: Serializable, gameID: Int) {
+    override fun persistCommand(command: ICommand, gameID: Int) {
         statement.addFile(makeFileName(command, gameID), command)
     }
 
@@ -13,10 +13,10 @@ class FlatFileCommandDAO(private val statement: FlatFileStatement) : ICommandDAO
         statement.removeFile(makeFileName(command, gameID))
     }
 
-    override fun loadCommands(persistanceManager: IPersistanceManager): List<Serializable> {
-        if(persistanceManager !is FlatFilePlugin) throw DatabaseException("Incompatible persistence manager!")
+    override fun loadCommands(persistenceManager: IPersistenceManager): List<ICommand> {
+        if(persistenceManager !is FlatFilePlugin) throw DatabaseException("Incompatible persistence manager!")
 
-        return persistanceManager.getFolder("command")
+        return persistenceManager.getFolder("command").map { it -> it as ICommand }
     }
 
     private fun makeFileName(command: Serializable, gameID: Int): String {

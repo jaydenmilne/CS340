@@ -24,23 +24,6 @@ class TarFlatFile {
     fun getFileName(): String { return entry.header.name.toString() }
 }
 
-class Serializer {
-    companion object {
-        fun serialize(obj: Serializable): ByteArray {
-            val bytes = ByteArrayOutputStream()
-            val objStream = ObjectOutputStream(bytes)
-
-            objStream.writeObject(obj)
-            return bytes.toByteArray()
-        }
-
-        fun deserialize(data: ByteArray): Serializable {
-            val objStream = ObjectInputStream(ByteArrayInputStream(data))
-            return objStream.readObject() as Serializable
-        }
-    }
-}
-
 class TarWriter(private val tarFile: File) {
     fun writeFiles(files: List<TarFlatFile>) {
         val tarStreamOut = TarOutputStream(tarFile)
@@ -122,7 +105,7 @@ class FlatFileDatabase {
     }
 }
 
-class FlatFilePlugin : IPersistanceManager {
+class FlatFilePlugin : IPersistenceManager {
     private val currentDir: String = File(".").canonicalPath
     private val databaseFile: File = File("$currentDir/resources/database/flatfileDB.tar")
     private var statement: FlatFileStatement = FlatFileStatement()

@@ -5,14 +5,14 @@ import java.io.Serializable
  * FlatFileGameDAO Used to access games in a Flat File Tar database
  */
 class FlatFileGameDAO(private val statement: FlatFileStatement) : IGameDAO {
-    override fun persistGame(game: Serializable) {
+    override fun persistGame(game: IGame) {
         statement.addFile(makeFileName(game), game)
     }
 
-    override fun loadGames(persistanceManager: IPersistanceManager): List<Serializable> {
-        if(persistanceManager !is FlatFilePlugin) throw DatabaseException("Incompatible persistence manager!")
+    override fun loadGames(persistenceManager: IPersistenceManager): List<IGame> {
+        if(persistenceManager !is FlatFilePlugin) throw DatabaseException("Incompatible persistence manager!")
 
-        return persistanceManager.getFolder("games")
+        return persistenceManager.getFolder("games").map { it -> it as IGame }
     }
 
     private fun makeFileName(game: Serializable): String {
