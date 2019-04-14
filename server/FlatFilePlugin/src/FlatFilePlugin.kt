@@ -144,9 +144,10 @@ class FlatFilePlugin : IPersistenceManager {
         tarWriter.writeFiles(database.export())
     }
 
-    fun clean() {
+    override fun clear(): Boolean {
         this.database.clean()
         tarWriter.clean()
+        return true
     }
 
     fun getFolder(path: String): List<Serializable> {

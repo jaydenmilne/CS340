@@ -22,7 +22,7 @@ class DummyGame(val name: String, override val gameId: Int): IGame {
 fun openDB(): FlatFilePlugin{
     val db = FlatFilePlugin()
     db.initialize()
-    db.clean()
+    db.clear()
     db.openTransaction()
     return db
 }
