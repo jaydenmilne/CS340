@@ -196,9 +196,9 @@ fun handlePost(httpExchange: HttpExchange) {
             writer.close()
 
             when (initialCommand.command) {
-                CREATE_GAME -> PersistenceManager.saveCheckpoint()
-                JOIN_GAME -> PersistenceManager.saveCheckpoint()
-                LEAVE_GAME -> PersistenceManager.saveCheckpoint()
+                CREATE_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                JOIN_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                LEAVE_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
                 LIST_GAMES -> null
                 PLAYER_READY -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
                 CHANGE_COLOR -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
