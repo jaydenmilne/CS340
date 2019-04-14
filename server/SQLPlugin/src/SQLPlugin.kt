@@ -25,4 +25,8 @@ class SQLPlugin : IPersistenceManager {
     override fun initialize(): Boolean {
         TODO("not implemented")
     }
+
+    override fun clear(): Boolean {
+        TODO("not implemented")
+    }
 }
