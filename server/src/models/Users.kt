@@ -41,6 +41,10 @@ object Users {
         return usersByUserId[id]
     }
 
+    fun getUsers(): List<User> {
+        return usersByUserId.map { e -> e.value }
+    }
+
 }
 
 class User(var username: String): IUser {
