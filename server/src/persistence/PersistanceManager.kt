@@ -1,11 +1,16 @@
 package persistence
 import IPersistenceManager
+import ICommand
 import ICommandDAO
 import IUserDAO
 import IGameDAO
+import models.Games
+import models.Users
 
 object PersistenceManager : IPersistenceManager {
     private var persistenceManager : IPersistenceManager = DummyPersistenceManager()
+    private var commandsPersistedCounter = 0
+    private var commandsBetweenCheckpoints = 1
 
     fun loadPersistenceManager(manager : IPersistenceManager) {
         persistenceManager = manager
@@ -39,4 +44,37 @@ object PersistenceManager : IPersistenceManager {
         return persistenceManager.clear()
     }
 
+    fun setCommandsBetweenCheckpoints(commandsBetweenCheckpoints: Int) {
+        this.commandsBetweenCheckpoints = commandsBetweenCheckpoints
+    }
+
+    fun saveCheckpoint() {
+        clear()
+        openTransaction()
+
+        val userDAO = getUserDAO()
+        val gameDAO = getGameDAO()
+
+        for (user in Users.getUsers()) {
+            userDAO.persistUser(user)
+        }
+
+        for (game in Games.getGames()) {
+            gameDAO.persistGame(game)
+        }
+
+        closeTransaction(true)
+    }
+
+    fun saveCommand(command: ICommand, gameId: Int) {
+        commandsPersistedCounter++
+
+        if ((commandsPersistedCounter % commandsBetweenCheckpoints) == 0) {
+            saveCheckpoint()
+        } else {
+            openTransaction()
+            getCommandDAO().persistCommand(command, gameId)
+            closeTransaction(true)
+        }
+    }
 }

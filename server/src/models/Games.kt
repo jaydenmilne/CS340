@@ -45,6 +45,10 @@ object Games {
 
         return lobbyGameDTOs
     }
+
+    fun getGames(): List<Game> {
+        return games.map { e -> e.value }
+    }
 }
 
 class Game(var name: String): IGame {

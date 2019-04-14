@@ -3,8 +3,10 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import commands.*
 import models.AuthTokens
+import models.Games
 import models.RegisterCommandQueue
 import org.apache.commons.io.IOUtils
+import persistence.PersistenceManager
 import persistence.PluginManager
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -18,14 +20,14 @@ const val PORT = 4300
 var commandsBetweenCheckpoints = 10
 
 fun main(args: Array<String>) {
+    val pluginManager = PluginManager()
+
     if (args.size > 2) {
-        val pluginManager = PluginManager()
         pluginManager.loadPlugin(args[2])
         if (args.size > 3) {
             commandsBetweenCheckpoints = Integer.parseInt(args[3])
         }
     }
-
 
     val server = HttpServer.create(InetSocketAddress(PORT), MAX_CONNECTIONS)
 
@@ -43,6 +45,7 @@ fun main(args: Array<String>) {
             "OPTIONS" -> handleOptions(httpExchange)
         }
     }
+
     println("On your marks... get set...")
     server.start()
     println("Server started on port $PORT")
@@ -84,6 +87,8 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
 
             writer.write(Gson().toJson(resultCommands))
             writer.close()
+
+            PersistenceManager.saveCheckpoint()
         }
 
     } catch (e: Exception) {
@@ -189,6 +194,24 @@ fun handlePost(httpExchange: HttpExchange) {
             }
 
             writer.close()
+
+            when (initialCommand.command) {
+                CREATE_GAME -> PersistenceManager.saveCheckpoint()
+                JOIN_GAME -> PersistenceManager.saveCheckpoint()
+                LEAVE_GAME -> PersistenceManager.saveCheckpoint()
+                LIST_GAMES -> null
+                PLAYER_READY -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                CHANGE_COLOR -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                POST_CHAT -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                REQUEST_DESTINATIONS -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                DISCARD_DESTINATIONS -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                CLAIM_ROUTE -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                DRAW_SHARD_CARD -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                DEBUG_HELP -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                REJOIN_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                SKIP_TURN -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                else -> null
+            }
         }
 
     } catch (e: Exception) {
