@@ -1,6 +1,7 @@
 import IPersistenceManager
 
 class FlatFilePlugin : IPersistenceManager {
+
     override fun openTransaction() {
         TODO("not implemented")
     }
@@ -24,4 +25,9 @@ class FlatFilePlugin : IPersistenceManager {
     override fun initialize(): Boolean {
         TODO("not implemented")
     }
+
+    override fun clear(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }
