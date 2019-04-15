@@ -1,7 +1,7 @@
 import java.lang.RuntimeException
 
 interface ICommandDAO {
-    fun persistCommand(command: ICommand, gameID: Int)
+    fun persistCommand(command: serializedCmdDTO, gameID: Int)
     fun loadCommands(persistenceManager: IPersistenceManager): List<ICommand>
     fun clearCommandsForGame(gameID: Int)
 }
