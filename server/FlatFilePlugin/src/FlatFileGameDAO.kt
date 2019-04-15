@@ -15,8 +15,8 @@ class FlatFileGameDAO(private val statement: FlatFileStatement) : IGameDAO {
         return persistenceManager.getFolder("games").map { it -> it as IGame }
     }
 
-    private fun makeFileName(game: Serializable): String {
-        return "games/%d.game".format(game.hashCode())
+    private fun makeFileName(game: IGame): String {
+        return "games/%d.game".format(game.gameId)
     }
 
 }

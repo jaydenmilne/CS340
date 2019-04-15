@@ -11,8 +11,8 @@ class TarFlatFile {
     var entry: TarEntry
     var data: ByteArray
 
-    constructor(fileName: String, data: ByteArray) {
-        entry = TarEntry(TarHeader.createHeader(fileName, toLong(data.size), Date().time / 1000, false, filePerms))
+    constructor(fileName: String, data: ByteArray, dir: Boolean = false) {
+        entry = TarEntry(TarHeader.createHeader(fileName, toLong(data.size), Date().time / 1000, dir, filePerms))
         this.data = data
     }
 
@@ -22,6 +22,8 @@ class TarFlatFile {
     }
 
     fun getFileName(): String { return entry.header.name.toString() }
+
+    fun isDir(): Boolean { return entry.isDirectory }
 }
 
 class TarWriter(private val tarFile: File) {
@@ -70,6 +72,10 @@ class FlatFileStatement {
         this.filesChanged.add(TarFlatFile(fileName, data))
     }
 
+    fun addDir(dirName: String) {
+        this.filesChanged.add(TarFlatFile(dirName, ByteArray(0), true))
+    }
+
     fun removeFile(fileName: String) {
         filesDeleted.add(fileName)
     }
@@ -101,7 +107,7 @@ class FlatFileDatabase {
     }
 
     fun getFolder(path: String): List<TarFlatFile> {
-        return files.values.filter { it.getFileName().startsWith(path) }
+        return files.values.filter { !it.isDir() && it.getFileName().startsWith(path) }
     }
 }
 
@@ -133,9 +139,12 @@ class FlatFilePlugin : IPersistenceManager {
     override fun initialize(): Boolean {
         if (!databaseFile.exists()) {
             databaseFile.createNewFile()
+            database.import(tarWriter.readFiles())
+            initTables()
+        } else {
+            database.import(tarWriter.readFiles())
         }
 
-        database.import(tarWriter.readFiles())
         return true
     }
 
@@ -144,9 +153,17 @@ class FlatFilePlugin : IPersistenceManager {
         tarWriter.writeFiles(database.export())
     }
 
+    fun initTables(){
+        this.statement.addDir("games")
+        this.statement.addDir("commands")
+        this.statement.addDir("users")
+        closeTransaction(true)
+    }
+
     override fun clear(): Boolean {
         this.database.clean()
         tarWriter.clean()
+        initTables()
         return true
     }
 

@@ -15,7 +15,7 @@ class FlatFileUserDAO(private val statement: FlatFileStatement) : IUserDAO {
         return persistenceManager.getFolder("users").map{ it -> it as IUser}
     }
 
-    private fun makeFileName(user: Serializable): String {
-        return "users/%d.user".format(user.hashCode())
+    private fun makeFileName(user: IUser): String {
+        return "users/%d.user".format(user.userId)
     }
 }

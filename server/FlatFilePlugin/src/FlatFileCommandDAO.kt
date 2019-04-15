@@ -6,6 +6,7 @@ import java.io.Serializable
  */
 class FlatFileCommandDAO(private val statement: FlatFileStatement) : ICommandDAO{
     override fun persistCommand(command: ICommand, gameID: Int) {
+        statement.addDir(makeFolderName(gameID))
         statement.addFile(makeFileName(command, gameID), command)
     }
 
@@ -16,11 +17,14 @@ class FlatFileCommandDAO(private val statement: FlatFileStatement) : ICommandDAO
     override fun loadCommands(persistenceManager: IPersistenceManager): List<ICommand> {
         if(persistenceManager !is FlatFilePlugin) throw DatabaseException("Incompatible persistence manager!")
 
-        return persistenceManager.getFolder("command").map { it -> it as ICommand }
+        return persistenceManager.getFolder("commands").map { it -> it as ICommand }
     }
 
     private fun makeFileName(command: Serializable, gameID: Int): String {
         return "commands/game_%d/%d.cmd".format(gameID, command.hashCode())
     }
 
+    private fun makeFolderName(gameID: Int): String {
+        return "commands/game_%d".format(gameID)
+    }
 }
