@@ -9,7 +9,7 @@ import models.Users
 
 object PersistenceManager : IPersistenceManager {
     private var persistenceManager : IPersistenceManager = DummyPersistenceManager()
-    private var commandsPersistedCounter = 0
+    private var commandsPersistedCounter = mutableMapOf<Int, Int>()
     private var commandsBetweenCheckpoints = 1
 
     fun loadPersistenceManager(manager : IPersistenceManager) {
@@ -67,11 +67,11 @@ object PersistenceManager : IPersistenceManager {
     }
 
     fun saveCommand(command: ICommand, gameId: Int) {
-        commandsPersistedCounter++
+        commandsPersistedCounter[gameId] = 1 + (commandsPersistedCounter[gameId] ?: 0)
 
-        if ((commandsPersistedCounter % commandsBetweenCheckpoints) == 0) {
+        if (((commandsPersistedCounter[gameId] ?: 0) % commandsBetweenCheckpoints) == 0) {
             saveCheckpoint()
-            commandsPersistedCounter = 0
+            commandsPersistedCounter[gameId] = 0
         } else {
             openTransaction()
             getCommandDAO().persistCommand(command, gameId)
