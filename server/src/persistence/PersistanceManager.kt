@@ -9,7 +9,7 @@ import models.Users
 
 object PersistenceManager : IPersistenceManager {
     private var persistenceManager : IPersistenceManager = DummyPersistenceManager()
-    private var commandsPersistedCounter = 0
+    private var commandsPersistedCounter = mutableMapOf<Int, Int>()
     private var commandsBetweenCheckpoints = 1
 
     fun loadPersistenceManager(manager : IPersistenceManager) {
@@ -48,30 +48,30 @@ object PersistenceManager : IPersistenceManager {
         this.commandsBetweenCheckpoints = commandsBetweenCheckpoints
     }
 
-    fun saveCheckpoint() {
-        clear()
+    fun saveCheckpoint(gameId: Int) {
         openTransaction()
 
         val userDAO = getUserDAO()
         val gameDAO = getGameDAO()
+        val commandDAO = getCommandDAO()
+
+        commandDAO.clearCommandsForGame(gameId)
 
         for (user in Users.getUsers()) {
             userDAO.persistUser(user)
         }
 
-        for (game in Games.getGames()) {
-            gameDAO.persistGame(game)
-        }
+        gameDAO.persistGame(Games.games[gameId]!!)
 
         closeTransaction(true)
     }
 
     fun saveCommand(command: ICommand, gameId: Int) {
-        commandsPersistedCounter++
+        commandsPersistedCounter[gameId] = 1 + (commandsPersistedCounter[gameId] ?: 0)
 
-        if ((commandsPersistedCounter % commandsBetweenCheckpoints) == 0) {
-            saveCheckpoint()
-            commandsPersistedCounter = 0
+        if (((commandsPersistedCounter[gameId] ?: 0) % commandsBetweenCheckpoints) == 0) {
+            saveCheckpoint(gameId)
+            commandsPersistedCounter[gameId] = 0
         } else {
             openTransaction()
             getCommandDAO().persistCommand(command, gameId)
