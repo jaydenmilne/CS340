@@ -153,4 +153,8 @@ class FlatFilePlugin : IPersistenceManager {
     fun getFolder(path: String): List<Serializable> {
         return database.getFolder(path).map { it -> Serializer.deserialize(it.data) }       // deserialize files
     }
+
+    override fun clear(): Boolean {
+        TODO("not implemented")
+    }
 }
