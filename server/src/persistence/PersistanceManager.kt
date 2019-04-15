@@ -48,6 +48,26 @@ object PersistenceManager : IPersistenceManager {
         this.commandsBetweenCheckpoints = commandsBetweenCheckpoints
     }
 
+    fun saveCheckpoint() {
+        openTransaction()
+        clear()
+
+        val userDAO = getUserDAO()
+        val gameDAO = getGameDAO()
+        val commandDAO = getCommandDAO()
+
+
+        for (user in Users.getUsers()) {
+            userDAO.persistUser(user)
+        }
+
+        for (game in Games.getGames()) {
+            gameDAO.persistGame(game)
+        }
+
+        closeTransaction(true)
+    }
+
     fun saveCheckpoint(gameId: Int) {
         openTransaction()
 
