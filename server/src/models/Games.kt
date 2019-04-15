@@ -2,6 +2,7 @@ package models
 
 import commands.*
 import IGame
+import persistence.PersistenceManager
 
 private var nextGameId = -1
 
@@ -299,6 +300,12 @@ class Game(var name: String): IGame {
         shardCardDeck.shardCards.addAll(shardCardDiscardPile.shardCards)
         shardCardDiscardPile = ShardCardDeck(mutableListOf())
         shardCardDeck.shuffle()
+
+        // Forgive us, for we have sinned
+        // Since the cards have changed, serialize it straight away
+        PersistenceManager.openTransaction()
+        PersistenceManager.getGameDAO().persistGame(this)
+        PersistenceManager.closeTransaction(true)
     }
 
     fun redrawFaceUpCards() {
