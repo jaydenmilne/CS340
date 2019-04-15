@@ -29,6 +29,8 @@ fun main(args: Array<String>) {
         }
     }
 
+    PersistenceManager.getUserDAO().loadUsers()
+
     val server = HttpServer.create(InetSocketAddress(PORT), MAX_CONNECTIONS)
 
     server.createContext(COMMAND_ENDPOINT) { httpExchange ->
