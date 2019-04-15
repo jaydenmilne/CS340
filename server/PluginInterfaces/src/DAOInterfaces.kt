@@ -1,19 +1,19 @@
 import java.lang.RuntimeException
 
-interface ICommandDAO {
-    fun persistCommand(command: ICommand, gameID: Int)
-    fun loadCommands(persistenceManager: IPersistenceManager): List<ICommand>
-    fun clearCommandsForGame(gameID: Int)
+abstract class ICommandDAO(val persistenceManager: IPersistenceManager) {
+    abstract fun persistCommand(command: serializedCmdDTO, gameID: Int)
+    abstract fun loadCommands(): List<ICommand>
+    abstract fun clearCommandsForGame(gameID: Int)
 }
 
-interface IGameDAO {
-    fun persistGame(game: IGame)
-    fun loadGames(persistenceManager: IPersistenceManager): List<IGame>
+abstract class IGameDAO(val persistenceManager: IPersistenceManager) {
+    abstract fun persistGame(game: IGame)
+    abstract fun loadGames(): List<IGame>
 }
 
-interface IUserDAO {
-    fun persistUser(user: IUser)
-    fun loadUsers(persistenceManager: IPersistenceManager): List<IUser>
+abstract class IUserDAO(val persistenceManager: IPersistenceManager) {
+    abstract fun persistUser(user: IUser)
+    abstract fun loadUsers(): List<IUser>
 }
 
 class DatabaseException(override val message: String): RuntimeException(message)
