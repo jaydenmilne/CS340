@@ -1,6 +1,7 @@
 package persistence
 import IPersistenceManager
 import ICommand
+import serializedCmdDTO
 import ICommandDAO
 import IUserDAO
 import IGameDAO
@@ -66,7 +67,7 @@ object PersistenceManager : IPersistenceManager {
         closeTransaction(true)
     }
 
-    fun saveCommand(command: ICommand, gameId: Int) {
+    fun saveCommand(command: serializedCmdDTO, gameId: Int) {
         commandsPersistedCounter[gameId] = 1 + (commandsPersistedCounter[gameId] ?: 0)
 
         if (((commandsPersistedCounter[gameId] ?: 0) % commandsBetweenCheckpoints) == 0) {

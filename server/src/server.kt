@@ -196,20 +196,20 @@ fun handlePost(httpExchange: HttpExchange) {
             writer.close()
 
             when (initialCommand.command) {
-                CREATE_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                JOIN_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                LEAVE_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                CREATE_GAME -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                JOIN_GAME -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                LEAVE_GAME -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
                 LIST_GAMES -> null
-                PLAYER_READY -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                CHANGE_COLOR -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                POST_CHAT -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                REQUEST_DESTINATIONS -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                DISCARD_DESTINATIONS -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                CLAIM_ROUTE -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                DRAW_SHARD_CARD -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                DEBUG_HELP -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                REJOIN_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                SKIP_TURN -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                PLAYER_READY -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                CHANGE_COLOR -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                POST_CHAT -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                REQUEST_DESTINATIONS -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                DISCARD_DESTINATIONS -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                CLAIM_ROUTE -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                DRAW_SHARD_CARD -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                DEBUG_HELP -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                REJOIN_GAME -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                SKIP_TURN -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
                 else -> null
             }
         }
