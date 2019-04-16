@@ -63,9 +63,11 @@ class TarWriter(private val tarFile: File) {
 class FlatFileStatement {
     private var filesChanged: MutableList<TarFlatFile> = mutableListOf<TarFlatFile>()
     private var filesDeleted: MutableList<String> = mutableListOf<String>()
+    private var foldersDeleted: MutableList<String> = mutableListOf<String>()
 
     fun getFilesChanged(): List<TarFlatFile>{ return filesChanged.toList() }
     fun getFilesDeleted(): List<String>{ return filesDeleted.toList() }
+    fun getFoldersDeleted(): List<String>{ return foldersDeleted.toList() }
 
     fun addFile(fileName: String, obj: Serializable) {
         val data = Serializer.serialize(obj)
@@ -80,9 +82,14 @@ class FlatFileStatement {
         filesDeleted.add(fileName)
     }
 
+    fun removeFolder(fileName: String) {
+        foldersDeleted.add(fileName)
+    }
+
     fun rollback() {
         this.filesChanged.clear()
         this.filesDeleted.clear()
+        this.foldersDeleted.clear()
     }
 }
 
@@ -100,6 +107,7 @@ class FlatFileDatabase {
     fun commit(statement: FlatFileStatement) {
         statement.getFilesChanged().forEach { files[it.getFileName()] = it }
         statement.getFilesDeleted().forEach { files.remove(it) }
+        statement.getFoldersDeleted().forEach { deleteFolder(it) }
     }
 
     fun clean() {
@@ -108,6 +116,12 @@ class FlatFileDatabase {
 
     fun getFolder(path: String): List<TarFlatFile> {
         return files.values.filter { !it.isDir() && it.getFileName().startsWith(path) }
+    }
+
+    private fun deleteFolder(path: String) {
+        val affectedFiles = files.keys.filter { it.startsWith(path) }
+
+        affectedFiles.forEach{ files.remove(it) }
     }
 }
 
@@ -132,9 +146,9 @@ class FlatFilePlugin : IPersistenceManager {
         statement = FlatFileStatement()
     }
 
-    override fun getCommandDAO(): ICommandDAO { return FlatFileCommandDAO(statement) }
-    override fun getUserDAO(): IUserDAO { return FlatFileUserDAO(statement) }
-    override fun getGameDAO(): IGameDAO { return FlatFileGameDAO(statement) }
+    override fun getCommandDAO(): ICommandDAO { return FlatFileCommandDAO(this) }
+    override fun getUserDAO(): IUserDAO { return FlatFileUserDAO(this) }
+    override fun getGameDAO(): IGameDAO { return FlatFileGameDAO(this) }
 
     override fun initialize(): Boolean {
         if (!databaseFile.exists()) {
@@ -170,4 +184,9 @@ class FlatFilePlugin : IPersistenceManager {
     fun getFolder(path: String): List<Serializable> {
         return database.getFolder(path).map { it -> Serializer.deserialize(it.data) }       // deserialize files
     }
+
+    fun addFile(fileName: String, data: Serializable) { statement.addFile(fileName, data) }
+    fun addFolder(folderName: String) { statement.addDir(folderName) }
+    fun removeFile(path: String) { statement.removeFile(path) }
+    fun removeFolder(path: String) { statement.removeFolder(path) }
 }
