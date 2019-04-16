@@ -126,6 +126,7 @@ class FlatFileDatabase {
 }
 
 class FlatFilePlugin : IPersistenceManager {
+
     private val currentDir: String = File(".").canonicalPath
     private val databaseFile: File = File("$currentDir/resources/database/flatfileDB.tar")
     private var statement: FlatFileStatement = FlatFileStatement()
@@ -183,6 +184,7 @@ class FlatFilePlugin : IPersistenceManager {
         initTables()
         return true
     }
+
 
     fun getFolder(path: String): List<Serializable> {
         return database.getFolder(path).map { it -> Serializer.deserialize(it.data) }       // deserialize files
