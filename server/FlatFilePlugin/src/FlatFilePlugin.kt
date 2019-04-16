@@ -151,6 +151,9 @@ class FlatFilePlugin : IPersistenceManager {
     override fun getGameDAO(): IGameDAO { return FlatFileGameDAO(this) }
 
     override fun initialize(): Boolean {
+        // Ensure that the file path to databaseFile exists
+        databaseFile.parentFile!!.mkdirs()
+
         if (!databaseFile.exists()) {
             databaseFile.createNewFile()
             database.import(tarWriter.readFiles())

@@ -1,14 +1,16 @@
 package models
 
+import java.io.Serializable
+
 class LobbyGameDTO(val gameId: Int,
                    val name: String,
                    val started: Boolean,
-                   val players: MutableSet<GamePlayerDTO>)
+                   val players: MutableSet<GamePlayerDTO>): Serializable
 
 class LoginUserDTO(val username: String,
                    val userId: Int,
                    val color: Color,
-                   val ready: Boolean)
+                   val ready: Boolean): Serializable
 
 class GamePlayerDTO(val userId: Int,
                  val username: String,
@@ -20,4 +22,4 @@ class GamePlayerDTO(val userId: Int,
                  val numRemainingTrains: Int,
                  val hasLongestRoute: Boolean,
                  val longestRouteLength: Int,
-                 val turnOrder: Int)
+                 val turnOrder: Int): Serializable

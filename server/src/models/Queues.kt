@@ -25,6 +25,13 @@ class CommandQueue : Serializable {
 
         return rendered
     }
+
+    /**
+     * Removes all commands from this queue
+     */
+    fun clear() {
+        commands.clear()
+    }
 }
 
 /**
