@@ -32,6 +32,7 @@ object AuthTokens {
         val token = BigInteger(bytes).toString(16)
 
         authTokens[token] = user
+        user.authToken = token
 
         return token
     }
