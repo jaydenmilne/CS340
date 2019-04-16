@@ -47,9 +47,11 @@ object PersistenceManager : IPersistenceManager {
 
     fun setCommandsBetweenCheckpoints(commandsBetweenCheckpoints: Int) {
         this.commandsBetweenCheckpoints = commandsBetweenCheckpoints
+        println("Using N=$commandsBetweenCheckpoints commands between checkpoints")
     }
 
     fun saveCheckpoint() {
+        println("PersistenceManager: Persisting everything")
         openTransaction()
         clear()
 
@@ -64,12 +66,14 @@ object PersistenceManager : IPersistenceManager {
 
         for (game in Games.getGames()) {
             gameDAO.persistGame(game)
+            commandDAO.clearCommandsForGame(game.gameId)
         }
 
         closeTransaction(true)
     }
 
     fun saveCheckpoint(gameId: Int) {
+        println("PersistenceManager: Persisting game $gameId")
         openTransaction()
 
         val userDAO = getUserDAO()
@@ -83,6 +87,8 @@ object PersistenceManager : IPersistenceManager {
         }
 
         gameDAO.persistGame(Games.games[gameId]!!)
+
+        commandDAO.clearCommandsForGame(gameId)
 
         closeTransaction(true)
     }
@@ -100,44 +106,59 @@ object PersistenceManager : IPersistenceManager {
         }
     }
 
-    fun saveUsers() {
+    fun saveUser(userId : Int) {
         val userDAO = getUserDAO()
         openTransaction()
-        for (user in Users.getUsers()) {
-            userDAO.persistUser(user)
-        }
+        userDAO.persistUser(Users.getUserById(userId)!!)
         closeTransaction(true)
     }
 
     fun restoreDB(){
-        println("Loading database...")
-        getUserDAO().loadUsers().forEach {
-            val user = it as User
-            Users.loadUser(user)
-            AuthTokens.loadToken(user.authToken, user)
+        try {
+            println("Loading database...")
+            getUserDAO().loadUsers().forEach {
+                val user = it as User
+                Users.loadUser(user)
+                AuthTokens.loadToken(user.authToken, user)
+            }
+
+            println("\t- Loaded ${Users.getUsers().size} users")
+
+            getGameDAO().loadGames().forEach {
+                Games.loadGame(it as Game)
+            }
+
+            println("\t- Loaded ${Games.getGames().size} games")
+
+            println("\t- Loading commands...")
+            val commandDao = getCommandDAO()
+            commandDao.loadCommands().forEach {
+                val user = Users.getUserById(it.userId)!!
+                val command = it.command as INormalServerCommand
+                println("\t\t- Re-executing ${command.command} for user ${user.username}")
+                command.execute(user)
+            }
+
+            // Clear commands for all games
+            for (game in Games.getGames()) {
+                commandDao.clearCommandsForGame(game.gameId)
+            }
+
+            // Clear outgoing queues, server should now be caught up with the client
+            Users.getUsers().forEach {
+                it.queue.clear()
+            }
+
+            println("Database loaded!")
+
+            println("Re-persisting data to disk...")
+            saveCheckpoint()
+
+        } catch (e : Exception) {
+            System.err.println("Unhandled exception loading database!")
+            clear() // automatically delete, but crash anyway because the server is in an undefined state
+            throw e
         }
 
-        println("\t- Loaded ${Users.getUsers().size} users")
-
-        getGameDAO().loadGames().forEach {
-            Games.loadGame(it as Game)
-        }
-
-        println("\t- Loaded ${Games.getGames().size} games")
-
-        println("\t- Loading commands...")
-        getCommandDAO().loadCommands().forEach {
-            val user = Users.getUserById(it.userId)!!
-            val command = it.command as INormalServerCommand
-            println("\t\t- Re-executing ${command.command} for user ${user.username}")
-            command.execute(user)
-        }
-
-        // Clear outgoing queues, server should now be caught up with the client
-        Users.getUsers().forEach {
-            it.queue.clear()
-        }
-
-        println("Database loaded!")
     }
 }
