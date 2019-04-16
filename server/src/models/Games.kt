@@ -49,6 +49,10 @@ object Games {
     fun getGames(): List<Game> {
         return games.map { e -> e.value }
     }
+
+    fun loadGame(game: Game) {
+        games[game.gameId] = game
+    }
 }
 
 class Game(var name: String): IGame {

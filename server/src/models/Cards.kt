@@ -73,7 +73,7 @@ class ShardCard(val type: MaterialType) : ICard {
     }
 }
 
-class DestinationCard(val cities: Set<String>, val points: Int) {
+class DestinationCard(val cities: Set<String>, val points: Int): Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

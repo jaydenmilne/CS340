@@ -46,5 +46,6 @@ class PluginManager {
         }
 
         PersistenceManager.loadPersistenceManager(manager)
+        PersistenceManager.initialize()
     }
 }

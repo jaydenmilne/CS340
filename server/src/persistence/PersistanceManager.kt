@@ -5,6 +5,8 @@ import serializedCmdDTO
 import ICommandDAO
 import IUserDAO
 import IGameDAO
+import commands.INormalServerCommand
+import models.Game
 import models.Games
 import models.User
 import models.Users
@@ -108,5 +110,11 @@ object PersistenceManager : IPersistenceManager {
             userDAO.persistUser(user)
         }
         closeTransaction(true)
+    }
+
+    fun restoreDB(){
+        getUserDAO().loadUsers().forEach{ Users.addUser(it as User) }
+        getGameDAO().loadGames().forEach{ Games.loadGame(it as Game) }
+//        getCommandDAO().loadCommands().forEach{ (it.command as INormalServerCommand).execute(Users.getUserById(it.userId)!!) }
     }
 }
