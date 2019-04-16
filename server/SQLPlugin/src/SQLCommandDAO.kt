@@ -1,6 +1,10 @@
 import java.io.Serializable
+import java.sql.Connection
 
 class SQLCommandDAO(persistenceManager: IPersistenceManager) : ICommandDAO(persistenceManager) {
+
+    private val sqlPlugin: SQLPlugin = persistenceManager as SQLPlugin
+    private val serializer = Serializer;
 
     override fun clearCommandsForGame(gameID: Int) {
 
