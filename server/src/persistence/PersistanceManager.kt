@@ -6,10 +6,7 @@ import ICommandDAO
 import IUserDAO
 import IGameDAO
 import commands.INormalServerCommand
-import models.Game
-import models.Games
-import models.User
-import models.Users
+import models.*
 
 object PersistenceManager : IPersistenceManager {
     private var persistenceManager : IPersistenceManager = DummyPersistenceManager()
@@ -113,17 +110,26 @@ object PersistenceManager : IPersistenceManager {
     }
 
     fun restoreDB(){
+        println("Loading database...")
         getUserDAO().loadUsers().forEach {
-            Users.addUser(it as User)
+            val user = it as User
+            Users.addUser(user)
+            AuthTokens.loadToken(user.authToken, user)
         }
+
+        println("\t- Loaded ${Users.getUsers().size} users")
 
         getGameDAO().loadGames().forEach {
             Games.loadGame(it as Game)
         }
 
+        println("\t- Loaded ${Games.getGames().size} games")
+
+        println("\t- Loading commands...")
         getCommandDAO().loadCommands().forEach {
             val user = Users.getUserById(it.userId)!!
             val command = it.command as INormalServerCommand
+            println("\t\t- Re-executing ${command.command} for user ${user.username}")
             command.execute(user)
         }
 
@@ -131,5 +137,7 @@ object PersistenceManager : IPersistenceManager {
         Users.getUsers().forEach {
             it.queue.clear()
         }
+
+        println("Database loaded!")
     }
 }

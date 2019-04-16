@@ -35,4 +35,8 @@ object AuthTokens {
 
         return token
     }
+
+    fun loadToken(token: String, user: User) {
+        authTokens[token] = user
+    }
 }
