@@ -116,6 +116,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.chatService.clearData();
     this.routeService.clearData();
     this.turnService.clearData();
+    this.userService.clearData();
   }
 }
 
