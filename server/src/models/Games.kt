@@ -303,9 +303,7 @@ class Game(var name: String): IGame {
 
         // Forgive us, for we have sinned
         // Since the cards have changed, serialize it straight away
-        PersistenceManager.openTransaction()
-        PersistenceManager.getGameDAO().persistGame(this)
-        PersistenceManager.closeTransaction(true)
+        PersistenceManager.saveCheckpoint(this.gameId)
     }
 
     fun redrawFaceUpCards() {
