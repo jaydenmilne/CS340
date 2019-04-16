@@ -3,6 +3,8 @@ package models
 import commands.CommandException
 import commands.UpdateHandCommand
 import IUser
+import java.io.Serializable
+import java.lang.Integer.max
 
 private var nextUserId = -1
 private const val STARTING_TRAINS = 45
@@ -22,6 +24,12 @@ object Users {
     fun addUser(user: User) {
         usersByUserId[user.userId] = user
         usersByUsername[user.username] = user
+    }
+
+    fun loadUser(user: User) {
+        usersByUserId[user.userId] = user
+        usersByUsername[user.username] = user
+        nextUserId = max(nextUserId, user.userId)
     }
 
     fun removeUser(user: User) {
@@ -166,7 +174,7 @@ class ClientUser(val userId: Int, var username: String, val authToken: String) {
     constructor() : this(0, "", "")
 }
 
-enum class Color(val rgb: String) {
+enum class Color(val rgb: String)  : Serializable {
     YELLOW("fdd835"),
     GREEN("66bb6a"),
     BLUE("1976d2"),

@@ -3,6 +3,7 @@ package models
 import commands.*
 import IGame
 import persistence.PersistenceManager
+import java.lang.Integer.max
 
 private var nextGameId = -1
 
@@ -49,6 +50,13 @@ object Games {
 
     fun getGames(): List<Game> {
         return games.map { e -> e.value }
+    }
+
+    fun loadGame(game: Game) {
+        val players = game.players.map{it -> Users.getUserById(it.userId)!!}.toMutableSet()
+        game.players = players
+        games[game.gameId] = game
+        nextGameId = max(nextGameId, game.gameId)
     }
 }
 

@@ -5,6 +5,7 @@ import commands.*
 import models.AuthTokens
 import models.Games
 import models.RegisterCommandQueue
+import models.Users
 import org.apache.commons.io.IOUtils
 import persistence.PersistenceManager
 import persistence.PluginManager
@@ -23,11 +24,14 @@ fun main(args: Array<String>) {
     val pluginManager = PluginManager()
 
     if (args.size > 2) {
+        println("Loading Plugin %s".format(args[2]))
         pluginManager.loadPlugin(args[2])
         if (args.size > 3) {
             commandsBetweenCheckpoints = Integer.parseInt(args[3])
         }
     }
+
+    PersistenceManager.restoreDB()
 
     val server = HttpServer.create(InetSocketAddress(PORT), MAX_CONNECTIONS)
 
@@ -88,7 +92,7 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             writer.write(Gson().toJson(resultCommands))
             writer.close()
 
-            PersistenceManager.saveCheckpoint()
+            PersistenceManager.saveUsers()
         }
 
     } catch (e: Exception) {
@@ -113,23 +117,32 @@ fun handleGet(httpExchange: HttpExchange) {
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
 
-        println("GET /command - $authToken")
-
         if (user == null) {
             httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
             return
         } else {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
+
+            // Don't log if nothing sent back
+            if (user.queue.commands.isNotEmpty()) {
+                var commands = ""
+                for (command in user.queue.commands) {
+                    commands += command.command + ", "
+                }
+                println("GET /command - ${user.username} $commands")
+                println(httpExchange.responseCode.toString())
+            }
+
             writer.write(user.queue.render())
             writer.close()
         }
     } catch (e: Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
+        println(httpExchange.responseCode.toString())
     }
 
-    println(httpExchange.responseCode.toString())
     httpExchange.close()
 }
 
@@ -156,9 +169,6 @@ fun handlePost(httpExchange: HttpExchange) {
             return
         }
 
-        println("POST /command - " + user.username)
-        println(requestBody)
-
         val command = when (initialCommand.command) {
             CREATE_GAME -> Gson().fromJson(requestBody, CreateGameCommand::class.java)
             JOIN_GAME -> Gson().fromJson(requestBody, JoinGameCommand::class.java)
@@ -177,10 +187,19 @@ fun handlePost(httpExchange: HttpExchange) {
             else -> null
         }
 
+
         if (command == null) {
+            println("POST /command - " + user.username)
+            println(requestBody)
             httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, 0)
+            println(httpExchange.responseCode.toString())
         } else {
             val writer = OutputStreamWriter(httpExchange.responseBody)
+
+            if(command !is ListGamesCommand){
+                println("POST /command - " + user.username)
+                println(requestBody)
+            }
 
             try {
                 command.execute(user)
@@ -196,29 +215,33 @@ fun handlePost(httpExchange: HttpExchange) {
             writer.close()
 
             when (initialCommand.command) {
-                CREATE_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                JOIN_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                LEAVE_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                CREATE_GAME -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                JOIN_GAME -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                LEAVE_GAME -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
                 LIST_GAMES -> null
-                PLAYER_READY -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                CHANGE_COLOR -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                POST_CHAT -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                REQUEST_DESTINATIONS -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                DISCARD_DESTINATIONS -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                CLAIM_ROUTE -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                DRAW_SHARD_CARD -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                DEBUG_HELP -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                REJOIN_GAME -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
-                SKIP_TURN -> PersistenceManager.saveCommand(command, Games.getGameIdForPlayer(user) ?: -1)
+                PLAYER_READY -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                CHANGE_COLOR -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                POST_CHAT -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                REQUEST_DESTINATIONS -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                DISCARD_DESTINATIONS -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                CLAIM_ROUTE -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                DRAW_SHARD_CARD -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                DEBUG_HELP -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                REJOIN_GAME -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
+                SKIP_TURN -> PersistenceManager.saveCommand(serializedCmdDTO(command, user.userId), Games.getGameIdForPlayer(user) ?: -1)
                 else -> null
+            }
+            if(command !is ListGamesCommand) {
+                println(httpExchange.responseCode.toString())
             }
         }
 
     } catch (e: Exception) {
         e.printStackTrace()
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
+        println(httpExchange.responseCode.toString())
+
     }
 
-    println(httpExchange.responseCode.toString())
     httpExchange.close()
 }

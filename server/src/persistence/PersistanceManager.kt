@@ -1,11 +1,12 @@
 package persistence
 import IPersistenceManager
 import ICommand
+import serializedCmdDTO
 import ICommandDAO
 import IUserDAO
 import IGameDAO
-import models.Games
-import models.Users
+import commands.INormalServerCommand
+import models.*
 
 object PersistenceManager : IPersistenceManager {
     private var persistenceManager : IPersistenceManager = DummyPersistenceManager()
@@ -48,6 +49,26 @@ object PersistenceManager : IPersistenceManager {
         this.commandsBetweenCheckpoints = commandsBetweenCheckpoints
     }
 
+    fun saveCheckpoint() {
+        openTransaction()
+        clear()
+
+        val userDAO = getUserDAO()
+        val gameDAO = getGameDAO()
+        val commandDAO = getCommandDAO()
+
+
+        for (user in Users.getUsers()) {
+            userDAO.persistUser(user)
+        }
+
+        for (game in Games.getGames()) {
+            gameDAO.persistGame(game)
+        }
+
+        closeTransaction(true)
+    }
+
     fun saveCheckpoint(gameId: Int) {
         openTransaction()
 
@@ -66,7 +87,7 @@ object PersistenceManager : IPersistenceManager {
         closeTransaction(true)
     }
 
-    fun saveCommand(command: ICommand, gameId: Int) {
+    fun saveCommand(command: serializedCmdDTO, gameId: Int) {
         commandsPersistedCounter[gameId] = 1 + (commandsPersistedCounter[gameId] ?: 0)
 
         if (((commandsPersistedCounter[gameId] ?: 0) % commandsBetweenCheckpoints) == 0) {
@@ -77,5 +98,46 @@ object PersistenceManager : IPersistenceManager {
             getCommandDAO().persistCommand(command, gameId)
             closeTransaction(true)
         }
+    }
+
+    fun saveUsers() {
+        val userDAO = getUserDAO()
+        openTransaction()
+        for (user in Users.getUsers()) {
+            userDAO.persistUser(user)
+        }
+        closeTransaction(true)
+    }
+
+    fun restoreDB(){
+        println("Loading database...")
+        getUserDAO().loadUsers().forEach {
+            val user = it as User
+            Users.loadUser(user)
+            AuthTokens.loadToken(user.authToken, user)
+        }
+
+        println("\t- Loaded ${Users.getUsers().size} users")
+
+        getGameDAO().loadGames().forEach {
+            Games.loadGame(it as Game)
+        }
+
+        println("\t- Loaded ${Games.getGames().size} games")
+
+        println("\t- Loading commands...")
+        getCommandDAO().loadCommands().forEach {
+            val user = Users.getUserById(it.userId)!!
+            val command = it.command as INormalServerCommand
+            println("\t\t- Re-executing ${command.command} for user ${user.username}")
+            command.execute(user)
+        }
+
+        // Clear outgoing queues, server should now be caught up with the client
+        Users.getUsers().forEach {
+            it.queue.clear()
+        }
+
+        println("Database loaded!")
     }
 }

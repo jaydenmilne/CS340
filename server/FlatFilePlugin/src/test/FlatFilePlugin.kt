@@ -3,6 +3,7 @@ package test
 import FlatFilePlugin
 import kotlin.test.assertEquals
 import ICommand
+import serializedCmdDTO
 import IUser
 import IGame
 
@@ -39,17 +40,17 @@ fun testDAOSerializationAndDeserialization(){
     val userDAO = db.getUserDAO()
     val gameDAO = db.getGameDAO()
 
-    commandDAO.persistCommand(command, 0)
+    commandDAO.persistCommand(serializedCmdDTO(command, 0), 0)
     userDAO.persistUser(user)
     gameDAO.persistGame(game)
 
     db.closeTransaction(true)
 
-    val retrievedCommand = commandDAO.loadCommands(db).first()
-    val retrievedUser = userDAO.loadUsers(db).first()
-    val retrievedGame = gameDAO.loadGames(db).first()
+    val retrievedCommand = commandDAO.loadCommands().first()
+    val retrievedUser = userDAO.loadUsers().first()
+    val retrievedGame = gameDAO.loadGames().first()
 
-    assertEquals(command.command, retrievedCommand.command)
+    assertEquals(command.command, retrievedCommand.command.command)
     assertEquals(user.userId, retrievedUser.userId)
     assertEquals(game.gameId, retrievedGame.gameId)
 }
@@ -65,15 +66,15 @@ fun testCommitFalse(){
     val userDAO = db.getUserDAO()
     val gameDAO = db.getGameDAO()
 
-    commandDAO.persistCommand(command, 0)
+    commandDAO.persistCommand(serializedCmdDTO(command, 0), 0)
     userDAO.persistUser(user)
     gameDAO.persistGame(game)
 
     db.closeTransaction(false)
 
-    val retrievedCommands = commandDAO.loadCommands(db)
-    val retrievedUsers = userDAO.loadUsers(db)
-    val retrievedGames = gameDAO.loadGames(db)
+    val retrievedCommands = commandDAO.loadCommands()
+    val retrievedUsers = userDAO.loadUsers()
+    val retrievedGames = gameDAO.loadGames()
 
     assertEquals(0, retrievedCommands.size)
     assertEquals(0, retrievedUsers.size)
@@ -91,23 +92,49 @@ fun testAdditionalParametersSerialize(){
     val userDAO = db.getUserDAO()
     val gameDAO = db.getGameDAO()
 
-    commandDAO.persistCommand(command, 0)
+    commandDAO.persistCommand(serializedCmdDTO(command, 0), 0)
     userDAO.persistUser(user)
     gameDAO.persistGame(game)
 
     db.closeTransaction(true)
 
-    val retrievedCommand = commandDAO.loadCommands(db).first() as DummyCommand
-    val retrievedUser = userDAO.loadUsers(db).first() as DummyUser
-    val retrievedGame = gameDAO.loadGames(db).first() as DummyGame
+    val retrievedCommand = commandDAO.loadCommands().first().command as DummyCommand
+    val retrievedUser = userDAO.loadUsers().first() as DummyUser
+    val retrievedGame = gameDAO.loadGames().first() as DummyGame
 
     assertEquals(command.name, retrievedCommand.name)
     assertEquals(user.name, retrievedUser.name)
     assertEquals(game.name, retrievedGame.name)
 }
 
+fun testRemoveCommands() {
+    val db = openDB()
+
+    val command1 = DummyCommand("Command1", "DummyCommand")
+    val command2 = DummyCommand("Command2", "DummyCommand")
+    val command3 = DummyCommand("Command3", "DummyCommand")
+
+    val commandDAO = db.getCommandDAO()
+
+    commandDAO.persistCommand(serializedCmdDTO(command1, 0), 1)
+    commandDAO.persistCommand(serializedCmdDTO(command1, 0), 0)
+    commandDAO.persistCommand(serializedCmdDTO(command2, 0), 0)
+    commandDAO.persistCommand(serializedCmdDTO(command3, 0), 0)
+
+    db.closeTransaction(true)
+
+    db.openTransaction()
+    commandDAO.clearCommandsForGame(0)
+    db.closeTransaction(true)
+
+    val retrievedCommands = commandDAO.loadCommands()
+
+    assertEquals(1, retrievedCommands.size)
+}
+
 fun main(args: Array<String>){
     testDAOSerializationAndDeserialization()
     testCommitFalse()
     testAdditionalParametersSerialize()
+    testRemoveCommands()
 }

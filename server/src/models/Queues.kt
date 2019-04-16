@@ -1,5 +1,6 @@
 package models
 
+import java.io.Serializable
 import com.google.gson.Gson
 import commands.INormalClientCommand
 import commands.IRegisterClientCommand
@@ -7,7 +8,7 @@ import commands.IRegisterClientCommand
 /**
  * Contains the client commands that a particular user needs to properly know game state.
  */
-class CommandQueue {
+class CommandQueue : Serializable {
 
     var commands = mutableListOf<INormalClientCommand>()
 
@@ -24,12 +25,19 @@ class CommandQueue {
 
         return rendered
     }
+
+    /**
+     * Removes all commands from this queue
+     */
+    fun clear() {
+        commands.clear()
+    }
 }
 
 /**
  * Temporarily used in the login and registration logic.
  */
-class RegisterCommandQueue {
+class RegisterCommandQueue : Serializable  {
 
     var commands = mutableListOf<IRegisterClientCommand>()
 
