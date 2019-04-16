@@ -5,7 +5,7 @@ import java.sql.SQLException
 class SQLCommandDAO(persistenceManager: IPersistenceManager) : ICommandDAO(persistenceManager) {
 
     private val sqlPlugin: SQLPlugin = persistenceManager as SQLPlugin
-    private val serializer = Serializer;
+    private val serializer = Serializer
 
     override fun clearCommandsForGame(gameID: Int) {
         val removeCommands = "DELETE FROM Commands" +
@@ -23,7 +23,7 @@ class SQLCommandDAO(persistenceManager: IPersistenceManager) : ICommandDAO(persi
 
     override fun persistCommand(command: serializedCmdDTO, gameID: Int) {
         val addCommand = "INSERT INTO Commands(GameId, Data)" +
-                " values(?, ?)"
+                            " values(?, ?)"
         try {
             val stmt = sqlPlugin.getConnection()!!.prepareStatement(addCommand)
             stmt.setInt(1, gameID)
@@ -40,14 +40,14 @@ class SQLCommandDAO(persistenceManager: IPersistenceManager) : ICommandDAO(persi
     override fun loadCommands(): List<serializedCmdDTO> {
         var commands = mutableListOf<serializedCmdDTO>()
         val getCommands = "SELECT Data" +
-                " FROM Commands"
+                            " FROM Commands"
         var results = sqlPlugin.getConnection()!!.createStatement().executeQuery(getCommands)
-        while(results.next()) {
+        while (results.next()) {
             var blob = results.getBlob("Data")
             var commandData = serializer.deserialize(blob.getBytes(1, blob.length().toInt()))
-            if(commandData is serializedCmdDTO) {
+            if (commandData is serializedCmdDTO) {
                 commands.add(commandData)
-            } else{
+            } else {
                 throw DatabaseException("Error: SQL failed to deserialize Command")
             }
             blob.free()
