@@ -6,6 +6,7 @@ import ICommandDAO
 import IUserDAO
 import IGameDAO
 import models.Games
+import models.User
 import models.Users
 
 object PersistenceManager : IPersistenceManager {
@@ -98,5 +99,14 @@ object PersistenceManager : IPersistenceManager {
             getCommandDAO().persistCommand(command, gameId)
             closeTransaction(true)
         }
+    }
+
+    fun saveUsers() {
+        val userDAO = getUserDAO()
+        openTransaction()
+        for (user in Users.getUsers()) {
+            userDAO.persistUser(user)
+        }
+        closeTransaction(true)
     }
 }

@@ -5,6 +5,7 @@ import commands.*
 import models.AuthTokens
 import models.Games
 import models.RegisterCommandQueue
+import models.Users
 import org.apache.commons.io.IOUtils
 import persistence.PersistenceManager
 import persistence.PluginManager
@@ -23,6 +24,7 @@ fun main(args: Array<String>) {
     val pluginManager = PluginManager()
 
     if (args.size > 2) {
+        println("Loading Plugin %s".format(args[2]))
         pluginManager.loadPlugin(args[2])
         if (args.size > 3) {
             commandsBetweenCheckpoints = Integer.parseInt(args[3])
@@ -90,7 +92,7 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             writer.write(Gson().toJson(resultCommands))
             writer.close()
 
-            PersistenceManager.saveCheckpoint()
+            PersistenceManager.saveUsers()
         }
 
     } catch (e: Exception) {

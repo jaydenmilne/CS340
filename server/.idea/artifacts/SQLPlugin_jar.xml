@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="SQLPlugin:jar">
-    <output-path>$PROJECT_DIR$/otu/artifacts/SQLPlugin_jar</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/SQLPlugin_jar</output-path>
     <root id="archive" name="SQLPlugin.jar">
       <element id="module-output" name="SQLPlugin" />
       <element id="module-output" name="PluginInterfaces" />
