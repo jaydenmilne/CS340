@@ -1,4 +1,3 @@
-import IPersistenceManager
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
@@ -21,7 +20,7 @@ class SQLPlugin : IPersistenceManager {
         }
         catch (e: SQLException) {
             e.printStackTrace()
-            throw RuntimeException("Error: SQL transaction failed to open")
+            throw DatabaseException("Error: SQL transaction failed to open")
         }
     }
 
@@ -36,7 +35,7 @@ class SQLPlugin : IPersistenceManager {
         }
         catch (e: SQLException) {
             e.printStackTrace()
-            throw RuntimeException("Error: SQL transaction failed to close")
+            throw DatabaseException("Error: SQL transaction failed to close")
         }
     }
 
