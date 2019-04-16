@@ -5,7 +5,7 @@ import java.sql.SQLException
 class SQLUserDAO(persistenceManager: IPersistenceManager) : IUserDAO(persistenceManager) {
 
     private val sqlPlugin: SQLPlugin = persistenceManager as SQLPlugin
-    private val serializer = Serializer;
+    private val serializer = Serializer
 
     override fun persistUser(user: IUser) {
         val addUser = "INSERT INTO Users(GameId, Data)" +
@@ -28,12 +28,12 @@ class SQLUserDAO(persistenceManager: IPersistenceManager) : IUserDAO(persistence
         val getUsers = "SELECT Data" +
                        " FROM Users"
         var results = sqlPlugin.getConnection()!!.createStatement().executeQuery(getUsers)
-        while(results.next()) {
+        while (results.next()) {
             var blob = results.getBlob("Data")
             var userData = serializer.deserialize(blob.getBytes(1, blob.length().toInt()))
-            if(userData is IUser) {
+            if (userData is IUser) {
                 users.add(userData)
-            } else{
+            } else {
                 throw DatabaseException("Error: SQL failed to deserialize User")
             }
             blob.free()
