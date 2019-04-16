@@ -113,7 +113,7 @@ object PersistenceManager : IPersistenceManager {
         println("Loading database...")
         getUserDAO().loadUsers().forEach {
             val user = it as User
-            Users.addUser(user)
+            Users.loadUser(user)
             AuthTokens.loadToken(user.authToken, user)
         }
 
