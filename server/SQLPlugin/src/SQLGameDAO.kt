@@ -27,7 +27,20 @@ class SQLGameDAO(persistenceManager: IPersistenceManager) : IGameDAO(persistence
     }
 
     override fun loadGames(): List<IGame> {
-        var games = listOf<IGame>()
+        var games = mutableListOf<IGame>()
+        val getGames = "SELECT Data" +
+                " FROM Users"
+        var results = sqlPlugin.getConnection()!!.createStatement().executeQuery(getGames)
+        while(results.next()) {
+            var blob = results.getBlob("Data")
+            var gameData = serializer.deserialize(blob.getBytes(1, blob.length().toInt()))
+            if(gameData is IGame) {
+                games.add(gameData)
+            } else{
+                throw DatabaseException("Error: SQL failed to deserialize User")
+            }
+            blob.free()
+        }
         return games
     }
 
