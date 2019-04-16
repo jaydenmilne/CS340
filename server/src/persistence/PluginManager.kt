@@ -39,7 +39,7 @@ class PluginManager {
         val manager: IPersistenceManager
 
         if (debugMode) {
-            manager = findClassInDirectory("otu", className)
+            manager = findClassInDirectory("out", className)
         } else {
             // Enumerate each jar in the /plugins directory
             manager =  findClassInDirectory("plugins", className)
