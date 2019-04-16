@@ -107,4 +107,6 @@ class SQLPlugin : IPersistenceManager {
         closeTransaction(true)
         return initialize()
     }
+
+    fun getConnection(): Connection? { return this.connection}
 }
