@@ -79,7 +79,7 @@ class Game(var name: String): IGame {
 
     var longestRouteManager = LongestRouteManager(this)
     var routes = RouteList()
-    private var lastRoundInitiator = User("")
+    private var lastRoundInitiator = -1
     private var lastRoundStarted = false
     private var nextMessageId = -1
 
@@ -274,7 +274,7 @@ class Game(var name: String): IGame {
             }
         } else {
             //Checks for Last Round to End
-            if (lastRoundInitiator == getTurningPlayer()) {
+            if (lastRoundInitiator == getTurningPlayer()!!.userId) {
                 this.endGame()
             }
             else {
@@ -350,7 +350,7 @@ class Game(var name: String): IGame {
 
             val lastRoundCommand = LastRoundCommand()
             broadcast(lastRoundCommand)
-            lastRoundInitiator = user
+            lastRoundInitiator = user.userId
         }
     }
 
