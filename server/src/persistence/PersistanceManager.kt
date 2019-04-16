@@ -1,6 +1,7 @@
 package persistence
 import IPersistenceManager
 import ICommand
+import IGame
 import serializedCmdDTO
 import ICommandDAO
 import IUserDAO
@@ -82,7 +83,10 @@ object PersistenceManager : IPersistenceManager {
             userDAO.persistUser(user)
         }
 
-        gameDAO.persistGame(Games.games[gameId]!!)
+        val game = Games.games[gameId]
+        if (game != null){
+            gameDAO.persistGame(game)
+        }
 
         closeTransaction(true)
     }
@@ -106,6 +110,12 @@ object PersistenceManager : IPersistenceManager {
         for (user in Users.getUsers()) {
             userDAO.persistUser(user)
         }
+        closeTransaction(true)
+    }
+
+    fun removeGame(game: IGame){
+        openTransaction()
+        getGameDAO().removeGame(game)
         closeTransaction(true)
     }
 

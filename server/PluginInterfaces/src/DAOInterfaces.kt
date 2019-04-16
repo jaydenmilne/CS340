@@ -1,3 +1,4 @@
+import java.awt.font.ImageGraphicAttribute
 import java.lang.RuntimeException
 
 abstract class ICommandDAO(val persistenceManager: IPersistenceManager) {
@@ -8,6 +9,7 @@ abstract class ICommandDAO(val persistenceManager: IPersistenceManager) {
 
 abstract class IGameDAO(val persistenceManager: IPersistenceManager) {
     abstract fun persistGame(game: IGame)
+    abstract fun removeGame(game: IGame)
     abstract fun loadGames(): List<IGame>
 }
 

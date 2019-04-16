@@ -137,6 +137,7 @@ class Game(var name: String): IGame {
         }
         broadcast(gameOverCommand)
         Games.games.remove(this.gameId)
+        PersistenceManager.removeGame(this)
     }
 
     enum class CanClaimRouteResult {
