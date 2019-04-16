@@ -7,7 +7,6 @@ import IUserDAO
 import IGameDAO
 import commands.INormalServerCommand
 import models.*
-import java.io.InvalidClassException
 
 object PersistenceManager : IPersistenceManager {
     private var persistenceManager : IPersistenceManager = DummyPersistenceManager()
