@@ -9,6 +9,7 @@ import IUserDAO
 import IGameDAO
 import serializedCmdDTO
 
+
 class DummyPersistenceManager(): IPersistenceManager {
     override fun openTransaction() {}
 
@@ -21,6 +22,7 @@ class DummyPersistenceManager(): IPersistenceManager {
     override fun getGameDAO(): IGameDAO { return DummyGameDAO(this) }
 
     override fun initialize(): Boolean { return true }
+
 
     override fun clear(): Boolean { return true }
 }
