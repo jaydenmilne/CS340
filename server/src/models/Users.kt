@@ -4,6 +4,7 @@ import commands.CommandException
 import commands.UpdateHandCommand
 import IUser
 import java.io.Serializable
+import java.lang.Integer.max
 
 private var nextUserId = -1
 private const val STARTING_TRAINS = 45
@@ -23,6 +24,12 @@ object Users {
     fun addUser(user: User) {
         usersByUserId[user.userId] = user
         usersByUsername[user.username] = user
+    }
+
+    fun loadUser(user: User) {
+        usersByUserId[user.userId] = user
+        usersByUsername[user.username] = user
+        nextUserId = max(nextUserId, user.userId)
     }
 
     fun removeUser(user: User) {
