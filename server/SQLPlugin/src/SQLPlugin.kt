@@ -39,17 +39,11 @@ class SQLPlugin : IPersistenceManager {
         }
     }
 
-    override fun getCommandDAO(): ICommandDAO {
-        TODO("not implemented")
-    }
+    override fun getCommandDAO(): ICommandDAO { return SQLCommandDAO(this) }
 
-    override fun getUserDAO(): IUserDAO {
-        TODO("not implemented")
-    }
+    override fun getUserDAO(): IUserDAO { return SQLUserDAO(this) }
 
-    override fun getGameDAO(): IGameDAO {
-        TODO("not implemented")
-    }
+    override fun getGameDAO(): IGameDAO { return SQLGameDAO(this) }
 
     override fun initialize(): Boolean {
         openTransaction()
