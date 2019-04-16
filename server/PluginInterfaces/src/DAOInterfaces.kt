@@ -1,14 +1,19 @@
-interface ICommandDAO {
-    fun persistCommand(command: ICommand, gameID: Int)
-    fun loadCommands(): List<ICommand>
+import java.lang.RuntimeException
+
+abstract class ICommandDAO(val persistenceManager: IPersistenceManager) {
+    abstract fun persistCommand(command: serializedCmdDTO, gameID: Int)
+    abstract fun loadCommands(): List<serializedCmdDTO>
+    abstract fun clearCommandsForGame(gameID: Int)
 }
 
-interface IGameDAO {
-    fun persistGame(game: IGame)
-    fun loadGames(): List<IGame>
+abstract class IGameDAO(val persistenceManager: IPersistenceManager) {
+    abstract fun persistGame(game: IGame)
+    abstract fun loadGames(): List<IGame>
 }
 
-interface IUserDAO {
-    fun persistUser(user: IUser)
-    fun loadUsers(): List<IUser>
+abstract class IUserDAO(val persistenceManager: IPersistenceManager) {
+    abstract fun persistUser(user: IUser)
+    abstract fun loadUsers(): List<IUser>
 }
+
+class DatabaseException(override val message: String): RuntimeException(message)

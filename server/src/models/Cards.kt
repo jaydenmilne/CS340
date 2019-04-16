@@ -1,6 +1,7 @@
 package models
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 enum class MaterialType(val material: String) {
     @SerializedName("reality_shard") REALITY_SHARD("reality_shard"),
@@ -37,8 +38,7 @@ enum class MaterialType(val material: String) {
     }
 
 }
-
-interface ICard
+interface ICard : Serializable
 
 class ShardCard(val type: MaterialType) : ICard {
     constructor() : this(MaterialType.INFINITY_GAUNTLET)
@@ -73,7 +73,7 @@ class ShardCard(val type: MaterialType) : ICard {
     }
 }
 
-class DestinationCard(val cities: Set<String>, val points: Int) {
+class DestinationCard(val cities: Set<String>, val points: Int): Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -94,7 +94,7 @@ class DestinationCard(val cities: Set<String>, val points: Int) {
 }
 
 
-abstract class IDeck<T>(var cards: MutableList<T>) {
+abstract class IDeck<T>(var cards: MutableList<T>) : Serializable {
 
     fun shuffle() {
         cards.shuffle()

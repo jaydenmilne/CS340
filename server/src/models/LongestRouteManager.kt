@@ -1,10 +1,11 @@
 package models
 
+import java.io.Serializable
 import commands.CommandException
 import commands.UpdatePlayerCommand
 import kotlin.system.measureTimeMillis
 
-class LongestRouteManager(private val game: Game) {
+class LongestRouteManager(private val game: Game): Serializable {
     // Player id of the player who last got the longest route
     private var currentPlayerWithLongestRoute = -1
     private var longestRoute = 0

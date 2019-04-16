@@ -7,8 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="KotlinJavaRuntime (3)" level="project" />
     <orderEntry type="module" module-name="PluginInterfaces" />
+
+    <orderEntry type="library" name="org.kamranzafar:jtar:2.3" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
   </component>
 </module>

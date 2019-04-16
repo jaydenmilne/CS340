@@ -1,6 +1,7 @@
 package models
 
 import commands.CommandException
+import java.io.Serializable
 
 /* CITY NAMES */
 const val DARK_DIMENSION = "darkdimension"
@@ -142,7 +143,7 @@ const val AVENGERSHQ_SOKOVIA_2 = "avengershq_sokovia_2"
 const val SOKOVIA_WAKANDA_1 = "sokovia_wakanda_1"
 const val SOKOVIA_WAKANDA_2 = "sokovia_wakanda_2"
 
-class RouteList {
+class RouteList : Serializable {
 
     var routesByRouteId = mutableMapOf<String, Route>()
 
@@ -275,7 +276,7 @@ class RouteList {
     }
 }
 
-enum class RouteType(val type: String) {
+enum class RouteType(val type: String) : Serializable {
     ANY("any"),
     REALITY("reality"),
     SOUL("soul"),
@@ -287,7 +288,7 @@ enum class RouteType(val type: String) {
     PALLADIUM("palladium")
 }
 
-class Route(val routeId: String, val cities: Set<String>, val numCars: Int, val type: RouteType, var ownerId: Int) {
+class Route(val routeId: String, val cities: Set<String>, val numCars: Int, val type: RouteType, var ownerId: Int) : Serializable {
     val points: Int
         get() {
             return when (numCars) {
