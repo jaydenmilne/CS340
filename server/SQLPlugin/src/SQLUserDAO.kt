@@ -25,9 +25,9 @@ class SQLUserDAO(persistenceManager: IPersistenceManager) : IUserDAO(persistence
 
     override fun loadUsers(): List<IUser> {
         var users = mutableListOf<IUser>()
-        val getGames = "SELECT Data" +
+        val getUsers = "SELECT Data" +
                        " FROM Users"
-        var results = sqlPlugin.getConnection()!!.createStatement().executeQuery(getGames)
+        var results = sqlPlugin.getConnection()!!.createStatement().executeQuery(getUsers)
         while(results.next()) {
             var blob = results.getBlob("Data")
             var userData = serializer.deserialize(blob.getBytes(1, blob.length().toInt()))

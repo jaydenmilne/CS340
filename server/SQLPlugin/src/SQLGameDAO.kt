@@ -37,7 +37,7 @@ class SQLGameDAO(persistenceManager: IPersistenceManager) : IGameDAO(persistence
             if(gameData is IGame) {
                 games.add(gameData)
             } else{
-                throw DatabaseException("Error: SQL failed to deserialize User")
+                throw DatabaseException("Error: SQL failed to deserialize Game")
             }
             blob.free()
         }
