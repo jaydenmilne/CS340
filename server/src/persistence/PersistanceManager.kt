@@ -52,6 +52,7 @@ object PersistenceManager : IPersistenceManager {
     }
 
     fun saveCheckpoint() {
+        println("PersistenceManager: Persisting everything")
         openTransaction()
         clear()
 
@@ -66,12 +67,14 @@ object PersistenceManager : IPersistenceManager {
 
         for (game in Games.getGames()) {
             gameDAO.persistGame(game)
+            commandDAO.clearCommandsForGame(game.gameId)
         }
 
         closeTransaction(true)
     }
 
     fun saveCheckpoint(gameId: Int) {
+        println("PersistenceManager: Persisting game $gameId")
         openTransaction()
 
         val userDAO = getUserDAO()
@@ -85,6 +88,8 @@ object PersistenceManager : IPersistenceManager {
         }
 
         gameDAO.persistGame(Games.games[gameId]!!)
+
+        commandDAO.clearCommandsForGame(gameId)
 
         closeTransaction(true)
     }
@@ -102,12 +107,10 @@ object PersistenceManager : IPersistenceManager {
         }
     }
 
-    fun saveUsers() {
+    fun saveUser(userId : Int) {
         val userDAO = getUserDAO()
         openTransaction()
-        for (user in Users.getUsers()) {
-            userDAO.persistUser(user)
-        }
+        userDAO.persistUser(Users.getUserById(userId)!!)
         closeTransaction(true)
     }
 
@@ -148,6 +151,10 @@ object PersistenceManager : IPersistenceManager {
             }
 
             println("Database loaded!")
+
+            println("Re-persisting data to disk...")
+            saveCheckpoint()
+
         } catch (e : Exception) {
             System.err.println("Unhandled exception loading database!")
             clear() // automatically delete, but crash anyway because the server is in an undefined state

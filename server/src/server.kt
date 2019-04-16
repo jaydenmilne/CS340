@@ -88,12 +88,17 @@ fun handleRegistrationPost(httpExchange: HttpExchange) {
             val writer = OutputStreamWriter(httpExchange.responseBody)
 
             val resultCommands = RegisterCommandQueue()
-            resultCommands.push(command.execute())
+            val resultCommand = command.execute() as LoginResultCommand
+            resultCommands.push(resultCommand)
+
+            // We only want to serialize the new user
+            if (resultCommand.error.isEmpty()) {
+                PersistenceManager.saveUser(resultCommand.user.userId)
+            }
 
             writer.write(Gson().toJson(resultCommands))
             writer.close()
 
-            PersistenceManager.saveUsers()
         }
 
     } catch (e: Exception) {
