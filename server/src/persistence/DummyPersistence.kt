@@ -7,8 +7,9 @@ import IPersistenceManager
 import ICommandDAO
 import IUserDAO
 import IGameDAO
+import serializedCmdDTO
 
-class DummyPersistenceManager(persistenceManager: IPersistenceManager): IPersistenceManager {
+class DummyPersistenceManager(): IPersistenceManager {
     override fun openTransaction() {}
 
     override fun closeTransaction(commit: Boolean) {}
@@ -25,9 +26,9 @@ class DummyPersistenceManager(persistenceManager: IPersistenceManager): IPersist
 }
 
 class DummyCommandDAO(persistenceManager: IPersistenceManager): ICommandDAO(persistenceManager) {
-    override fun persistCommand(command: ICommand, gameID: Int) {}
+    override fun persistCommand(command: serializedCmdDTO, gameID: Int) {}
 
-    override fun loadCommands(): List<ICommand> {
+    override fun loadCommands(): List<serializedCmdDTO> {
         return listOf()
     }
 

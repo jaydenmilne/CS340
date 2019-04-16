@@ -2,7 +2,7 @@ import java.lang.RuntimeException
 
 abstract class ICommandDAO(val persistenceManager: IPersistenceManager) {
     abstract fun persistCommand(command: serializedCmdDTO, gameID: Int)
-    abstract fun loadCommands(): List<ICommand>
+    abstract fun loadCommands(): List<serializedCmdDTO>
     abstract fun clearCommandsForGame(gameID: Int)
 }
 
