@@ -51,6 +51,8 @@ object Games {
     }
 
     fun loadGame(game: Game) {
+        val players = game.players.map{it -> Users.getUserById(it.userId)!!}.toMutableSet()
+        game.players = players
         games[game.gameId] = game
     }
 }
