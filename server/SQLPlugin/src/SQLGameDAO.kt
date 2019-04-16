@@ -12,7 +12,7 @@ class SQLGameDAO(persistenceManager: IPersistenceManager) : IGameDAO(persistence
     override fun persistGame(game: IGame) {
 
         val addGame = "INSERT INTO Games(GameId, Data)" +
-                      " values(?, ?)"
+                      " values(?, ?) ON DUPLICATE KEY UPDATE"
         try {
             val stmt = sqlPlugin.getConnection()!!.prepareStatement(addGame)
             stmt.setInt(1, game.gameId)

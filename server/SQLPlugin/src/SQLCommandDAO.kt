@@ -8,7 +8,17 @@ class SQLCommandDAO(persistenceManager: IPersistenceManager) : ICommandDAO(persi
     private val serializer = Serializer;
 
     override fun clearCommandsForGame(gameId: Int) {
-        
+        val removeCommands = "DELETE FROM Commands" +
+                             " WHERE gameId = " + gameId
+        try {
+            val stmt = sqlPlugin.getConnection()!!.createStatement()
+            stmt.executeUpdate(removeCommands)
+        }
+        catch (e: SQLException) {
+            persistenceManager.closeTransaction(false)
+            e.printStackTrace()
+            throw DatabaseException("Error: SQL failed to delete Commands")
+        }
     }
 
     override fun persistCommand(command: serializedCmdDTO, gameID: Int) {

@@ -9,7 +9,7 @@ class SQLUserDAO(persistenceManager: IPersistenceManager) : IUserDAO(persistence
 
     override fun persistUser(user: IUser) {
         val addUser = "INSERT INTO Users(GameId, Data)" +
-                " values(?, ?)"
+                " values(?, ?) ON DUPLICATE KEY UPDATE"
         try {
             val stmt = sqlPlugin.getConnection()!!.prepareStatement(addUser)
             stmt.setInt(1, user.userId)
