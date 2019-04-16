@@ -114,11 +114,3 @@ class SQLPlugin : IPersistenceManager {
         return initialize()
     }
 }
-
-fun main(args: Array<String>) {
-    println("TEST")
-    println("Initializing Database")
-    SQLPlugin().initialize()
-    println("Clearing Database")
-    SQLPlugin().clear()
-}
