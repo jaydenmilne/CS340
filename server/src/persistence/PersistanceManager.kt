@@ -113,8 +113,23 @@ object PersistenceManager : IPersistenceManager {
     }
 
     fun restoreDB(){
-        getUserDAO().loadUsers().forEach{ Users.addUser(it as User) }
-        getGameDAO().loadGames().forEach{ Games.loadGame(it as Game) }
-//        getCommandDAO().loadCommands().forEach{ (it.command as INormalServerCommand).execute(Users.getUserById(it.userId)!!) }
+        getUserDAO().loadUsers().forEach {
+            Users.addUser(it as User)
+        }
+
+        getGameDAO().loadGames().forEach {
+            Games.loadGame(it as Game)
+        }
+
+        getCommandDAO().loadCommands().forEach {
+            val user = Users.getUserById(it.userId)!!
+            val command = it.command as INormalServerCommand
+            command.execute(user)
+        }
+
+        // Clear outgoing queues, server should now be caught up with the client
+        Users.getUsers().forEach {
+            it.queue.clear()
+        }
     }
 }
