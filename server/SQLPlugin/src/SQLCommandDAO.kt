@@ -7,9 +7,9 @@ class SQLCommandDAO(persistenceManager: IPersistenceManager) : ICommandDAO(persi
     private val sqlPlugin: SQLPlugin = persistenceManager as SQLPlugin
     private val serializer = Serializer;
 
-    override fun clearCommandsForGame(gameId: Int) {
+    override fun clearCommandsForGame(gameID: Int) {
         val removeCommands = "DELETE FROM Commands" +
-                             " WHERE gameId = " + gameId
+                             " WHERE gameId = " + gameID
         try {
             val stmt = sqlPlugin.getConnection()!!.createStatement()
             stmt.executeUpdate(removeCommands)
