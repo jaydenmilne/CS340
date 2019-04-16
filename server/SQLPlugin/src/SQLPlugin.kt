@@ -1,15 +1,16 @@
 import IPersistenceManager
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
 
 class SQLPlugin : IPersistenceManager {
 
-    //TODO: set file name of database
+    private val parentdir = File(".").canonicalPath
+
     private val filename = "endgame.db"
 
-    //TODO: set file path of database
-    private val url = "jdbc:sqlite:C:\\Users\\Justin\\Desktop\\CS 340 Files\\tickettoride\\CS340\\server\\SQLPlugin\\db\\" + filename
+    private val url = "jdbc:sqlite:" + parentdir + "\\SQLPlugin\\db\\" + filename
 
     private var connection : Connection? = null
 
@@ -111,14 +112,14 @@ class SQLPlugin : IPersistenceManager {
         }
 
         closeTransaction(true)
-        initialize()
-        return true
+        return initialize()
     }
 }
 
 fun main(args: Array<String>) {
-    System.out.println("Initializing Database")
+    println("TEST")
+    println("Initializing Database")
     SQLPlugin().initialize()
-    System.out.println("Clearing Database")
+    println("Clearing Database")
     SQLPlugin().clear()
 }
