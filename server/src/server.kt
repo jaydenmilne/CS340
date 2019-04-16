@@ -117,23 +117,32 @@ fun handleGet(httpExchange: HttpExchange) {
         val authToken = httpExchange.requestHeaders.getFirst("Authorization")
         val user = AuthTokens.getUser(authToken)
 
-        println("GET /command - $authToken")
-
         if (user == null) {
             httpExchange.sendResponseHeaders(HTTP_FORBIDDEN, 0)
             return
         } else {
             httpExchange.sendResponseHeaders(HTTP_OK, 0)
             val writer = OutputStreamWriter(httpExchange.responseBody)
+
+            // Don't log if nothing sent back
+            if (user.queue.commands.isNotEmpty()) {
+                var commands = ""
+                for (command in user.queue.commands) {
+                    commands += command.command + ", "
+                }
+                println("GET /command - ${user.username} $commands")
+                println(httpExchange.responseCode.toString())
+            }
+
             writer.write(user.queue.render())
             writer.close()
         }
     } catch (e: Exception) {
         println(e)
         httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, 0)
+        println(httpExchange.responseCode.toString())
     }
 
-    println(httpExchange.responseCode.toString())
     httpExchange.close()
 }
 
