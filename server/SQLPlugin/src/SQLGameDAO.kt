@@ -5,8 +5,18 @@ import java.sql.DriverManager
 
 
 class SQLGameDAO(persistenceManager: IPersistenceManager) : IGameDAO(persistenceManager) {
+    
     override fun removeGame(game: IGame) {
-        TODO("not implemented")
+        val removeGame = "DELETE FROM Games WHERE GameId = ?"
+        try {
+            val stmt = sqlPlugin.getConnection()!!.prepareStatement(removeGame)
+            stmt.setInt(1, game.gameId)
+            stmt.execute()
+        } catch (e: SQLException) {
+            persistenceManager.closeTransaction(false)
+            e.printStackTrace()
+            throw DatabaseException("Error: SQL failed to delete Game ${game.gameId}")
+        }
     }
 
     private val sqlPlugin: SQLPlugin = persistenceManager as SQLPlugin
