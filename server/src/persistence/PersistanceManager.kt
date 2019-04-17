@@ -120,6 +120,7 @@ object PersistenceManager : IPersistenceManager {
     fun removeGame(game: IGame){
         openTransaction()
         getGameDAO().removeGame(game)
+        getCommandDAO().clearCommandsForGame(game.gameId)
         closeTransaction(true)
     }
 
