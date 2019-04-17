@@ -43,4 +43,8 @@ export class UserService {
     this.commandRouter.loginResult$.subscribe(loginResult => this.onLoginResult(loginResult));
     this.user$.subscribe(user => this.onUser(user));
   }
+
+  public clearData(){ // clear game number after game over
+    this.gameid = -1;
+  }
 }

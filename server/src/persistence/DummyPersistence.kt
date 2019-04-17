@@ -45,6 +45,8 @@ class DummyUserDAO(persistenceManager: IPersistenceManager): IUserDAO(persistenc
     }
 }
 class DummyGameDAO(persistenceManager: IPersistenceManager): IGameDAO(persistenceManager) {
+    override fun removeGame(game: IGame) {}
+
     override fun persistGame(game: IGame) {}
 
     override fun loadGames(): List<IGame> {
