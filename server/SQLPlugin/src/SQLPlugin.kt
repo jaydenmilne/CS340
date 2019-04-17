@@ -55,9 +55,14 @@ class SQLPlugin : IPersistenceManager {
     override fun getGameDAO(): IGameDAO { return SQLGameDAO(this) }
 
     override fun initialize(): Boolean {
+        val file = File(filepath)
+        if (!file.exists()) {
+            return clear()
+        }
+        return true
+    }
 
-        closeTransaction(true)
-
+    override fun clear(): Boolean {
         val file = File(filepath)
         Files.deleteIfExists(file.toPath())
 
@@ -97,11 +102,6 @@ class SQLPlugin : IPersistenceManager {
 
         closeTransaction(true)
         return true
-    }
-
-    override fun clear(): Boolean {
-        // Initialize does everything clear needs to do
-        return initialize()
     }
 
     fun getConnection(): Connection? { return this.connection}
