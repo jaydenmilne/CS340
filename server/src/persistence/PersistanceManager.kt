@@ -54,7 +54,6 @@ object PersistenceManager : IPersistenceManager {
     fun saveCheckpoint() {
         println("PersistenceManager: Persisting everything")
         openTransaction()
-        clear()
 
         val userDAO = getUserDAO()
         val gameDAO = getGameDAO()
