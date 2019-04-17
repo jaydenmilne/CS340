@@ -27,7 +27,7 @@ class SQLCommandDAO(persistenceManager: IPersistenceManager) : ICommandDAO(persi
         try {
             val stmt = sqlPlugin.getConnection()!!.prepareStatement(addCommand)
             stmt.setInt(1, gameID)
-            stmt.setBlob(2, serializer.serialize(command).inputStream())
+            stmt.setBytes(2, serializer.serialize(command))
             stmt.execute()
         }
         catch (e: SQLException) {
@@ -43,14 +43,13 @@ class SQLCommandDAO(persistenceManager: IPersistenceManager) : ICommandDAO(persi
                             " FROM Commands"
         var results = sqlPlugin.getConnection()!!.createStatement().executeQuery(getCommands)
         while (results.next()) {
-            var blob = results.getBlob("Data")
-            var commandData = serializer.deserialize(blob.getBytes(1, blob.length().toInt()))
+            var blob = results.getBytes("Data")
+            var commandData = serializer.deserialize(blob)
             if (commandData is serializedCmdDTO) {
                 commands.add(commandData)
             } else {
                 throw DatabaseException("Error: SQL failed to deserialize Command")
             }
-            blob.free()
         }
         return commands
     }
