@@ -1,4 +1,5 @@
 import java.io.File
+import java.nio.file.Files
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -9,9 +10,13 @@ class SQLPlugin : IPersistenceManager {
 
     private val filename = "endgame.db"
 
-    private val url = "jdbc:sqlite:" + parentdir + "\\SQLPlugin\\db\\" + filename
+    private val sqlite = "jdbc:sqlite:"
 
-    private var connection : Connection? = null
+    private val url = sqlite + parentdir + "\\SQLPlugin\\db\\" + filename
+
+    private val filepath = parentdir + "\\SQLPlugin\\db\\" + filename
+
+    private var connection: Connection? = null
 
     override fun openTransaction() {
         try {
@@ -26,11 +31,15 @@ class SQLPlugin : IPersistenceManager {
 
     override fun closeTransaction(commit: Boolean) {
         try {
-            if (commit) {
-                connection!!.commit()
-            }
-            else {
-                connection!!.rollback()
+            if (connection != null) {
+                if (!connection!!.isClosed) {
+                    if (commit) {
+                        connection!!.commit()
+                    } else {
+                        connection!!.rollback()
+                    }
+                    connection!!.close()
+                }
             }
         }
         catch (e: SQLException) {
@@ -39,19 +48,19 @@ class SQLPlugin : IPersistenceManager {
         }
     }
 
-    override fun getCommandDAO(): ICommandDAO {
-        TODO("not implemented")
-    }
+    override fun getCommandDAO(): ICommandDAO { return SQLCommandDAO(this) }
 
-    override fun getUserDAO(): IUserDAO {
-        TODO("not implemented")
-    }
+    override fun getUserDAO(): IUserDAO { return SQLUserDAO(this) }
 
-    override fun getGameDAO(): IGameDAO {
-        TODO("not implemented")
-    }
+    override fun getGameDAO(): IGameDAO { return SQLGameDAO(this) }
 
     override fun initialize(): Boolean {
+
+        closeTransaction(true)
+
+        val file = File(filepath)
+        Files.deleteIfExists(file.toPath())
+
         openTransaction()
 
         val createTable1 = "CREATE TABLE Commands (" +
@@ -91,26 +100,9 @@ class SQLPlugin : IPersistenceManager {
     }
 
     override fun clear(): Boolean {
-        openTransaction()
-
-        val deleteTable1 = "DROP TABLE Commands"
-        val deleteTable2 = "DROP TABLE Games"
-        val deleteTable3 = "DROP TABLE Users"
-
-        try {
-            val stmt = connection!!.createStatement()
-            stmt.addBatch(deleteTable1)
-            stmt.addBatch(deleteTable2)
-            stmt.addBatch(deleteTable3)
-            stmt.executeBatch()
-        }
-        catch (e: SQLException) {
-            closeTransaction(false)
-            e.printStackTrace()
-            return false
-        }
-
-        closeTransaction(true)
+        // Initialize does everything clear needs to do
         return initialize()
     }
+
+    fun getConnection(): Connection? { return this.connection}
 }
