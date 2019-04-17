@@ -126,6 +126,7 @@ object PersistenceManager : IPersistenceManager {
     fun restoreDB(){
         try {
             println("Loading database...")
+            openTransaction()
             getUserDAO().loadUsers().forEach {
                 val user = it as User
                 Users.loadUser(user)
@@ -159,6 +160,7 @@ object PersistenceManager : IPersistenceManager {
                 it.queue.clear()
             }
 
+            closeTransaction(true)
             println("Database loaded!")
 
             println("Re-persisting data to disk...")

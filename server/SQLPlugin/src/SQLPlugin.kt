@@ -55,10 +55,18 @@ class SQLPlugin : IPersistenceManager {
     override fun getGameDAO(): IGameDAO { return SQLGameDAO(this) }
 
     override fun initialize(): Boolean {
-
-        closeTransaction(true)
-
         val file = File(filepath)
+        Class.forName("org.sqlite.JDBC")
+
+        if (!file.exists()) {
+            return clear()
+        }
+        return true
+    }
+
+    override fun clear(): Boolean {
+        val file = File(filepath)
+        closeTransaction(false)
         Files.deleteIfExists(file.toPath())
 
         openTransaction()
@@ -97,11 +105,6 @@ class SQLPlugin : IPersistenceManager {
 
         closeTransaction(true)
         return true
-    }
-
-    override fun clear(): Boolean {
-        // Initialize does everything clear needs to do
-        return initialize()
     }
 
     fun getConnection(): Connection? { return this.connection}

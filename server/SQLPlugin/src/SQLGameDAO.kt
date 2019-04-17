@@ -5,6 +5,9 @@ import java.sql.DriverManager
 
 
 class SQLGameDAO(persistenceManager: IPersistenceManager) : IGameDAO(persistenceManager) {
+    override fun removeGame(game: IGame) {
+        TODO("not implemented")
+    }
 
     private val sqlPlugin: SQLPlugin = persistenceManager as SQLPlugin
     private val serializer = Serializer;
