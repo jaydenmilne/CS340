@@ -56,6 +56,8 @@ class SQLPlugin : IPersistenceManager {
 
     override fun initialize(): Boolean {
         val file = File(filepath)
+        Class.forName("org.sqlite.JDBC")
+
         if (!file.exists()) {
             return clear()
         }
