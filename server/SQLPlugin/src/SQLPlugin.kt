@@ -66,6 +66,7 @@ class SQLPlugin : IPersistenceManager {
 
     override fun clear(): Boolean {
         val file = File(filepath)
+        closeTransaction(false)
         Files.deleteIfExists(file.toPath())
 
         openTransaction()
