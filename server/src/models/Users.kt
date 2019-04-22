@@ -1,8 +1,11 @@
 package models
 
+import Color
+import GamePlayerDTO
 import commands.CommandException
 import commands.UpdateHandCommand
 import IUser
+import LoginUserDTO
 import java.io.Serializable
 import java.lang.Integer.max
 
@@ -103,9 +106,9 @@ class User(var username: String): IUser {
 
     fun toLoginUserDTO(): LoginUserDTO {
         return LoginUserDTO(this.username,
-                            this.userId,
-                            this.color,
-                            this.ready)
+                this.userId,
+                this.color,
+                this.ready)
     }
 
     fun updateHand() {
@@ -172,15 +175,6 @@ class User(var username: String): IUser {
 
 class ClientUser(val userId: Int, var username: String, val authToken: String) {
     constructor() : this(0, "", "")
-}
-
-enum class Color(val rgb: String)  : Serializable {
-    YELLOW("fdd835"),
-    GREEN("66bb6a"),
-    BLUE("1976d2"),
-    PURPLE("7b1fa2"),
-    RED("d32f2f"),
-    ORANGE("ff5722");
 }
 
 class PlayerPoints(val userId: Int,

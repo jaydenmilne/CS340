@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/FlatFilePlugin/FlatFilePlugin.iml" filepath="$PROJECT_DIR$/FlatFilePlugin/FlatFilePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/PluginInterfaces/PluginInterfaces.iml" filepath="$PROJECT_DIR$/PluginInterfaces/PluginInterfaces.iml" />
       <module fileurl="file://$PROJECT_DIR$/SQLPlugin/SQLPlugin.iml" filepath="$PROJECT_DIR$/SQLPlugin/SQLPlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Shared Models/Shared Models.iml" filepath="$PROJECT_DIR$/Shared Models/Shared Models.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Thanos-AI/Thanos-AI.iml" filepath="$PROJECT_DIR$/Thanos-AI/Thanos-AI.iml" />
       <module fileurl="file://$PROJECT_DIR$/server.iml" filepath="$PROJECT_DIR$/server.iml" />
     </modules>
   </component>

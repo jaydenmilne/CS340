@@ -1,5 +1,3 @@
-package models
-
 import java.io.Serializable
 
 class LobbyGameDTO(val gameId: Int,

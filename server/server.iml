@@ -11,5 +11,6 @@
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.5" level="project" />
     <orderEntry type="library" name="commons-io:commons-io:2.6" level="project" />
     <orderEntry type="module" module-name="PluginInterfaces" />
+    <orderEntry type="module" module-name="Shared Models" />
   </component>
 </module>

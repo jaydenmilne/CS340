@@ -1,5 +1,7 @@
 package commands
 
+import Color
+import GamePlayerDTO
 import models.*
 
 class GameCreatedCommand(val gameId: Int) : INormalClientCommand {
