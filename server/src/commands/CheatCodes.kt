@@ -1,5 +1,6 @@
 package commands
 
+import MaterialType
 import models.*
 
 class DebugHelpCommand : INormalServerCommand {

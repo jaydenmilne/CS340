@@ -5,6 +5,7 @@ import GamePlayerDTO
 import commands.*
 import IGame
 import LobbyGameDTO
+import MaterialType
 import persistence.PersistenceManager
 import java.lang.Integer.max
 

@@ -1,5 +1,6 @@
 package models
 
+import RouteType
 import commands.CommandException
 import java.io.Serializable
 
@@ -274,18 +275,6 @@ class RouteList : Serializable {
         return false
 
     }
-}
-
-enum class RouteType(val type: String) : Serializable {
-    ANY("any"),
-    REALITY("reality"),
-    SOUL("soul"),
-    SPACE("space"),
-    MIND("mind"),
-    POWER("power"),
-    TIME("time"),
-    VIBRANIUM("vibranium"),
-    PALLADIUM("palladium")
 }
 
 class Route(val routeId: String, val cities: Set<String>, val numCars: Int, val type: RouteType, var ownerId: Int) : Serializable {

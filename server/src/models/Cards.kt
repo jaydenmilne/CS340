@@ -1,46 +1,11 @@
 package models
 
-import com.google.gson.annotations.SerializedName
+import MaterialType
+import IShardCard
+import IDestinationCard
 import java.io.Serializable
 
-enum class MaterialType(val material: String) {
-    @SerializedName("reality_shard") REALITY_SHARD("reality_shard"),
-    @SerializedName("soul_shard") SOUL_SHARD("soul_shard"),
-    @SerializedName("space_shard") SPACE_SHARD("space_shard"),
-    @SerializedName("mind_shard") MIND_SHARD("mind_shard"),
-    @SerializedName("power_shard") POWER_SHARD("power_shard"),
-    @SerializedName("time_shard") TIME_SHARD("time_shard"),
-    @SerializedName("vibranium") VIBRANIUM("vibranium"),
-    @SerializedName("palladium") PALLADIUM("palladium"),
-    @SerializedName("infinity_gauntlet") INFINITY_GAUNTLET("infinity_gauntlet");
-
-    companion object {
-        fun matchesRouteType(routeType: RouteType, materialType: MaterialType): Boolean {
-
-            // Infinity Gauntlet matches any route type
-            if (materialType == INFINITY_GAUNTLET) {
-                return true
-            }
-
-            return when (routeType) {
-                // Any card matches route type
-                RouteType.ANY -> true
-                RouteType.REALITY -> materialType == MaterialType.REALITY_SHARD
-                RouteType.SOUL -> materialType == MaterialType.SOUL_SHARD
-                RouteType.SPACE -> materialType == MaterialType.SPACE_SHARD
-                RouteType.MIND -> materialType == MaterialType.MIND_SHARD
-                RouteType.POWER -> materialType == MaterialType.POWER_SHARD
-                RouteType.TIME -> materialType == MaterialType.TIME_SHARD
-                RouteType.VIBRANIUM -> materialType == MaterialType.VIBRANIUM
-                RouteType.PALLADIUM -> materialType == MaterialType.PALLADIUM
-            }
-        }
-    }
-
-}
-interface ICard : Serializable
-
-class ShardCard(val type: MaterialType) : ICard {
+class ShardCard(override val type: MaterialType) : IShardCard {
     constructor() : this(MaterialType.INFINITY_GAUNTLET)
 
     override fun equals(other: Any?): Boolean {
@@ -73,7 +38,8 @@ class ShardCard(val type: MaterialType) : ICard {
     }
 }
 
-class DestinationCard(val cities: Set<String>, val points: Int): Serializable {
+
+class DestinationCard(override val cities: Set<String>, override val points: Int): IDestinationCard {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
