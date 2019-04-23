@@ -8,7 +8,7 @@ open class ICreateGameCommand(protected var name: String = ""): ICommand {
     override val command = CREATE_GAME
 }
 
-open class IJoinGameCommand(protected val gameId: String = "") : ICommand {
+open class IJoinGameCommand(protected val gameId: Int = -1) : ICommand {
     override val command = JOIN_GAME
 }
 
@@ -16,7 +16,7 @@ open class IListGamesCommand : ICommand {
     override val command = LIST_GAMES
 }
 
-open class ILeaveGameCommand(protected val gameId: String = "") : ICommand {
+open class ILeaveGameCommand(protected val gameId: Int = -1) : ICommand {
     override val command = LEAVE_GAME
 }
 
@@ -24,7 +24,7 @@ open class ILoginCommand(protected val username: String = "", protected val pass
     override val command = LOGIN
 }
 
-open class IPlayerReadyCommand(protected val gameId: String = "", protected val playerIsReady: Boolean = false) : ICommand {
+open class IPlayerReadyCommand(protected val gameId: Int = -1, protected val playerIsReady: Boolean = false) : ICommand {
     override val command = PLAYER_READY
 }
 
@@ -32,7 +32,7 @@ open class IRegisterCommand(protected val username: String = "", protected val p
     override val command = REGISTER
 }
 
-open class IChangeColorCommand(protected val gameId: String = "", protected var newColor: String = "") : ICommand {
+open class IChangeColorCommand(protected val gameId: Int = -1, protected var newColor: String = "") : ICommand {
     override val command = CHANGE_COLOR
 }
 

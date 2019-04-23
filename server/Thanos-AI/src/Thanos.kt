@@ -8,8 +8,13 @@ class Thanos (private val username: String, private val password: String){
     private val commandRouter = CommandRouter()
     private val server = ProxyServer(commandRouter)
 
+    fun processCommands(){
+        commandRouter.processCommands()
+    }
+
     // Services
     private val loginService = LoginService(server, commandRouter)
+    private val lobbyService = LobbyService(server, commandRouter)
 
     fun login(){
         loginService.login(username, password)
@@ -19,7 +24,7 @@ class Thanos (private val username: String, private val password: String){
         loginService.register(username, password)
     }
 
-    fun processCommands(){
-        commandRouter.processCommands()
+    fun joinGame(gameId: Int){
+        lobbyService.joinGame(gameId)
     }
 }

@@ -36,7 +36,7 @@ class JoinGameCommand : INormalServerCommand, IJoinGameCommand() {
         // Ensure that the user is only in one game
         Games.removeUserFromGames(user)
 
-        val game = Games.games[gameId.toInt()] ?: throw CommandException("JoinGameCommand: Game does not exist")
+        val game = Games.games[gameId] ?: throw CommandException("JoinGameCommand: Game does not exist")
 
         if (game.players.size < 5) {
             game.players.add(user)
@@ -56,7 +56,7 @@ class JoinGameCommand : INormalServerCommand, IJoinGameCommand() {
 class LeaveGameCommand : INormalServerCommand, ILeaveGameCommand() {
 
     override fun execute(user: User) {
-        val game = Games.games[gameId.toInt()] ?: throw CommandException("LeaveGameCommand: Game does not exist")
+        val game = Games.games[gameId] ?: throw CommandException("LeaveGameCommand: Game does not exist")
 
         game.players.remove(user)
         user.ready = false
@@ -171,7 +171,7 @@ class RegisterCommand : IRegistrationServerCommand, IRegisterCommand() {
 class ChangeColorCommand : INormalServerCommand, IChangeColorCommand() {
 
     override fun execute(user: User) {
-        val game = Games.games[gameId.toInt()] ?: throw CommandException("ChangeColorCommand: Game does not exist")
+        val game = Games.games[gameId] ?: throw CommandException("ChangeColorCommand: Game does not exist")
 
         // Verify that the game exists
 
