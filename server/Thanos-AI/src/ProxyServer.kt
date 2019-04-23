@@ -15,14 +15,14 @@ import java.net.URL
  * @author Jordan Gassaway
  * @since 2/15/17
  */
-class ProxyServer(private val url: String = "http://localhost",  private val port: Int = 4300) {
+class ProxyServer(private val cmdRouter: CommandRouter, private val url: String = "http://localhost",  private val port: Int = 4300) {
     /** AuthToken for current session */
     private var session: String? = null
     private val gson = Gson()
     private val serverURL = "$url:$port"
 
 
-    public fun executeCommand(command: ICommand): List<ICommand> {
+    public fun executeCommand(command: ICommand) {
         try {
             val type = when (command.command) {
                 LOGIN -> RequestType.REGISTER
@@ -60,11 +60,11 @@ class ProxyServer(private val url: String = "http://localhost",  private val por
 
             // HTTP OK
             val responseBody = getResponse(con)
-            return deserializeCommands(responseBody)
+            val commands = deserializeCommands(responseBody)
+            cmdRouter.addNewCommands(commands)
 
         } catch (e: IOException) {
             e.printStackTrace()
-            return listOf()
         }
 
     }
@@ -116,11 +116,8 @@ class ProxyServer(private val url: String = "http://localhost",  private val por
         return commandsList
     }
 
-    fun handleLoginResult(loginResult: LoginResultCommand){
-        if(loginResult.error != ""){
-            println("Login Error!: ${loginResult.error}")
-        }
-        session = loginResult.user.authToken
+    fun setAuthToken(authToken: String?){
+        session = authToken
     }
 
     private enum class RequestType private constructor(val endpoint: String, val method: String) {
