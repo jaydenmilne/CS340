@@ -5,8 +5,8 @@ import IShardCard
 import IDestinationCard
 import java.io.Serializable
 
-class ShardCard(override val type: MaterialType) : IShardCard {
-    constructor() : this(MaterialType.INFINITY_GAUNTLET)
+class ShardCard(type: MaterialType) : IShardCard(type) {
+    constructor(dto: IShardCard) : this(dto.type)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -39,7 +39,9 @@ class ShardCard(override val type: MaterialType) : IShardCard {
 }
 
 
-class DestinationCard(override val cities: Set<String>, override val points: Int): IDestinationCard {
+class DestinationCard(cities: Set<String>, points: Int): IDestinationCard(cities, points) {
+    constructor(dto: IDestinationCard) : this(dto.cities, dto.points)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

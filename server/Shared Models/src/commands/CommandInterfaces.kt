@@ -36,11 +36,11 @@ interface INormalCommand : ICommand {
     override val command: String
 }
 
-interface IRegisterCommand : ICommand {
+interface IRegistrationCommand : ICommand {
     override val command: String
 }
 
-interface IRegisterClientCommand : IRegisterCommand {
+interface IRegistrationClientCommand : IRegistrationCommand {
     override val command: String
 }
 

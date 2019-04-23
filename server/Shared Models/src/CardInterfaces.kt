@@ -8,11 +8,8 @@ import java.io.Serializable
 
 interface ICard : Serializable
 
-interface IShardCard : ICard {
-    val type: MaterialType
+open class IShardCard(val type: MaterialType = MaterialType.INFINITY_GAUNTLET) : ICard {
 }
 
-interface IDestinationCard : ICard {
-    val cities: Set<String>
-    val points: Int
+open class IDestinationCard(val cities: Set<String> = setOf(), val points: Int) : ICard {
 }

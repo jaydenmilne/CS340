@@ -13,7 +13,7 @@ class GameCreatedCommand(val gameId: Int) : INormalClientCommand {
     override val command = GAME_CREATED
 }
 
-class LoginResultCommand(var error: String = "", var game: Int = -1, var user: LoginUserDTO = LoginUserDTO()) : IRegisterClientCommand {
+class LoginResultCommand(var error: String = "", var game: Int = -1, var user: LoginUserDTO = LoginUserDTO()) : IRegistrationClientCommand {
     override val command = LOGIN_RESULT
 }
 

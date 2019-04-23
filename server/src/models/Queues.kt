@@ -3,7 +3,7 @@ package models
 import java.io.Serializable
 import com.google.gson.Gson
 import commands.INormalClientCommand
-import commands.IRegisterClientCommand
+import commands.IRegistrationClientCommand
 
 /**
  * Contains the client commands that a particular user needs to properly know game state.
@@ -39,9 +39,9 @@ class CommandQueue : Serializable {
  */
 class RegisterCommandQueue : Serializable  {
 
-    var commands = mutableListOf<IRegisterClientCommand>()
+    var commands = mutableListOf<IRegistrationClientCommand>()
 
-    fun push(command: IRegisterClientCommand) {
+    fun push(command: IRegistrationClientCommand) {
         commands.add(command)
     }
 

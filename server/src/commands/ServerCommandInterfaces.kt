@@ -2,9 +2,9 @@ package commands
 
 import models.User
 
-interface IRegisterServerCommand : IRegisterCommand {
+interface IRegistrationServerCommand : IRegistrationCommand {
     override val command: String
-    fun execute(): IRegisterClientCommand
+    fun execute(): IRegistrationClientCommand
 }
 
 interface INormalServerCommand : INormalCommand {

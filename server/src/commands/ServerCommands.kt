@@ -9,9 +9,7 @@ import models.*
 /**
  * Create a new game on the server.
  */
-class CreateGameCommand : INormalServerCommand {
-    override val command = CREATE_GAME
-    private var name = ""
+class CreateGameCommand : INormalServerCommand, ICreateGameCommand() {
 
     override fun execute(user: User) {
         val newGame = Game(name)
@@ -32,9 +30,7 @@ class CreateGameCommand : INormalServerCommand {
 /**
  * Join a game that has not yet started.
  */
-class JoinGameCommand : INormalServerCommand {
-    override val command = JOIN_GAME
-    private val gameId = ""
+class JoinGameCommand : INormalServerCommand, IJoinGameCommand() {
 
     override fun execute(user: User) {
         // Ensure that the user is only in one game
@@ -57,9 +53,7 @@ class JoinGameCommand : INormalServerCommand {
 /**
  * Leave a game that has not yet started.
  */
-class LeaveGameCommand : INormalServerCommand {
-    override val command = LEAVE_GAME
-    private val gameId = ""
+class LeaveGameCommand : INormalServerCommand, ILeaveGameCommand() {
 
     override fun execute(user: User) {
         val game = Games.games[gameId.toInt()] ?: throw CommandException("LeaveGameCommand: Game does not exist")
@@ -76,8 +70,7 @@ class LeaveGameCommand : INormalServerCommand {
 /**
  * List all available games to play.
  */
-class ListGamesCommand : INormalServerCommand {
-    override val command = LIST_GAMES
+class ListGamesCommand : INormalServerCommand, IListGamesCommand() {
 
     override fun execute(user: User) {
         val newCommand = RefreshGameListCommand(Games.toDTO())
@@ -88,12 +81,9 @@ class ListGamesCommand : INormalServerCommand {
 /**
  * Log in to the server with the provided credentials.
  */
-class LoginCommand : IRegisterServerCommand {
-    override val command = LOGIN
-    private val username = ""
-    private val password = ""
+class LoginCommand : IRegistrationServerCommand, ILoginCommand() {
 
-    override fun execute(): IRegisterClientCommand {
+    override fun execute(): IRegistrationClientCommand {
         val response = LoginResultCommand()
 
         val user = Users.getUserByUsername(username)
@@ -128,10 +118,7 @@ class LoginCommand : IRegisterServerCommand {
 /**
  * Change a user's ready status for a particular game.
  */
-class PlayerReadyCommand : INormalServerCommand {
-    override val command = PLAYER_READY
-    private val gameId = ""
-    private val playerIsReady = false
+class PlayerReadyCommand : INormalServerCommand, IPlayerReadyCommand() {
 
     override fun execute(user: User) {
         user.ready = playerIsReady
@@ -156,12 +143,9 @@ class PlayerReadyCommand : INormalServerCommand {
 /**
  * Register a new user with the server.
  */
-class RegisterCommand : IRegisterServerCommand {
-    override val command = REGISTER
-    private val username = ""
-    private val password = ""
+class RegisterCommand : IRegistrationServerCommand, IRegisterCommand() {
 
-    override fun execute(): IRegisterClientCommand {
+    override fun execute(): IRegistrationClientCommand {
         val response = LoginResultCommand()
 
         if (Users.isUsernameTaken(username)) {
@@ -184,10 +168,7 @@ class RegisterCommand : IRegisterServerCommand {
 /**
  * Change a user's color for a particular game.
  */
-class ChangeColorCommand : INormalServerCommand {
-    override val command = CHANGE_COLOR
-    private val gameId = ""
-    private var newColor = ""
+class ChangeColorCommand : INormalServerCommand, IChangeColorCommand() {
 
     override fun execute(user: User) {
         val game = Games.games[gameId.toInt()] ?: throw CommandException("ChangeColorCommand: Game does not exist")
@@ -214,12 +195,11 @@ class ChangeColorCommand : INormalServerCommand {
  *
  * @deprecated
  */
-class ServerCommandData : IRegisterCommand, INormalCommand {
+class ServerCommandData : IRegistrationCommand, INormalCommand {
     override val command: String = ""
 }
 
-class RequestDestinationsCommand : INormalServerCommand {
-    override val command = REQUEST_DESTINATIONS
+class RequestDestinationsCommand : INormalServerCommand, IRequestDestinationsCommand() {
 
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user) ?: throw RuntimeException("User not in a game")
@@ -270,8 +250,7 @@ class RequestDestinationsCommand : INormalServerCommand {
     }
 }
 
-class RejoinGameCommand : INormalServerCommand {
-    override val command = REJOIN_GAME
+class RejoinGameCommand : INormalServerCommand, IRejoinGameCommand() {
 
     override fun execute(user: User) {
         // The client has no state, send everything that it will need.
@@ -308,9 +287,7 @@ class RejoinGameCommand : INormalServerCommand {
     }
 }
 
-class DiscardDestinationsCommand : INormalServerCommand {
-    override val command = DISCARD_DESTINATIONS
-    private val discardedDestinations = listOf<DestinationCard>()
+class DiscardDestinationsCommand : INormalServerCommand, IDiscardDestinationsCommand() {
 
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user)
@@ -320,9 +297,10 @@ class DiscardDestinationsCommand : INormalServerCommand {
             user.turnOrder = game.destDiscardOrder++
         }
 
-        discardedDestinations.forEach { discarded -> game.destinationCardDeck.push(discarded) }
+        val extractedDestinations = discardedDestinations.map { DestinationCard(it) }
+        extractedDestinations.forEach { discarded -> game.destinationCardDeck.push(DestinationCard(discarded)) }
         // Remove the discarded cards from the player's hand
-        user.destinationCards.destinationCards.removeAll(discardedDestinations)
+        user.destinationCards.destinationCards.removeAll(extractedDestinations)
         user.setupComplete = true   //
 
         // Broadcast the updated player to everyone else
@@ -333,22 +311,19 @@ class DiscardDestinationsCommand : INormalServerCommand {
     }
 }
 
-class ClaimRouteCommand : INormalServerCommand {
-    override val command = CLAIM_ROUTE
-    private val routeId = ""
-    private val shardsUsed = listOf<ShardCard>()
-
+class ClaimRouteCommand : INormalServerCommand, IClaimRouteCommand() {
 
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user) ?: throw RuntimeException("User not in a game")
 
-        val claimRouteResult = game.canClaimRoute(user, routeId, shardsUsed.toTypedArray())
+        val extractedShards = shardsUsed.map { ShardCard(it) }
+        val claimRouteResult = game.canClaimRoute(user, routeId, extractedShards.toTypedArray())
 
         if (claimRouteResult == Game.CanClaimRouteResult.CLAIM_OK) {
             shardsUsed.forEach { card -> user.shardCards.shardCards.remove(card) }
-            game.shardCardDiscardPile.shardCards.addAll(shardsUsed)
+            game.shardCardDiscardPile.shardCards.addAll(extractedShards)
 
-            game.claimRoute(user, routeId, shardsUsed)
+            game.claimRoute(user, routeId, extractedShards)
 
             val routeClaimed = RouteClaimedCommand(user.userId, this.routeId)
             game.broadcast(routeClaimed)
@@ -369,12 +344,10 @@ class ClaimRouteCommand : INormalServerCommand {
     }
 }
 
-class DrawShardCardCommand : INormalServerCommand {
-    override val command = DRAW_SHARD_CARD
-    private var card = ""
-    private var cardToSend = ShardCard()
+class DrawShardCardCommand : INormalServerCommand, IDrawShardCardCommand() {
 
     override fun execute(user: User) {
+        var cardToSend: ShardCard
         val game = Games.getGameForPlayer(user) ?: throw CommandException("DrawShardCard Command: User not in a game")
 
         if (game.getTurningPlayer() != user) {
@@ -439,8 +412,7 @@ class DrawShardCardCommand : INormalServerCommand {
     }
 }
 
-class SkipTurnCommand : INormalServerCommand {
-    override val command = SKIP_TURN
+class SkipTurnCommand : INormalServerCommand, ISkipTurnCommand() {
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user) ?: throw CommandException("SkipTurn Command: User not in a game")
 
