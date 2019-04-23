@@ -75,3 +75,14 @@ class LastRoundCommand : INormalClientCommand {
 class GameOverCommand(val players: List<PlayerPoints>) : INormalClientCommand {
     override val command = GAME_OVER
 }
+
+/**
+ * Concrete type to make Gson happy when identifying the type of Server Command.
+ *
+ * In a future update, this will be replaced by making INormalServerCommand concrete.
+ *
+ * @deprecated
+ */
+class ClientCommandData : IRegistrationCommand, INormalClientCommand {
+    override val command: String = ""
+}
