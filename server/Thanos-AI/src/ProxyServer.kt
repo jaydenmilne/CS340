@@ -20,6 +20,7 @@ class ProxyServer(private val cmdRouter: CommandRouter, private val url: String 
     private var session: String? = null
     private val gson = Gson()
     private val serverURL = "$url:$port"
+    private val debugMode = false
 
 
     public fun executeCommand(command: ICommand) {
@@ -50,7 +51,7 @@ class ProxyServer(private val cmdRouter: CommandRouter, private val url: String 
             output.write(jsonSend.toByteArray(charset("UTF-8")))
             output.close()
 
-            println("Sending Request to $sendURL")
+            if(debugMode) println("Sending Request to $sendURL")
 
             when (con.responseCode){
                 HttpURLConnection.HTTP_UNAUTHORIZED -> throw UnauthorizedException(con.responseMessage)

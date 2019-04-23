@@ -15,16 +15,25 @@ class Thanos (private val username: String, private val password: String){
     // Services
     private val loginService = LoginService(server, commandRouter)
     private val lobbyService = LobbyService(server, commandRouter)
+    private val poller = Poller(commandRouter, server)
 
     fun login(){
         loginService.login(username, password)
+        commandRouter.processCommands()
     }
 
     fun register(){
         loginService.register(username, password)
+        commandRouter.processCommands()
     }
 
     fun joinGame(gameId: Int){
+        if(!loginService.isLoggedIn()) return
+        poller.startPolling()
         lobbyService.joinGame(gameId)
+    }
+
+    fun close(){
+        poller.close()
     }
 }

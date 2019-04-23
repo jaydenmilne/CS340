@@ -7,7 +7,7 @@ import commands.*
 class LobbyService(private val server: ProxyServer, private val cmdRouter: CommandRouter) {
 
     private var currentGameId: Int = -1
-    private var currentGame: LobbyGameDTO? = null
+    @Volatile private var currentGame: LobbyGameDTO? = null
 
     init {
         this.cmdRouter.registerCallback(REFRESH_GAME_LIST) { handleRefreshGamesList(it as RefreshGameListCommand) }
@@ -15,12 +15,13 @@ class LobbyService(private val server: ProxyServer, private val cmdRouter: Comma
 
     fun joinGame(gameId: Int){
         server.executeCommand(IJoinGameCommand(gameId))
-        currentGameId = -1
+        currentGameId = gameId
 
         while(currentGame == null){
             // poll
         }
         server.executeCommand(IPlayerReadyCommand(currentGameId, true))
+        println("Successfully joined game $gameId")
     }
 
     fun leaveGame(){

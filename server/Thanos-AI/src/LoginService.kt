@@ -27,6 +27,7 @@ class LoginService(private val server: ProxyServer, private val cmdRouter: Comma
         if(loginResultCommand.error != ""){
             println("Login Error ${loginResultCommand.error}")
             server.setAuthToken(null)
+            user = null
             return
         }
         // TODO: Handle Re-entering a game?
@@ -35,4 +36,7 @@ class LoginService(private val server: ProxyServer, private val cmdRouter: Comma
         println("Login Successful: ${user!!.username}")
     }
 
+    fun isLoggedIn():Boolean {
+        return user != null
+    }
 }
