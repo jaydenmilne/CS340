@@ -1,6 +1,5 @@
 package commands
 
-import models.User
 import ICommand
 
 const val CREATE_GAME = "createGame"
@@ -21,7 +20,6 @@ const val REQUEST_DESTINATIONS = "requestDestinations"
 const val REJOIN_GAME = "rejoinGame"
 const val CHANGE_TURN = "changeTurn"
 const val DISCARD_DESTINATIONS = "discardDestinations"
-const val SELECT_DESTINATIONS = "selectDestinations"
 const val POST_CHAT = "postChat"
 const val UPDATE_CHAT = "updateChat"
 const val DEAL_CARDS = "dealCards"
@@ -42,18 +40,8 @@ interface IRegisterCommand : ICommand {
     override val command: String
 }
 
-interface IRegisterServerCommand : IRegisterCommand {
-    override val command: String
-    fun execute(): IRegisterClientCommand
-}
-
 interface IRegisterClientCommand : IRegisterCommand {
     override val command: String
-}
-
-interface INormalServerCommand : INormalCommand {
-    override val command: String
-    fun execute(user: User)
 }
 
 interface INormalClientCommand : INormalCommand {

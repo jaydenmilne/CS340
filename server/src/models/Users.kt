@@ -5,8 +5,8 @@ import GamePlayerDTO
 import commands.CommandException
 import commands.UpdateHandCommand
 import IUser
-import LoginUserDTO
-import java.io.Serializable
+import LobbyUserDTO
+import PlayerPoints
 import java.lang.Integer.max
 
 private var nextUserId = -1
@@ -104,8 +104,8 @@ class User(var username: String): IUser {
                 this.turnOrder)
     }
 
-    fun toLoginUserDTO(): LoginUserDTO {
-        return LoginUserDTO(this.username,
+    fun toLoginUserDTO(): LobbyUserDTO {
+        return LobbyUserDTO(this.username,
                 this.userId,
                 this.color,
                 this.ready)
@@ -177,10 +177,3 @@ class ClientUser(val userId: Int, var username: String, val authToken: String) {
     constructor() : this(0, "", "")
 }
 
-class PlayerPoints(val userId: Int,
-                   val username: String,
-                   val totalPoints: Int,
-                   val claimedRoutePoints: Int,
-                   val completedDestinationPoints: Int,
-                   val incompleteDestinationPoints: Int,
-                   val longestRoutePoints: Int): Serializable

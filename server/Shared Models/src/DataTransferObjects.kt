@@ -5,10 +5,19 @@ class LobbyGameDTO(val gameId: Int,
                    val started: Boolean,
                    val players: MutableSet<GamePlayerDTO>): Serializable
 
-class LoginUserDTO(val username: String,
+class LobbyUserDTO(val username: String,
                    val userId: Int,
                    val color: Color,
-                   val ready: Boolean): Serializable
+                   val ready: Boolean): Serializable {
+    companion object {
+        fun nullUser(): LobbyUserDTO {
+            return LobbyUserDTO("", -1, Color.YELLOW, false)
+        }
+    }
+}
+
+class LoginUserDTO(val userId: Int = 0, var username: String = "", val authToken: String = "") {
+}
 
 class GamePlayerDTO(val userId: Int,
                  val username: String,

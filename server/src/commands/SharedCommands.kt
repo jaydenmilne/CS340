@@ -1,7 +1,7 @@
 package commands
 
 import models.Games
-import models.Message
+import Message
 import models.User
 
 /**

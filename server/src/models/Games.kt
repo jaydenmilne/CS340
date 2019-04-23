@@ -6,6 +6,7 @@ import commands.*
 import IGame
 import LobbyGameDTO
 import MaterialType
+import Message
 import persistence.PersistenceManager
 import java.lang.Integer.max
 
@@ -125,20 +126,13 @@ class Game(var name: String): IGame {
 
 
     fun updatebank() {
-        val updatebankCommand = UpdateBankCommand()
-        updatebankCommand.faceUpCards = faceUpShardCards.cards
-        updatebankCommand.shardDrawPileSize = shardCardDeck.cards.size
-        updatebankCommand.shardDiscardPileSize = shardCardDiscardPile.cards.size
-        updatebankCommand.destinationPileSize = destinationCardDeck.cards.size
+        val updatebankCommand = UpdateBankCommand(faceUpShardCards.cards, shardCardDeck.cards.size, shardCardDiscardPile.cards.size, destinationCardDeck.cards.size)
         broadcast(updatebankCommand)
     }
 
     fun endGame() {
-        val gameOverCommand = GameOverCommand(mutableListOf())
-        players.forEach {
-            gameOverCommand.players.add(it.toPlayerPoints())
-            it.reset()
-        }
+        val gameOverCommand = GameOverCommand(players.map { it.toPlayerPoints() })
+        players.forEach { it.reset() }
         broadcast(gameOverCommand)
         Games.games.remove(this.gameId)
         PersistenceManager.removeGame(this)

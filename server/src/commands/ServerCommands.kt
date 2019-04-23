@@ -2,6 +2,7 @@ package commands
 
 import Color
 import MaterialType
+import LoginUserDTO
 import models.*
 
 
@@ -79,7 +80,7 @@ class ListGamesCommand : INormalServerCommand {
     override val command = LIST_GAMES
 
     override fun execute(user: User) {
-        val newCommand = RefreshGameListCommand()
+        val newCommand = RefreshGameListCommand(Games.toDTO())
         user.queue.push(newCommand)
     }
 }
@@ -115,7 +116,7 @@ class LoginCommand : IRegisterServerCommand {
             }
 
             val authToken = AuthTokens.makeAuthTokenForUser(user)
-            response.user = ClientUser(user.userId, user.username, authToken)
+            response.user = LoginUserDTO(user.userId, user.username, authToken)
             return response
         } else {
             response.error = "Authentication error."
@@ -174,7 +175,7 @@ class RegisterCommand : IRegisterServerCommand {
         val token = AuthTokens.makeAuthTokenForUser(newUser)
         newUser.authToken = token
 
-        response.user = ClientUser(newUser.userId, newUser.username, newUser.authToken)
+        response.user = LoginUserDTO(newUser.userId, newUser.username, newUser.authToken)
 
         return response
     }
@@ -223,11 +224,12 @@ class RequestDestinationsCommand : INormalServerCommand {
     override fun execute(user: User) {
         val game = Games.getGameForPlayer(user) ?: throw RuntimeException("User not in a game")
 
-        val dealCardsCommand = DealCardsCommand()
         val dealtDestinationCards = mutableListOf<DestinationCard>()
         val dealtShardCards = mutableListOf<ShardCard>()
+        var minDestinations = 1
 
         if (game.whoseTurn == -1) {
+            minDestinations = 2
 
             /* Deal 4 train cards to user */
             for (i in 0..3) {
@@ -238,7 +240,6 @@ class RequestDestinationsCommand : INormalServerCommand {
             }
 
         } else {
-            dealCardsCommand.minDestinations = 1
             if (game.getTurningPlayer() != user) {
                 throw CommandException("RequestDestinations: Not Your Turn")
             }
@@ -258,9 +259,8 @@ class RequestDestinationsCommand : INormalServerCommand {
         if (dealtDestinationCards.isEmpty()) {
             throw CommandException("RequestDestinations: Cannot Draw on an Empty Deck")
         }
-        dealCardsCommand.shardCards = dealtShardCards
-        dealCardsCommand.destinations = dealtDestinationCards
-        user.queue.push(dealCardsCommand)
+
+        user.queue.push(DealCardsCommand(dealtDestinationCards, dealtShardCards, minDestinations))
 
         /* Send UpdateBankCommand to user's client */
         game.updatebank()
@@ -290,9 +290,7 @@ class RejoinGameCommand : INormalServerCommand {
         game.routes.routesByRouteId.values.forEach {
             val id = it.ownerId
             if (id != -1) {
-                val cmd = RouteClaimedCommand()
-                cmd.routeId = it.routeId
-                cmd.userId = id
+                val cmd = RouteClaimedCommand(id, it.routeId)
                 user.queue.push(cmd)
             }
         }
@@ -352,9 +350,7 @@ class ClaimRouteCommand : INormalServerCommand {
 
             game.claimRoute(user, routeId, shardsUsed)
 
-            val routeClaimed = RouteClaimedCommand()
-            routeClaimed.routeId = this.routeId
-            routeClaimed.userId = user.userId
+            val routeClaimed = RouteClaimedCommand(user.userId, this.routeId)
             game.broadcast(routeClaimed)
 
             user.updateHand()
@@ -427,9 +423,8 @@ class DrawShardCardCommand : INormalServerCommand {
             }
         }
 
-        val dealCardsCmd = DealCardsCommand()
+        val dealCardsCmd = DealCardsCommand(mutableListOf(), mutableListOf(cardToSend))
         user.shardCards.shardCards.add(cardToSend)
-        dealCardsCmd.shardCards.add(cardToSend)
         user.queue.push(dealCardsCmd)
 
         game.updatebank()

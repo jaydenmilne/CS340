@@ -1,6 +1,5 @@
 package persistence
 
-import ICommand
 import IUser
 import IGame
 import IPersistenceManager

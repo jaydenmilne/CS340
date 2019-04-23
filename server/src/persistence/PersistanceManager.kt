@@ -1,6 +1,5 @@
 package persistence
 import IPersistenceManager
-import ICommand
 import IGame
 import serializedCmdDTO
 import ICommandDAO

@@ -5,7 +5,6 @@ import commands.*
 import models.AuthTokens
 import models.Games
 import models.RegisterCommandQueue
-import models.Users
 import org.apache.commons.io.IOUtils
 import persistence.PersistenceManager
 import persistence.PluginManager
