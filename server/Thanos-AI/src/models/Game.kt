@@ -9,6 +9,7 @@ import LobbyGameDTO
 class Game() {
     var players: MutableSet<GamePlayerDTO> = mutableSetOf()
     var bank: Bank = Bank()
+    var map: RouteList = RouteList()
 
     constructor(lobbyGameDTO: LobbyGameDTO) : this() {
         players = lobbyGameDTO.players

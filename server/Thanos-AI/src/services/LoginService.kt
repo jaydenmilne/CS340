@@ -13,7 +13,6 @@ import commands.LoginResultCommand
  * services.LoginService Handles Login and Registration
  */
 class LoginService(private val server: ProxyServer, private val cmdRouter: CommandRouter) {
-
     private var user: LoginUserDTO? = null
 
     init {
@@ -43,5 +42,9 @@ class LoginService(private val server: ProxyServer, private val cmdRouter: Comma
 
     fun isLoggedIn():Boolean {
         return user != null
+    }
+
+    fun getUserId(): Int {
+        return user?.userId ?: -1
     }
 }

@@ -1,10 +1,10 @@
 package models
 
-import RouteType
-import java.io.Serializable
-
-class RouteList : Serializable {
-
+/**
+ * Created by Jordan Gassaway on 4/23/2019.
+ * models.RouteList: Keeps track of Routes and who owns them
+ */
+class RouteList() {
     var routesByRouteId = mutableMapOf<String, Route>()
 
     init {
@@ -110,29 +110,6 @@ class RouteList : Serializable {
         routesByRouteId[SOKOVIA_WAKANDA_2] = Route(SOKOVIA_WAKANDA_2, setOf(SOKOVIA, WAKANDA), 2, RouteType.ANY, -1)
     }
 
-    fun pathBetweenCities(city1: String, city2: String, userId: Int): Boolean {
-        val queue = mutableListOf(city1)
-        val visited = mutableMapOf<String, Boolean>()
 
-        while (queue.isNotEmpty()) {
-            val node = queue.removeAt(0)
-            visited[node] = true
 
-            if (node == city2) {
-                return true
-            }
-
-            var discoveredNodes = routesByRouteId.map { e -> e.value }
-                    .filter { r -> r.cities.contains(node) && r.ownerId == userId }
-                    .map { r -> r.cities.minus(node).elementAt(0) }
-
-            discoveredNodes = discoveredNodes.filter { c -> !(visited[c] ?: false) }
-
-            queue.addAll(discoveredNodes)
-        }
-
-        return false
-
-    }
 }
-

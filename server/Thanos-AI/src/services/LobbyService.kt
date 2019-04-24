@@ -10,7 +10,6 @@ import commands.*
  * services.LobbyService Handles Lobby functions (joining games, etc)
  */
 class LobbyService(private val server: ProxyServer, private val cmdRouter: CommandRouter) {
-
     private var currentGameId: Int = -1
     @Volatile private var currentGame: LobbyGameDTO? = null
 
@@ -38,4 +37,8 @@ class LobbyService(private val server: ProxyServer, private val cmdRouter: Comma
         currentGame = refreshGameList.games.firstOrNull { it.gameId == currentGameId }
     }
 
+
+    fun getCurrentGame(): LobbyGameDTO? {
+        return currentGame
+    }
 }

@@ -1,3 +1,8 @@
+import commands.GAME_OVER
+import commands.GameOverCommand
+import commands.START_GAME
+import commands.StartGameCommand
+import models.Game
 import services.GameService
 import services.LobbyService
 import services.LoginService
@@ -14,10 +19,14 @@ class Thanos (private val username: String, private val password: String){
         commandRouter.processCommands()
     }
 
+    init {
+        this.commandRouter.registerCallback(GAME_OVER) { handleGameOver(it as GameOverCommand) }
+    }
+
     // Services
     private val loginService = LoginService(server, commandRouter)
     private val lobbyService = LobbyService(server, commandRouter)
-    private val gameService = GameService(server, commandRouter)
+    private var gameService: GameService? = null
     private val poller = Poller(commandRouter, server)
 
     fun login(){
@@ -34,9 +43,15 @@ class Thanos (private val username: String, private val password: String){
         if(!loginService.isLoggedIn()) return
         poller.startPolling()
         lobbyService.joinGame(gameId)
+        gameService = GameService(server, commandRouter, loginService.getUserId())
     }
 
     fun close(){
         poller.close()
+    }
+
+    fun handleGameOver(gameOver: GameOverCommand){
+        gameService = null
+        poller.stopPolling()    //
     }
 }
