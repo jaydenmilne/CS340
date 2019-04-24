@@ -1,15 +1,15 @@
 package services
 
-import CommandRouter
+import ICommandRouter
 import LobbyGameDTO
-import ProxyServer
+import IProxyServer
 import commands.*
 
 /**
  * Created by Jordan Gassaway on 4/23/2019.
  * services.LobbyService Handles Lobby functions (joining games, etc)
  */
-class LobbyService(private val server: ProxyServer, private val cmdRouter: CommandRouter) {
+class LobbyService(private val server: IProxyServer, private val cmdRouter: ICommandRouter) {
     private var currentGameId: Int = -1
     @Volatile private var currentGame: LobbyGameDTO? = null
 

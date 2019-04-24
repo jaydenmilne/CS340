@@ -4,7 +4,7 @@ import commands.IListGamesCommand
  * Created by Jordan Gassaway on 4/23/2019.
  * Poller Periodically polls server for new commands
  */
-class Poller(private val cmdRouter: CommandRouter, private val server: ProxyServer) {
+class Poller(private val cmdRouter: ICommandRouter, private val server: ProxyServer) {
     private val pollThread = PollThread { poll() }
     private val debugMode = false
     var lobbyMode = false

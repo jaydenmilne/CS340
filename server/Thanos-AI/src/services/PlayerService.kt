@@ -1,15 +1,15 @@
 package services
 
-import CommandRouter
+import ICommandRouter
 import GamePlayerDTO
-import ProxyServer
+import IProxyServer
 import commands.*
 
 /**
  * Created by Jordan Gassaway on 4/23/2019.
  * services.PlayerService: Handles updates to player
  */
-class PlayerService(private val server: ProxyServer, private val cmdRouter: CommandRouter, private val players: MutableSet<GamePlayerDTO>, val myPlayerId: Int) {
+class PlayerService(private val server: IProxyServer, private val cmdRouter: ICommandRouter, private val players: MutableSet<GamePlayerDTO>, val myPlayerId: Int) {
     var myPlayer: GamePlayerDTO? = null
 
     init {

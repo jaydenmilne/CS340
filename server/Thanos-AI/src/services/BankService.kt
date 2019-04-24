@@ -1,8 +1,8 @@
 package services
 
-import CommandRouter
+import ICommandRouter
 import MaterialType
-import ProxyServer
+import IProxyServer
 import commands.*
 import models.Bank
 
@@ -10,7 +10,7 @@ import models.Bank
  * Created by Jordan Gassaway on 4/23/2019.
  * services.BankService: Handles Bank updates and drawing cards.
  */
-class BankService(private val server: ProxyServer, private val cmdRouter: CommandRouter, private val bank: Bank) {
+class BankService(private val server: IProxyServer, private val cmdRouter: ICommandRouter, private val bank: Bank) {
     @Volatile private var drawComplete: Boolean = false
 
     init {

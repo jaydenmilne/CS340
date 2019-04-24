@@ -7,6 +7,12 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
+interface IProxyServer {
+    fun executeCommand(command: ICommand)
+    fun poll()
+    fun setAuthToken(authToken: String?)
+}
+
 /**
  * Server.ProxyServer: Runs on Client to provide interface with server.
  * Communicates with Server over HTTP, Decodes and Encodes JSON
@@ -15,7 +21,7 @@ import java.net.URL
  * @author Jordan Gassaway
  * @since 2/15/17
  */
-class ProxyServer(private val cmdRouter: CommandRouter, private val url: String = "http://localhost",  private val port: Int = 4300) {
+class ProxyServer(private val cmdRouter: ICommandRouter, private val url: String = "http://localhost",  private val port: Int = 4300) : IProxyServer {
     /** AuthToken for current session */
     private var session: String? = null
     private val gson = Gson()
@@ -23,7 +29,7 @@ class ProxyServer(private val cmdRouter: CommandRouter, private val url: String 
     private val debugMode = false
 
 
-    public fun executeCommand(command: ICommand) {
+    override fun executeCommand(command: ICommand) {
         try {
             val type = when (command.command) {
                 LOGIN -> RequestType.REGISTER
@@ -72,7 +78,7 @@ class ProxyServer(private val cmdRouter: CommandRouter, private val url: String 
 
     }
 
-    public fun poll() {
+    override fun poll() {
         try {
             val type = RequestType.POLL
             val sendURL = URL(serverURL + type.endpoint)
@@ -155,7 +161,7 @@ class ProxyServer(private val cmdRouter: CommandRouter, private val url: String 
         return commandsList
     }
 
-    fun setAuthToken(authToken: String?){
+    override fun setAuthToken(authToken: String?){
         session = authToken
     }
 

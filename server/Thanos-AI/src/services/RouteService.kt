@@ -1,7 +1,7 @@
 package services
 
-import CommandRouter
-import ProxyServer
+import ICommandRouter
+import IProxyServer
 import commands.*
 import IShardCard
 import models.Route
@@ -12,7 +12,7 @@ import RouteType
  * Created by Jordan Gassaway on 4/23/2019.
  * services.RouteService: Handles RouteList updates and route claiming
  */
-class RouteService(private val server: ProxyServer, private val cmdRouter: CommandRouter, private val map: RouteList,
+class RouteService(private val server: IProxyServer, private val cmdRouter: ICommandRouter, private val map: RouteList,
                    private val lessThan4Players: Boolean) {
     init {
         this.cmdRouter.registerCallback(ROUTE_CLAIMED) { handleRouteClaimed(it as RouteClaimedCommand) }
@@ -55,7 +55,10 @@ class RouteService(private val server: ProxyServer, private val cmdRouter: Comma
     }
 
     private fun canClaimRouteAny(cards: List<IShardCard>, cardsNeeded: Int): Boolean {
-        RouteType.values().forEach { if (canClaimRouteType(it, cards, cardsNeeded)) return true }
+        val routeTypes = RouteType.values().toMutableList()
+        routeTypes.remove(RouteType.ANY)        // Skip RouteType.ANY
+
+        routeTypes.forEach { if (canClaimRouteType(it, cards, cardsNeeded)) return true }
         return false        // route could not be claimed with any card type
     }
 

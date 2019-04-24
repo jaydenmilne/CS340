@@ -1,7 +1,7 @@
 package services
 
-import CommandRouter
-import ProxyServer
+import ICommandRouter
+import IProxyServer
 import commands.*
 import models.Game
 
@@ -9,7 +9,7 @@ import models.Game
  * Created by Jordan Gassaway on 4/23/2019.
  * services.GameService Handles models.Game functions (starting game, selecting cards, discarding cards, etc.)
  */
-class GameService(private val server: ProxyServer, private val cmdRouter: CommandRouter, private val myPlayerId: Int) {
+class GameService(private val server: IProxyServer, private val cmdRouter: ICommandRouter, private val myPlayerId: Int) {
     var game = Game()
 
     // Sub-services

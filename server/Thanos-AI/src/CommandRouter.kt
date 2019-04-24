@@ -1,11 +1,17 @@
 import com.google.gson.Gson
 import commands.*
 
+interface ICommandRouter {
+    fun addNewCommands(commands: List<ICommand>)
+    fun processCommands()
+    fun registerCallback(command: String, callback: (cmd: ICommand) -> Unit)
+}
+
 /**
  * Created by Jordan Gassaway on 4/22/2019.
  * CommandRouter Execute functions for commands
  */
-class CommandRouter() {
+class CommandRouter() : ICommandRouter {
     private val commandQueue: MutableList<ICommand> = mutableListOf()
 
     // Callback functions
@@ -23,11 +29,11 @@ class CommandRouter() {
     private var handleLastRound: (lastRound: LastRoundCommand) -> Unit = { }
     private var handleGameOver: (gameOver: GameOverCommand) -> Unit = { }
 
-    public fun addNewCommands(commands: List<ICommand>){
+    override fun addNewCommands(commands: List<ICommand>){
         commandQueue.addAll(commands)
     }
 
-    public fun processCommands(){
+    override fun processCommands(){
         val commandQueueCopy = commandQueue.toList()    // Avoid concurrent modification
         commandQueue.clear()
         commandQueueCopy.forEach{ handleIncomingCommand(it) }
@@ -52,7 +58,7 @@ class CommandRouter() {
         }
     }
 
-    public fun registerCallback(command: String, callback: (cmd: ICommand) -> Unit){
+    override fun registerCallback(command: String, callback: (cmd: ICommand) -> Unit){
 
         when (command) {
             LOGIN_RESULT -> handleLoginResult = callback

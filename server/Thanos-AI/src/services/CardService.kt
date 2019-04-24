@@ -1,9 +1,9 @@
 package services
 
-import CommandRouter
+import ICommandRouter
 import IDestinationCard
 import IShardCard
-import ProxyServer
+import IProxyServer
 import commands.*
 import models.Route
 
@@ -11,7 +11,7 @@ import models.Route
  * Created by Jordan Gassaway on 4/23/2019.
  * services.CardService: Handles shard cards and destination cards
  */
-class CardService(private val server: ProxyServer, private val cmdRouter: CommandRouter) {
+class CardService(private val server: IProxyServer, private val cmdRouter: ICommandRouter) {
     var shardCards: MutableList<IShardCard> = mutableListOf()
     var destinationCards: MutableList<IDestinationCard> = mutableListOf()
     var stagedDestCards: MutableList<IDestinationCard> = mutableListOf()
