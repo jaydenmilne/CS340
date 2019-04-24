@@ -1,6 +1,7 @@
 package services
 
 import models.Game
+import MaterialType
 
 /**
  * Created by Jordan Gassaway on 4/23/2019.
@@ -10,25 +11,23 @@ class MoveService(private val game: Game, private val cardService: CardService, 
                   private val playerService: PlayerService, private val routeService: RouteService, private val turnService: TurnService) {
 
     private val moveThread = MoveThread(turnService) { chooseNextMove() }
-    @Volatile private var bankUpdated = false
-
-    fun onUpdateBank(){
-        bankUpdated = true
-    }
 
     fun chooseNextMove(){
         if(turnService.canDrawShards()){
-            val card  = game.bank.faceUpCards.first()
-            bankUpdated = false
-            bankService.drawFaceUpCard(card.type)
-            if (card.type == MaterialType.INFINITY_GAUNTLET){
-                turnService.onDrawWild()
-                return
-            } else {
-                turnService.onDrawFaceUp()
-                while(!bankUpdated);    // Wait for update bank command
-                bankService.drawFaceUpCard(game.bank.faceUpCards.first().type)
-            }
+            drawFaceUpCard(game.bank.faceUpCards.first().type)
+            drawFaceUpCard(game.bank.faceUpCards.first().type)
+        }
+    }
+
+    fun drawFaceUpCard(card: MaterialType){
+        if (card == MaterialType.INFINITY_GAUNTLET && turnService.canDrawWild()){
+            bankService.drawFaceUpCard(card)
+            turnService.onDrawWild()
+            return
+        } else if(turnService.canDrawShards()){
+            bankService.drawFaceUpCard(card)
+            turnService.onDrawFaceUp()
+            while(!bankService.drawIsComplete());    // Wait for update bank command
         }
     }
 

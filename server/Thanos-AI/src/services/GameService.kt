@@ -23,7 +23,6 @@ class GameService(private val server: ProxyServer, private val cmdRouter: Comman
     init {
         this.cmdRouter.registerCallback(DEAL_CARDS) { handleDealCards(it as DealCardsCommand) }
         this.cmdRouter.registerCallback(CHANGE_TURN) { handleChangeTurn(it as ChangeTurnCommand) }
-        this.cmdRouter.registerCallback(UPDATE_BANK) { handleUpdateBank(it as UpdateBankCommand) }
     }
 
 
@@ -40,11 +39,6 @@ class GameService(private val server: ProxyServer, private val cmdRouter: Comman
 
     fun handleChangeTurn(changeTurn: ChangeTurnCommand){
         turnService.handleChangeTurn(changeTurn)
-    }
-
-    fun handleUpdateBank(updateBank: UpdateBankCommand){
-        bankService.handleUpdateBank(updateBank)
-        moveService.onUpdateBank()
     }
 
     fun close(){

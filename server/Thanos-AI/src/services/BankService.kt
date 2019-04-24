@@ -11,19 +11,24 @@ import models.Bank
  * services.BankService: Handles Bank updates and drawing cards.
  */
 class BankService(private val server: ProxyServer, private val cmdRouter: CommandRouter, private val bank: Bank) {
+    @Volatile private var drawComplete: Boolean = false
+
     init {
+        this.cmdRouter.registerCallback(UPDATE_BANK) { handleUpdateBank(it as UpdateBankCommand) }
     }
 
-
     fun requestDestinations(){
+        drawComplete = false
         server.executeCommand(IRequestDestinationsCommand())
     }
 
     fun drawFaceUpCard(card: MaterialType){
+        drawComplete = false
         server.executeCommand(IDrawShardCardCommand(card.material))
     }
 
     fun drawCardFromDeck(){
+        drawComplete = false
         server.executeCommand(IDrawShardCardCommand("deck"))
     }
 
@@ -31,5 +36,8 @@ class BankService(private val server: ProxyServer, private val cmdRouter: Comman
         bank.faceUpCards = updateBank.faceUpCards
         bank.shardCardDeckSize = updateBank.shardDrawPileSize
         bank.destinationCardDeckSize = updateBank.destinationPileSize
+        drawComplete = true
     }
+
+    fun drawIsComplete(): Boolean { return drawComplete }
 }
