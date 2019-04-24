@@ -21,9 +21,9 @@ class GameService(private val server: ProxyServer, private val cmdRouter: Comman
     private val moveService = MoveService(game, cardService, bankService, playerService, routeService, turnService)
 
     init {
-        this.cmdRouter.registerCallback(START_GAME) { handleStartGame(it as StartGameCommand) }
         this.cmdRouter.registerCallback(DEAL_CARDS) { handleDealCards(it as DealCardsCommand) }
         this.cmdRouter.registerCallback(CHANGE_TURN) { handleChangeTurn(it as ChangeTurnCommand) }
+        this.cmdRouter.registerCallback(UPDATE_BANK) { handleUpdateBank(it as UpdateBankCommand) }
     }
 
 
@@ -35,16 +35,19 @@ class GameService(private val server: ProxyServer, private val cmdRouter: Comman
         cardService.handleDealCards(dealCards)
         if(dealCards.minDestinations != 0){
             moveService.selectDestinationCards(dealCards.minDestinations)
-        } else if( turnService.canDrawShards()){
-            moveService.chooseNextMove()
         }
-
     }
 
     fun handleChangeTurn(changeTurn: ChangeTurnCommand){
         turnService.handleChangeTurn(changeTurn)
-        if(turnService.isMyTurn()){
-            moveService.chooseNextMove()
-        }
+    }
+
+    fun handleUpdateBank(updateBank: UpdateBankCommand){
+        bankService.handleUpdateBank(updateBank)
+        moveService.onUpdateBank()
+    }
+
+    fun close(){
+        moveService.close()
     }
 }

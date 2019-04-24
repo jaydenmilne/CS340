@@ -7,12 +7,14 @@ import commands.IListGamesCommand
 class Poller(private val cmdRouter: CommandRouter, private val server: ProxyServer) {
     private val pollThread = PollThread { poll() }
     private val debugMode = false
+    var lobbyMode = false
 
     init {
         pollThread.start()
     }
 
-    fun startPolling(){
+    fun startPolling(lobbyMode:Boolean = false){
+        this.lobbyMode = lobbyMode
         pollThread.enabled = true
     }
 
@@ -25,7 +27,11 @@ class Poller(private val cmdRouter: CommandRouter, private val server: ProxyServ
     }
 
     private fun poll(){
-        server.executeCommand(IListGamesCommand())
+        if(lobbyMode){
+            server.executeCommand(IListGamesCommand())
+        } else {
+            server.poll()
+        }
         cmdRouter.processCommands()
     }
 
@@ -36,7 +42,7 @@ class Poller(private val cmdRouter: CommandRouter, private val server: ProxyServ
 
 private class PollThread(private val pollFunc: () -> Unit): Thread("Polling Thread") {
     var enabled = false
-    var period:Long = 500
+    var period:Long = 300
     var exit = false
     private val debugMode = false
 

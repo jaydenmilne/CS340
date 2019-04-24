@@ -17,6 +17,12 @@ class TurnService(private val myPlayerId: Int){
     fun canDrawDestinations(): Boolean { return state.canDrawDestinations() }
     fun canClaimRoutes(): Boolean { return state.canClaimRoutes() }
 
+    fun onDrawFaceUp() { state.onDrawFaceUp() }
+    fun onDrawWild() { state.onDrawWild() }
+    fun onDrawDeck() { state.onDrawDeck() }
+    fun onDrawDestinations() { state.onDrawDestinations() }
+    fun onClaimRoute() { state.onClaimRoute() }
+
     fun handleChangeTurn(changeTurn: ChangeTurnCommand){
         if (changeTurn.userId == myPlayerId){
             state = MyTurn(this)

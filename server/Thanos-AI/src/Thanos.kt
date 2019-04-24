@@ -21,6 +21,7 @@ class Thanos (private val username: String, private val password: String){
     }
 
     init {
+        this.commandRouter.registerCallback(START_GAME) { handleStartGame(it as StartGameCommand) }
         this.commandRouter.registerCallback(GAME_OVER) { handleGameOver(it as GameOverCommand) }
     }
 
@@ -42,18 +43,33 @@ class Thanos (private val username: String, private val password: String){
 
     fun joinGame(gameId: Int){
         if(!loginService.isLoggedIn()) return
-        poller.startPolling()
-        sleep(2)    // give Poller time to process queued commands.
+        poller.startPolling(true)
+        sleep(2000)    // give Poller time to process queued commands.
         lobbyService.joinGame(gameId)
+    }
+
+    fun rejoinGame(){
+        if(!loginService.isLoggedIn()) return
+        poller.startPolling(false)
+        sleep(2000)    // give Poller time to process queued commands.
         gameService = GameService(server, commandRouter, loginService.getUserId())
+        lobbyService.rejoinGame()
     }
 
     fun close(){
+        gameService?.close()
         poller.close()
+    }
+
+    fun handleStartGame(startGame: StartGameCommand){
+        poller.startPolling(false)
+        gameService = GameService(server, commandRouter, loginService.getUserId())
+        gameService!!.handleStartGame(startGame)
     }
 
     fun handleGameOver(gameOver: GameOverCommand){
         gameService = null
+        gameService?.close()
         poller.stopPolling()    // Stop polling until we join a new game
     }
 }

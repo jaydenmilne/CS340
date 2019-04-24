@@ -28,6 +28,11 @@ class LobbyService(private val server: ProxyServer, private val cmdRouter: Comma
         println("Successfully joined game $gameId")
     }
 
+    fun rejoinGame(){
+        server.executeCommand(IRejoinGameCommand())
+        println("Successfully rejoined game")
+    }
+
     fun leaveGame(){
         if (currentGame == null) return     // currentGameId is invalid
         server.executeCommand(ILeaveGameCommand(currentGameId))

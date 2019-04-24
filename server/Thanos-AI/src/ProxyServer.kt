@@ -28,7 +28,7 @@ class ProxyServer(private val cmdRouter: CommandRouter, private val url: String 
             val type = when (command.command) {
                 LOGIN -> RequestType.REGISTER
                 REGISTER -> RequestType.REGISTER
-                LIST_GAMES -> RequestType.POLL
+                LIST_GAMES -> RequestType.COMMAND
                 else -> RequestType.COMMAND
             }
 
@@ -39,7 +39,9 @@ class ProxyServer(private val cmdRouter: CommandRouter, private val url: String 
 
             con.doOutput = true
             con.requestMethod = type.method
-            con.addRequestProperty("Content-Type", "application/json")
+            if(type != RequestType.POLL){
+                con.addRequestProperty("Content-Type", "application/json")
+            }
             if(session != null){
                 con.addRequestProperty("Authorization", session)
             }
@@ -52,6 +54,42 @@ class ProxyServer(private val cmdRouter: CommandRouter, private val url: String 
             output.close()
 
             if(debugMode) println("Sending Request to $sendURL")
+
+            when (con.responseCode){
+                HttpURLConnection.HTTP_UNAUTHORIZED -> throw UnauthorizedException(con.responseMessage)
+                HttpURLConnection.HTTP_INTERNAL_ERROR -> throw InternalServerException(con.responseMessage)
+            }
+
+
+            // HTTP OK
+            val responseBody = getResponse(con)
+            val commands = deserializeCommands(responseBody)
+            cmdRouter.addNewCommands(commands)
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+    }
+
+    public fun poll() {
+        try {
+            val type = RequestType.POLL
+            val sendURL = URL(serverURL + type.endpoint)
+
+            val con = sendURL.openConnection() as HttpURLConnection
+
+
+            con.doOutput = true
+            con.requestMethod = type.method
+
+            if(session != null){
+                con.addRequestProperty("Authorization", session)
+            }
+
+            con.connect()
+
+            if(debugMode) println("Polling to $sendURL")
 
             when (con.responseCode){
                 HttpURLConnection.HTTP_UNAUTHORIZED -> throw UnauthorizedException(con.responseMessage)

@@ -12,7 +12,6 @@ import models.Bank
  */
 class BankService(private val server: ProxyServer, private val cmdRouter: CommandRouter, private val bank: Bank) {
     init {
-        this.cmdRouter.registerCallback(UPDATE_BANK) { handleUpdateBank(it as UpdateBankCommand) }
     }
 
 
