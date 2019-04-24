@@ -28,4 +28,9 @@ class CardService(private val server: ProxyServer, private val cmdRouter: Comman
         shardCards.addAll(dealCards.shardCards)
         stagedDestCards = dealCards.destinations.toMutableList()
     }
+
+    fun selectDestinationCards(selectedCards: List<IDestinationCard>, discardedCards: List<IDestinationCard>){
+        destinationCards.addAll(selectedCards)
+        server.executeCommand(IDiscardDestinationsCommand(discardedCards))
+    }
 }

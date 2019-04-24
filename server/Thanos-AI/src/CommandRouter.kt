@@ -34,7 +34,7 @@ class CommandRouter() {
     }
 
     private fun handleIncomingCommand(command: ICommand){
-
+        if(command.command != REFRESH_GAME_LIST)("processing ${command.command}")
         when (command.command) {
             LOGIN_RESULT -> handleLoginResult(command as LoginResultCommand)
             GAME_CREATED -> handleGameCreated(command as GameCreatedCommand)

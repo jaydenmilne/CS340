@@ -6,6 +6,7 @@ import models.Game
 import services.GameService
 import services.LobbyService
 import services.LoginService
+import java.lang.Thread.sleep
 
 /**
  * Created by Jordan Gassaway on 4/22/2019.
@@ -42,6 +43,7 @@ class Thanos (private val username: String, private val password: String){
     fun joinGame(gameId: Int){
         if(!loginService.isLoggedIn()) return
         poller.startPolling()
+        sleep(2)    // give Poller time to process queued commands.
         lobbyService.joinGame(gameId)
         gameService = GameService(server, commandRouter, loginService.getUserId())
     }
@@ -52,6 +54,6 @@ class Thanos (private val username: String, private val password: String){
 
     fun handleGameOver(gameOver: GameOverCommand){
         gameService = null
-        poller.stopPolling()    //
+        poller.stopPolling()    // Stop polling until we join a new game
     }
 }
