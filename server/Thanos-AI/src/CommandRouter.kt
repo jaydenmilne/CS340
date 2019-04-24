@@ -28,8 +28,9 @@ class CommandRouter() {
     }
 
     public fun processCommands(){
-        commandQueue.forEach{ handleIncomingCommand(it) }
+        val commandQueueCopy = commandQueue.toList()    // Avoid concurrent modification
         commandQueue.clear()
+        commandQueueCopy.forEach{ handleIncomingCommand(it) }
     }
 
     private fun handleIncomingCommand(command: ICommand){

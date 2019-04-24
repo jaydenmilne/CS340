@@ -6,6 +6,7 @@ import commands.IListGamesCommand
  */
 class Poller(private val cmdRouter: CommandRouter, private val server: ProxyServer) {
     private val pollThread = PollThread { poll() }
+    private val debugMode = false
 
     init {
         pollThread.start()
@@ -37,12 +38,13 @@ private class PollThread(private val pollFunc: () -> Unit): Thread("Polling Thre
     var enabled = false
     var period:Long = 500
     var exit = false
+    private val debugMode = false
 
     override fun run() {
         super.run()
         while(!exit){
             if (enabled){
-                println("polling...")
+                if(debugMode) println("polling...")
                 pollFunc()
             }
             sleep(period)

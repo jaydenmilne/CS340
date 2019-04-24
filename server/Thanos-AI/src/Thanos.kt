@@ -1,4 +1,6 @@
-import commands.*
+import services.GameService
+import services.LobbyService
+import services.LoginService
 
 /**
  * Created by Jordan Gassaway on 4/22/2019.
@@ -15,6 +17,7 @@ class Thanos (private val username: String, private val password: String){
     // Services
     private val loginService = LoginService(server, commandRouter)
     private val lobbyService = LobbyService(server, commandRouter)
+    private val gameService = GameService(server, commandRouter)
     private val poller = Poller(commandRouter, server)
 
     fun login(){

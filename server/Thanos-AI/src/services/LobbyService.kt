@@ -1,8 +1,13 @@
+package services
+
+import CommandRouter
+import LobbyGameDTO
+import ProxyServer
 import commands.*
 
 /**
  * Created by Jordan Gassaway on 4/23/2019.
- * LoginService Handles Lobby functions (joining games, etc)
+ * services.LobbyService Handles Lobby functions (joining games, etc)
  */
 class LobbyService(private val server: ProxyServer, private val cmdRouter: CommandRouter) {
 

@@ -1,3 +1,8 @@
+package services
+
+import CommandRouter
+import LoginUserDTO
+import ProxyServer
 import commands.ILoginCommand
 import commands.IRegisterCommand
 import commands.LOGIN_RESULT
@@ -5,7 +10,7 @@ import commands.LoginResultCommand
 
 /**
  * Created by Jordan Gassaway on 4/23/2019.
- * LoginService Handles Login and Registration
+ * services.LoginService Handles Login and Registration
  */
 class LoginService(private val server: ProxyServer, private val cmdRouter: CommandRouter) {
 
