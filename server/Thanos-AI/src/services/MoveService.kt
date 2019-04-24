@@ -2,6 +2,7 @@ package services
 
 import models.Game
 import MaterialType
+import models.Route
 
 /**
  * Created by Jordan Gassaway on 4/23/2019.
@@ -12,11 +13,13 @@ class MoveService(private val game: Game, private val cardService: CardService, 
 
     private val moveThread = MoveThread(turnService) { chooseNextMove() }
 
+    init {
+        moveThread.start()
+    }
+
     fun chooseNextMove(){
-        if(turnService.canDrawShards()){
-            drawFaceUpCard(game.bank.faceUpCards.first().type)
-            drawFaceUpCard(game.bank.faceUpCards.first().type)
-        }
+        drawFaceUpCard(game.bank.faceUpCards.first().type)
+        drawFaceUpCard(game.bank.faceUpCards.first().type)
     }
 
     fun drawFaceUpCard(card: MaterialType){
@@ -31,13 +34,26 @@ class MoveService(private val game: Game, private val cardService: CardService, 
         }
     }
 
+    fun requestDestinationCards(){
+        if(turnService.canDrawDestinations()){
+            bankService.requestDestinations()
+        }
+    }
+
+    fun drawFromDeck(){
+        if(turnService.canDrawShards()){
+            bankService.drawCardFromDeck()
+        }
+    }
+
     fun selectDestinationCards(minRequired: Int){
         cardService.selectDestinationCards(cardService.stagedDestCards.subList(0,2), cardService.stagedDestCards.subList(2,3))
     }
 
-
-    init {
-        moveThread.start()
+    fun claimRoute(route: Route){
+        if(turnService.canClaimRoutes()){
+            routeService.claimRoute(route.routeId, cardService.getCardsForRoute(route))
+        }
     }
 
     fun close() {

@@ -16,7 +16,7 @@ class GameService(private val server: ProxyServer, private val cmdRouter: Comman
     private val cardService = CardService(server, cmdRouter)
     private val bankService = BankService(server, cmdRouter, game.bank)
     private val playerService = PlayerService(server, cmdRouter, game.players, myPlayerId)
-    private val routeService = RouteService(server, cmdRouter, game.map)
+    private val routeService = RouteService(server, cmdRouter, game.map, game.players.size < 4)
     private val turnService = TurnService(myPlayerId)
     private val moveService = MoveService(game, cardService, bankService, playerService, routeService, turnService)
 
