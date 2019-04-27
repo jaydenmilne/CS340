@@ -18,8 +18,13 @@ class MoveService(private val game: Game, private val cardService: CardService, 
     }
 
     fun chooseNextMove(){
-        drawFaceUpCard(game.bank.faceUpCards.first().type)
-        drawFaceUpCard(game.bank.faceUpCards.first().type)
+        val route = chooseRoute()
+        if (route == null){
+            drawFaceUpCard(game.bank.faceUpCards.first().type)
+            drawFaceUpCard(game.bank.faceUpCards.first().type)
+        } else {
+            claimRoute(route)
+        }
     }
 
     fun drawFaceUpCard(card: MaterialType){
@@ -44,6 +49,10 @@ class MoveService(private val game: Game, private val cardService: CardService, 
         if(turnService.canDrawShards()){
             bankService.drawCardFromDeck()
         }
+    }
+
+    fun chooseRoute(): Route? {      // Returns first available route to claim
+        return game.map.routesByRouteId.values.firstOrNull { routeService.claimRoutePossible(it, cardService.shardCards, playerService.myPlayer!!.numRemainingTrains) }
     }
 
     fun selectDestinationCards(minRequired: Int){
