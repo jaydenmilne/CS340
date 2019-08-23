@@ -1,4 +1,12 @@
 # Ticket to Ride: Infinity War Edition - CS340
+
+This is a web-based implementation of Ticket to Ride that was created for 
+BYU's CS340 class, themed for Infinity War.
+
+There is a server (sometimes) running at [marylou.ga](https://marylou.ga)
+
+Created early 2019 by Brennon Brimhall, Mark Frame, Jordan Gassaway, Justin Hawkins, and Jayden Milne.
+
 ## [client](./client)
 Angular based frontend for the client. Typescript/Angular based.
 
