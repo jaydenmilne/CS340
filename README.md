@@ -3,7 +3,7 @@
 This is a web-based implementation of Ticket to Ride that was created for 
 BYU's CS340 class, themed for Infinity War.
 
-There is a server (sometimes) running at [ticket2endgame.ga](ticket2endgame.ga)
+There is a server (sometimes) running at [ticket2endgame.ga](https://ticket2endgame.ga)
 
 Created early 2019 by Brennon Brimhall, Mark Frame, Jordan Gassaway, Justin Hawkins, and Jayden Milne.
 
