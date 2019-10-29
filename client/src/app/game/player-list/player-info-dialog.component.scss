@@ -1,6 +1,9 @@
 .row-label {
     font-weight: bold;
     text-align:right;
+    padding-left: 5px;
+    padding-right: 10px;
+    text-align: center;
 }
 .info-box{
     display: flex;
@@ -12,4 +15,7 @@
 }
 .avatar{
     height: 150px;
+}
+.info-table{
+    padding-left: 10px;
 }

@@ -1,4 +1,4 @@
-import { Color, StyleColor } from './color.enum';
+import { Color, StyleColor, ColorAvatar } from './color.enum';
 
 export class GamePlayer {
     public color: Color;
@@ -51,5 +51,9 @@ export class GamePlayer {
 
     public getCSSColor(attribute: string){
         return { [attribute]: '#' + StyleColor[this.color]};
+    }
+
+    public getAvatar(){
+        return ColorAvatar[this.color];
     }
 }

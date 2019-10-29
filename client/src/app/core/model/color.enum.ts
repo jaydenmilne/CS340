@@ -15,3 +15,12 @@ export enum StyleColor {
     RED = 'd32f2f',
     ORANGE = 'ff5722'
 }
+
+export enum ColorAvatar {
+    YELLOW = 'avatar-thor.svg',
+    GREEN = 'avatar-hulk.svg',
+    BLUE = 'avatar-cap.svg',
+    PURPLE = 'avatar-thanos.svg',
+    RED = 'avatar-ironman.svg',
+    ORANGE = 'avatar-vision.svg'
+}
