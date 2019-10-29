@@ -3,25 +3,25 @@
     <img class="avatar" src="assets/img/avatars/mohawk.svg">
     <table>
         <tr>
-            <td class="row-label">Points</td>
+            <td class="row-label"><img class="info-icon" matTooltip="Points"  src="assets/img/star-icon.svg"></td>
             <td>{{player.points}}</td>
         </tr>
         <tr>
-            <td class="row-label"><img class="info-icon" src="assets/img/shards/shard_circle.svg"></td>
+            <td class="row-label"><img class="info-icon" matTooltip="Shard Cards"  src="assets/img/shards/shard_circle.svg"></td>
             <td>{{player.numTrainCards}}</td>
         </tr>
         <tr>
             <td class="row-label">
-                <img class="info-icon" src="assets/img/shards/route_map.svg">
+                <img class="info-icon" matTooltip="Destination Cards" src="assets/img/shards/route_map.svg">
             </td>
             <td>{{player.numDestinationCards}}</td>
         </tr>
         <tr>
-            <td class="row-label"><img class="info-icon" src="assets/img/shards/player_shard.svg"></td>
+            <td class="row-label"><img class="info-icon" matTooltip="Remaining Shards"  src="assets/img/shards/player_shard.svg"></td>
             <td>{{player.numRemainingTrains}}</td>
         </tr>
         <tr>
-        <td class="row-label">Longest Route</td>
+        <td class="row-label"><img class="info-icon" matTooltip="Longest Route Length" src="assets/img/route-icon.svg"></td>
             <td>{{player.longestRouteLength}}</td>
         </tr>
     </table>
