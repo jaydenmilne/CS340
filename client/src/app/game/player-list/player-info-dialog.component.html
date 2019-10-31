@@ -3,26 +3,34 @@
     <img class="avatar" src="assets/img/avatars/{{player.getAvatar()}}">
     <table class="info-table">
         <tr>
-            <td class="row-label"><img class="info-icon" matTooltip="Points"  src="assets/img/star-icon.svg"></td>
-            <td>{{player.points}}</td>
+            <td class="row-icon"><img class="info-icon" src="assets/img/star-icon.svg"></td>
+            <td class="row-label">Points</td>
+            <td class="info-data">{{player.points}}</td>
         </tr>
         <tr>
-            <td class="row-label"><img class="info-icon" matTooltip="Shard Cards"  src="assets/img/shards/shard_circle.svg"></td>
-            <td>{{player.numTrainCards}}</td>
+            <td class="row-icon"><img class="info-icon" src="assets/img/shards/shard_circle.svg"></td>
+            <td class="row-label">Shard Cards</td>
+            <td class="info-data">{{player.numTrainCards}}</td>
         </tr>
         <tr>
-            <td class="row-label">
-                <img class="info-icon" matTooltip="Destination Cards" src="assets/img/shards/route_map.svg">
+            <td class="row-icon">
+                <img class="info-icon" src="assets/img/shards/route_map.svg">
             </td>
-            <td>{{player.numDestinationCards}}</td>
+            <td class="row-label">Destination Cards</td>
+            <td class="info-data">{{player.numDestinationCards}}</td>
         </tr>
         <tr>
-            <td class="row-label"><img class="info-icon" matTooltip="Remaining Shards"  src="assets/img/shards/player_shard.svg"></td>
-            <td>{{player.numRemainingTrains}}</td>
+            <td class="row-icon"><img class="info-icon" src="assets/img/shards/player_shard.svg"></td>
+            <td class="row-label">Remaining Shards</td>
+            <td class="info-data">{{player.numRemainingTrains}}</td>
         </tr>
         <tr>
-        <td class="row-label"><img class="info-icon" matTooltip="Longest Route Length" src="assets/img/route-icon.svg"></td>
-            <td>{{player.longestRouteLength}}</td>
+        <td class="row-icon"><img class="info-icon" src="assets/img/route-icon.svg"></td>
+        <td class="row-label">Longest Route Length</td>
+        <td class="info-data">
+            {{player.longestRouteLength}}
+            <i class="material-icons longest-route-icon" matTooltip="Longest Route Leader" *ngIf="player.hasLongestRoute">_emoji_events</i>
+        </td>
         </tr>
     </table>
 </div>

@@ -18,18 +18,7 @@
    sodipodi:docname="avatar-thor.svg"
    enable-background="new">
   <defs
-     id="defs4775">
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter5514">
-      <feBlend
-         inkscape:collect="always"
-         mode="exclusion"
-         in2="BackgroundImage"
-         id="feBlend5516" />
-    </filter>
-  </defs>
+     id="defs4775" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -37,16 +26,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="126.53"
-     inkscape:cy="272.30359"
+     inkscape:zoom="2.8"
+     inkscape:cx="219.17247"
+     inkscape:cy="224.9121"
      inkscape:document-units="mm"
-     inkscape:current-layer="g5472"
+     inkscape:current-layer="layer2"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="657"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="2880"
+     inkscape:window-height="1526"
+     inkscape:window-x="2869"
+     inkscape:window-y="-11"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata4778">
@@ -56,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -64,7 +53,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="graphics"
-     style="filter:url(#filter5514)">
+     style="">
     <g
        id="g5472"
        transform="rotate(25,66.145837,66.145838)">

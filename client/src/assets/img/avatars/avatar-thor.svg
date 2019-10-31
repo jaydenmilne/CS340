@@ -12,16 +12,7 @@
    height="132.29167mm"
    width="132.29167mm">
   <defs
-     id="defs4775">
-    <filter
-       id="filter5514"
-       style="color-interpolation-filters:sRGB">
-      <feBlend
-         id="feBlend5516"
-         in2="BackgroundImage"
-         mode="exclusion" />
-    </filter>
-  </defs>
+     id="defs4775" />
   <metadata
      id="metadata4778">
     <rdf:RDF>
@@ -35,7 +26,7 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="filter:url(#filter5514)"
+     style=""
      id="layer2">
     <g
        transform="rotate(25,66.145837,66.145838)"
