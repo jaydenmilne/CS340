@@ -1,5 +1,5 @@
 import { Component,  Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DestCardSelectionDeck, DestinationCardDeck, DestCardSelectionPair } from '@core/model/cards';
 import { TurnService } from '../turn/turn.service';
 

@@ -7,7 +7,7 @@ import { ErrorNotifierService } from '@core/error-notifier.service';
 import { ShardCardDeck } from '@core/model/cards';
 import { CardService } from '../card.service';
 import { RouteInfoDialogComponent, RouteInfoData } from './route-info-dialog/route-info-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ClaimRoutesDialogComponent, ClaimRouteData } from '../claim-routes-dialog/claim-routes-dialog.component';
 import { Subscription } from 'rxjs';
 

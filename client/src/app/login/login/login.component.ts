@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoginService } from '../login.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { isDevMode } from '@angular/core';
 
 @Component({

@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { GameState } from '@core/server/server-connection-state';
-import { MatDialog, MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material/snack-bar';
 import { SelectDestinationCardsDialogComponent, SelectDestinationCardsData } from '../select-destination-cards-dialog/select-destination-cards-dialog.component';
 import { CardService } from '../card.service';
 import { PlayerNotifierService, IPlayerNotification, TextNotification, ShardNotification } from '@core/player-notifier.service';
