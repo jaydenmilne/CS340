@@ -2,8 +2,16 @@ import { Component, Inject } from '@angular/core';
 import { Route, typeToMaterial } from '@core/model/route';
 import { ShardCard, ShardCardDeck, ShardCardSelectionDeck, ShardCardSelectionPair } from '@core/model/cards';
 import { MaterialType } from '@core/model/material-type.enum';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RouteService } from '../route.service';
+
+export class ClaimRouteData {
+  constructor(public route: Route, public hand: ShardCardDeck) {}
+}
+
+export class ClaimRouteResult {
+  constructor(public routeClaimed: boolean, public usedCards: ShardCardDeck) {}
+}
 
 @Component({
   selector: 'app-claim-routes-dialog',
@@ -55,12 +63,4 @@ export class ClaimRoutesDialogComponent {
   getRouteTypeImage(): string {
     return ShardCard.getImageByType(typeToMaterial[this.data.route.type]);
   }
-}
-
-export class ClaimRouteData {
-  constructor(public route: Route, public hand: ShardCardDeck) {}
-}
-
-export class ClaimRouteResult {
-  constructor(public routeClaimed: boolean, public usedCards: ShardCardDeck) {}
 }

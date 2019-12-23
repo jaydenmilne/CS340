@@ -4,6 +4,14 @@ import { DestinationCard, ShardCard } from '@core/model/cards';
 import { typeToMaterial, Route } from '@core/model/route';
 import { PlayerService } from '../../player.service';
 
+export class RouteInfoData {
+  constructor(public route: Route, public canClaim: boolean) {}
+}
+
+export class RouteInfoResult {
+  constructor(public claimRoute: boolean) {}
+}
+
 @Component({
   selector: 'app-route-info-dialog',
   templateUrl: './route-info-dialog.component.html',
@@ -46,12 +54,4 @@ export class RouteInfoDialogComponent {
     }
     return this.playerService.playersById.get(this.data.route.ownerId).username;
   }
-}
-
-export class RouteInfoData {
-  constructor(public route: Route, public canClaim: boolean) {}
-}
-
-export class RouteInfoResult {
-  constructor(public claimRoute: boolean) {}
 }
