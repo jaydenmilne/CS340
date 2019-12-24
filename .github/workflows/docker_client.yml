@@ -47,11 +47,13 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: client-build
-          path: ${{runner.temp}}
+          path: ${{github.workspace}}
       - name: Untar Artifact
-        run: tar xvzf ${{runner.temp}}/marylou-client.tar.gz && ls
+        run: tar xvzf ${{github.workspace}}/marylou-client.tar.gz -C ${{github.workspace}} && ls ${{github.workspace}}/app/dist/marylou
       - name: Update gh-pages branch
-        env: 
-          BUILD_DIR: ${{runner.temp}}/app/dist/marylou
-        uses: maxheld83/ghpages@v0.2.1
+        with: 
+          site-directory: ${{github.workspace}}/app/dist/marylou
+          repo-token: ${{secrets.GH_PAT}}
+        uses: alex-page/blazing-fast-gh-pages-deploy@v1.1.0
+        
         
