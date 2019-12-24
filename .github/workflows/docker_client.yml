@@ -1,19 +1,57 @@
 name: Build Client Docker Image
 
-on: [pull_request]
+on: 
+  pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
 
   build:
 
     runs-on: ubuntu-latest
-
+    if: github.ref != 'refs/heads/gh-pages'
+    
     steps:
     - uses: actions/checkout@v1
     - name: Build the Docker image for the client
       run: |
         cd client
         export TAG=$(date +%s)
-        docker build . --file Dockerfile --tag jaydenmilne/ticket2endgame-client:$TAG
+        docker build . --file Dockerfile --tag jaydenmilne/marylou-client:$TAG --tag jaydenmilne/marylou-client:latest
         docker login -u "${{ secrets.DOCKER_LOGIN }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-        docker push jaydenmilne/ticket2endgame-client:$TAG 
+        docker push jaydenmilne/marylou-client:$TAG 
+        docker push jaydenmilne/marylou-client:latest
+
+    - name: Extract Built Files from Docker Image
+      run: |
+        docker create --name burritos jaydenmilne/marylou-client:latest
+        docker cp burritos:/marylou-client.tar.gz ${{runner.temp}}/marylou-client.tar.gz
+        
+    - name: Upload the built files
+      uses: actions/upload-artifact@v1
+      with:
+        name: client-build
+        path: ${{runner.temp}}/marylou-client.tar.gz
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    
+    needs: [build]
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: client-build
+          path: ${{runner.temp}}
+      - name: Untar Artifact
+        run: tar xvzf ${{runner.temp}}/marylou-client.tar.gz && ls
+      - name: Update gh-pages branch
+        env: 
+          BUILD_DIR: ${{runner.temp}}/app/dist/marylou
+        uses: maxheld83/ghpages@v0.2.1
+        
