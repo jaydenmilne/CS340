@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install && \
-    npm run build
+    ./node_modules/.bin/ng build --prod=true
 
 RUN tar -czvf /app/marylou-client.tar.gz /app/dist
 
