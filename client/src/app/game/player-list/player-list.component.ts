@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { StyleColor } from '@core/model/color.enum';
 import { PlayerService } from '../player.service';
 import { GamePlayer } from '@core/model/game-player';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login-error-dialog',

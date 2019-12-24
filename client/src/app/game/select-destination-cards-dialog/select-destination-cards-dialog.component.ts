@@ -1,7 +1,15 @@
 import { Component,  Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DestCardSelectionDeck, DestinationCardDeck, DestCardSelectionPair } from '@core/model/cards';
 import { TurnService } from '../turn/turn.service';
+
+export class SelectDestinationCardsData {
+  constructor(public newCards: DestinationCardDeck, public minRequired: number) {}
+}
+
+export class SelectDestinationCardsResult {
+  constructor(public selectedCards: DestinationCardDeck, public discardedCards: DestinationCardDeck) {}
+}
 
 @Component({
   selector: 'app-select-destination-cards-dialog',
@@ -38,10 +46,3 @@ export class SelectDestinationCardsDialogComponent {
 
 }
 
-export class SelectDestinationCardsData {
-  constructor(public newCards: DestinationCardDeck, public minRequired: number) {}
-}
-
-export class SelectDestinationCardsResult {
-  constructor(public selectedCards: DestinationCardDeck, public discardedCards: DestinationCardDeck) {}
-}

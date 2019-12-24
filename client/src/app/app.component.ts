@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ErrorNotifierService, ErrorMessage } from '@core/error-notifier.service';
 import { ServerConnectionService } from '@core/server/server-connection.service';
 import { ServerPollerService } from '@core/server/server-poller.service';
@@ -62,8 +62,8 @@ export class AppComponent implements OnInit {
   }
 
   @HostListener('document:keypress', ['$event'])
-  private handleKeypress(event: KeyboardEvent) {
-    if (event.srcElement.nodeName !== 'INPUT' && event.srcElement.nodeName !== 'TEXTAREA') {
+  private handleKeypress(event: any) {
+    if (event.target.nodeName !== 'INPUT' && event.target.nodeName !== 'TEXTAREA') {
       switch (event.key) {
         case 'm':
         case 'p':

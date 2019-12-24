@@ -11,7 +11,8 @@ import { GameModule } from './game/game.module';
 import { ChatModule } from './chat/chat.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDialogModule, MatButtonModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ServerProxyService } from '@core/server/server-proxy.service';
 import { FatalErrorDialogComponent } from './app.component';
 import { WINDOW_PROVIDERS } from '@core/server/window-provider';

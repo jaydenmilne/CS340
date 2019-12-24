@@ -14,7 +14,7 @@ import { PlayerService } from 'src/app/game/player.service';
 export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
   constructor(public chatService: ChatService, public userService: UserService, private playerService: PlayerService) {
   }
-  @ViewChild('chatBox') private chatBox: ElementRef;
+  @ViewChild('chatBox', {static: false}) private chatBox: ElementRef;
 
   chatForm = new FormGroup({
     chatInput: new FormControl('')
