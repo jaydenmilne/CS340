@@ -62,6 +62,6 @@ jobs:
       - name: Update :master tag on Docker registry
         run: |
           docker login -u "${{ secrets.DOCKER_LOGIN }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-          docket tag jaydenmilne/marylou-client:latest jaydenmilne/marylou-client:master
+          docker tag jaydenmilne/marylou-client:latest jaydenmilne/marylou-client:master
           docker push jaydenmilne/marylou-client:master
         
