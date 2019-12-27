@@ -28,7 +28,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.mapSvg === undefined) {
-      console.error('Map not found!');
+      this.errorNotifier.notifyHeading('MapComponent::ngOnInit', 'Map not found!');
     }
 
     this.mapSvg.nativeElement.addEventListener('click', this.onSvgClick.bind(this));
@@ -41,8 +41,9 @@ export class MapComponent implements OnInit, OnDestroy {
   private onSvgClick(event: any) {
     if (event.target) {
       // Walk up the path to try and find the group that contains the path, shield, and line
-      for (let i = 0; i < event.path.length; ++i) {
-        const node = event.path[i];
+      let path = event.composedPath()
+      for (let i = 0; i < path.length; ++i) {
+        const node = path[i];
         if (node.id === 'mapSvg') {
           // Isn't a route
           return;
@@ -50,6 +51,7 @@ export class MapComponent implements OnInit, OnDestroy {
         if (this.routeService.routes.has(node.id)) {
           // alert(node.id);
           this.openRouteInfo(node.id);
+          return;
         }
       }
     }
