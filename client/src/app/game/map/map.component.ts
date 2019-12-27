@@ -23,7 +23,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.routeService.routeOwnershipChanged$.subscribe( route => this.onRouteOwnershipChange(route)));
      }
 
-  @ViewChild('mapSvg', {static: false})
+  @ViewChild('mapSvg', {static: true})
   mapSvg: ElementRef;
 
   ngOnInit() {
