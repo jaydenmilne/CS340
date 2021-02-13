@@ -67,6 +67,16 @@ export class TurnService {
     }
     else if (this.playerService.myPlayerId == this.playerService.activePlayerId) {
       this.playerNotifier.notifyPlayer('It is your turn!');
+
+      try {
+        let a = new Audio("assets/snd/yourturn.mp3");
+        a.load();
+        a.addEventListener("canplaythrough", event => {
+          a.volume = 0.3;
+          a.play();
+        })
+      } finally {};
+      
       this.wasPlayersTurn = true;
     }
     this.state.onChangeTurn(cmd);
