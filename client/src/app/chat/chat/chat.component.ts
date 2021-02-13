@@ -71,7 +71,15 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.chatBox.nativeElement.scrollTop = this.chatBox.nativeElement.scrollHeight;
   }
 
+  public getMessageNameStyle(message: ChatMessage){
+    return this.playerService.getPlayerCSSColor(message.getUserId(), 'color')
+  }
+
   public getMessageTextStyle(message: ChatMessage){
-    return message.getIsEvent() ? this.playerService.getMyPlayerCSSColor('color') : {};
+    if (message.getIsEvent()) {
+      return this.playerService.getPlayerCSSColor(message.getUserId(), 'color')
+    } else {
+      return {}
+    }
   }
 }

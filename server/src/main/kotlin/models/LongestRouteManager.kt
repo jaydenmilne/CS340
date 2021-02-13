@@ -120,7 +120,7 @@ class LongestRouteManager(private val game: Game): Serializable {
             longestRoute = playerLongest
             val user = Users.getUserById(playerid) ?: throw CommandException("REEE")
 
-            game.broadcastEvent(user.username + " now has the longest route with length " + longestRoute)
+            game.broadcastEvent(user.username + " now has the longest route with length " + longestRoute, user)
         }
 
         // Update the longest path value on the player
