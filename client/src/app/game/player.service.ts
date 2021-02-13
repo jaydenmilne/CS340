@@ -82,7 +82,9 @@ export class PlayerService {
   getPlayerCSSColor(playerId: number, attribute: string) {
     let player: GamePlayer = this.playersById.get(playerId)
     if (player === undefined || player === null) {
+      console.error("Couldn't find player " + playerId);
       return {[attribute]: '#' + StyleColor.YELLOW};
+
     }
 
     return player.getCSSColor(attribute);

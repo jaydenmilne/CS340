@@ -259,7 +259,7 @@ class Game(var name: String): IGame {
                     DisplayNameFormatter().getProperCityName(citiesArray[1]),
                     cardsUsed)
 
-            broadcastEvent(message)
+            broadcastEvent(message, user)
         } else {
             throw RuntimeException("Route does not have two cities listed")
         }
@@ -301,8 +301,8 @@ class Game(var name: String): IGame {
         return this.players.filter { p -> p.turnOrder == this.whoseTurn }[0]
     }
 
-    fun broadcastEvent(message: String) {
-        broadcast(UpdateChatCommand(Message(-1, "", message, nextMessageId, true)))
+    fun broadcastEvent(message: String, user: User) {
+        broadcast(UpdateChatCommand(Message(user.userId, user.username, message, nextMessageId, true)))
     }
 
     fun shuffleShardCards() {

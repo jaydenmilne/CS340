@@ -6,10 +6,12 @@
   </mat-card-header>
 
   <mat-card-content class="chat-box" #chatBox>
-    <mat-card class="chat-message-card" *ngFor="let message of chatService.chatHistory" [class.my-message]="isCurrentUserPost(message)"
+    <mat-card class="chat-message-card" *ngFor="let message of chatService.chatHistory" 
+      [class.my-message]="isCurrentUserPost(message)"
       [ngStyle]="getMessageTextStyle(message)"
-      [class.other-message]="!isCurrentUserPost(message)" [class.event-message]="message.getIsEvent()">
-      {{message.username == "" ? "" : message.username + ": "}} {{message.message}}
+      [class.other-message]="!isCurrentUserPost(message)" 
+      [class.event-message]="message.getIsEvent()">
+      <span class="chat-name" [ngStyle]="getMessageNameStyle(message)"> {{message.getIsEvent() || isCurrentUserPost(message) ? "" : message.username + ": "}}</span> {{message.message}}
     </mat-card>
   </mat-card-content>
 
