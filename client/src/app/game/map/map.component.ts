@@ -69,11 +69,18 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     const routeLine = this.mapSvg.nativeElement.getElementById(route.routeName + '-fg');
-    if (!routeLine) {
-      this.errorNotifier.notifyHeading('MapComponent::onRouteOwnershipChange', 'Unable to find the -fg line for route ' + route.routeName);
+    const routeLineFg = this.mapSvg.nativeElement.getElementById(route.routeName + '-bg');
+    const shield = this.mapSvg.nativeElement.getElementById(route.routeName + '-shield');
+
+    if (!routeLine || !routeLineFg || !shield) {
+      this.errorNotifier.notifyHeading('MapComponent::onRouteOwnershipChange', 'Unable to find the -fg/-bg line for route ' + route.routeName);
       return;
     }
-    routeLine.style.stroke = player.getStyleColor();
+
+    let color = "#" + player.getStyleColor();
+    routeLine.style.setProperty("stroke", color, "important");
+    routeLineFg.style.setProperty("stroke", color, "important");
+    shield.style.setProperty("fill", color, "important");
   }
 
   private openRouteInfo(routeName: RouteName) {
