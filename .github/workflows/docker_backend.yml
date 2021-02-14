@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Build docker image and tag it
         run: |
           cd server
           export TAG=$(date +%s)
@@ -40,7 +40,7 @@ jobs:
       - name: Extract compiled jar file from Docker image
         run: |
           docker create --name burritos jaydenmilne/marylou-server:latest
-          docker cp burritos:/app/marylou.jar marylou.jar
+          docker cp burritos:/app/marylou.jar ${{runner.temp}}/marylou.jar
         
       - name: Save artifacts
         uses: actions/upload-artifact@v1
