@@ -68,7 +68,7 @@ export class ServerConnectionService {
       return 'http://' + window.location.hostname + ':4300';
     } else {
       // In production, use the subdomain and https for the backend
-      return 'https://api.' + window.location.hostname;
+      return 'https://apiticket2endgame.jayd.ml';
     }
   }
 
